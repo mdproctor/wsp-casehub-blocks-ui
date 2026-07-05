@@ -1,23 +1,22 @@
 # HANDOFF — casehub-blocks-ui
 
 **Date:** 2026-07-05
-**Branch:** `feat/4-work-item-management-ui` (37 commits, not yet merged)
+**Branch:** `main` — epic #4 landed as `131a056`
 
 ---
 
 ## Last Session
 
-Built the entire Work Item Management UI from scratch — design token system, Lit components (inbox, detail, queue board, workbench), examples showcase with mock data and SSE simulation. Then iterated on UX bugs found by visual testing: column alignment, filter pill state, badge count accuracy, SSE response shape mismatch causing UI lock.
+Closed epic #4 — squashed 44 commits to 1, pushed to fork and blessed repo, closed issues #4, #5, #6, #7, #14, #15, #17. Branch `feat/4-work-item-management-ui` stamped as closed.
 
 ## Immediate Next Step
 
-The branch has 37 commits and needs squashing before merge. Run `/work` to continue on the branch, then `work-end` when ready to land.
+Pick up #20 (queue board UX redesign) or #16 (minor cleanup). Run `yarn examples` to see the showcase.
 
-**Before merging:** the garden push failed (3 entries committed locally but not pushed to github.com/Hortora/garden). Retry `git -C ~/.hortora/garden push origin main`.
+**Garden push still pending:** 3 entries committed locally but not pushed. Retry `git -C ~/.hortora/garden push origin main`.
 
 ## What's Left
 
-- Examples showcase dev server still running in background (port 3000) — kill if needed · XS · Low
 - #16 — Minor findings from final code review (10 items: dead IntersectionObserver code, schema-form type safety, missing aria-controls, etc.) · M · Low
 - #20 — Queue board UX redesign + constrained filter pills · L · High
 
