@@ -1,0 +1,9 @@
+branch: issue-23-review-findings-ui-primitives
+project-sha: 47187e20776073829c4038532ceaa1f61bc3a0de
+date: 2026-07-06
+issue: 23
+issue-repo: casehubio/blocks-ui
+covers: 23
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
