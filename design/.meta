@@ -1,0 +1,9 @@
+branch: issue-13-ui-primitives-batch
+project-sha: 150a74f1decad5cea304c075f7664582801ba707
+date: 2026-07-06
+issue: 13
+issue-repo: casehubio/blocks-ui
+covers: 13,12,8,16
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
