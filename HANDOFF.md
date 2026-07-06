@@ -1,34 +1,39 @@
 # HANDOFF — casehub-blocks-ui
 
 **Date:** 2026-07-06
-**Branch:** `main` — #23 landed as `c30fc25`
+**Branch:** `main` — #22 landed as `0e3b44b`
 
 ---
 
 ## Last Session
 
-Closed #23. Fixed sla-indicator invalid date handling (render crash + incoherent state from NaN comparisons), added aria-valuemin to approval-gate quorum progressbar, added error path tests for approval-gate and endpoint mode tests for kpi-metric-row. Standardized fetch mocks to `vi.stubGlobal` across all test files. Design-reviewed (3 rounds, 10 issues, all verified). Filed #24 (density-compact) and #25 (reactive endpoint) as deferred items.
+Closed #22. Built pages-data-table: standalone Lit Web Component with ColumnDef<R> data model, three display modes (auto/paginated/scroll), CSS Grid rendering, virtual scroll engine, multi-mode selection, client-side sorting, column visibility, 2D keyboard navigation, ARIA grid, CSS ::part() row styling. Design-reviewed (5 rounds, 19 issues). Implementation-reviewed (14 findings fixed). Visually verified in browser (6 rendering fixes). Refactored work-item-inbox to consume it (~170 lines removed). Filed #26-#31 as deferred items.
 
 ## Immediate Next Step
 
-Start #22 — build the data table component (`<pages-data-table>`). This is the **top priority**. Every CaseHub app needs tables; they must all use the same one. Build here in blocks-ui first, then promote to pages when stable.
+Pick next work from What's Next. #27 (pages migration) is the natural follow-on once the table is stable in production use.
 
 ## What's Left
 
-- #22 — Build pages-data-table: pagination, virtual scroll, configurable columns, sorting, row selection · L · High · **PRIORITY**
-- #25 — kpi-metric-row endpoint change after mount should trigger re-fetch · S · Low
-- #24 — Add density property to kpi-metric-row · S · Med
-- #21 — Token migration `--blocks-*` → `--pages-*` · M · Med · blocked by pages#112
+- #27 — Migrate PagesTable examples and remove pages-viz table . L . High . blocked by table stabilisation
+- #25 — kpi-metric-row endpoint change after mount should trigger re-fetch . S . Low
+- #24 — Add density property to kpi-metric-row . S . Med
+- #21 — Token migration --blocks-* to --pages-* . M . Med . blocked by pages#112
+- #26 — Row and column spanning support . M . High
+- #28 — Multi-column sort . S . Med
+- #29 — Text filter support . S . Med
+- #30 — Tree/expandable rows . M . High
+- #31 — CSV export . S . Low
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #22 | Build pages-data-table — pagination, virtual scroll, columns, sorting | L | High | **DO THIS FIRST** |
+| #27 | Migrate PagesTable examples and remove pages-viz table | L | High | Promote to pages-primitives first |
 | #25 | kpi-metric-row: reactive endpoint property | S | Low | Add willUpdate handler |
 | #24 | kpi-metric-row: density property for compact grid | S | Med | Design property API |
-| #21 | Token migration — `--blocks-*` → `--pages-*` | M | Med | Blocked by pages#112 |
-| #9 | Audit Trail Viewer | M | Med | Needs table |
+| #21 | Token migration to --pages-* | M | Med | Blocked by pages#112 |
+| #9 | Audit Trail Viewer | M | Med | Can use new table |
 | #10 | Case Timeline (replace stub) | M | Med | |
 | #11 | Trust Score Panel (replace stub) | M | Med | |
 
