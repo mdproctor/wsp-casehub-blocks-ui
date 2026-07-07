@@ -1,0 +1,9 @@
+branch: issue-31-csv-export
+project-sha: cbcbc6661253cbffecdd48e607f3d954de09f8cc
+date: 2026-07-07
+issue: 31
+issue-repo: casehubio/blocks-ui
+covers: 31
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
