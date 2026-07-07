@@ -1,0 +1,9 @@
+branch: issue-42-workitemresponse-types-field
+project-sha: 5dc411d7e7bc46a90effa2250043d3e792162d98
+date: 2026-07-07
+issue: 42
+issue-repo: casehubio/blocks-ui
+covers: 42
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
