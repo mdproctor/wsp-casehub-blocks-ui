@@ -1,0 +1,9 @@
+branch: issue-28-multi-column-sort
+project-sha: a7f7b1a21e59e1d095ee9d52e095c52c5a44ed00
+date: 2026-07-07
+issue: 28
+issue-repo: casehubio/blocks-ui
+covers: 28
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
