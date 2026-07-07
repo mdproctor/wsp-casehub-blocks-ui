@@ -1,0 +1,9 @@
+branch: issue-29-component-consolidation
+project-sha: 3b03ffcbb87188b9f25172c69e4ebf185faae806
+date: 2026-07-07
+issue: 29
+issue-repo: casehubio/blocks-ui
+covers: 29,32,24,25,18,19,9,10,11
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
