@@ -1,0 +1,9 @@
+branch: issue-37-aml-workbench-promotion
+project-sha: 70242c5d04da40ca2196dc370c74b764aa06c861
+date: 2026-07-08
+issue: 37
+issue-repo: casehubio/blocks-ui
+covers: 37
+flyway-next-v: unknown
+design-repo: project
+design-section-hashes: 
