@@ -1,0 +1,9 @@
+branch: issue-40-approval-gate-decided-payload
+project-sha: 63f88ef5a23e2b96f18c72070d04a7b24db7d0ea
+date: 2026-07-08
+issue: 40
+issue-repo: casehubio/blocks-ui
+covers: 40
+flyway-next-v: unknown
+design-repo: project
+design-section-hashes: 
