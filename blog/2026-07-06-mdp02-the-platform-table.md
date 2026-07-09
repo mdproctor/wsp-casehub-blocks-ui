@@ -2,6 +2,9 @@
 title: The Platform Table
 date: 2026-07-06
 author: mdp
+entry_type: note
+subtype: diary
+projects: [casehub-blocks-ui]
 tags: [data-table, web-components, css-grid, virtual-scroll, design-review]
 issue: 22
 ---
