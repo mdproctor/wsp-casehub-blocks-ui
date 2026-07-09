@@ -1,29 +1,24 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-08
-**Branch:** `main` — #37 generic workbench components landed
-**Priority:** Three new layout primitives shipped. AML migrated. Other domain repos can now adopt.
+**Date:** 2026-07-09
+**Branch:** `main` — no open work
+**Priority:** casehub-pages#145 landed and closed. #44 (DataSourceMixin migration) is now unblocked.
 
 ---
 
 ## Last Session
 
-Designed, reviewed (6 rounds, $34), and built three generic workbench components: `<split-workbench>`, `<list-pane>`, `<detail-pane>`. Refactored `<work-item-workbench>` to use `<split-workbench>` internally (-400 lines). Migrated AML to consume the generic components — deleted local case-workbench (-535 lines). Filed casehub-pages#145 for DataSource pipeline improvements.
+Reviewed pages' #145 delivery (DataSource pipeline unification) against spec — all 6 deliverables confirmed. Key finding: pages' SSE question had a wrong premise — blocks-ui components use SSEManager directly, not through DataEndpointMixin. The mixin's SSE integration is dead code. Fixed IntelliJ project setup for blocks-ui and pages (missing .iml/modules.xml). Ran full closed-branch audit: stamped 4 branches, recovered 1 blog + 2 plans, published 6 blog entries.
 
 ## Immediate Next Step
 
-No trailing work. Pick from open backlog — #44 is blocked by pages, #33/#34 are the next component features.
-
-## Cross-Module
-
-**Blocked by:**
-- `casehub-pages` — casehub-pages#145 gates #44 (DataSourceMixin migration). blocks-ui components use DataEndpointMixin now; swap to DataSourceMixin once pages ships the unified mixin.
+#44 is unblocked — write the DataSourceMixin Lit adapter in blocks-ui-core wrapping pages' DataSourceController. The spec is at `pages/docs/specs/2026-07-09-datasource-pipeline-design.md` § "blocks-ui adapter".
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #44 | Migrate DataEndpointMixin → DataSourceMixin | S | Low | Blocked by casehub-pages#145 |
+| #44 | Migrate DataEndpointMixin → DataSourceMixin | S | Low | **Unblocked** — pages#145 closed |
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
