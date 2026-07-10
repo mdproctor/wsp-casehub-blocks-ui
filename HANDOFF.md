@@ -2,23 +2,23 @@
 
 **Date:** 2026-07-10
 **Branch:** `main` — no open work
-**Priority:** #45 (trust-score-panel trend sparkline) is next.
+**Priority:** #46 (pages-data-table rendering fix) is next — user requested it.
 
 ---
 
 ## Last Session
 
-Migrated all DataEndpointMixin consumers to DataSourceMixin + DataSourceAdapter wrapping pages' DataSourceController (#44). Two-layer Lit binding: DataSourceAdapter (ReactiveController) as the reusable unit, DataSourceMixin as convenience sugar. Added fetchSource for raw JSON domain components, renderPropertyTree for human-readable payload rendering. Design review: 16 issues raised, all resolved. Four components migrated (list-pane, trust-score-panel, case-timeline, audit-trail-viewer), DataEndpointMixin deleted. Examples app fixed — mock-fetch centralised, vitest configs updated with dist/ aliases. Filed #45 for trust-score-panel trend sparkline.
+Implemented #45 — trust-score-panel trend sparkline. Built three new blocks-ui-core primitives: shared `renderSparkline`, `TrendPoint` + `extractTrendPoints` (safe TypedDataSet extraction), and `TrendSourceMixin` (reusable time-series trend pattern). Migrated kpi-metric-row to shared sparkline (fixed gradient ID collision). Examples page shows live simulated + static demos with play/pause. Design review: 4 rounds, 15 issues, all resolved ($14.19). Filed #46 for pre-existing pages-data-table rendering issue in trust-score-panel capability breakdown and audit-trail-viewer.
 
 ## Immediate Next Step
 
-Pick up #45 — add trend sparkline to trust-score-panel using `simulated()` data source from pages-data. The DataSource pipeline (`simulated`, `inlineSource`, `ScenarioController`) is designed for exactly this. Use a second DataSourceAdapter on the panel for trend data.
+Pick up #46 — `pages-data-table` shows "No data" in trust-score-panel Per-Capability Breakdown and Audit Trail Viewer examples despite mock data loading correctly. The gauge renders (data arrives), but the table is empty. Likely a data-table rendering issue with `.data`/`.columns` property binding.
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #45 | Trust-score-panel trend sparkline with simulated data source | S | Med | Just filed — uses simulated() from pages-data |
+| #46 | pages-data-table shows "No data" in trust-score-panel and audit-trail-viewer examples | S | Med | Pre-existing; mock data loads but table empty |
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
