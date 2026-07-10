@@ -1,24 +1,24 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-09
+**Date:** 2026-07-10
 **Branch:** `main` — no open work
-**Priority:** casehub-pages#145 landed and closed. #44 (DataSourceMixin migration) is now unblocked.
+**Priority:** #45 (trust-score-panel trend sparkline) is next.
 
 ---
 
 ## Last Session
 
-Reviewed pages' #145 delivery (DataSource pipeline unification) against spec — all 6 deliverables confirmed. Key finding: pages' SSE question had a wrong premise — blocks-ui components use SSEManager directly, not through DataEndpointMixin. The mixin's SSE integration is dead code. Fixed IntelliJ project setup for blocks-ui and pages (missing .iml/modules.xml). Ran full closed-branch audit: stamped 4 branches, recovered 1 blog + 2 plans, published 6 blog entries.
+Migrated all DataEndpointMixin consumers to DataSourceMixin + DataSourceAdapter wrapping pages' DataSourceController (#44). Two-layer Lit binding: DataSourceAdapter (ReactiveController) as the reusable unit, DataSourceMixin as convenience sugar. Added fetchSource for raw JSON domain components, renderPropertyTree for human-readable payload rendering. Design review: 16 issues raised, all resolved. Four components migrated (list-pane, trust-score-panel, case-timeline, audit-trail-viewer), DataEndpointMixin deleted. Examples app fixed — mock-fetch centralised, vitest configs updated with dist/ aliases. Filed #45 for trust-score-panel trend sparkline.
 
 ## Immediate Next Step
 
-#44 is unblocked — write the DataSourceMixin Lit adapter in blocks-ui-core wrapping pages' DataSourceController. The spec is at `pages/docs/specs/2026-07-09-datasource-pipeline-design.md` § "blocks-ui adapter".
+Pick up #45 — add trend sparkline to trust-score-panel using `simulated()` data source from pages-data. The DataSource pipeline (`simulated`, `inlineSource`, `ScenarioController`) is designed for exactly this. Use a second DataSourceAdapter on the panel for trend data.
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #44 | Migrate DataEndpointMixin → DataSourceMixin | S | Low | **Unblocked** — pages#145 closed |
+| #45 | Trust-score-panel trend sparkline with simulated data source | S | Med | Just filed — uses simulated() from pages-data |
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
