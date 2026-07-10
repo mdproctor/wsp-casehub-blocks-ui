@@ -1,0 +1,9 @@
+branch: issue-45-trust-score-trend-sparkline
+project-sha: e1f6f8fc6153fa46c18daebb71f30b56d3736048
+date: 2026-07-10
+issue: 45
+issue-repo: casehubio/blocks-ui
+covers: 45
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
