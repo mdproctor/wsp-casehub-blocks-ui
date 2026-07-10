@@ -1,0 +1,9 @@
+branch: issue-48-migrate-data-table-to-pages
+project-sha: 950f781f2bf3ac32477d8976b85ba81c8515da4b
+date: 2026-07-10
+issue: 48
+issue-repo: casehubio/blocks-ui
+covers: 48
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
