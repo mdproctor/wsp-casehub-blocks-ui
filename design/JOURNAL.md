@@ -11,3 +11,16 @@
 **Cross-repo split:** Pages changes (Tasks 1-3) implemented locally, Task 4 (table redesign) deferred to pages session. Filed casehub-pages#152. blocks-ui Tasks 5-8 depend on pages completion.
 
 **Design review:** 3 rounds, 16 issues, 15 verified, 1 accepted, $14.19. Key additions: ExtractionDef type narrowing, fromRows() factory for in-memory domain data, SnapshotEvent.totalRows for pagination, client-sort/filter mechanics with TypedRow.
+
+## §Session-2 — 2026-07-11: Implementation — pipeline integration and first consumer
+
+**Pages session completed Tasks 1-4:** ExtractionDef, fromRows(), SnapshotEvent.totalRows, DataReceiver type fix, SourceFactory extension, and full table redesign (pages-data-table → pages-table, 83 tests). casehub-pages#152 landed.
+
+**blocks-ui Tasks 5-7 implemented this session:**
+- fetchSource rewritten to use extractDataSet — raw `as never` cast deleted, real TypedDataSet with working TypedRow accessors produced. navigatePath utility for totalPath extraction.
+- DataSourceAdapter and DataSourceMixin typed as `TypedDataSet | undefined`, createSourceFactory passes columns/dataPath/totalPath through.
+- list-pane migrated: removed ColumnDef/rows extraction, passes TypedDataSet directly to pages-table. Added columnConfig and columnRenderers properties.
+
+**Discovery:** Empty array `[]` through extractDataSet throws EMPTY_RESULT instead of producing empty TypedDataSet. Garden entry GE-20260711-5170ee filed. Consumer workaround: don't set endpoint until data is expected, or handle EMPTY_RESULT as empty state.
+
+**Remaining:** Task 8 — migrate trust-score-panel, audit-trail-viewer, work-item-inbox, notification-inbox, subscription-list, vitest configs, examples. Mechanical — same pattern as list-pane migration.
