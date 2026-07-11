@@ -1,0 +1,9 @@
+branch: issue-49-typeddataset-native
+project-sha: e488e0ce064f2b0a98af546122b78fdf28b97f46
+date: 2026-07-11
+issue: 49
+issue-repo: casehubio/blocks-ui
+covers: 49
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
