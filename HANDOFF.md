@@ -1,5 +1,7 @@
 # HANDOFF — casehub-blocks-ui
 
+*Updated: #46 closed — removed from backlog.*
+
 **Date:** 2026-07-11
 **Branch:** `issue-49-typeddataset-native` — #49 in progress (Task 8 remaining)
 **Priority:** Task 8 — migrate 5 remaining consumers to TypedDataSet + pages-table.
@@ -70,7 +72,6 @@ Once all consumers are migrated and tests pass:
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
 | #50 | Recover 43 PagesTable tests for TypedDataSet integration | M | Med | Filed during design review |
-| #46 | pages-table shows "No data" in trust-score-panel/audit-trail-viewer | S | Med | Paused on stack; may be fixed by #49 migration |
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
