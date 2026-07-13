@@ -1,18 +1,22 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-12
-**Branch:** `main` — #49 closed
-**Priority:** #50 (recover PagesTable tests) is the natural follow-on.
+**Date:** 2026-07-13
+**Branch:** `main`
+**Priority:** #47 is now blocked on casehub-pages#172. Pick up #50 or another issue.
 
 ---
 
 ## Last Session
 
-Four sessions on #49. Designed the unified extraction pipeline (fetch is just push), ran 3-round adversarial design review, implemented pages foundation (Tasks 1-4 in pages), then blocks-ui foundation (Tasks 5-7: fetchSource pipeline, DataSourceAdapter/Mixin typing, list-pane migration). Final session migrated all 5 remaining consumers (trust-score-panel, audit-trail-viewer, work-item-inbox, notification-inbox, subscription-list), fixed case-timeline extraction error, improved compact timeline UX (labels, connecting line, temporal spacing), added inline sparkline to trust-score compact mode. 367 tests pass. Landed as 26b0e67 on main.
+Designed row-detail expansion for `pages-table` — the missing UX pattern that makes audit-trail-viewer's row click actually work. Spec written and committed to pages repo (`docs/specs/2026-07-13-row-detail-expansion-design.md`), issue filed as casehub-pages#172. blocks-ui#47 commented with the dependency. No code changes to blocks-ui this session — this was pure design work.
 
 ## Immediate Next Step
 
-Pick up #50 — recover 43 PagesTable tests for TypedDataSet integration. These tests were dropped during the pages-data-table → pages-table redesign and need rewriting for the new API.
+Pick up #50 — recover 43 PagesTable tests for TypedDataSet integration.
+
+## What's Left
+
+- #47 — audit-trail-viewer row expand. Blocked by casehub-pages#172. Once pages implements `getRowDetail`, the fix here is passing a callback. · XS · Low
 
 ## What's Next
 
@@ -26,6 +30,7 @@ Pick up #50 — recover 43 PagesTable tests for TypedDataSet integration. These 
 
 ## References
 
-- Spec: `docs/specs/2026-07-11-typeddataset-native-design.md`
-- Garden: GE-20260712-7250c5 (DataSourceMixin extraction pipeline gotcha), GE-20260711-5170ee (empty array gotcha), GE-20260711-190f40 (ide_edit_member gotcha)
-- Pages issue: casehub-pages#152 (landed)
+- Spec (pages repo): `docs/specs/2026-07-13-row-detail-expansion-design.md`
+- Pages issue: casehub-pages#172
+- Blog: `blog/2026-07-13-mdp01-the-missing-ux-pattern.md`
+- Previous: `git show HEAD~1:HANDOFF.md`
