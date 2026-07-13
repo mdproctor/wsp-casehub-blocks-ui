@@ -2,7 +2,8 @@
 
 **Date:** 2026-07-13
 **Branch:** `main`
-**Priority:** #47 is now blocked on casehub-pages#172. Pick up #50 or another issue.
+*Updated: #50 closed — removed from backlog.*
+**Priority:** #47 is blocked on casehub-pages#172. Pick up #33, #34, #26, or another issue.
 
 ---
 
@@ -12,7 +13,7 @@ Designed row-detail expansion for `pages-table` — the missing UX pattern that 
 
 ## Immediate Next Step
 
-Pick up #50 — recover 43 PagesTable tests for TypedDataSet integration.
+Pick up next open issue — #33 (subscription editor), #34 (notification prefs), or #26 (row/column spanning).
 
 ## What's Left
 
@@ -22,7 +23,6 @@ Pick up #50 — recover 43 PagesTable tests for TypedDataSet integration.
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #50 | Recover 43 PagesTable tests for TypedDataSet integration | M | Med | Filed during design review |
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
