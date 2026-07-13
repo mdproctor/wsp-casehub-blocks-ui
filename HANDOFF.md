@@ -2,31 +2,25 @@
 
 **Date:** 2026-07-13
 **Branch:** `main`
-**Priority:** Channel-activity promotion landed. Connectors UI extraction and claudony integration are the follow-on. Pick up #33, #34, #26, or #52 next.
+**Priority:** Small fixes batch landed (#51, #47, #52). Build is clean, audit-trail-viewer row expand works, chat-app has a permanent home. Resume with #33, #34, #26, or #35.
 
 ---
 
 ## Last Session
 
-Promoted connectors' 8 qhorus chat-demo primitives into `@casehubio/blocks-ui-channel-activity` — channel-message, channel-input, channel-feed, channel-nav, channel-member-panel, channel-emoji-picker, channel-reaction-bar, channel-thread. Renamed `qhorus-*` → `channel-*`, event topics `chat:*` → `channel:*`. Added extension points (formatSender, renderContextHeader, renderError, type selector with allowedTypes/deniedTypes filtering, terminalDimming, eventStyling, autoScroll, staleCursorMinutes). Formalised component customisation protocol PP-20260713-8ea1af. Design-reviewed (5 rounds, 18 issues, all resolved). Filed pages#174 (gap surfacing) and pages#175 (cursor persistence).
+Batch of S/XS fixes on one branch. #51 (broken build) was bigger than filed — root cause was `exactOptionalPropertyTypes` violations in blocks-ui-core preventing declaration file generation, cascading 343 errors into all downstream components. Also added missing tsconfig decorator flags to 3 components. #47 wired audit-trail-viewer row expansion via pages-table's `getRowDetail` callback (pages#172 shipped). #52 resolved chat-app's permanent home as an example page in blocks-ui.
 
 ## Immediate Next Step
 
-Pick up #52 (chat-app module permanent home) or start connectors-side integration — update connectors' chat-demo to consume from blocks-ui instead of local primitives.
+Pick up #33 (subscription editor), #34 (notification preferences), or #26 (data-table spanning).
 
 ## Cross-Module
 
-**We're blocking** (other modules waiting on us):
-- `claudony` — can now retire hand-rolled channel-panel and consume `@casehubio/blocks-ui-channel-activity` · M · Med
-
-**Blocked by** (can't proceed until):
-- `casehub-pages#174` — gap surfacing on reconnect (gates stale cursor upgrade from timestamp-based to gap-based)
-- `casehub-pages#175` — cursor persistence (gates page-reload cursor resumption)
+*Unchanged — `git show HEAD~1:HANDOFF.md`*
 
 ## What's Left
 
-- #47 — audit-trail-viewer row expand. Blocked by casehub-pages#172. · XS · Low
-- #52 — chat-app module permanent home decision. · S · Low
+*Nothing trailing — all three issues closed.*
 
 ## What's Next
 
@@ -35,13 +29,9 @@ Pick up #52 (chat-app module permanent home) or start connectors-side integratio
 | #33 | Subscription editor component | M | Med | |
 | #34 | Notification preferences and suppression UI | M | Med | |
 | #26 | Data-table row and column spanning | M | Med | |
-| #35 | Cross-repo component migration tracking | L | High | Epic — #39 channel panel portion done |
+| #35 | Cross-repo component migration tracking | L | High | Epic — AML + claudony done, 3 remaining |
 
 ## References
 
-- Spec: `docs/specs/2026-07-13-channel-activity-promotion-design.md`
-- Protocol: `docs/protocols/blocks-ui/component-customisation-pattern.md`
-- Blog: `blog/2026-07-13-mdp02-three-repos-one-component-library.md`
-- Pages issues: casehub-pages#174, casehub-pages#175
-- Chat-app home: #52
+- Blog: `blog/2026-07-13-mdp03-the-build-that-lied.md`
 - Previous: `git show HEAD~1:HANDOFF.md`
