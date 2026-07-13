@@ -1,0 +1,9 @@
+branch: issue-51-small-fixes-batch
+project-sha: 8757233bc460a16b0cba8961e0c6183e68fe84c2
+date: 2026-07-13
+issue: 51
+issue-repo: casehubio/blocks-ui
+covers: 51,47,52
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
