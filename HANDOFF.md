@@ -2,13 +2,15 @@
 
 **Date:** 2026-07-14
 **Branch:** `main`
+*Updated: #27 closed — removed from backlog.*
+
 **Priority:** CI green on casehubio/blocks-ui. All 16 packages published at 0.2.2. Pages also at 0.2.2. Gap analysis done for #38 clinical promotion — 6 issues filed (#58–#63). Channel-activity divergence with connectors identified but not yet addressed.
 
 ---
 
 ## Last Session
 
-CI/build stabilisation: bumped all pages and blocks-ui packages to 0.2.2 (Maven alignment), fixed cross-repo package auth (GH_PACKAGES_TOKEN secret + publishConfig.registry), resolved typecheck errors (exactOptionalPropertyTypes, IntersectionObserver mock, node types, stale tsconfig references), made vitest aliases conditional for CI. Closed #27 (PagesTable migration — blocks-ui side done). Full gap analysis on #38 clinical promotion — all 6 components assessed, 3 complementary pairs analysed (all SEPARATE), 6 issues filed. Also identified channel-activity divergence: blocks-ui has the extracted component but connectors still has 30 files of its own copy, never switched over.
+CI/build stabilisation: bumped all pages and blocks-ui packages to 0.2.2 (Maven alignment), fixed cross-repo package auth (GH_PACKAGES_TOKEN secret + publishConfig.registry), resolved typecheck errors (exactOptionalPropertyTypes, IntersectionObserver mock, node types, stale tsconfig references), made vitest aliases conditional for CI. Full gap analysis on #38 clinical promotion — all 6 components assessed, 3 complementary pairs analysed (all SEPARATE), 6 issues filed. Also identified channel-activity divergence: blocks-ui has the extracted component but connectors still has 30 files of its own copy, never switched over.
 
 ## Immediate Next Step
 
