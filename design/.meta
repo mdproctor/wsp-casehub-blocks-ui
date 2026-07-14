@@ -1,0 +1,9 @@
+branch: issue-38-clinical-ui-promotion
+project-sha: 9bea88e5d92d2d0805e66c8f827148fa1c9b911d
+date: 2026-07-14
+issue: 38
+issue-repo: casehubio/blocks-ui
+covers: 38,58,59,60,61,62,63
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
