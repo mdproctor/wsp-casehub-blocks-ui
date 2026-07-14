@@ -1,37 +1,33 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-13
+**Date:** 2026-07-14
 **Branch:** `main`
-**Priority:** Small fixes batch landed (#51, #47, #52). Build is clean, audit-trail-viewer row expand works, chat-app has a permanent home. Resume with #33, #34, #26, or #35.
+**Priority:** #55 delivered — blocks-timeline replaces case-timeline. Epic audit of #35 child epics done. CI fix pushed. Next: pick up #33, #34, or remaining app delivery items from #56.
 
 ---
 
 ## Last Session
 
-Batch of S/XS fixes on one branch. #51 (broken build) was bigger than filed — root cause was `exactOptionalPropertyTypes` violations in blocks-ui-core preventing declaration file generation, cascading 343 errors into all downstream components. Also added missing tsconfig decorator flags to 3 components. #47 wired audit-trail-viewer row expansion via pages-table's `getRowDetail` callback (pages#172 shipped). #52 resolved chat-app's permanent home as an example page in blocks-ui.
+Major delivery: unified pluggable timeline (`<blocks-timeline>`) replacing `<case-timeline>`. Strategy pattern with two shipped strategies (event chronology, state progression), three layout modes (vertical, horizontal, compact), render callback resolution, temporal weighting, staggered axis labels. 174 tests. Three example pages. Design-reviewed (3 adversarial rounds, 14 issues resolved). Also audited all five child epics under #35 (cross-repo migration tracking) — updated #36 (OpenClaw), #38 (Clinical), #41 (DevTown), filed missing component issues (#53 queue-board, #54 routing-rationale), created app delivery epic #56. Fixed CI workflow token issue. Updated audit-trail-viewer example page.
 
 ## Immediate Next Step
 
-Pick up #33 (subscription editor), #34 (notification preferences), or #26 (data-table spanning).
-
-## Cross-Module
-
-*Unchanged — `git show HEAD~1:HANDOFF.md`*
-
-## What's Left
-
-*Nothing trailing — all three issues closed.*
+Pick up #33 (subscription editor) or #34 (notification preferences) — both are M/Med, independent, and needed by notification-inbox consumers.
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #33 | Subscription editor component | M | Med | |
-| #34 | Notification preferences and suppression UI | M | Med | |
-| #26 | Data-table row and column spanning | M | Med | |
-| #35 | Cross-repo component migration tracking | L | High | Epic — AML + claudony done, 3 remaining |
+| #33 | Subscription editor component | M | Med | notification-inbox incomplete without it |
+| #34 | Notification preferences and suppression UI | M | Med | notification-inbox incomplete without it |
+| #54 | Routing rationale component | M | Med | DevTown trust visibility |
+| #26 | Data-table row and column spanning | M | Med | clinical regulatory grid |
+| #27 | PagesTable migration to pages-primitives | M | Med | cleanup |
+| #53 | Queue-board component | M | Med | single consumer (DevTown), needs design review |
 
 ## References
 
-- Blog: `blog/2026-07-13-mdp03-the-build-that-lied.md`
+- Spec: `docs/specs/2026-07-13-blocks-timeline-design.md`
+- Plan: `docs/plans/2026-07-14-blocks-timeline.md`
+- App delivery epic: #56
 - Previous: `git show HEAD~1:HANDOFF.md`
