@@ -1,0 +1,9 @@
+branch: issue-53-queue-board
+project-sha: a83bec0e16038ac1710a4ed060a54a8d7bb00765
+date: 2026-07-15
+issue: 53
+issue-repo: casehubio/blocks-ui
+covers: 53
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
