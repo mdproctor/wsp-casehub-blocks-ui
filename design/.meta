@@ -1,0 +1,9 @@
+branch: issue-64-channel-activity-extensions
+project-sha: e74df45a26bf9d962250dbfb8b91de51ff605920
+date: 2026-07-16
+issue: 64
+issue-repo: casehubio/blocks-ui
+covers: 64,65
+flyway-next-v: unknown
+design-repo: project
+design-section-hashes: 
