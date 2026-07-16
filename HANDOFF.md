@@ -2,13 +2,13 @@
 
 **Date:** 2026-07-16
 **Branch:** `main`
-**Priority:** #53 grouped-data-view landed. 22 packages total (was 21). Pages composability (#188) shipped — pages-grouped-view now composes pages-table. Enhancement issue #196 filed for interstitial hooks, legend, rowAccent, nested grouping.
+**Priority:** #64 and #65 landed (channel-activity extension points for claudony). PR #74 open on blessed repo. 22 packages.
 
 ---
 
 ## Last Session
 
-Completed #53 (renamed from queue-board to grouped-data-view). Key insight: queue-board was a configuration of a generic grouped table pattern, not a dedicated component. Filed and got casehub-pages#188 (composability) shipped first. Built grouped-data-view as thin DataSourceMixin wrapper over composable pages-grouped-view. Design-reviewed (4 rounds, $14.86). Also committed #68 (button color), #69 (thread reactions) PRs from another session, and synced #66 to fork.
+Delivered #64 (channel-nav compact dropdown mode, showCreate/showDelete toggles, messageCounts) and #65 (renderContent callback on channel-message). Both claudony-requested. Also fixed formatSender passthrough gap on channel-feed and channel-thread. Discovered shadow DOM `<select>` positioning gotcha — native popups displace in nested shadow roots with scrolled containers; replaced with custom dropdown. Garden entry GE-20260716-424a17.
 
 ## Immediate Next Step
 
