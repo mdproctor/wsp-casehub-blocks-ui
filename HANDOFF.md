@@ -1,32 +1,32 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-16
+**Date:** 2026-07-17
 **Branch:** `main`
-**Priority:** #64 and #65 landed (channel-activity extension points for claudony). PR #74 open on blessed repo. 22 packages.
+**Priority:** #67 and #54 landed. Shadow DOM CSS scoping fix + routing-rationale component. 23 packages.
 
 ---
 
 ## Last Session
 
-Delivered #64 (channel-nav compact dropdown mode, showCreate/showDelete toggles, messageCounts) and #65 (renderContent callback on channel-message). Both claudony-requested. Also fixed formatSender passthrough gap on channel-feed and channel-thread. Discovered shadow DOM `<select>` positioning gotcha — native popups displace in nested shadow roots with scrolled containers; replaced with custom dropdown. Garden entry GE-20260716-424a17.
+Fixed #67 — column renderers in similarity-panel, compliance-summary, and work-item-inbox used CSS classes that couldn't reach pages-table's shadow DOM. Root cause: shadow DOM CSS scoping. Fix: inline styles. Formalised as protocol rule (PP-20260713-8ea1af) and garden entry (GE-20260717-4618a1).
+
+Built #54 — routing-rationale component. Trust-weighted routing decision explanation: score header with threshold/margin visualization, alternatives table with phase badges, policy summary. Data contract maps to engine's TrustCandidateClassifier + TrustRoutingPolicy. Dual-data mode. 20 tests. Full adversarial design review (5 rounds, 25 issues).
 
 ## Immediate Next Step
 
-Pick up #67 (column renderers not applied in similarity-panel/compliance-summary) — pages-table integration issue. Run `/work` to start.
+Pick up next issue from What's Next. Run `/work` to start.
 
 ## What's Left
 
 - Channel-activity gap analysis — connectors has 30 qhorus UI files diverged from blocks-ui's channel-activity. Needs full diff before migration. · M · Med
-- #67 column renderers not applied in similarity-panel/compliance-summary — pages-table integration issue · S · Med
 - Parent deep-dive doc (`docs/repos/casehub-blocks-ui.md`) stale — references DataEndpointMixin (renamed), missing new components · S · Low
 - casehub-pages#196 — table enhancements: interstitial hooks, legend component, rowAccent, nested grouping · M · Med
+- Engine REST endpoint for routing decision data — blocks endpoint mode of routing-rationale. Tracked as deferred issue in spec. · M · Med
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #67 | Column renderers not applied | S | Med | pages-table binding investigation |
-| #54 | Routing rationale component | M | Med | DevTown priority |
 | #33 | Subscription editor | M | Med | notification-inbox incomplete without it |
 | #34 | Notification preferences UI | M | Med | notification-inbox incomplete without it |
 | #26 | Data-table row and column spanning | M | Med | clinical regulatory grid |
