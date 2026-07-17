@@ -9,3 +9,4 @@
 | [2026-07-13-mdp01-the-missing-ux-pattern.md](2026-07-13-mdp01-the-missing-ux-pattern.md) | 2026-07-13 | Row-detail expansion design for pages-table |
 | [2026-07-13-mdp02-three-repos-one-component-library.md](2026-07-13-mdp02-three-repos-one-component-library.md) | 2026-07-13 | Channel-activity promotion — connectors chat primitives into blocks-ui |
 | [2026-07-16-mdp01-the-select-that-lost-its-way.md](2026-07-16-mdp01-the-select-that-lost-its-way.md) | 2026-07-16 | Channel-activity extension points — renderContent callback, compact dropdown, shadow DOM select gotcha |
+| [2026-07-17-mdp01-the-styles-that-never-arrived.md](2026-07-17-mdp01-the-styles-that-never-arrived.md) | 2026-07-17 | Shadow DOM CSS scoping breaks column renderers — inline styles fix, routing-rationale component |
