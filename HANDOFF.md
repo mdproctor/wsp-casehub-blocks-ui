@@ -2,19 +2,19 @@
 
 **Date:** 2026-07-17
 **Branch:** `main`
-**Priority:** #57 landed (timeline pagination). #73 tested. #1, #2, #3 closed as done. PR #75 open.
+**Priority:** #82 closed (emoji picker viewport fix). Schema-form epic #81 filed with 5 children. #33/#34 branch created but no implementation yet.
 
 ---
 
 ## Last Session
 
-Built timeline pagination (#57) — strategy-declared `supportsPagination` + `extractPaginationMeta`. Component bypasses DataSourceMixin for paginated endpoint mode (raw JSON needed for envelope metadata). Load-more button in vertical layout, progress text, pageSize prop. 14 new tests. Code review caught a pageSize refetch guard bug — fixed.
+Fixed emoji picker viewport overflow (#82) — dead CSS `.flip` class was defined but never wired to JS. Added `_computePickerPosition()` with `getBoundingClientRect`-based flip/align logic. Garden entry GE-20260717-6610cc submitted.
 
-Closed #73 (formatSender crash — already fixed in 5f62a1e, added regression test). Closed #1, #2, #3 as stale infra issues organically completed. Enriched garden entry GE-20260712-7250c5 with pagination envelope variant.
+Designed #33 (subscription editor) + #34 (notification preferences) together. Identified schema-form gaps that gate both issues. Filed epic #81 with five children: #76 array editing, #77 nested object editing, #78 field metadata, #79 validation, #80 getEventTypes API. Branch `issue-33-subscription-prefs` exists but has no implementation — waiting on schema-form enhancements.
 
 ## Immediate Next Step
 
-PR #75 is open on casehubio/blocks-ui. Merge when CI passes, or pick up next issue from What's Next.
+Start schema-form epic #81 — build order: #78 + #80 first (quick wins), then #77 → #76, then #79.
 
 ## What's Left
 
@@ -27,9 +27,10 @@ PR #75 is open on casehubio/blocks-ui. Merge when CI passes, or pick up next iss
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #33 | Subscription editor | M | Med | notification-inbox incomplete without it |
-| #34 | Notification preferences UI | M | Med | notification-inbox incomplete without it |
-| #26 | Data-table row and column spanning | M | Med | clinical regulatory grid |
+| #81 | Schema-form enhancements epic (5 children) | L | Med | Gates #33 and #34 |
+| #33 | Subscription editor | M | Med | Blocked by #81 |
+| #34 | Notification preferences UI | M | Med | Blocked by #81 |
+| #26 | Data-table row and column spanning | M | Med | Clinical regulatory grid |
 
 ## References
 
