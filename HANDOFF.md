@@ -1,35 +1,36 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-17
+**Date:** 2026-07-18
 **Branch:** `main`
-**Priority:** #82 closed (emoji picker viewport fix). Schema-form epic #81 filed with 5 children. #33/#34 branch created but no implementation yet.
+**Priority:** #83 closed — schema-form migrated to pages as @casehubio/pages-form. Epic #81 children (#76–#80) now target pages.
 
 ---
 
 ## Last Session
 
-Fixed emoji picker viewport overflow (#82) — dead CSS `.flip` class was defined but never wired to JS. Added `_computePickerPosition()` with `getBoundingClientRect`-based flip/align logic. Garden entry GE-20260717-6610cc submitted.
+Moved schema-form from blocks-ui-core to casehub-pages as a new `pages-form` package. Removed schema-form source, example page, and barrel export from blocks-ui. Updated work-item-detail to use `<pages-schema-form>` with a local `SchemaFormElement` interface.
 
-Designed #33 (subscription editor) + #34 (notification preferences) together. Identified schema-form gaps that gate both issues. Filed epic #81 with five children: #76 array editing, #77 nested object editing, #78 field metadata, #79 validation, #80 getEventTypes API. Branch `issue-33-subscription-prefs` exists but has no implementation — waiting on schema-form enhancements.
+In pages: created pages-form package (22 tests), filled gaps (nested object editing, array editing with add/remove), aligned CSS with pages' form input styling, created three-tab gallery example (Schema/HTML/YAML), wired tsPath auto-detection in generate-samples.js, merged Form Components into Schema Form as tabbed comparison.
+
+Key insight: the initial migration copied blocks-ui's schema-form wholesale without auditing pages' existing form infrastructure. Pages already had 6 form input Web Components, type definitions, and gallery examples. The audit revealed schema-form's genuine value is the orchestrator layer (schema→form, display mode, nesting, arrays, field registry, form-level submit) — not the individual field rendering.
 
 ## Immediate Next Step
 
-Start schema-form epic #81 — build order: #78 + #80 first (quick wins), then #77 → #76, then #79.
+Epic #81 (schema-form enhancements) should be worked in the pages session. Children #76–#80 need re-filing against casehub-pages.
 
 ## What's Left
 
-- Channel-activity gap analysis — connectors has 30 qhorus UI files diverged from blocks-ui's channel-activity. Needs full diff before migration. · M · Med
-- Parent deep-dive doc (`docs/repos/casehub-blocks-ui.md`) stale — references DataEndpointMixin (renamed), missing new components · S · Low
-- casehub-pages#196 — table enhancements: interstitial hooks, legend component, rowAccent, nested grouping · M · Med
-- Engine REST endpoint for routing decision data — blocks endpoint mode of routing-rationale · M · Med
+- Channel-activity gap analysis — connectors has 30 qhorus UI files diverged from blocks-ui's channel-activity · M · Med
+- Parent deep-dive doc (`docs/repos/casehub-blocks-ui.md`) stale · S · Low
+- casehub-pages#196 — table enhancements · M · Med
+- Engine REST endpoint for routing decision data · M · Med
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #81 | Schema-form enhancements epic (5 children) | L | Med | Gates #33 and #34 |
-| #33 | Subscription editor | M | Med | Blocked by #81 |
-| #34 | Notification preferences UI | M | Med | Blocked by #81 |
+| #33 | Subscription editor | M | Med | Blocked by pages #81 |
+| #34 | Notification preferences UI | M | Med | Blocked by pages #81 |
 | #26 | Data-table row and column spanning | M | Med | Clinical regulatory grid |
 
 ## References
