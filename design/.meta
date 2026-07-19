@@ -1,0 +1,9 @@
+branch: issue-87-composable-case-explorer
+project-sha: 2e9293651485425bd32ffac3510e9085396c5b50
+date: 2026-07-20
+issue: 87
+issue-repo: casehubio/blocks-ui
+covers: 87
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
