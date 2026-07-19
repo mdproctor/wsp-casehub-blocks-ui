@@ -1,37 +1,32 @@
 # HANDOFF — casehub-blocks-ui
 
-**Date:** 2026-07-18
-**Branch:** `main`
-**Priority:** #83 closed — schema-form migrated to pages as @casehubio/pages-form. Epic #81 children (#76–#80) now target pages.
+**Date:** 2026-07-19
+**Branch:** `issue-26-data-table-row-col-spanning`
+**Priority:** Cell spanning design complete — handed to pages as epic casehub-pages#210. blocks-ui needs new work.
 
 ---
 
 ## Last Session
 
-Moved schema-form from blocks-ui-core to casehub-pages as a new `pages-form` package. Removed schema-form source, example page, and barrel export from blocks-ui. Updated work-item-detail to use `<pages-schema-form>` with a local `SchemaFormElement` interface.
-
-In pages: created pages-form package (22 tests), filled gaps (nested object editing, array editing with add/remove), aligned CSS with pages' form input styling, created three-tab gallery example (Schema/HTML/YAML), wired tsPath auto-detection in generate-samples.js, merged Form Components into Schema Form as tabbed comparison.
-
-Key insight: the initial migration copied blocks-ui's schema-form wholesale without auditing pages' existing form infrastructure. Pages already had 6 form input Web Components, type definitions, and gallery examples. The audit revealed schema-form's genuine value is the orchestrator layer (schema→form, display mode, nesting, arrays, field registry, form-level submit) — not the individual field rendering.
+Designed data-table cell spanning (row + column). Replaced the per-row CSS Grid model with a single body grid in the spec. Design-reviewed (13 findings, all addressed). Filed 7 child issues (#211–#217) against casehub-pages. Closed blocks-ui#26, #76, #77, #78, #79. Garden entry GE-20260719-4db710 (CSS Grid single-container virtual scroll technique).
 
 ## Immediate Next Step
 
-Epic #81 (schema-form enhancements) should be worked in the pages session. Children #76–#80 need re-filing against casehub-pages.
+Close this branch via `/work end` — design deliverables are complete. Then find new blocks-ui work from the What's Next table or check the issue tracker for unblocked items.
 
 ## What's Left
 
 - Channel-activity gap analysis — connectors has 30 qhorus UI files diverged from blocks-ui's channel-activity · M · Med
 - Parent deep-dive doc (`docs/repos/casehub-blocks-ui.md`) stale · S · Low
-- casehub-pages#196 — table enhancements · M · Med
 - Engine REST endpoint for routing decision data · M · Med
 
 ## What's Next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #33 | Subscription editor | M | Med | Blocked by pages #81 |
+| #33 | Subscription editor | M | Med | Blocked by pages #81 (needs #207, #208 — now landed, pages needs to close) |
 | #34 | Notification preferences UI | M | Med | Blocked by pages #81 |
-| #26 | Data-table row and column spanning | M | Med | Clinical regulatory grid |
+| #80 | NotificationApi.getEventTypes() | XS | Low | API work, not schema-form |
 
 ## References
 
