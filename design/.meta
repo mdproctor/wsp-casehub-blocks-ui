@@ -1,0 +1,9 @@
+branch: issue-80-notification-api-get-event-types
+project-sha: 25032a79ae33c0c6ea2a26121b9d1dd8f53349ee
+date: 2026-07-19
+issue: 80
+issue-repo: casehubio/blocks-ui
+covers: 80
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
