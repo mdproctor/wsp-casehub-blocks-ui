@@ -1,3 +1,5 @@
+*Updated: #26 closed — removed from backlog.*
+
 # HANDOFF — casehub-blocks-ui
 
 **Date:** 2026-07-19
