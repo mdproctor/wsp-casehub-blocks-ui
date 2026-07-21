@@ -1,0 +1,9 @@
+branch: issue-90-entity-reader
+project-sha: 012d41a29d457058b35574d60c9ed44fb536cc2c
+date: 2026-07-21
+issue: 90
+issue-repo: casehubio/blocks-ui
+covers: 90
+flyway-next-v: unknown
+design-repo: project
+design-section-hashes: 
