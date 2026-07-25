@@ -1,38 +1,24 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** issue-33-subscription-editor (closed)
-**Date:** 2026-07-21
-**Issues:** casehubio/blocks-ui#33, casehubio/blocks-ui#34
+**Branch:** issue-95-align-table-pipeline (closed)
+**Date:** 2026-07-25
+**Issues:** casehubio/blocks-ui#95
 
 ## What landed
 
-Schema-driven subscription editor (#33) and notification preferences UI (#34), plus GDPR erasure form migration — all using `pages-schema-form`.
+Aligned all 10 table components with the pages pipeline (`DataSource → SourceConnector → DataSourceController`). Components now use `DataSourceMixin` or `DataSourceAdapter` for data lifecycle instead of manual fetch/fromRows/loading state.
 
-**pages-form improvements (cross-repo, casehub-pages):**
-- `oneOf` labeled enums with disabled placeholder in create mode
-- `format: 'time'` for HH:mm inputs
-- `readOnly` field support (validation skip)
-- Recursive validation for nested objects and array items
+**Per-component:**
+- compliance-summary, similarity-panel: +client-sort
+- routing-rationale: fixed endpoint-path renderer bug (renderers only built for property path), +client-sort
+- trust-score-panel: removed duplicate fromRows in render, use pipeline dataSet, +client-sort
+- trust-workbench: declarative list-pane binding replacing imperative _syncListPane
+- audit-trail-viewer: pipeline delivers real dataset (was pushing empty), +client-sort
+- preferences-editor: adopted DataSourceAdapter (was manual _loading/_error/_dataSet)
+- work-item-inbox: extracted fromRows from render path into @state() (SSE lifecycle too complex for full adapter adoption)
+- list-pane, grouped-data-view: verified aligned, no changes
 
-**New components in notification-inbox:**
-- `subscription-editor` — dynamic event-type field rebuild for constraint/template fields
-- `channel-preferences` — per-channel delivery mode toggle (immediate/digest), digest schedule, groupBy, quiet hours with action
-- `mute-list` — pages-table + inline schema-form with scope-conditional entityType
-- `snooze-control` — two-state toggle with date-time picker
-- `notification-preferences` — container composing all three
-
-**Migrated:**
-- `gdpr-erasure-action` — hand-coded form → schema-form (−48 lines)
-
-**Frontend type alignment:**
-- `DigestScheduleWeeklyAt`, `ENTITY_WATCHERS` target, `DigestGroupBy`, `QuietHoursAction`
-
-**Example page:**
-- Preferences button + dialog with full mock API routes (channels, preferences PATCH, mutes CRUD)
-- Column overlap fix: unread dot merged into title, AGE column widened
-- `relativeTime` shows weeks/months/years instead of dates
-
-**Tests:** 177 passing across pages-form (65), notification-inbox (101), gdpr-erasure-action (11)
+**Stats:** 14 files, 192 insertions, 99 deletions, 316 tests passing
 
 ## What's left
 
@@ -43,6 +29,8 @@ Schema-driven subscription editor (#33) and notification preferences UI (#34), p
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| — | Publish `@casehubio/pages-form` to GitHub Packages | XS | Low | Blocks blocks-ui release |
-| — | SSE for preferences/mute/snooze | S | Med | Deferred — fetch-on-mount sufficient |
-| — | Drag-and-drop ordering for constraints/targets | S | Med | Deferred — add/remove is functional |
+| #94 | Rename all components to use `blocks-` prefix consistently | M | Med | Breaking change |
+| #93 | Migrate native HTML elements to `@casehubio/pages-ui-components` | S | Low | |
+| #88 | pages-modal duplicate CustomElementRegistry crash in esbuild bundle | S | Med | Bug |
+| #85 | Column resizing interaction with single-grid model | M | High | |
+| #84 | Variable row heights with cell spanning | L | High | |
