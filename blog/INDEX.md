@@ -11,3 +11,5 @@
 | [2026-07-16-mdp01-the-select-that-lost-its-way.md](2026-07-16-mdp01-the-select-that-lost-its-way.md) | 2026-07-16 | Channel-activity extension points — renderContent callback, compact dropdown, shadow DOM select gotcha |
 | [2026-07-17-mdp01-the-styles-that-never-arrived.md](2026-07-17-mdp01-the-styles-that-never-arrived.md) | 2026-07-17 | Shadow DOM CSS scoping breaks column renderers — inline styles fix, routing-rationale component |
 | [2026-07-17-mdp02-the-css-that-looked-like-it-worked.md](2026-07-17-mdp02-the-css-that-looked-like-it-worked.md) | 2026-07-17 | Emoji picker viewport overflow — dead CSS flip class, viewport-aware positioning |
+| [2026-07-25-mdp01-the-pipeline-was-already-there.md](2026-07-25-mdp01-the-pipeline-was-already-there.md) | 2026-07-25 | Table pipeline alignment — DataSourceMixin/Adapter adoption across 10 components |
+| [2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md](2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md) | 2026-07-25 | Barrel import side effects, pages-ui-components migration, blocks- prefix rename |
