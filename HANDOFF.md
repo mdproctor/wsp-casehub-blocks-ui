@@ -1,48 +1,26 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** issue-33-subscription-editor (closed)
+**Branch:** issue-89-trust-workbench (closed)
 **Date:** 2026-07-21
-**Issues:** casehubio/blocks-ui#33, casehubio/blocks-ui#34
+**Issue:** casehubio/blocks-ui#89
 
 ## What landed
 
-Schema-driven subscription editor (#33) and notification preferences UI (#34), plus GDPR erasure form migration — all using `pages-schema-form`.
+`<trust-workbench>` — composite trust visibility component composing trust-score-panel, routing-rationale, and trust-feedback-display in a pre-wired split-workbench layout. Capability drill-down filters routing history. Three consumption tiers (drop-in, custom renderers, direct composition). 29 tests.
 
-**pages-form improvements (cross-repo, casehub-pages):**
-- `oneOf` labeled enums with disabled placeholder in create mode
-- `format: 'time'` for HH:mm inputs
-- `readOnly` field support (validation skip)
-- Recursive validation for nested objects and array items
+**Prerequisites landed alongside:**
+- trust-score-panel: event topic migrated from dot to colon separator (`trust:capability-selected`), switched from raw CustomEvent to `emitPagesEvent` (payload convention), SVG gauge replaced with compact score header, trend section hidden when no data
+- routing-rationale: `PHASE_STYLES` exported for downstream reuse
 
-**New components in notification-inbox:**
-- `subscription-editor` — dynamic event-type field rebuild for constraint/template fields
-- `channel-preferences` — per-channel delivery mode toggle (immediate/digest), digest schedule, groupBy, quiet hours with action
-- `mute-list` — pages-table + inline schema-form with scope-conditional entityType
-- `snooze-control` — two-state toggle with date-time picker
-- `notification-preferences` — container composing all three
+**Showcase:** `examples/src/pages/trust-workbench-page.ts` with full mock data layer (routing-history endpoints in mock-fetch.ts). Vite alias fix: pages-component source alias removed (source uses refactored SourceConnector API incompatible with DataSourceAdapter).
 
-**Migrated:**
-- `gdpr-erasure-action` — hand-coded form → schema-form (−48 lines)
+## Known issues
 
-**Frontend type alignment:**
-- `DigestScheduleWeeklyAt`, `ENTITY_WATCHERS` target, `DigestGroupBy`, `QuietHoursAction`
+- **pages-component source/dist mismatch:** The pages repo source has a refactored SourceConnector API that breaks DataSourceAdapter.connect(). The examples vite config works around this by NOT aliasing pages-component to source. This needs resolving when pages-component is next released.
+- **Backend routing-history endpoints:** Don't exist yet. trust-workbench works via inline data mode. Engine team needs to build `GET /trust/{actorId}/routing-history` and `GET /trust/{actorId}/routing-history/{decisionId}`.
+- **Worktree + IntelliJ MCP:** IntelliJ MCP edits target the main repo, not the worktree. File syncing via shutil.copy2 was needed throughout. Garden entry GE-20260720-3573ac documents the root cause.
 
-**Example page:**
-- Preferences button + dialog with full mock API routes (channels, preferences PATCH, mutes CRUD)
-- Column overlap fix: unread dot merged into title, AGE column widened
-- `relativeTime` shows weeks/months/years instead of dates
+## Garden entries
 
-**Tests:** 177 passing across pages-form (65), notification-inbox (101), gdpr-erasure-action (11)
-
-## What's left
-
-- Replace portal `@casehubio/pages-form` links with published version refs before release · XS · Low
-- Update `docs/repos/casehub-blocks-ui.md` in parent repo with new component descriptions · S · Low
-
-## What's next
-
-| # | Description | Scale | Complexity | Notes |
-|---|-------------|-------|------------|-------|
-| — | Publish `@casehubio/pages-form` to GitHub Packages | XS | Low | Blocks blocks-ui release |
-| — | SSE for preferences/mute/snooze | S | Med | Deferred — fetch-on-mount sufficient |
-| — | Drag-and-drop ordering for constraints/targets | S | Med | Deferred — add/remove is functional |
+- GE-20260720-ebe1cd — onPagesEvent callback receives payload directly, not CustomEvent
+- GE-20260720-3573ac — git worktree + yarn workspace symlink resolution crosses working trees
