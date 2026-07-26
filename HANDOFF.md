@@ -1,36 +1,27 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** issue-95-align-table-pipeline (closed)
-**Date:** 2026-07-25
-**Issues:** casehubio/blocks-ui#95
+**Branch:** issue-94-blocks-prefix-and-cleanup (closed)
+**Date:** 2026-07-26
+**Issues:** casehubio/blocks-ui#94, #93, #88
 
 ## What landed
 
-Aligned all 10 table components with the pages pipeline (`DataSource → SourceConnector → DataSourceController`). Components now use `DataSourceMixin` or `DataSourceAdapter` for data lifecycle instead of manual fetch/fromRows/loading state.
+Three issues on one branch — barrel import fix, element migration, full prefix rename:
 
-**Per-component:**
-- compliance-summary, similarity-panel: +client-sort
-- routing-rationale: fixed endpoint-path renderer bug (renderers only built for property path), +client-sort
-- trust-score-panel: removed duplicate fromRows in render, use pipeline dataSet, +client-sort
-- trust-workbench: declarative list-pane binding replacing imperative _syncListPane
-- audit-trail-viewer: pipeline delivers real dataset (was pushing empty), +client-sort
-- preferences-editor: adopted DataSourceAdapter (was manual _loading/_error/_dataSet)
-- work-item-inbox: extracted fromRows from render path into @state() (SSE lifecycle too complex for full adapter adoption)
-- list-pane, grouped-data-view: verified aligned, no changes
+- **#88** — Narrowed 17 `@casehubio/pages-primitives` barrel imports to `/a11y` sub-path. Eliminates transitive pages-modal registration that caused duplicate CustomElementRegistry crash in aliased bundler setups (GE-20260720-96fab8).
+- **#93** — Migrated 19 native `<button>` elements in channel-activity to `<pages-button>` from `@casehubio/pages-ui-components`. Fixed 2 hardcoded colors in channel-nav to `--pages-*` tokens. Textarea/select kept native (imperative API would break with wrapper components).
+- **#94** — Renamed all 87 custom element tags to `blocks-*` prefix (59 component tags + 27 example pages + 1 shell). 141 files changed. Platform namespace consistency: `pages-*` for pages, `blocks-*` for blocks-ui.
 
-**Stats:** 14 files, 192 insertions, 99 deletions, 316 tests passing
+**Stats:** 3 commits after squash, pushed to both fork and upstream
 
 ## What's left
 
-- Replace portal `@casehubio/pages-form` links with published version refs before release · XS · Low
-- Update `docs/repos/casehub-blocks-ui.md` in parent repo with new component descriptions · S · Low
+- Update `docs/repos/casehub-blocks-ui.md` in parent repo with latest component descriptions · S · Low (casehubio/parent#393)
+- Downstream apps (chat-app, clinical) need template updates for blocks- prefix · M · Low (each app session)
 
 ## What's next
 
 | # | Description | Scale | Complexity | Notes |
 |---|-------------|-------|------------|-------|
-| #94 | Rename all components to use `blocks-` prefix consistently | M | Med | Breaking change |
-| #93 | Migrate native HTML elements to `@casehubio/pages-ui-components` | S | Low | |
-| #88 | pages-modal duplicate CustomElementRegistry crash in esbuild bundle | S | Med | Bug |
 | #85 | Column resizing interaction with single-grid model | M | High | |
 | #84 | Variable row heights with cell spanning | L | High | |
