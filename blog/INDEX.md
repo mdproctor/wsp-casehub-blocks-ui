@@ -11,3 +11,8 @@
 | [2026-07-16-mdp01-the-select-that-lost-its-way.md](2026-07-16-mdp01-the-select-that-lost-its-way.md) | 2026-07-16 | Channel-activity extension points — renderContent callback, compact dropdown, shadow DOM select gotcha |
 | [2026-07-17-mdp01-the-styles-that-never-arrived.md](2026-07-17-mdp01-the-styles-that-never-arrived.md) | 2026-07-17 | Shadow DOM CSS scoping breaks column renderers — inline styles fix, routing-rationale component |
 | [2026-07-17-mdp02-the-css-that-looked-like-it-worked.md](2026-07-17-mdp02-the-css-that-looked-like-it-worked.md) | 2026-07-17 | Emoji picker viewport overflow — dead CSS flip class, viewport-aware positioning |
+| [2026-07-19-mdp01-why-every-data-table-gets-spanning-wrong.md](2026-07-19-mdp01-why-every-data-table-gets-spanning-wrong.md) | 2026-07-19 | Single-grid cell spanning model — why row-per-row fails |
+| [2026-07-21-mdp02-schema-driven-notification-forms.md](2026-07-21-mdp02-schema-driven-notification-forms.md) | 2026-07-21 | Schema-driven notification subscription editor |
+| [2026-07-25-mdp01-the-pipeline-was-already-there.md](2026-07-25-mdp01-the-pipeline-was-already-there.md) | 2026-07-25 | Commitment lifecycle — the extraction pipeline pattern |
+| [2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md](2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md) | 2026-07-25 | blocks- prefix rename and barrel export gotcha |
+| [2026-07-29-mdp01-the-property-that-does-nothing.md](2026-07-29-mdp01-the-property-that-does-nothing.md) | 2026-07-29 | pages-table selectedKeys silently ignored without selection attribute |
