@@ -1,20 +1,25 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** issue-100-commitment-strategy-pill-adoption (closed)
+**Branch:** main (no active branch)
 **Date:** 2026-07-29
-**Issues:** casehubio/blocks-ui#100, #101
+**Issues:** #102 (closed)
 
 ## What landed
 
-Two issues closed on one branch:
+Fixed CI flakiness and session-list row selection (#102). Four production fixes: entity-tree Array.isArray guard, channel-feed scrollIntoView optional chaining, channel-topic-bar active class misplaced in size attribute, session-list selection="single" + selectedKeys tracking. Removed three stale test files (themes.test.ts, trend-source-mixin DataSource tests, fetch-source extraction test). CI green.
 
-- **#100** — Refactored `commitmentLifecycleStrategy` to delegate to `stateProgressionStrategy` with the canonical 7-state model. Deleted the parallel 4-stage ontology (`COMMITMENT_STAGES`). Default resolver switched from `linearResolveStatus` (index-based) to `defaultResolveStatus` (transition-based — handles branching state machines). Fixed DELEGATED terminal state gap by expanding `StageConfig.terminal` to include `'transfer'`.
+Closed three completed epics: #56 (app delivery), #35 (cross-repo migration), #36 (openclaw). All five consuming apps fully migrated. Zero open issues.
 
-- **#101** — Adopted `commitment-state-pill` across channel-activity (channel-message, channel-task-panel, channel-correlation-panel, channel-thread). Promoted pill and `stateCategoryStyles` from commitment-viz to blocks-ui-core to avoid component-to-component dependency (ARC42STORIES §2). Fixed commitment lookup key from `msg.id` to `correlationId`. Removed dead `commitments` property from channel-feed. DRY'd `_isTerminal` via `isTerminalCommitmentState`.
+## What's left
 
-**Stats:** 5 commits squashed to 2, pushed to fork and upstream
+- Project main has uncommitted changes from another session — blocks-timeline, channel-activity, examples, blocks-ui-core commitment-pill work · M · Med
+- Update `docs/repos/casehub-blocks-ui.md` in parent repo with latest component descriptions · S · Low (casehubio/parent#393)
+- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
 
 ## Known issues
 
-- **pages-component source/dist mismatch** (carried from prior session): pages repo source has a refactored SourceConnector API that breaks DataSourceAdapter.connect(). Examples vite config works around this by NOT aliasing pages-component to source.
-- **Pre-existing test failures in channel-activity `dist/`**: 98 compiled test files run alongside source tests due to vitest config not excluding `dist/`. Not introduced by this branch.
+*Unchanged — retrieve with: `git show HEAD~1:HANDOFF.md`*
+
+## What's next
+
+Zero open issues on blocks-ui. New work requires filing issues first.
