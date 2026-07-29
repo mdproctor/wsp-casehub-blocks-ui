@@ -1,27 +1,20 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** issue-97-session-workbench (closed)
-**Date:** 2026-07-27
-**Issues:** casehubio/blocks-ui#97, #98
+**Branch:** issue-100-commitment-strategy-pill-adoption (closed)
+**Date:** 2026-07-29
+**Issues:** casehubio/blocks-ui#100, #101
 
 ## What landed
 
 Two issues closed on one branch:
 
-- **#97** — Worker session management components: session-list (CRUD + SSE), session-detail (terminal/git/health/events tabs), session-workbench (split-pane composition), showcase page with mock data. Unblocks casehubio/devtown#123.
-- **#98** — Dark mode theme fixes across 7 components and 5 example pages. Replaced hardcoded `background: white`, fake `--pages-*-color` tokens, and `--pages-gray-*` references with real `--pages-neutral-*` scale tokens. Fixed entity-list and session-list `row-activate` handler using `detail.key` instead of non-existent `detail.index`/`detail.rowIndex`. Default showcase theme → `casehub-dark`.
+- **#100** — Refactored `commitmentLifecycleStrategy` to delegate to `stateProgressionStrategy` with the canonical 7-state model. Deleted the parallel 4-stage ontology (`COMMITMENT_STAGES`). Default resolver switched from `linearResolveStatus` (index-based) to `defaultResolveStatus` (transition-based — handles branching state machines). Fixed DELEGATED terminal state gap by expanding `StageConfig.terminal` to include `'transfer'`.
 
-**Stats:** 6 commits (squashed to 5), pushed to both fork and upstream
+- **#101** — Adopted `commitment-state-pill` across channel-activity (channel-message, channel-task-panel, channel-correlation-panel, channel-thread). Promoted pill and `stateCategoryStyles` from commitment-viz to blocks-ui-core to avoid component-to-component dependency (ARC42STORIES §2). Fixed commitment lookup key from `msg.id` to `correlationId`. Removed dead `commitments` property from channel-feed. DRY'd `_isTerminal` via `isTerminalCommitmentState`.
 
-## What's left
+**Stats:** 5 commits squashed to 2, pushed to fork and upstream
 
-- Update `docs/repos/casehub-blocks-ui.md` in parent repo with latest component descriptions · S · Low (casehubio/parent#393)
-- Downstream apps (aml, chat-app, claudony, clinical, life, openclaw) need template updates for blocks- prefix · M · Low (each app session)
-- pages-table pagination buttons still use light backgrounds (upstream pages fix needed) · S · Low
+## Known issues
 
-## What's next
-
-| # | Description | Scale | Complexity | Notes |
-|---|-------------|-------|------------|-------|
-| #85 | Column resizing interaction with single-grid model | M | High | |
-| #84 | Variable row heights with cell spanning | L | High | |
+- **pages-component source/dist mismatch** (carried from prior session): pages repo source has a refactored SourceConnector API that breaks DataSourceAdapter.connect(). Examples vite config works around this by NOT aliasing pages-component to source.
+- **Pre-existing test failures in channel-activity `dist/`**: 98 compiled test files run alongside source tests due to vitest config not excluding `dist/`. Not introduced by this branch.
