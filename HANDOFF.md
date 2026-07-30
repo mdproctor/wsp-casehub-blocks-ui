@@ -1,8 +1,10 @@
+*Updated: parent#393 closed — removed from backlog. Uncommitted changes resolved (working tree clean).*
+
 # HANDOFF — casehub-blocks-ui
 
 **Branch:** main (no active branch)
 **Date:** 2026-07-30
-**Issues:** #102 (closed)
+**Issues:** #102 (still open per GitHub)
 
 ## What landed
 
@@ -14,8 +16,6 @@ Closed three completed epics: #56 (app delivery), #35 (cross-repo migration), #3
 
 ## What's left
 
-- Project main has uncommitted changes from another session — blocks-timeline, channel-activity, examples, blocks-ui-core commitment-pill work · M · Med
-- Update `docs/repos/casehub-blocks-ui.md` in parent repo with latest component descriptions · S · Low (casehubio/parent#393)
 - pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
 
 ## Known issues
