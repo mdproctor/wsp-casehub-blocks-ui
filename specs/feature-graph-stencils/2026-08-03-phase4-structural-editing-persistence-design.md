@@ -2,7 +2,7 @@
 
 **Date:** 2026-08-03
 **Issue:** #103 (Epic: Visual Diagram Editor — Domain Layer)
-**Status:** Approved
+**Status:** Approved (revised after light design review)
 **Parent spec:** `specs/2026-08-01-visual-diagram-editor-design.md` (parent workspace)
 **Depends on:** Phase 3 (property editing — completed)
 
@@ -143,7 +143,7 @@ HumanTask mode switching (title vs titleExpression vs templateRef) remains read-
 
 ## 6. Delete with Dependency Checks
 
-Delete key or Backspace while a node is selected triggers removal.
+Delete key or Backspace while a node is selected triggers removal. The handler MUST check `e.target` — skip deletion if the active element is an `<input>`, `<textarea>`, or `[contenteditable]` to avoid conflicting with text editing in the properties panel.
 
 ### 6.1 Connected nodes (has edges in graph model)
 
@@ -214,6 +214,16 @@ Structural edits follow the same undo/redo pattern as property edits:
 
 The only difference from property edits is that structural edits call `_fullRender()` (with re-layout) instead of `_updateWithoutLayout()`.
 
+**Undo/redo always uses `_fullRender()`:** Since undo/redo can restore YAML from either a property edit or a structural edit, and the undo stack doesn't track which type of edit produced each entry, all undo/redo operations use `_fullRender()` for correctness. The performance cost of occasional unnecessary re-layout on property-edit undo is negligible compared to the incorrectness of skipping re-layout on structural-edit undo.
+
+### 7.4 Async render guard
+
+`_fullRender()` is async (ELK layout). Rapid structural edits (e.g., clicking palette twice quickly) can cause overlapping renders where the second completes with stale intermediate state.
+
+Guard: `_renderInProgress: boolean` flag. While true, new structural edits still mutate `_currentYaml` and push to the undo stack (YAML mutations are synchronous), but `_fullRender()` is deferred. When the in-flight render completes, if `_currentYaml` has changed since the render started, trigger another `_fullRender()` with the current YAML. This ensures the final rendered state always matches `_currentYaml`.
+
+The guard also prevents save while a render is in progress — the save flow checks `_renderInProgress` and defers until render completes.
+
 ## 8. Persistence
 
 ### 8.1 PersistenceBackend SPI (already exists in graph-core)
@@ -275,26 +285,31 @@ The `uri` parameter is the file path within the repo (e.g., `cases/document-proc
 | State | Type | Description |
 |-------|------|-------------|
 | `_version` | `string` | Last version from backend (optimistic concurrency) |
-| `_dirty` | `boolean` | True when YAML changed since last save/load |
+| `_savedYaml` | `string` | YAML at last save/load point |
+| `_saving` | `boolean` | True while a save is in flight |
 
 **Load flow** (on `backend` + `uri` both set):
-1. `backend.read(uri)` → handle `ReadResult`
-2. `ok` → set `_currentYaml`, `_version`, `_dirty = false`, clear undo/redo, full render
-3. `not_found` → start with empty case definition template
-4. `parse_error` → show error
-5. `schema_error` → load anyway (warnings advisory), store version
+1. If `_saving` is true, ignore (don't load while a save is in flight)
+2. `try { backend.read(uri) }` → handle `ReadResult`. On fetch/network error: show error toast, keep current state.
+3. `ok` → set `_currentYaml`, `_savedYaml`, `_version`, clear undo/redo, full render
+4. `not_found` → start with empty case definition template, set `_version = ''`
+5. `parse_error` → show error
+6. `schema_error` → load anyway (warnings advisory), store version
 
 **Save flow** (Ctrl+S or toolbar Save):
-1. If no backend or not dirty → no-op
-2. `backend.write(uri, _currentYaml, _version)` → handle `WriteResult`
-3. `ok` → update `_version`, set `_dirty = false`
-4. `conflict` → show conflict dialog
+1. If no backend, not dirty, `_saving` is true, or `_renderInProgress` is true → no-op
+2. Set `_saving = true`, update toolbar
+3. `try { backend.write(uri, _currentYaml, _version) }` → handle `WriteResult`. On fetch/network error: show error toast, set `_saving = false`.
+4. `ok` → update `_version`, set `_savedYaml = _currentYaml`, set `_saving = false`
+5. `conflict` → set `_saving = false`, show conflict dialog
 
-**Dirty tracking:** Every YAML mutation sets `_dirty = true`. Save and load set `_dirty = false`.
+**New file creation:** When `_version` is `''` (from a `not_found` load or a brand new document), the GitHubBackend interprets `expectedVersion = ''` as "create new file" and omits the `sha` field from the PUT request body.
+
+**Dirty tracking:** Dirty state is derived: `_currentYaml !== _savedYaml`. This correctly handles undo past a save point — if the user saves, then undoes back to the pre-save state, dirty becomes true again because the current YAML differs from what was last saved. No explicit `_dirty` flag needed.
 
 ### 8.4 Conflict resolution dialog
 
-On `write()` returning `conflict`, show `blocks-confirm-dialog`:
+On `write()` returning `conflict`, show a conflict resolution dialog. `blocks-confirm-dialog` supports confirm/cancel (two actions). Conflict resolution needs three actions, so use a dedicated `<casehub-diagram-conflict-dialog>` inline element (not a new file — a private render method within casehub-diagram) with three buttons:
 
 | Action | Label | Behavior |
 |--------|-------|----------|
@@ -307,8 +322,8 @@ On `write()` returning `conflict`, show `blocks-confirm-dialog`:
 `<casehub-diagram-toolbar>` — Lit element with Shadow DOM.
 
 **Properties:**
-- `dirty: boolean` — shows unsaved indicator (dot next to Save)
-- `saving: boolean` — shows spinner while save in progress
+- `dirty: boolean` — shows unsaved indicator (dot next to Save). Computed by casehub-diagram as `_currentYaml !== _savedYaml`.
+- `saving: boolean` — shows spinner while save in progress. Set by casehub-diagram's `_saving` state.
 - `hasBackend: boolean` — when false, Save button hidden (playground mode)
 
 **Events:**
@@ -349,3 +364,25 @@ components/casehub-diagram/
 8. **casehub-diagram — persistence**: Mock backend → verify load flow (read → render), save flow (write → version update → dirty cleared), conflict flow (dialog → overwrite/reload/cancel)
 9. **casehub-diagram — delete with dependencies**: Worker with bindings → verify warning dialog appears. Unconnected node → verify immediate removal. External node → verify not deletable.
 10. **casehub-diagram-properties — target switching**: Select binding → switch target type → verify `target-type-change` event with correct type. Verify panel re-renders with new target fields.
+11. **Async render guard**: Trigger two rapid palette adds → verify final rendered state matches the YAML with both nodes added. Verify save is blocked while render is in progress.
+12. **Dirty-on-undo**: Save → undo → verify dirty is true. Save → edit → undo → verify dirty matches whether current YAML equals saved YAML.
+13. **Network errors**: Mock fetch to throw → verify error toast shown on save failure, verify error toast shown on load failure, verify `_saving` reset to false after error.
+14. **Delete key in text input**: Focus a text input in properties panel → press Delete → verify node NOT removed. Click canvas background → press Delete → verify node removed.
+
+## 11. Review Findings Addressed
+
+| Finding | Resolution |
+|---------|-----------|
+| Async race on `_fullRender` (Robustness-R1-01, Cross-cutting-R1-01/02) | §7.4: Render guard with deferred re-render. |
+| Undo of structural edits (Robustness-R1-02) | §7.3: Undo/redo always uses `_fullRender()`. |
+| Delete key conflicts with text input (Robustness-R1-07) | §6: Check `e.target` before deletion. |
+| Network error handling (Coherence-R1-03, Cross-cutting-R1-04) | §8.3: try/catch on backend calls, error toast. |
+| Dirty tracking on undo (Coherence-R1-04, Cross-cutting-R1-03) | §8.3: Derived from `_currentYaml !== _savedYaml`. |
+| Saving state flow (Coherence-R1-05) | §8.3: `_saving` flag, §8.5: toolbar reflects it. |
+| New file expectedVersion (Coherence-R1-02) | §8.3: Empty string `''` = create new. |
+| Conflict dialog three actions (Robustness-R1-06) | §8.4: Dedicated inline dialog, not blocks-confirm-dialog. |
+| Testing gaps (Cross-cutting-R1-05) | §10: Items 11-14 added. |
+| PersistenceBackend SPI mismatch (Coherence-R1-01, Structure-R1-03, Robustness-R1-04) | False positive — spec matches graph-core implementation (verified against source). |
+| InMemoryBackend doesn't exist (Structure-R1-04, Robustness-R1-05) | False positive — exists in graph-core `persistence.ts`. |
+| God component (Structure-R1-02, Cross-cutting-R1-02) | casehub-diagram is the composition root — decomposed sub-components (palette, toolbar, properties) are already separate. |
+| YAML-first orphans graph-core ops (Structure-R1-06) | By design — §2 explains why. |
