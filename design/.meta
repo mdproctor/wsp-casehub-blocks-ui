@@ -1,0 +1,9 @@
+branch: feature/graph-stencils
+project-sha: 755a86193b339a286ef0f6aaed8fa2b5831b283b
+date: 2026-08-03
+issue: 103
+issue-repo: casehubio/blocks-ui
+covers: 103
+flyway-next-v: none
+design-repo: project
+design-section-hashes: 
