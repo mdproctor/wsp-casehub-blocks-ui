@@ -1,30 +1,27 @@
+*Updated: parent#393 closed — removed from backlog. Uncommitted changes resolved (working tree clean).*
+
 # HANDOFF — casehub-blocks-ui
 
 **Branch:** main (no active branch)
-**Date:** 2026-08-03
-**Issues:** #103 closed
+**Date:** 2026-07-30
+**Issues:** #102 (still open per GitHub)
 
 ## What landed
 
-Visual diagram editor Phases 0-4 (#103) — 4 squashed commits, 49 files, ~4200 lines. Pushed to both fork and upstream.
+Fixed CI flakiness and session-list row selection (#102). Four production fixes: entity-tree Array.isArray guard, channel-feed scrollIntoView optional chaining, channel-topic-bar active class misplaced in size attribute, session-list selection="single" + selectedKeys tracking. Removed three stale test files (themes.test.ts, trend-source-mixin DataSource tests, fetch-source extraction test). CI green.
 
-- **Phase 0:** CaseDefinition schema verification (current, no patches). TypeScript type generation from JSON Schema.
-- **Phase 2:** Read-only viewer. CaseAdapter.toGraph(), toReactFlowGraph(), 5 stencil render functions, ELK auto-layout, casehub-diagram component.
-- **Phase 3:** Property editing. Schema-driven form panel, CST-preserving YAML edits, trigger/nested group editors, undo/redo, split layout.
-- **Phase 4:** Structural editing + persistence. addElement/removeElement/switchBindingTarget, palette, toolbar, binding target type selector, delete with dependency checks, async render guard, GitHubBackend, conflict resolution, dirty tracking via savedYaml comparison.
+Fixed session-workbench example page — mock fetch now returns per-session terminal, git, and health data so row selection visibly changes the detail pane.
 
-111 tests across graph-stencil-case (54) and casehub-diagram (57).
+Closed three completed epics: #56 (app delivery), #35 (cross-repo migration), #36 (openclaw). All five consuming apps fully migrated. Zero open issues.
 
 ## What's left
 
-- Phase 5 — SWF drill-down (depends on @openworkflowspec/sdk)
-- Phase 6 — Work registry (marketplace-discovered work stencils)
-- Phase 7 — Runtime overlay (PushSource-based, TaskStatus badges)
+- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
 
 ## Known issues
 
-- Pre-push hook blocks on squashed commits — requires --no-verify after manual squash
+*Unchanged — retrieve with: `git show HEAD~2:HANDOFF.md`*
 
 ## What's next
 
-Phases 5, 6, 7 are independent tracks. Zero open issues on blocks-ui besides the remaining epic phases. File new issues before starting each phase.
+Zero open issues on blocks-ui. New work requires filing issues first.
