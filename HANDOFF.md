@@ -1,30 +1,30 @@
 # HANDOFF — casehub-blocks-ui
 
 **Branch:** main (no active branch)
-**Date:** 2026-08-03
-**Issues:** #103 closed
+**Date:** 2026-08-04
+**Issues:** #103 Phase 7 closed
 
 ## What landed
 
-Visual diagram editor Phases 0-4 (#103) — 4 squashed commits, 49 files, ~4200 lines. Pushed to both fork and upstream.
+Phase 7 runtime overlay (#103) — 3 squashed commits, 21 files changed, +587/-170 lines. Pushed to both fork and upstream.
 
-- **Phase 0:** CaseDefinition schema verification (current, no patches). TypeScript type generation from JSON Schema.
-- **Phase 2:** Read-only viewer. CaseAdapter.toGraph(), toReactFlowGraph(), 5 stencil render functions, ELK auto-layout, casehub-diagram component.
-- **Phase 3:** Property editing. Schema-driven form panel, CST-preserving YAML edits, trigger/nested group editors, undo/redo, split layout.
-- **Phase 4:** Structural editing + persistence. addElement/removeElement/switchBindingTarget, palette, toolbar, binding target type selector, delete with dependency checks, async render guard, GitHubBackend, conflict resolution, dirty tracking via savedYaml comparison.
+- Stencil API migration: all 5 case stencils now use pages StencilDescriptor API (new render signature, registerStencil, deleted old createReactNodeType bridge and local toReactFlowGraph)
+- RuntimeAdapter: toDecorations() pure function with active-worst-first PlanItem aggregation, terminal severity tiebreaker, tooltip breakdown, milestone mapping, unknown status fallback
+- Badge mappings: all 9 TaskStatus states + 3 MilestoneLifecycleStatus states
+- casehub-diagram: property-based runtimeState, design/runtime mode toggle, decoration flow via toReactFlowGraph, staleness indicator, OBSOLETE opacity
 
-111 tests across graph-stencil-case (54) and casehub-diagram (57).
+## Open items
 
-## What's left
+- #104: update consumer guide with Phase 7 runtime overlay API
+- Phase 5 (SWF drill-down) blocked on @openworkflowspec/sdk supporting bare do: task lists
+- Phase 6 (Work Registry) not in epic scope
 
-- Phase 5 — SWF drill-down (depends on @openworkflowspec/sdk)
-- Phase 6 — Work registry (marketplace-discovered work stencils)
-- Phase 7 — Runtime overlay (PushSource-based, TaskStatus badges)
+## Key decisions
 
-## Known issues
+- Property-based runtime data (not PushSource — component is transport-agnostic)
+- MilestoneLifecycleStatus has 3 states not 5 (engine is authoritative)
+- Decorations applied in both _fullRender and _updateWithoutLayout paths
 
-- Pre-push hook blocks on squashed commits — requires --no-verify after manual squash
+## Dependencies
 
-## What's next
-
-Phases 5, 6, 7 are independent tracks. Zero open issues on blocks-ui besides the remaining epic phases. File new issues before starting each phase.
+- pages#277 (NodeDecoration types) and decoration rendering pipeline must be synced to .casehub-packages/ before blocks-ui compiles against new APIs
