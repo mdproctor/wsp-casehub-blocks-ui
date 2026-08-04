@@ -16,3 +16,4 @@
 | [2026-07-25-mdp01-the-pipeline-was-already-there.md](2026-07-25-mdp01-the-pipeline-was-already-there.md) | 2026-07-25 | Commitment lifecycle — the extraction pipeline pattern |
 | [2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md](2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md) | 2026-07-25 | blocks- prefix rename and barrel export gotcha |
 | [2026-07-29-mdp01-the-property-that-does-nothing.md](2026-07-29-mdp01-the-property-that-does-nothing.md) | 2026-07-29 | pages-table selectedKeys silently ignored without selection attribute |
+| [2026-08-04-mdp01-the-table-that-hid-its-own-data.md](2026-08-04-mdp01-the-table-that-hid-its-own-data.md) | 2026-08-04 | Expanded work-item-inbox from 4 visible columns to 10, with custom renderers for progress bars, deadline styling, and label pills |
