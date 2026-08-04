@@ -1,22 +1,26 @@
+*Updated: #102 closed — removed from backlog.*
+
 # HANDOFF — casehub-blocks-ui
 
 **Branch:** main (no active branch)
-**Date:** 2026-08-04
-**Issues:** #105 closed
+**Date:** 2026-07-30
 
 ## What landed
 
-#105 — work-item-inbox expanded from 4 visible columns to 10. Priority now visible by default. Five toggleable columns added (percentComplete, statusNote, expiresAt, assigneeId, labels) with custom renderers (progress bar, overdue deadline, label pills). Pushed to both fork and upstream.
+Fixed CI flakiness and session-list row selection (#102). Four production fixes: entity-tree Array.isArray guard, channel-feed scrollIntoView optional chaining, channel-topic-bar active class misplaced in size attribute, session-list selection="single" + selectedKeys tracking. Removed three stale test files (themes.test.ts, trend-source-mixin DataSource tests, fetch-source extraction test). CI green.
 
-## Open items
+Fixed session-workbench example page — mock fetch now returns per-session terminal, git, and health data so row selection visibly changes the detail pane.
 
-- Phase 5 (SWF drill-down) blocked on @openworkflowspec/sdk supporting bare do: task lists
-- Phase 6 (Work Registry) not in epic scope
+Closed three completed epics: #56 (app delivery), #35 (cross-repo migration), #36 (openclaw). All five consuming apps fully migrated. Zero open issues.
 
-## Key decisions
+## What's left
 
-*Unchanged — retrieve with: `git show HEAD~1:HANDOFF.md`*
+- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
 
-## Dependencies
+## Known issues
 
-*Unchanged — retrieve with: `git show HEAD~1:HANDOFF.md`*
+*Unchanged — retrieve with: `git show HEAD~2:HANDOFF.md`*
+
+## What's next
+
+Zero open issues on blocks-ui. New work requires filing issues first.
