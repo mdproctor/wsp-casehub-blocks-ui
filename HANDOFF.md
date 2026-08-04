@@ -2,11 +2,11 @@
 
 **Branch:** main (no active branch)
 **Date:** 2026-08-04
-**Issues:** #104 closed
+**Issues:** #105 closed
 
 ## What landed
 
-#104 — consumer guide and contributor guide updated with Phase 7 runtime overlay API. casehub-diagram component documented (properties table, CaseRuntimeState type contract, mode toggle, staleness, toDecorations for custom overlay). graph-stencil-case upgraded Alpha → Beta. Pushed to both fork and upstream.
+#105 — work-item-inbox expanded from 4 visible columns to 10. Priority now visible by default. Five toggleable columns added (percentComplete, statusNote, expiresAt, assigneeId, labels) with custom renderers (progress bar, overdue deadline, label pills). Pushed to both fork and upstream.
 
 ## Open items
 
