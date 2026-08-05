@@ -128,9 +128,7 @@ OBSOLETE.
 | ESCALATED | warning | ↑ | |
 | OBSOLETE | neutral | — | |
 | EXPIRED | warning | ⌛ | |
-| DECLINED | neutral | 🚫 | |
-| FAILED | danger | ✗ | |
-| Others (3) | — | — | — |
+| Others (5) | — | — | — |
 
 **MilestoneLifecycleStatus (3 states) — `milestone:`**
 
