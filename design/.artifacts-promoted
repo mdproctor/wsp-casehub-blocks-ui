@@ -1,8 +1,8 @@
-timestamp=2026-07-27T10:18:46.615863+00:00
-branch=issue-97-session-workbench
-workspace_promoted=0
-project_promoted=0
+timestamp=2026-08-05T16:39:11.982547+00:00
+branch=issue-109-runtime-state-badges
+workspace_promoted=25
+project_promoted=2
 specs_cleaned=0
-issues_closed=2
-blog_published=0
-plans_archived=0
+issues_closed=1
+blog_published=1
+plans_archived=1
