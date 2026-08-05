@@ -241,14 +241,26 @@ columnRenderers.set('status', (cell) =>
 
 ## Diagram Decoration Output
 
-A pure function in `blocks-ui-core/src/status-badge/decoration.ts`:
+A pure function in `graph-stencil-case/src/runtime/decoration.ts` — NOT in
+blocks-ui-core. `NodeDecoration` is defined in `@casehubio/graph-core`, which
+blocks-ui-core does not depend on. Placing `toDecoration()` in blocks-ui-core
+would couple the generic component library to the graph rendering system.
+The conversion from `StatusDescriptor` → `NodeDecoration` is thin and properly
+belongs in the graph-aware package.
 
 ```typescript
+import { lookupStatus } from '@casehubio/blocks-ui-core';
+import type { NodeDecoration } from '@casehubio/graph-core';
+
 export function toDecoration(domain: string, state: string): NodeDecoration;
 ```
 
-Looks up the same registry. Maps category to badge colour via a separate
-`BADGE_COLORS` record — NOT `stateCategoryStyles()`. The graph badge needs
+This adds `@casehubio/blocks-ui-core` as a dependency of `graph-stencil-case`
+(correct direction: specific depends on generic). blocks-ui-core exports
+`lookupStatus()` from the registry; graph-stencil-case consumes it.
+
+Maps category to badge colour via a `BADGE_COLORS` record local to
+graph-stencil-case — NOT `stateCategoryStyles()`. The graph badge needs
 a single vibrant colour as background (with white text overlay), whereas
 `stateCategoryStyles()` returns pill-appropriate CSS variable pairs (light
 background + dark text at scale-3). The graph renderer renders NodeDecoration
@@ -307,8 +319,9 @@ Mark as deprecated in JSDoc — new code uses `status-badge` directly.
 ### graph-stencil-case badge-mappings
 
 Remove `TASK_STATUS_DECORATIONS`, `MILESTONE_STATUS_DECORATIONS`,
-`UNKNOWN_DECORATION`. Replace with `toDecoration()` calls from blocks-ui-core.
-Keep `TERMINAL_SEVERITY` and `ACTIVE_WORST_PRIORITY` as aggregation logic.
+`UNKNOWN_DECORATION`. Replace with `toDecoration()` calls from the new
+`decoration.ts` within graph-stencil-case itself. Keep `TERMINAL_SEVERITY`
+and `ACTIVE_WORST_PRIORITY` as aggregation logic.
 
 ### sla-indicator
 
@@ -320,12 +333,21 @@ The `sla` domain registration provides a simpler badge for table columns.
 No code change now. The `<status-badge domain="case">` component is available
 for column renderers when status columns are added to entity-list.
 
+## What Changes (structural moves)
+
+- `stateCategoryStyles()`, `CategoryStyle`, and `CATEGORY_STYLES` move from
+  `blocks-ui-core/src/commitment-pill/styles.ts` to
+  `blocks-ui-core/src/styles/category.ts`. These are cross-cutting concerns —
+  both `status-badge` and `commitment-state-pill` depend on them, so leaving
+  them in commitment-pill would invert the dependency direction (generic
+  importing from specific). The `src/styles/` directory already exists
+  (holds `animations.ts`). `commitment-state-pill` imports from the new
+  location. Old re-export from `commitment-pill/styles.ts` is removed.
+
 ## What Doesn't Change
 
-- `stateCategoryStyles()` — stays in `commitment-pill/styles.ts`, re-exported.
-  `CategoryStyle` type and `CATEGORY_STYLES` record remain the single source
-  of truth for colours.
-- `StateCategory` type — shared between old and new code.
+- `StateCategory` type — stays in `types/commitment.ts`, shared between old
+  and new code.
 - CSS custom property names — all `--pages-*` tokens unchanged.
 - `commitment-state-pill` tag — continues to work, deprecated not removed.
 
