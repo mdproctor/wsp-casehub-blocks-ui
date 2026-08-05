@@ -50,8 +50,10 @@ export type StatusDomain = 'case' | 'task' | 'work' | 'milestone'
 
 A `Map<string, StatusDescriptor>` keyed by `${domain}:${state}`. Lookup order:
 
-1. `domain:state` — exact match (e.g., `case:WAITING`)
-2. `*:state` — cross-domain default (e.g., `*:COMPLETED`)
+1. `domain:state` — exact match when domain is provided (e.g., `case:WAITING`)
+2. `*:state` — cross-domain default (e.g., `*:COMPLETED`). This is the only
+   fallback when domain is omitted — per-domain registrations are never scanned
+   without an explicit domain.
 3. Fallback — `{ category: 'neutral', icon: '?' }`
 
 Extensibility for future epics (#110 conversation states, #111 orchestration states):
