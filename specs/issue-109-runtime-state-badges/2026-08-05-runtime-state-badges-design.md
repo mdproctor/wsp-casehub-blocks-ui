@@ -35,14 +35,14 @@ In `blocks-ui-core/src/types/status.ts`:
 ```typescript
 export type StateCategory = 'active' | 'info' | 'success' | 'danger'
   | 'neutral' | 'transfer' | 'warning';
-// Re-exported from commitment.ts — single definition, not duplicated.
+// Canonical definition. commitment.ts imports from here.
 
 export interface StatusDescriptor {
   readonly category: StateCategory;
   readonly icon: string;
   readonly label?: string;     // display override; default: the state string
   readonly pulse?: boolean;    // animates active/running states
-  readonly active?: boolean;   // in-flight state — toDecoration() adds a border
+  readonly border?: boolean;   // toDecoration() produces a solid border in graph context
 }
 ```
 
@@ -84,9 +84,9 @@ export function lookupStatus(
 
 ### Cross-domain defaults
 
-| State | Category | Icon | Pulse | Active |
+| State | Category | Icon | Pulse | Border |
 |-------|----------|------|-------|--------|
-| PENDING | neutral | ○ | | yes |
+| PENDING | neutral | ○ | | |
 | RUNNING | success | ▶ | yes | yes |
 | COMPLETED | success | ✓ | | |
 | FAULTED | danger | ! | | |
@@ -105,12 +105,25 @@ export function lookupStatus(
 
 **TaskStatus (9 states) — `task:`**
 
-| State | Category | Icon | Active |
+| State | Category | Icon | Border |
 |-------|----------|------|--------|
 | DELEGATED | info | → | yes |
 | REJECTED | warning | ✕ | |
 | OBSOLETE | neutral | — | |
 | Others (6) | — | — | — |
+
+**WorkStatus (8 states) — `work:`**
+
+Maps to engine `WorkStatus` — the execution-side status for orchestrated work.
+Distinct from `WorkItemStatus` (UI-side composite). Used when rendering work
+execution state in orchestration views; not used by work-item-inbox.
+
+| State | Category | Icon |
+|-------|----------|------|
+| DECLINED | neutral | 🚫 |
+| FAILED | danger | ✗ |
+| EXPIRED | warning | ⌛ |
+| Others (5) | — | — |
 
 **WorkItemStatus (12 states) — `workitem:`**
 
@@ -119,9 +132,9 @@ UI-side composite status used by work-item-inbox. This is distinct from engine
 `WorkStatus` (8 states); the UI enum adds ASSIGNED, IN_PROGRESS, ESCALATED,
 OBSOLETE.
 
-| State | Category | Icon | Active |
+| State | Category | Icon | Border |
 |-------|----------|------|--------|
-| ASSIGNED | info | ● | yes |
+| ASSIGNED | info | ● | |
 | IN_PROGRESS | active | ◐ | yes |
 | DELEGATED | info | → | yes |
 | REJECTED | warning | ✕ | |
@@ -132,9 +145,9 @@ OBSOLETE.
 
 **MilestoneLifecycleStatus (3 states) — `milestone:`**
 
-| State | Category | Icon | Pulse | Active |
+| State | Category | Icon | Pulse | Border |
 |-------|----------|------|-------|--------|
-| ACTIVE | info | ◉ | yes | yes |
+| ACTIVE | info | ◉ | yes | |
 | Others (2) | — | — | | |
 
 **OutcomeKind (6 values) — `outcome:`**
@@ -283,10 +296,13 @@ const BADGE_COLORS: Record<StateCategory, string> = {
 These match the existing raw hex values in `TASK_STATUS_DECORATIONS` and
 `MILESTONE_STATUS_DECORATIONS`.
 
-Border rendering uses the `active` flag from `StatusDescriptor`. States with
-`active: true` get a `border: { style: 'solid', color }` in the decoration;
-terminal states (no `active` flag) get no border. `pulse` is forwarded
-independently — it controls animation, not border presence.
+Border rendering uses the `border` flag from `StatusDescriptor`. States with
+`border: true` get a `border: { style: 'solid', color }` in the decoration.
+This is independent of active/terminal classification — PENDING is active
+for aggregation purposes but borderless (visually quiet for not-yet-started
+work, per Phase 7 §5.3). Similarly, milestone ACTIVE uses pulse but no
+border. `pulse` is forwarded independently — it controls animation, not
+border presence.
 
 Replaces `TASK_STATUS_DECORATIONS`, `MILESTONE_STATUS_DECORATIONS`, and
 `UNKNOWN_DECORATION` in `graph-stencil-case/src/runtime/badge-mappings.ts`.
@@ -297,6 +313,19 @@ static records.
 aggregation logic — they're about which status "wins" when multiple plan items
 exist, not about rendering.
 
+### Case-level overlay
+
+`CaseRuntimeState` in `graph-stencil-case/src/runtime/types.ts` is extended
+with `caseStatus?: string` (CaseStatus from the engine: STARTING, RUNNING,
+WAITING, SUSPENDED, COMPLETED, FAULTED, CANCELLED). When present, the
+diagram toolbar renders `<status-badge domain="case" state=${caseStatus}>`
+next to the mode toggle and staleness indicator.
+
+This is NOT a NodeDecoration — the case has no corresponding node in the plan
+graph. The badge is rendered directly by `casehub-diagram-toolbar`, reading
+`caseStatus` from the `runtimeState` property. `toDecorations()` does not
+emit a case entry; the toolbar handles it as a first-class display concern.
+
 ## Retrofit Plan
 
 ### work-item-inbox
@@ -304,7 +333,10 @@ exist, not about rendering.
 Remove static `_statusColors` record (lines 121–131). Replace inline status
 column renderer with `<status-badge domain="workitem">`. The `workitem` domain
 maps to `WorkItemStatus` (12 states) — distinct from engine `WorkStatus` (8 states).
-Priority badges stay — priority is not a status domain.
+Priority badges stay — priority is not a status domain. Remove dead CSS rules
+for `.status-pill.status-obsolete`, `.status-pill.status-expired`, and
+`.status-pill.status-escalated` (lines 430–443) — these reference an unused
+class pattern (the column renderer uses inline styles, not CSS classes).
 
 ### session-list
 
@@ -344,10 +376,12 @@ for column renderers when status columns are added to entity-list.
   (holds `animations.ts`). `commitment-state-pill` imports from the new
   location. Old re-export from `commitment-pill/styles.ts` is removed.
 
+- `StateCategory` type — moves from `types/commitment.ts` to `types/status.ts`
+  (canonical location for status model types). `commitment.ts` imports from
+  `status.ts`.
+
 ## What Doesn't Change
 
-- `StateCategory` type — stays in `types/commitment.ts`, shared between old
-  and new code.
 - CSS custom property names — all `--pages-*` tokens unchanged.
 - `commitment-state-pill` tag — continues to work, deprecated not removed.
 
@@ -358,7 +392,7 @@ for column renderers when status columns are added to entity-list.
 - Component: rendering tests for each size/domain/showIcon combination.
   Snapshot or string-match on rendered HTML.
 - Decoration: unit tests for `toDecoration()` producing valid `NodeDecoration`
-  for all registered domains. Verify active states produce borders, terminals don't.
+  for all registered domains. Verify border-flagged states produce borders.
 - Retrofit: existing tests for work-item-inbox, session-list pass unchanged
   (DOM structure equivalent). Update snapshot tests — background colours shift
   from scale-4 to scale-3 as part of the intentional normalisation.
