@@ -10,6 +10,8 @@ The engine defines 6 runtime state enums beyond what blocks-ui currently renders
 The Phase 7 runtime overlay covers TaskStatus (9 states) and MilestoneLifecycleStatus
 (3 states). The remaining enums — CaseStatus (7), WorkStatus (8), SlaStatus (3),
 OutcomeKind (6), GroupStatus (3), NodeState (6) — have no UI representation.
+The work module additionally defines WorkItemStatus (12 states) — a UI-side composite
+that includes states like ASSIGNED, IN_PROGRESS, ESCALATED not present in engine WorkStatus.
 
 Additionally, three components (commitment-state-pill, work-item-inbox, session-list)
 each implement their own ad-hoc status badge rendering with inline `_statusColors`
@@ -40,15 +42,24 @@ export interface StatusDescriptor {
   readonly icon: string;
   readonly label?: string;     // display override; default: the state string
   readonly pulse?: boolean;    // animates active/running states
+  readonly active?: boolean;   // in-flight state — toDecoration() adds a border
 }
-
-export type StatusDomain = 'case' | 'task' | 'work' | 'milestone'
-  | 'outcome' | 'group' | 'node' | 'sla' | 'commitment' | 'session';
 ```
+
+The `domain` parameter on both `registerStatus()` and the `<status-badge>` component
+is `string` — the registry is open for future epics (#110, #111) to add domains
+without updating a union type. Known domains are documented in the per-domain
+registration tables below.
 
 ### Registry
 
-A `Map<string, StatusDescriptor>` keyed by `${domain}:${state}`. Lookup order:
+A `Map<string, StatusDescriptor>` keyed by `${domain}:${state}`. All built-in
+registrations (cross-domain defaults and per-domain entries) are static `Map`
+entries populated at module parse time in the same module as the Map itself —
+no side-effect imports, no initialization ordering risk. `registerStatus()` is
+for external consumers adding new domains at runtime.
+
+Lookup order:
 
 1. `domain:state` — exact match when domain is provided (e.g., `case:WAITING`)
 2. `*:state` — cross-domain default (e.g., `*:COMPLETED`). This is the only
@@ -73,14 +84,14 @@ export function lookupStatus(
 
 ### Cross-domain defaults
 
-| State | Category | Icon | Pulse |
-|-------|----------|------|-------|
-| PENDING | neutral | ○ | |
-| RUNNING | success | ▶ | yes |
-| COMPLETED | success | ✓ | |
-| FAULTED | danger | ! | |
-| CANCELLED | neutral | / | |
-| SUSPENDED | warning | ⏸ | |
+| State | Category | Icon | Pulse | Active |
+|-------|----------|------|-------|--------|
+| PENDING | neutral | ○ | | yes |
+| RUNNING | success | ▶ | yes | yes |
+| COMPLETED | success | ✓ | | |
+| FAULTED | danger | ! | | |
+| CANCELLED | neutral | / | | |
+| SUSPENDED | warning | ⏸ | | yes |
 
 ### Per-domain registrations
 
@@ -94,28 +105,39 @@ export function lookupStatus(
 
 **TaskStatus (9 states) — `task:`**
 
-| State | Category | Icon |
-|-------|----------|------|
-| DELEGATED | info | → |
-| REJECTED | warning | ✕ |
-| OBSOLETE | neutral | — |
-| Others (6) | — | — |
+| State | Category | Icon | Active |
+|-------|----------|------|--------|
+| DELEGATED | info | → | yes |
+| REJECTED | warning | ✕ | |
+| OBSOLETE | neutral | — | |
+| Others (6) | — | — | — |
 
-**WorkStatus (8 states) — `work:`**
+**WorkItemStatus (12 states) — `workitem:`**
 
-| State | Category | Icon |
-|-------|----------|------|
-| DECLINED | neutral | 🚫 |
-| FAILED | danger | ✗ |
-| EXPIRED | warning | ⌛ |
-| Others (5) | — | — |
+Maps to `WorkItemStatus` from `blocks-ui-core/src/types/work-item.ts` — the
+UI-side composite status used by work-item-inbox. This is distinct from engine
+`WorkStatus` (8 states); the UI enum adds ASSIGNED, IN_PROGRESS, ESCALATED,
+OBSOLETE.
+
+| State | Category | Icon | Active |
+|-------|----------|------|--------|
+| ASSIGNED | info | ● | yes |
+| IN_PROGRESS | active | ◐ | yes |
+| DELEGATED | info | → | yes |
+| REJECTED | warning | ✕ | |
+| ESCALATED | warning | ↑ | |
+| OBSOLETE | neutral | — | |
+| EXPIRED | warning | ⌛ | |
+| DECLINED | neutral | 🚫 | |
+| FAILED | danger | ✗ | |
+| Others (3) | — | — | — |
 
 **MilestoneLifecycleStatus (3 states) — `milestone:`**
 
-| State | Category | Icon | Pulse |
-|-------|----------|------|-------|
-| ACTIVE | info | ◉ | yes |
-| Others (2) | — | — | |
+| State | Category | Icon | Pulse | Active |
+|-------|----------|------|-------|--------|
+| ACTIVE | info | ◉ | yes | yes |
+| Others (2) | — | — | | |
 
 **OutcomeKind (6 values) — `outcome:`**
 
@@ -183,15 +205,26 @@ In `blocks-ui-core/src/status-badge/status-badge.ts`:
 @customElement('status-badge')
 export class StatusBadge extends LitElement {
   @property({ type: String }) state?: string;
-  @property({ type: String }) domain?: StatusDomain;
+  @property({ type: String }) domain?: string;
   @property({ type: String }) size: 'sm' | 'md' = 'sm';
   @property({ type: Boolean }) showIcon = false;
 }
 ```
 
+When `state` is falsy (`undefined`, `null`, `''`), renders `nothing` — no DOM output.
+This matches the existing `commitment-state-pill` guard and prevents misleading
+fallback badges for absent data.
+
 Renders a coloured pill using `styleMap()` and inline styles (protocol PP-20260713-8ea1af).
 Looks up descriptor via `lookupStatus(domain, state)`, maps category to `CategoryStyle`
 via the existing `stateCategoryStyles()`.
+
+The retrofit normalises all pill backgrounds to scale-3 CSS custom properties (the
+`CATEGORY_STYLES` standard). The existing `_statusColors` in work-item-inbox and
+session-list use scale-4. This is an intentional normalisation — all status pills
+converge to the commitment-pill aesthetic (scale-3) rather than preserving the
+per-component scale-4 choices. The visual difference is subtle (slightly lighter
+backgrounds) and eliminates the inconsistency.
 
 ### Usage
 
@@ -204,7 +237,7 @@ via the existing `stateCategoryStyles()`.
 
 <!-- In a column renderer -->
 columnRenderers.set('status', (cell) =>
-  html`<status-badge domain="work" state=${cell.value} size="sm" showIcon></status-badge>`
+  html`<status-badge domain="workitem" state=${cell.value} size="sm" showIcon></status-badge>`
 );
 ```
 
@@ -216,13 +249,39 @@ A pure function in `blocks-ui-core/src/status-badge/decoration.ts`:
 export function toDecoration(domain: string, state: string): NodeDecoration;
 ```
 
-Looks up the same registry. Maps category to colour (using `stateCategoryStyles()`
-for the raw colour values). Active states produce a border; terminal states don't.
-Pulse flag forwarded from the descriptor.
+Looks up the same registry. Maps category to badge colour via a separate
+`BADGE_COLORS` record — NOT `stateCategoryStyles()`. The graph badge needs
+a single vibrant colour as background (with white text overlay), whereas
+`stateCategoryStyles()` returns pill-appropriate CSS variable pairs (light
+background + dark text at scale-3). The graph renderer renders NodeDecoration
+colours as React inline styles on DOM elements (via `stencil-wrapper.tsx`),
+so CSS variables would technically resolve, but the scale-3 pill colours are
+semantically wrong for the badge context.
 
-Replaces `TASK_STATUS_DECORATIONS` and `MILESTONE_STATUS_DECORATIONS` in
-`graph-stencil-case/src/runtime/badge-mappings.ts`. The runtime-adapter calls
-`toDecoration('task', status)` instead of indexing static records.
+```typescript
+const BADGE_COLORS: Record<StateCategory, string> = {
+  active:   '#6366f1',   // accent-9: vibrant indigo
+  info:     '#3b82f6',   // info-9: vibrant blue
+  success:  '#22c55e',   // success-9: vibrant green
+  danger:   '#ef4444',   // danger-9: vibrant red
+  neutral:  '#9ca3af',   // neutral-8: medium grey
+  transfer: '#3b82f6',   // same as info
+  warning:  '#eab308',   // warning-9: vibrant amber
+};
+```
+
+These match the existing raw hex values in `TASK_STATUS_DECORATIONS` and
+`MILESTONE_STATUS_DECORATIONS`.
+
+Border rendering uses the `active` flag from `StatusDescriptor`. States with
+`active: true` get a `border: { style: 'solid', color }` in the decoration;
+terminal states (no `active` flag) get no border. `pulse` is forwarded
+independently — it controls animation, not border presence.
+
+Replaces `TASK_STATUS_DECORATIONS`, `MILESTONE_STATUS_DECORATIONS`, and
+`UNKNOWN_DECORATION` in `graph-stencil-case/src/runtime/badge-mappings.ts`.
+The runtime-adapter calls `toDecoration('task', status)` instead of indexing
+static records.
 
 `TERMINAL_SEVERITY` and `ACTIVE_WORST_PRIORITY` remain in badge-mappings as
 aggregation logic — they're about which status "wins" when multiple plan items
@@ -233,8 +292,9 @@ exist, not about rendering.
 ### work-item-inbox
 
 Remove static `_statusColors` record (lines 121–131). Replace inline status
-column renderer with `<status-badge domain="work">`. Priority badges stay —
-priority is not a status domain.
+column renderer with `<status-badge domain="workitem">`. The `workitem` domain
+maps to `WorkItemStatus` (12 states) — distinct from engine `WorkStatus` (8 states).
+Priority badges stay — priority is not a status domain.
 
 ### session-list
 
@@ -280,5 +340,6 @@ for column renderers when status columns are added to entity-list.
 - Decoration: unit tests for `toDecoration()` producing valid `NodeDecoration`
   for all registered domains. Verify active states produce borders, terminals don't.
 - Retrofit: existing tests for work-item-inbox, session-list pass unchanged
-  (visual output equivalent). Update any snapshot tests.
+  (DOM structure equivalent). Update snapshot tests — background colours shift
+  from scale-4 to scale-3 as part of the intentional normalisation.
 - Backward compat: `commitment-state-pill` renders identically before and after.
