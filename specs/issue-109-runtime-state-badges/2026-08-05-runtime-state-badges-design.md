@@ -42,7 +42,7 @@ export interface StatusDescriptor {
   readonly icon: string;
   readonly label?: string;     // display override; default: the state string
   readonly pulse?: boolean;    // animates active/running states
-  readonly border?: boolean;   // toDecoration() produces a solid border in graph context
+  readonly border?: boolean;   // sole driver of graph node borders in toDecoration()
 }
 ```
 
@@ -163,6 +163,10 @@ OBSOLETE.
 
 **GroupStatus (3 values) — `group:`**
 
+GroupStatus has no FAULTED state — in this 3-state model, REJECTED is the terminal
+failure state and uses `danger` accordingly. This differs from task/workitem domains
+where REJECTED (warning) and FAULTED (danger) are separate failure modes.
+
 | State | Category | Icon |
 |-------|----------|------|
 | IN_PROGRESS | active | ◐ |
@@ -232,10 +236,23 @@ via the existing `stateCategoryStyles()`.
 
 The retrofit normalises all pill backgrounds to scale-3 CSS custom properties (the
 `CATEGORY_STYLES` standard). The existing `_statusColors` in work-item-inbox and
-session-list use scale-4. This is an intentional normalisation — all status pills
-converge to the commitment-pill aesthetic (scale-3) rather than preserving the
-per-component scale-4 choices. The visual difference is subtle (slightly lighter
-backgrounds) and eliminates the inconsistency.
+session-list use scale-4. For most states, this is a scale-only change within the
+same colour family (e.g. `--pages-neutral-4` → `--pages-neutral-3`) — visually
+subtle, slightly lighter backgrounds.
+
+Two workitem states change colour category, not just scale:
+
+- **REJECTED**: danger (red, `--pages-danger-4`) → warning (amber, `--pages-warning-3`).
+  REJECTED is a workflow decision ("declined"), not a system failure. FAULTED carries
+  the danger semantic. Aligns with task:REJECTED → warning.
+- **DELEGATED**: accent (indigo, `--pages-accent-4`) → info (blue, `--pages-info-3`).
+  DELEGATED is an informational transfer state, not an active/in-progress state. The
+  accent family is reserved for active states (IN_PROGRESS). Aligns with
+  task:DELEGATED → info.
+
+Both category changes are intentional semantic corrections — the existing
+`_statusColors` miscategorised these states relative to the platform's category
+semantics. The remaining 7 workitem states stay within their colour family.
 
 ### Usage
 
@@ -293,8 +310,11 @@ const BADGE_COLORS: Record<StateCategory, string> = {
 };
 ```
 
-These match the existing raw hex values in `TASK_STATUS_DECORATIONS` and
-`MILESTONE_STATUS_DECORATIONS`.
+These match the existing raw hex values in `MILESTONE_STATUS_DECORATIONS` and
+all `TASK_STATUS_DECORATIONS` entries except REJECTED — which changes from
+`#f97316` (Tailwind orange-500, ad-hoc) to `#eab308` (amber-500, warning
+category standard). This follows from REJECTED's reclassification to the
+`warning` category.
 
 Border rendering uses the `border` flag from `StatusDescriptor`. States with
 `border: true` get a `border: { style: 'solid', color }` in the decoration.
