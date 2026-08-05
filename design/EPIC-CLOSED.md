@@ -1,5 +1,5 @@
-# Branch Closed: issue-97-session-workbench
+# Branch Closed: issue-109-runtime-state-badges
 
-**Date:** 2026-07-27
-**Issues:** 97,98
+**Date:** 2026-08-05
+**Issues:** 109
 **Status:** merged to main
