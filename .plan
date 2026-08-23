@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-133-remove-reexports
-state: scaffolded
+state: closing:review
 project-sha: eda73e76f394213b12367b60d4c6534df59aff74
 date: 2026-08-23
 issue-repo: casehubio/blocks-ui
@@ -11,5 +11,6 @@ design-repo: project
 design-section-hashes: 
 flyway-next-v: none
 
+evidence-era: true
 ## Queue
 - [ ] casehubio/blocks-ui#133 — Issue #133 ← active
