@@ -1,0 +1,27 @@
+# Work Plan — issue-123-timeline-extends-pages
+
+## State
+branch: issue-123-timeline-extends-pages
+state: closing:review
+project-sha: fe9dfa36fb4d21ba21344356f617e15b35bcce8b
+date: 2026-08-22
+issue-repo: casehubio/blocks-ui
+covers: 123
+design-repo: project
+design-section-hashes: 4d2cc5ab:## §1 Introduction and Goals|4f6b26ef:## §2 Constraints|39b76cb9:## §3 Context and Scope|74aa736f:## §4 Solution Strategy|9ca8de62:## §5 Building Block View|f1938c56:## §6 Runtime View|65807a21:## §7 Deployment View|a03d508f:## §8 Crosscutting Concepts|b2e1b57c:## §9 Journeys and Chapters|598f3a04:## §10 Architectural Decisions|1f604475:## §11 Quality Requirements|af5f260f:## §12 Risks and Technical Debt|42d51385:## §13 Glossary
+flyway-next-v: none
+
+evidence-era: true
+## Queue
+- [ ] casehubio/blocks-ui#123 — Issue #123 ← active
+  - [x] Batch 1: Pages renderers
+    - [x] Task 1: Vertical renderer
+    - [x] Task 2: Horizontal renderer
+    - [x] Task 3: Compact + filter bar
+    - [x] Task 4: Refactor PagesEventTimeline + exports
+  - [x] Batch 2: Blocks types + strategies
+    - [x] Task 5: Adopt pages types
+    - [x] Task 6: Update strategies
+  - [x] Batch 3: Blocks component + consumers
+    - [x] Task 7: Refactor BlocksTimeline
+    - [x] Task 8: Update exports + consumers
