@@ -1,0 +1,9 @@
+# Work Plan — 
+
+## State
+branch: main
+state: idle
+
+## Queue
+- [ ] casehubio/casehub-pages#373 — pages-property-palette
+- [ ] casehubio/blocks-ui#136 — domain-property-schemas
