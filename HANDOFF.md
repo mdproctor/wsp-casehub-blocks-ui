@@ -1,24 +1,39 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** main (no active branch)
-**Date:** 2026-08-05
+**Branch:** `issue-140-wire-pages-palettes`
+**Date:** 2026-08-27
 
-## What landed
+## Last Session
 
-Generic `<status-badge>` component with a 10-domain status registry (#109). Replaces 4 ad-hoc status badge implementations (work-item-inbox, session-list, commitment-state-pill, badge-mappings) with one component and one source of truth. Registry uses cross-domain defaults so new domains get sensible rendering for shared state names (COMPLETED, PENDING, RUNNING, etc.) without explicit registration. `toDecoration()` in graph-stencil-case converts the same descriptors to graph node decorations via a separate `BADGE_COLORS` hex palette. Case-level status badge added to diagram toolbar. Consumer and contributor guides updated.
+Closed #136 (rich property schemas) — 5 squashed commits landed on main: schema registry, 5 case schemas with discriminated unions, HTN schemas, SWF x-group annotations, custom editor stubs. Then filed #140 and started it: brainstormed, designed (standard spec review with significant enrichment around virtual discriminators and the data-schema mismatch problem), planned (10 tasks in 4 batches), completed Batch 1 (dependencies, editor event contract fix, PropertyPaletteSource adapter in DiagramBaseMixin).
 
-Filed 6 new epics (#106–#111) for the remaining blocks-ui modelling gaps: SWF diagram, HTN/DAG visualiser, worker function drill-down, runtime state expansion (done), conversation protocol viewer, orchestration monitor. Slot 85 created for #106 (SWF diagram).
+Key design decisions: EditorResolver via protected method on mixin (not abstract), EditPolicy validates before domain adapter mutates YAML, discriminator rendering via closures capturing `this` to access switch functions directly. The spec's §Virtual Discriminators section is critical reading — worker functionType, binding trigger, agent model provider are all virtual selectors that don't match the data structure.
 
-## What's left
+## Immediate Next Step
 
-- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
+Start Batch 2: CaseEditPolicy (Task 4), SwfEditPolicy + addSwfTask (Task 5), switchTriggerType + migrate detectTriggerType (Task 6). Run `work continue` on this branch.
 
-## What's next
+## Queue
 
-| # | Description | Scale | Complexity | Notes |
-|---|-------------|-------|------------|-------|
-| #106 | SWF diagram — complete graph-stencil-swf | L | Med | Slot 85 ready, `@openworkflowspec/sdk` available |
-| #107 | HTN decomposition tree and DAG plan visualiser | L | High | Needs design |
-| #108 | Worker function drill-down — agent/flow/a2a/mcp config | M | Med | Partially independent of #106 |
-| #110 | Conversation protocol viewer — convergence, epistemic status | L | High | Needs design |
-| #111 | Orchestration monitor — execution lifecycle, audit chain | L | High | Needs design |
+```
+- [ ] #140 <- active
+  - [x] Batch 1: Deps+Foundation (3/3 done)
+  - [ ] Batch 2: EditPolicy+Palette
+    - [ ] Task 4: CaseEditPolicy
+    - [ ] Task 5: SwfEditPolicy + addSwfTask
+    - [ ] Task 6: switchTriggerType + migrate detectTriggerType
+  - [ ] Batch 3: Wire+Cleanup
+    - [ ] Task 7: Wire casehub-diagram
+    - [ ] Task 8: Wire swf-diagram
+    - [ ] Task 9: Remove old code
+  - [ ] Batch 4: Showcase
+    - [ ] Task 10: Update showcase pages
+```
+
+## Notes
+
+- `casehub-diagram.ts` and `swf-diagram.ts` will not compile until Tasks 7-8 update them — `_paletteTypes()` abstract was replaced by `_addElement(type)` in Task 3
+- Pre-existing test failure in `case-adapter.test.ts` (external node test) — unrelated
+- Spec at `specs/issue-140-wire-pages-palettes/2026-08-27-wire-pages-palettes-design.md`
+- Plan at `plans/2026-08-27-wire-pages-palettes.md`
+- Deferred issues filed during spec review: #141 (drag-to-canvas), #142 (edge reconnection UX), #143 (context menus)
