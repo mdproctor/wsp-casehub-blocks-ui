@@ -49,8 +49,9 @@ protected get _propertyPaletteSource(): PropertyPaletteSource | undefined {
 The `onChange` routes through a new `_onPropertyChange(field, value)`
 method on DiagramBaseMixin. The base implementation wraps undo tracking
 and delegates to `_applyPropertyEdit` for regular field changes.
-Subclasses override to intercept discriminator changes and route them
-to specialised CST-preserving YAML editors (see §Discriminator Routing).
+Discriminator type changes do NOT flow through `_onPropertyChange` —
+they are handled directly by render function closures in the
+EditorResolver (see §Discriminator Rendering via Closures).
 
 ### EditorResolver
 
@@ -69,6 +70,13 @@ protected override _editorResolver(): EditorResolver {
   return (schema) => {
     const tag = schema['x-editor-component'] as string | undefined;
     if (tag) return { kind: 'tag', tag };
+
+    if (schema['x-discriminator'] && schema.oneOf) {
+      return {
+        kind: 'render',
+        render: (ctx) => this._renderDiscriminator(ctx, schema),
+      };
+    }
     return undefined;
   };
 }
@@ -82,85 +90,233 @@ updated to emit standard `change` events to match this contract (see
 §Custom Editor Event Contract).
 
 For discriminated unions (`x-discriminator` + `oneOf`), the resolver
-returns a `{ kind: 'render' }` descriptor with a render function that
-handles the full discriminator UX. This keeps all discriminator
-complexity in the EditorResolver — pages-property-palette does not
-need native `x-discriminator` support:
-
-```typescript
-// casehub-diagram override — handles both custom editors and discriminators
-protected override _editorResolver(): EditorResolver {
-  return (schema) => {
-    const tag = schema['x-editor-component'] as string | undefined;
-    if (tag) return { kind: 'tag', tag };
-
-    if (schema['x-discriminator'] && schema.oneOf) {
-      return {
-        kind: 'render',
-        render: (ctx) => renderDiscriminator(ctx, schema),
-      };
-    }
-    return undefined;
-  };
-}
-```
-
-`renderDiscriminator` is a shared utility in diagram-core that:
-1. Reads the `x-discriminator` field name and `oneOf` branches
-2. Determines the active branch by matching data against each branch's
-   `const` value for the discriminator field
-3. Renders a type selector dropdown from branch titles
-4. Renders a nested `<pages-property-palette>` for the active branch's
-   sub-schema
-5. Routes discriminator changes through `ctx.onChange` with the
-   discriminator field path (e.g. `['functionType', '_type']`)
+returns a `{ kind: 'render' }` descriptor. The render function is a
+**closure that captures `this`** (the diagram component instance), giving
+it direct access to `_selectedData`, `_adapterResult`, and the CST-
+preserving switch functions. This is critical because pages-property-
+palette's `FieldRenderContext.onChange` is typed `(value: unknown) => void`
+— it takes only a value, not a field path. The field path is baked in by
+pages-property-palette when creating the context. Discriminator type
+changes cannot flow through `ctx.onChange`.
 
 `swf-diagram` does not override `_editorResolver()` — SWF schemas have
 no custom editor fields or discriminated unions.
 
-### Discriminator Routing
+### Virtual Discriminators and Data-Schema Mismatch
 
-`DiagramBaseMixin._onPropertyChange(field, value)` handles regular
-field changes via `_applyPropertyEdit`. `casehub-diagram` overrides
-this to intercept discriminator changes before they reach the generic
-editor:
+The case schemas use `x-discriminator` + `oneOf` as a **presentation
+construct** that does not match the data structure:
+
+**Worker `functionType`:** The schema defines `functionType` as a property
+with `x-discriminator: '_type'` and 6 `oneOf` branches (agent, flow, a2a,
+mcp, sequence, external). But worker data has NO `functionType` field —
+function type is determined by which key is present at the top level:
+`data['agent']`, `data['a2a']`, `data['mcp']`, `data['do']`, or
+`data['sequence']` via `detectFunctionType()`. The schema says
+`functionType._type = 'agent'`; the data says `{ agent: { ... } }`.
+
+**Nested discriminators:** `model._provider` and `transport._transport`
+within the agent and MCP branches are also virtual — the data has
+`agent.model._provider` as a key in the model object, not a
+discriminator field that maps cleanly to `ctx.value`.
+
+**Binding `on` trigger:** The schema defines `on` with
+`x-discriminator: 'triggerType'` and 4 branches. The `on` field DOES
+exist in the data (`data['on'] = { contextChange: {...} }`), but the
+discriminator key `triggerType` does not — the active trigger is
+determined by which key is present inside `on`.
+
+Because all discriminators are virtual, a generic `renderDiscriminator`
+utility that reads `ctx.value` and matches `const` values cannot work.
+The render functions use **domain-aware detection functions**
+(`detectFunctionType`, `detectTriggerType`, `detectMcpTransport`,
+`detectModelProvider`) to determine the active branch from the actual
+data structure.
+
+### Discriminator Rendering via Closures
+
+Discriminator type changes and sub-field edits are handled through
+two separate paths:
+
+**Type changes** (structural mutations): The render function calls the
+CST-preserving switch function directly via the captured `this` reference.
+These never flow through `_onPropertyChange` or `ctx.onChange`.
+
+**Sub-field edits** (value mutations): The render function creates a
+nested `<pages-property-palette>` for the active branch, with a nested
+`PropertyPaletteSource` whose `onChange` prefixes the field path with the
+correct YAML key. These flow through the normal `_onPropertyChange` →
+`_applyPropertyEdit` path.
 
 ```typescript
-// casehub-diagram
-protected override _onPropertyChange(
-  field: (string | number)[], value: unknown,
-): void {
-  const key = String(field[field.length - 1]);
-  if (key === '_type' && field[0] === 'functionType') {
-    this._switchFunctionType(value as WorkerFunctionType);
-    return;
+// casehub-diagram — discriminator rendering for functionType
+private _renderDiscriminator(
+  ctx: FieldRenderContext,
+  schema: FieldSchema,
+): TemplateResult {
+  const disc = schema['x-discriminator'] as string;
+
+  // --- Function type discriminator ---
+  if (disc === '_type') {
+    const fnType = detectFunctionType(this._selectedData);
+    const yamlKey = FUNCTION_TYPE_TO_YAML_KEY[fnType]; // e.g., 'agent'
+    const branches = schema.oneOf as FieldSchema[];
+    const activeBranch = branches.find(b =>
+      b.properties?.['_type']?.const === (yamlKey ?? fnType));
+
+    return html`
+      <select @change=${(e: Event) => {
+        const newType = (e.target as HTMLSelectElement).value;
+        this._switchFunctionType(newType as WorkerFunctionType);
+      }}>
+        ${branches.map(b => html`
+          <option value=${b.properties?.['_type']?.const}
+            ?selected=${b === activeBranch}>${b.title}</option>
+        `)}
+      </select>
+      ${activeBranch && yamlKey ? this._renderBranchPalette(
+        activeBranch, yamlKey,
+      ) : nothing}
+    `;
   }
-  if (key === '_transport') {
-    this._switchMcpTransport(value as McpTransportType);
-    return;
+
+  // --- Trigger type discriminator ---
+  if (disc === 'triggerType') {
+    return this._renderTriggerDiscriminator(ctx, schema);
   }
-  if (key === '_provider') {
-    this._switchModelProvider(value as ModelProviderKey);
-    return;
+
+  // --- Model provider discriminator ---
+  if (disc === '_provider') {
+    return this._renderProviderDiscriminator(ctx, schema);
   }
-  if (field[0] === 'targetType') {
-    this._switchBindingTarget(value as string);
-    return;
+
+  // --- MCP transport discriminator ---
+  if (disc === '_transport') {
+    return this._renderTransportDiscriminator(ctx, schema);
   }
-  super._onPropertyChange(field, value);
+
+  return html`<span>Unknown discriminator: ${disc}</span>`;
 }
 ```
 
-Each `_switch*` method wraps the existing CST-preserving YAML editor
-(`switchFunctionType`, `switchMcpTransport`, `switchModelProvider`,
-`switchBindingTarget`) with undo tracking and `_fullRender`.
+**Nested palette for sub-field edits:**
 
-This approach handles all four discriminator levels in the worker schema
-(`functionType._type` → 6 branches, `model._provider` → 5 providers,
-`transport._transport` → stdio/http) and the binding target type, using
-the same specialized YAML mutation functions that `casehub-diagram.ts`
-already has (`_handleFunctionTypeChange`, `_handleMcpTransportChange`,
-etc.).
+```typescript
+private _renderBranchPalette(
+  branch: FieldSchema,
+  yamlKey: string,
+): TemplateResult {
+  const subData = (this._selectedData[yamlKey] ?? {}) as Record<string, unknown>;
+  const subProps = { ...branch.properties };
+  delete subProps['_type']; // exclude discriminator const field
+
+  const nestedSource: PropertyPaletteSource = {
+    schema: { type: 'object', properties: subProps } as FieldSchema,
+    data: subData,
+    readonly: this.readonly,
+    onChange: (field, value) =>
+      this._onPropertyChange([yamlKey, ...field], value),
+  };
+
+  return html`
+    <pages-property-palette
+      .source=${nestedSource}
+      .resolver=${this._editorResolver()}>
+    </pages-property-palette>
+  `;
+}
+```
+
+The nested palette uses the **same EditorResolver** (which captures
+`this`), so nested discriminators (model `_provider` within agent,
+transport `_transport` within MCP) are handled recursively. Each nesting
+level adds the correct YAML key prefix to `onChange`, producing the full
+path: e.g., `['agent', 'model', 'modelName']`.
+
+**No `_onPropertyChange` override needed for discriminators.**
+`casehub-diagram` does NOT override `_onPropertyChange`. Discriminator
+type changes bypass onChange entirely (direct switch function calls).
+Sub-field edits flow through the base class `_onPropertyChange` →
+`_applyPropertyEdit` with the correct YAML path. The existing four
+event handlers (`_handleFunctionTypeChange`, `_handleMcpTransportChange`,
+`_handleModelProviderChange`, `_handleTargetTypeChange`) are removed —
+their logic moves into the render function closures.
+
+### Binding Target Type
+
+The binding target type (capability/subCase/humanTask) is a virtual
+selector like `functionType` — the three fields are mutually exclusive
+but the schema does not model them as a discriminator. The existing
+`_renderTargetSelector()` in `casehub-diagram-properties.ts` detects
+the target type by key presence and renders a dropdown.
+
+In the new design, `casehub-diagram` renders the target type selector
+as part of the property panel for binding nodes. When the selector value
+changes, it calls `switchBindingTarget()` directly via the same closure
+pattern:
+
+```typescript
+private _renderTargetSelector(): TemplateResult | typeof nothing {
+  if (this._selectedType !== 'binding') return nothing;
+  const current = this._currentTargetType();
+  return html`
+    <select @change=${(e: Event) => {
+      const newTarget = (e.target as HTMLSelectElement).value;
+      this._switchBindingTarget(newTarget as 'capability' | 'subCase' | 'humanTask');
+    }}>
+      <option value="capability" ?selected=${current === 'capability'}>Capability</option>
+      <option value="subCase" ?selected=${current === 'subCase'}>SubCase</option>
+      <option value="humanTask" ?selected=${current === 'humanTask'}>HumanTask</option>
+    </select>
+  `;
+}
+```
+
+`_currentTargetType()` detects the active target by key presence, matching
+the existing logic. `_switchBindingTarget` wraps `switchBindingTarget()`
+with undo tracking and `_fullRender`.
+
+Modeling the binding target type as a proper `x-discriminator` in the
+binding schema (for consistency with `functionType` and `on`) is deferred
+to casehubio/blocks-ui#144.
+
+### Trigger Type Switching
+
+The existing `trigger-editor.ts` (being removed from diagram-core) handles
+trigger type switching by replacing the entire `on` value — a crude approach
+that loses YAML comments. For consistency with the other CST-preserving
+switch functions, a new `switchTriggerType` is added:
+
+```typescript
+// yaml-editor.ts — new function
+const TRIGGER_KEYS = ['contextChange', 'cloudEvent', 'schedule', 'scopeActivated'];
+const TRIGGER_DEFAULTS: Record<string, unknown> = {
+  contextChange: {},
+  cloudEvent: {},
+  schedule: {},
+  scopeActivated: {},
+};
+
+export function switchTriggerType(
+  yaml: string,
+  bindingPath: readonly (string | number)[],
+  newType: string,
+): string {
+  const doc = parseDocument(yaml);
+  const onPath = [...bindingPath, 'on'];
+  const on = doc.getIn(onPath) as YAMLMap;
+  for (const key of TRIGGER_KEYS) {
+    if (on.has(key)) on.delete(key);
+  }
+  on.set(newType, doc.createNode(TRIGGER_DEFAULTS[newType]));
+  return doc.toString();
+}
+```
+
+`detectTriggerType` migrates from `diagram-core/src/form/trigger-editor.ts`
+(being removed) to `graph-stencil-case/src/worker-function/detect.ts`
+alongside the other detection functions. The type alias `TriggerType` moves
+with it.
 
 ### casehub-diagram-properties.ts Migration
 
@@ -174,9 +330,14 @@ The existing `casehub-diagram-properties.ts` (177 lines) contains:
 
 All of this is replaced by the combination of:
 1. `pages-property-palette` — generic field rendering
-2. EditorResolver discriminator support — type selector + sub-schema swap
-3. Discriminator routing in `_onPropertyChange` — YAML mutation dispatch
+2. EditorResolver with closure-captured render functions — discriminator
+   type selectors + nested sub-palettes (see §Discriminator Rendering
+   via Closures)
+3. Direct switch function calls from render closures — CST-preserving
+   YAML mutations without routing through `_onPropertyChange`
 4. `x-editor-component` editors — blocks-prompt-editor, blocks-env-map-editor, etc.
+5. Binding target type selector — rendered directly by casehub-diagram
+   (see §Binding Target Type)
 
 The component is added to the Removal List. Its sub-form renderers
 (renderAgentForm, renderA2AForm, etc.) in graph-stencil-case are also
@@ -220,6 +381,18 @@ For SWF diagrams, `SwfEditPolicy.getCreatableTypes()` filters to user-
 creatable task types: call, set, switch, raise, try.
 
 The `casehub-diagram-palette` component is removed.
+
+**`_paletteTypes()` migration:** The existing `_paletteTypes()` method
+and all its overrides are removed. Three call sites must be updated:
+
+1. `DiagramBaseMixin._handleKeydown` (line 378): guards Delete/Backspace
+   on `this._paletteTypes().length > 0`. Updated to check
+   `this._editPolicy() != null` — if an edit policy exists, editing
+   (including deletion) is enabled.
+2. `casehub-diagram._paletteTypes()` returning `PALETTE_TYPES` — removed.
+   Palette items now derive from `CaseEditPolicy.getCreatableTypes()`.
+3. `swf-diagram._paletteTypes()` returning `[]` — removed. Palette items
+   now derive from `SwfEditPolicy.getCreatableTypes()`.
 
 ### EditPolicy Implementation
 
@@ -320,7 +493,7 @@ Read-only editors (`blocks-sequence-editor`, `blocks-swf-link`,
 |------|--------|
 | `packages/diagram-core/src/form/field-renderer.ts` | Replaced by pages-property-palette EditorResolver |
 | `packages/diagram-core/src/form/validation.ts` | Replaced by pages-ui-components validateField |
-| `packages/diagram-core/src/form/trigger-editor.ts` | Replaced by x-discriminator in binding schema |
+| `packages/diagram-core/src/form/trigger-editor.ts` | `detectTriggerType` and `TriggerType` migrate to `graph-stencil-case/src/worker-function/detect.ts`; `renderTriggerEditor` removed — replaced by EditorResolver discriminator rendering |
 | `packages/diagram-core/src/form/nested-group.ts` | Replaced by pages-property-palette nested object rendering |
 | `packages/diagram-core/src/form/property-form.ts` | Replaced by pages-property-palette |
 | `packages/diagram-core/src/diagram-properties.ts` | Replaced by pages-property-palette (used inline in mixin) |
@@ -329,6 +502,7 @@ Read-only editors (`blocks-sequence-editor`, `blocks-swf-link`,
 | `components/casehub-diagram/src/casehub-diagram-palette.ts` | Replaced by pages-diagram-palette |
 | `components/casehub-diagram/src/casehub-diagram-palette.test.ts` | Tests for removed component |
 | Inline prompt dialog in `casehub-diagram.ts` | The `<dialog id="prompt-editor-dialog">` block (lines 270-296), `_promptEditorOpen`/`_promptEditorValue` state, and `_handlePromptEditor*` methods are removed. `blocks-prompt-editor` with `x-editor-component` provides the editing surface. |
+| Event handlers in `casehub-diagram.ts` | `_handleFunctionTypeChange`, `_handleMcpTransportChange`, `_handleModelProviderChange`, `_handleTargetTypeChange` — replaced by direct switch function calls from EditorResolver render closures (see §Discriminator Rendering via Closures). |
 
 Exports removed from `packages/diagram-core/src/index.ts`:
 `DiagramProperties`, `renderPropertyForm`, `emitPropertyChange`,
@@ -361,7 +535,9 @@ panes.
 ### Unit Tests
 
 - `PropertyPaletteSource` adapter: schema/data bridge, onChange routing
-- `EditorResolver`: x-editor-component → tag descriptor mapping
+- `EditorResolver`: x-editor-component → tag descriptor, x-discriminator → render descriptor
+- `switchTriggerType`: CST-preserving trigger type switching
+- Discriminator render closures: type detection, nested palette construction
 - `CaseEditPolicy`: canConnect rules, creatable types, delete strategies
 - `SwfEditPolicy`: flow edge validation, boundary node protection
 - Palette item generation from `_paletteItems()`
@@ -397,7 +573,7 @@ Each deferred item is captured as a GitHub issue:
 - packages/diagram-core/src/diagram-base-mixin.ts — _updateSelectedNode, _handlePropertyChange
 - packages/diagram-core/src/form/ — old form utilities (to be removed)
 - components/casehub-diagram/src/casehub-diagram-palette.ts — old palette (to be removed)
-- packages/graph-stencil-case/src/adapter/yaml-editor.ts — addElement, switchFunctionType, etc.
+- packages/graph-stencil-case/src/adapter/yaml-editor.ts — addElement, switchFunctionType, switchTriggerType, etc.
 - packages/graph-stencil-swf/src/adapter/swf-yaml-editor.ts — applySwfPropertyEdit, addSwfTask
 - PP-20260806-320d50 — stencil package isolation protocol
 - PP-20260713-8ea1af — component customisation pattern
