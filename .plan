@@ -13,10 +13,10 @@ flyway-next-v: unknown
 
 ## Queue
 - [ ] casehubio/blocks-ui#140 — Issue #140 ← active
-  - [ ] Batch 1: Deps+Foundation
-    - [ ] Task 1: Publish pages SNAPSHOT and add dependencies
-    - [ ] Task 2: Fix custom editor event contract
-    - [ ] Task 3: PropertyPaletteSource adapter in DiagramBaseMixin
+  - [x] Batch 1: Deps+Foundation
+    - [x] Task 1: Publish pages SNAPSHOT and add dependencies
+    - [x] Task 2: Fix custom editor event contract
+    - [x] Task 3: PropertyPaletteSource adapter in DiagramBaseMixin
   - [ ] Batch 2: EditPolicy+Palette
     - [ ] Task 4: CaseEditPolicy
     - [ ] Task 5: SwfEditPolicy + addSwfTask
