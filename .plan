@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-140-wire-pages-palettes
-state: scaffolded
+state: active
 project-sha: 1ad13e37895e53dbeeccda464f1860d8dcb587b6
 date: 2026-08-27
 issue-repo: casehubio/blocks-ui
@@ -27,3 +27,6 @@ flyway-next-v: unknown
     - [ ] Task 9: Remove old code
   - [ ] Batch 4: Showcase
     - [ ] Task 10: Update showcase pages
+- [ ] casehubio/blocks-ui#141 — Drag-to-canvas node placement
+- [ ] casehubio/blocks-ui#142 — Edge reconnection and drag-create UX
+- [ ] casehubio/blocks-ui#143 — Context menus for edge splitting
