@@ -18,13 +18,13 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#190 — Speech_denoising
 - [x] casehubio/blocks#215 — Shallow_fusion_n-gram
 - [ ] casehubio/blocks#184 — Voice_Activity_Detection ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: SPI+FFM+Provisioning
-  - [ ] Batch 2: Implementation
-    - [ ] Task 2: Silero VAD wrapper
-  - [ ] Batch 3: Integration
-    - [ ] Task 3: STT integration+runtime toggle
-    - [ ] Task 4: Avatar demo wiring
+  - [x] Batch 1: Foundation
+    - [x] Task 1: SPI+FFM+Provisioning
+  - [x] Batch 2: Implementation
+    - [x] Task 2: Silero VAD wrapper
+  - [x] Batch 3: Integration
+    - [x] Task 3: STT integration+runtime toggle
+    - [x] Task 4: Avatar demo wiring
 - [ ] casehubio/blocks#168 — Cache_offline_recognizer
 - [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
 - [ ] casehubio/blocks#191 — Speaker_diarization
