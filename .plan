@@ -6,7 +6,7 @@ state: active
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui
-covers: 168
+covers: 176
 design-repo: project
 design-section-hashes: 
 flyway-next-v: unknown
@@ -18,7 +18,7 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#190 — Speech_denoising
 - [x] casehubio/blocks#215 — Shallow_fusion_n-gram
 - [x] casehubio/blocks#184 — Voice_Activity_Detection
-- [ ] casehubio/blocks#168 — Cache_offline_recognizer ← active
-- [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
+- [x] casehubio/blocks#168 — Cache_offline_recognizer
+- [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling ← active
 - [ ] casehubio/blocks#191 — Speaker_diarization
 - [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
