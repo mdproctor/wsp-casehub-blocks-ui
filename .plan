@@ -23,8 +23,8 @@ flyway-next-v: unknown
   - [x] Batch 1: Runtime
     - [x] Task 1: NativeJarExtractor
     - [x] Task 2: SherpaLibrary Tier 1.5
-  - [ ] Batch 2: Packaging
+  - [x] Batch 2: Packaging
     - [x] Task 3: NativePackager + osx-arm64
-    - [ ] Task 4: Remaining 4 modules
+    - [x] Task 4: Remaining 4 modules
 - [ ] casehubio/blocks#191 — Speaker_diarization
 - [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
