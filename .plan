@@ -16,13 +16,13 @@ flyway-next-v: unknown
 - [x] casehubio/blocks-ui#148 — Align_deps_rebuild_whisper_remap_Kokoro
 - [x] casehubio/blocks#187 — Streaming_TTS
 - [ ] casehubio/blocks#190 — Speech_denoising ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: SPI+FFM+Provisioning
-  - [ ] Batch 2: Implementations
-    - [ ] Task 2: Offline denoiser
-    - [ ] Task 3: Online streaming denoiser
-  - [ ] Batch 3: Integration
-    - [ ] Task 4: STT integration+runtime toggle+avatar wiring
+  - [x] Batch 1: Foundation
+    - [x] Task 1: SPI+FFM+Provisioning
+  - [x] Batch 2: Implementations
+    - [x] Task 2: Offline denoiser
+    - [x] Task 3: Online streaming denoiser
+  - [x] Batch 3: Integration
+    - [x] Task 4: STT integration+runtime toggle+avatar wiring
 - [ ] casehubio/blocks#215 — Shallow_fusion_n-gram
 - [ ] casehubio/blocks#184 — Voice_Activity_Detection
 - [ ] casehubio/blocks#168 — Cache_offline_recognizer
