@@ -6,7 +6,7 @@ state: active
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui
-covers: 139
+covers: 168
 design-repo: project
 design-section-hashes: 
 flyway-next-v: unknown
