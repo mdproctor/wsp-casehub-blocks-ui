@@ -1,0 +1,24 @@
+# Work Plan — issue-139-avatar-components
+
+## State
+branch: issue-139-avatar-components
+state: active
+project-sha: slot-creation
+date: 2026-08-31
+issue-repo: casehubio/blocks-ui
+covers: 139
+design-repo: project
+design-section-hashes: 
+flyway-next-v: unknown
+
+## Queue
+- [x] casehubio/blocks-ui#139 — Issue #139
+- [x] casehubio/blocks-ui#148 — Align_deps_rebuild_whisper_remap_Kokoro
+- [x] casehubio/blocks#187 — Streaming_TTS
+- [ ] casehubio/blocks#190 — Speech_denoising ← active
+- [ ] casehubio/blocks#215 — Shallow_fusion_n-gram
+- [ ] casehubio/blocks#184 — Voice_Activity_Detection
+- [ ] casehubio/blocks#168 — Cache_offline_recognizer
+- [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
+- [ ] casehubio/blocks#191 — Speaker_diarization
+- [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
