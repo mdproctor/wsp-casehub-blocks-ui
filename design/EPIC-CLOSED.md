@@ -1,5 +1,5 @@
-# Branch Closed: issue-97-session-workbench
+# Epic Closed
 
-**Date:** 2026-07-27
-**Issues:** 97,98
-**Status:** merged to main
+**Branch:** issue-89-trust-workbench
+**Date:** 2026-07-21
+**Issues:** #89

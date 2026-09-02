@@ -1,24 +1,31 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** main (no active branch)
-**Date:** 2026-08-05
+**Branch:** issue-124-showcase-gallery-coverage
+**Issue:** casehubio/blocks-ui#124
+**Date:** 2026-08-20
 
-## What landed
+## Last Session
 
-Generic `<status-badge>` component with a 10-domain status registry (#109). Replaces 4 ad-hoc status badge implementations (work-item-inbox, session-list, commitment-state-pill, badge-mappings) with one component and one source of truth. Registry uses cross-domain defaults so new domains get sensible rendering for shared state names (COMPLETED, PENDING, RUNNING, etc.) without explicit registration. `toDecoration()` in graph-stencil-case converts the same descriptors to graph node decorations via a separate `BADGE_COLORS` hex palette. Case-level status badge added to diagram toolbar. Consumer and contributor guides updated.
+Deep edge routing overhaul across pages graph-renderer and blocks-ui diagram components. Rebuilt the handle assignment algorithm from scratch — priority system (default then perpendicular then fallback) with flow-direction detection for wrapping layouts, corridor blocking, container-aware scope. Added SmartEdgeProvider for A* pathfinding. Fixed casehub-diagram to pass layoutDirection on all toReactFlowGraph calls (3 paths were silently defaulting to DOWN). Added node sizing for SWF thumbnails (130px collapsed). Added shared validateEdgeRouting function for diagram-agnostic TDD. Fixed risk-aggregator try/catch YAML structure. Hid handles on unconnected nodes.
 
-Filed 6 new epics (#106–#111) for the remaining blocks-ui modelling gaps: SWF diagram, HTN/DAG visualiser, worker function drill-down, runtime state expansion (done), conversation protocol viewer, orchestration monitor. Slot 85 created for #106 (SWF diagram).
+TDD integration tests now run the FULL pipeline (YAML to adapter to ELK to toReactFlowGraph to filter) for all 4 showcase diagrams and assert no line crosses shape, no node overlap, no line crosses line. Tests extract YAML dynamically from the showcase example pages.
 
-## What's left
+## What's Still Open
 
-- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
+### fitView clipping (CaseHub Diagram page)
+ReactFlow fitView calculates zoom before SWF thumbnails are fully DOM-measured (50px to 130px). Produces zoom 0.5 instead of 0.487, clipping 15px top/bottom. Needs delayed re-fit after measurement. Consider useNodesInitialized hook or ResizeObserver on graph container.
 
-## What's next
+### Pages branch unmerged
+Branch issue-294-server-examples-tab has all graph-renderer fixes (8 commits). Not merged to pages main.
 
-| # | Description | Scale | Complexity | Notes |
-|---|-------------|-------|------------|-------|
-| #106 | SWF diagram — complete graph-stencil-swf | L | Med | Slot 85 ready, `@openworkflowspec/sdk` available |
-| #107 | HTN decomposition tree and DAG plan visualiser | L | High | Needs design |
-| #108 | Worker function drill-down — agent/flow/a2a/mcp config | M | Med | Partially independent of #106 |
-| #110 | Conversation protocol viewer — convergence, epistemic status | L | High | Needs design |
-| #111 | Orchestration monitor — execution lifecycle, audit chain | L | High | Needs design |
+### Forage entries to capture
+4 entries identified but not written: Vite portal source loading gotcha, fitView timing gotcha, flow-direction detection technique, direction param omission gotcha.
+
+## Cross-Module
+
+**Blocking** (pages owes blocks-ui):
+- graph-renderer — merge issue-294-server-examples-tab to pages main (gates blocks-ui SNAPSHOT refresh) S Low
+
+## Immediate Next Step
+
+Merge pages branch issue-294-server-examples-tab to main, then fix the fitView clipping.
