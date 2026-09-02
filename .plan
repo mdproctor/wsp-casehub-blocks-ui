@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-150-case-flow-viewer
-state: scaffolded
+state: active
 project-sha: 2370f1d3cf27ef4b33bdc75a41cfc0092c8419d5
 date: 2026-09-02
 issue-repo: casehubio/blocks-ui
@@ -13,13 +13,13 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#150 — Issue #150 ← active
-  - [ ] Batch 1: Runtime types
-    - [ ] Task 1: Extend CaseRuntimeState
-    - [ ] Task 2: Extend toDecorations
-  - [ ] Batch 2: Viewer component
-    - [ ] Task 3: Scaffold and implement viewer
-    - [ ] Task 4: Implement toolbar
-  - [ ] Batch 3: Parallel groups
-    - [ ] Task 5: Wire ELK partitioning
-  - [ ] Batch 4: Docs
-    - [ ] Task 6: Update CLAUDE.md and aria-check
+  - [x] Batch 1: Runtime types
+    - [x] Task 1: Extend CaseRuntimeState
+    - [x] Task 2: Extend toDecorations
+  - [x] Batch 2: Viewer component
+    - [x] Task 3: Scaffold and implement viewer
+    - [x] Task 4: Implement toolbar
+  - [x] Batch 3: Parallel groups
+    - [x] Task 5: Wire ELK partitioning
+  - [x] Batch 4: Docs
+    - [x] Task 6: Update CLAUDE.md and aria-check
