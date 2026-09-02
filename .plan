@@ -20,5 +20,11 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#184 — Voice_Activity_Detection
 - [x] casehubio/blocks#168 — Cache_offline_recognizer
 - [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling ← active
+  - [ ] Batch 1: Runtime
+    - [ ] Task 1: NativeJarExtractor
+    - [ ] Task 2: SherpaLibrary Tier 1.5
+  - [ ] Batch 2: Packaging
+    - [ ] Task 3: NativePackager + osx-arm64
+    - [ ] Task 4: Remaining 4 modules
 - [ ] casehubio/blocks#191 — Speaker_diarization
 - [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
