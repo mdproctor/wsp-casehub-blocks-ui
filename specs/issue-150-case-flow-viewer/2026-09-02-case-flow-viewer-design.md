@@ -144,7 +144,9 @@ When `runtimeState.trustScores` is provided, `toDecorations()` adds a trust scor
 | 50-79 | Amber (#eab308) | Moderate trust |
 | 0-49 | Red (#ef4444) | Low trust |
 
-`NodeDecoration` does not have a `label` field (it has `badge`, `border`, `overlay`, `tooltip`). Trust score display uses the worker stencil's render function: when `trustScoreAtRouting` is present in the node's properties (set by `toDecorations()` via a new `properties` field on `NodeDecoration`), the stencil renderer shows a trust pill below the node. This requires adding an optional `properties` field to `NodeDecoration` in `graph-core` — a non-breaking upstream change. Alternatively (recommended), trust scores can be injected into the `GraphNode.properties` during the `_adaptYaml()` override by merging `runtimeState.trustScores` into worker node properties before layout. The worker stencil renderer already has access to `node.properties` and can render the pill when `trustScoreAtRouting` is present. This avoids any upstream type change and keeps the rendering logic in `graph-stencil-case` where it belongs.
+`NodeDecoration` is extended with an optional `pills` array in `graph-core` (upstream). Each pill has `text`, `color`, and optional `icon`. This is domain-agnostic — trust scores, execution times, SLA deadlines, cost indicators all use the same mechanism. The stencil renderer in `graph-renderer` renders pills below the node badge.
+
+`toDecorations()` maps `runtimeState.trustScores` into pills on the corresponding worker node decorations. The colour thresholds (green/amber/red) are applied during decoration construction, not rendering — the pill carries its resolved colour.
 
 ### Adaptive decision highlighting
 
@@ -159,14 +161,13 @@ The `affectedBindings` field on each decision maps it to graph node IDs via the 
 
 When `runtimeState.parallelGroups` is provided, the viewer passes ELK compound node constraints to `computeElkLayout()` via the `_layoutOptions()` override.
 
-Each parallel group becomes an ELK compound node (parent) containing its member nodes as children. `GraphNode.parentId` already supports this — member nodes set `parentId` to the compound node's ID. ELK lays out compound children side-by-side within the parent, creating visually distinct parallel branches.
-
-The compound nodes are inserted into the `GraphModel` by a pre-layout transform in `_adaptYaml()` (after calling `toGraph()`). They render with a subtle dashed border and a "parallel" label.
+Parallel groups use ELK's native partitioning — no synthetic compound nodes, no model mutation. The viewer overrides `_layoutOptions()` to assign partition indices to nodes based on `runtimeState.parallelGroups`.
 
 Implementation approach:
-1. Override `_layoutOptions()` to configure ELK partitioning
-2. In `_adaptYaml()`, after calling `toGraph()`, insert synthetic compound nodes for each parallel group and reparent member nodes
-3. The compound nodes use a new `parallel-group` stencil type — a minimal stencil that renders as a dashed rectangle with no interaction
+1. Override `_layoutOptions()` to return ELK partition constraints derived from `runtimeState.parallelGroups`
+2. Each parallel group's member nodes (identified by binding name) receive the same partition index
+3. ELK lays out partitioned nodes side-by-side without requiring changes to the `GraphModel`
+4. If visual grouping indicators are needed (dashed borders around groups), a post-layout overlay draws them based on the partition boundaries — this is a rendering concern, not a model concern
 
 ### Toolbar
 
@@ -209,7 +210,7 @@ packages/graph-stencil-case/src/runtime/
   decoration.ts   — add trust score pill colour logic
 ```
 
-Trust score rendering avoids upstream type changes when possible — see the trust score pills section for the two approaches (upstream `NodeDecoration.properties` field vs injecting into `GraphNode.properties` during `_adaptYaml()`).
+Trust score rendering uses the `NodeDecoration.pills` array — an upstream extension to `graph-core`. See the trust score pills section for details.
 
 ## Relation to existing components
 

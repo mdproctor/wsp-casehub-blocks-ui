@@ -45,15 +45,28 @@
 **Exploration:** quick
 **Status:** captured
 
-## D5: Parallel group rendering — ELK sub-graphs
+## D5: Parallel group rendering — ELK partition constraints
 
-**Choice:** Use ELK's compound node / partition feature to lay out parallel groups as side-by-side sub-graphs. Structurally correct layout — parallel branches are visually distinct columns.
+**Choice:** Use ELK's native partitioning via `_layoutOptions()` — assign nodes in the same parallel group a partition index. No synthetic compound nodes, no model mutation. The layout concern stays in the layout layer.
 **Alternatives:**
-- Visual grouping only (dashed boxes as post-layout overlay) — simpler but layout may interleave parallel nodes, defeating the purpose
-- Defer parallel groups — simplifies v1 but was explicitly scoped in
-**Rationale:** Parallel execution is a first-class concept in case flows. The layout must reflect it structurally, not just decoratively. ELK supports this natively via compound nodes.
-**Trade-offs:** More complex ELK configuration. May need investigation into ELK partition API if not already used in the codebase.
-**Sources:** blocks-dag-viewer.ts:56 (computeElkLayout usage), issue #150 spec (parallelGroups field)
-**Exploration:** quick
+- Compound nodes inserted post-adapter (original proposal) — mutates GraphModel after toGraph(), fragile coupling to internal graph structure
+- Extend toGraph() to accept parallel groups — right if parallel groups are a permanent case concept, but over-engineers the adapter for what is fundamentally a layout concern
+- Visual grouping only (dashed boxes as post-layout overlay) — simpler but layout may interleave parallel nodes
+**Rationale:** Parallel grouping is a layout concern, not a structural one. ELK supports partitioning natively without requiring changes to the graph model. No synthetic nodes, no model mutation, cleanest separation of concerns.
+**Trade-offs:** ELK partitioning may have less visual control than compound nodes (no containing border around the group). If visual grouping is needed, a post-layout overlay can supplement the partition layout.
+**Sources:** blocks-dag-viewer.ts:56 (computeElkLayout usage), ELK partitioning documentation
+**Exploration:** deep-analysis
 **Depends on:** D4 (parallelGroups comes from CaseRuntimeState)
+**Status:** captured
+
+## D6: Trust score rendering — extend NodeDecoration with pills array
+
+**Choice:** Add an optional `pills` array to `NodeDecoration` in `graph-core` (upstream). Each pill has `text`, `color`, and optional `icon`. `toDecorations()` maps `trustScores` to pills. Any stencil renderer renders pills below the badge.
+**Alternatives:**
+- Inject trust scores into GraphNode.properties during _adaptYaml() — conflates definition data with runtime visual state, breaks the clean boundary between GraphNode (definition) and NodeDecoration (runtime overlay)
+- Add a `label` field to NodeDecoration — too specific, only handles one supplementary element
+**Rationale:** NodeDecoration is the runtime visual overlay channel. Trust scores are runtime data, not definition data. A pills array is domain-agnostic and reusable — execution times, SLA deadlines, cost indicators all fit the same pattern. Non-breaking upstream change (additive optional field).
+**Trade-offs:** Requires an upstream change to graph-core in the pages repo. If pages can't be updated in this branch, trust scores can be deferred or delivered via the workaround with a follow-up to migrate.
+**Sources:** graph-core/src/model.ts (NodeDecoration type), graph-stencil-case/src/runtime/decoration.ts (toDecoration)
+**Exploration:** deep-analysis
 **Status:** captured
