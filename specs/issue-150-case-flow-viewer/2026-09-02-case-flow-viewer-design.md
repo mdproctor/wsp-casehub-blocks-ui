@@ -144,7 +144,7 @@ When `runtimeState.trustScores` is provided, `toDecorations()` adds a trust scor
 | 50-79 | Amber (#eab308) | Moderate trust |
 | 0-49 | Red (#ef4444) | Low trust |
 
-Trust pills use the `NodeDecoration.label` field. If the stencil renderer doesn't currently support a label field on decorations, this is added to `graph-core`'s `NodeDecoration` type as an optional field.
+`NodeDecoration` does not have a `label` field (it has `badge`, `border`, `overlay`, `tooltip`). Trust score display uses the worker stencil's render function: when `trustScoreAtRouting` is present in the node's properties (set by `toDecorations()` via a new `properties` field on `NodeDecoration`), the stencil renderer shows a trust pill below the node. This requires adding an optional `properties` field to `NodeDecoration` in `graph-core` — a non-breaking upstream change. Alternatively (recommended), trust scores can be injected into the `GraphNode.properties` during the `_adaptYaml()` override by merging `runtimeState.trustScores` into worker node properties before layout. The worker stencil renderer already has access to `node.properties` and can render the pill when `trustScoreAtRouting` is present. This avoids any upstream type change and keeps the rendering logic in `graph-stencil-case` where it belongs.
 
 ### Adaptive decision highlighting
 
@@ -159,9 +159,9 @@ The `affectedBindings` field on each decision maps it to graph node IDs via the 
 
 When `runtimeState.parallelGroups` is provided, the viewer passes ELK compound node constraints to `computeElkLayout()` via the `_layoutOptions()` override.
 
-Each parallel group becomes an ELK compound node (parent) containing its member nodes as children. ELK lays out compound children side-by-side within the parent, creating visually distinct parallel branches.
+Each parallel group becomes an ELK compound node (parent) containing its member nodes as children. `GraphNode.parentId` already supports this — member nodes set `parentId` to the compound node's ID. ELK lays out compound children side-by-side within the parent, creating visually distinct parallel branches.
 
-The compound nodes are added to the `GraphModel` by a pre-layout transform in the viewer (before calling `computeElkLayout`). They render with a subtle dashed border and a "parallel" label.
+The compound nodes are inserted into the `GraphModel` by a pre-layout transform in `_adaptYaml()` (after calling `toGraph()`). They render with a subtle dashed border and a "parallel" label.
 
 Implementation approach:
 1. Override `_layoutOptions()` to configure ELK partitioning
@@ -209,7 +209,7 @@ packages/graph-stencil-case/src/runtime/
   decoration.ts   — add trust score pill colour logic
 ```
 
-If `NodeDecoration.label` doesn't exist in `graph-core`, that type extension happens in the pages repo (upstream dependency). If that's not feasible in this branch, the trust score pill renders via a render callback on the stencil instead.
+Trust score rendering avoids upstream type changes when possible — see the trust score pills section for the two approaches (upstream `NodeDecoration.properties` field vs injecting into `GraphNode.properties` during `_adaptYaml()`).
 
 ## Relation to existing components
 
