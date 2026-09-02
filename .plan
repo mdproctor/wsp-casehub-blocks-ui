@@ -16,8 +16,8 @@ flyway-next-v: unknown
 - [x] casehubio/blocks-ui#148 — Align_deps_rebuild_whisper_remap_Kokoro
 - [x] casehubio/blocks#187 — Streaming_TTS
 - [x] casehubio/blocks#190 — Speech_denoising
-- [ ] casehubio/blocks#215 — Shallow_fusion_n-gram ← active
-- [ ] casehubio/blocks#184 — Voice_Activity_Detection
+- [x] casehubio/blocks#215 — Shallow_fusion_n-gram
+- [ ] casehubio/blocks#184 — Voice_Activity_Detection ← active
 - [ ] casehubio/blocks#168 — Cache_offline_recognizer
 - [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
 - [ ] casehubio/blocks#191 — Speaker_diarization
