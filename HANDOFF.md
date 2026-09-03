@@ -2,31 +2,59 @@
 
 ## Last Session
 
-Completed #168 (cache offline recognizer — XS/Low, blocks repo) and #176 (platform-specific Maven JARs for native lib bundling — M/High, blocks repo). 
+**Issue:** casehubio/blocks#191 — Speaker diarization & identification (merged with #211)
+**Queue position:** 8/10 (issue #191 active)
+**Branch:** `issue-190-speech-denoising` (both blocks and blocks-ui repos)
 
-**#168:** `SherpaOnnxSpeechToText` now caches the offline recognizer keyed by `(modelSize, languageHint)`, implementing `AutoCloseable` for cleanup. Eliminates ~500ms model-loading overhead per `transcribe()` call.
+### What Was Done
 
-**#176:** Built the full native JAR packaging pipeline:
-- `NativeJarExtractor` — scans classpath for native libs at `META-INF/native/sherpa-onnx/<version>/<platform>/`, extracts to Provisioner cache dir with atomic move and file locking
-- `SherpaLibrary.load()` gains Tier 1.5 (classpath extraction) between system path and local cache
-- `NativePackager` — build-time entry point that copies provisioned native libs into JAR resource structure
-- 5 Maven modules (`speech-sherpa-native-{osx-arm64,osx-x64,linux-x64,linux-arm64,win-x64}`) using `exec-maven-plugin` to invoke NativePackager during `generate-resources`
-- Verified: osx-arm64 JAR builds and contains both `libsherpa-onnx-c-api.dylib` + `libonnxruntime.dylib` at the correct resource path
+**Design phase completed:**
+- Brainstormed with 9 decisions, standard decision review (3 rounds, 13 issues), user override on scope (reverted reviewer's un-merge of #191/#211)
+- Wrote full design spec at `specs/issue-191-speaker-diarization/2026-09-03-speaker-diarization-design.md`
+- Standard spec review (3 rounds, 27 issues, 22 verified)
+- Implementation plan at `plans/2026-09-03-speaker-diarization.md` — 3 batches, 5 tasks
 
-## Immediate Next Step
+**Batch 1 complete (Embedding + Registry):**
 
-Run `work next` to advance to #191 (Speaker diarization) — position 8/10 in the queue.
+Task 1 — SPI types + campplus embedding extractor:
+- 8 SPI files in `speech-api`: `SpeakerEmbedding`, `SpeakerMatch`, `DiarizedSegment`, `DiarizationOptions`, `SpeakerEmbeddingExtractor`, `SpeakerRegistry`, `VoiceprintStore`, `SpeakerDiarizationService`
+- `CampplusSpeakerEmbeddingExtractor` in `speech-sherpa` — ORT with campplus.onnx, 192-dim embeddings, replicates CosyVoice3VoiceEncoder preprocessing path
+- `Provisioner.ensureCampplusModel()` — standalone campplus provisioning from HuggingFace
+- 3 integration tests passing
 
-## Queue State
+Task 2 — voiceprint registry + file persistence:
+- `CosineDistanceSpeakerRegistry` — ConcurrentHashMap cache, pluggable VoiceprintStore
+- `FileVoiceprintStore` — JSON to `~/.casehub/voiceprints/`, atomic rename
+- 12 unit tests passing
 
-Position 7/10 (7 done, 3 remaining):
-- [x] #139, #148, #187, #190, #215, #184, #168, #176
-- [ ] #191 — Speaker diarization
-- [ ] #211 — Speaker identification/voiceprint
+Both commits landed in the **blocks** repo on branch `issue-231-summarisation-api-extraction`.
 
-## References
+### What's Next
 
-- `specs/issue-176-native-jars/` — design spec + decisions
-- `plans/2026-09-03-native-jar-bundling.md` — implementation plan
-- `specs/issue-190-speech-denoising/` — denoising spec (prior session)
-- `specs/issue-184-vad/` — VAD spec (prior session)
+**Batch 2: Offline Diarization** (Task 3)
+- Add 9 diarization MethodHandles to `SherpaLibrary`
+- Add config byte offsets to `SherpaLayouts` (64 bytes, much simpler than STT config)
+- Implement `SherpaOnnxDiarizationService` with per-instance handle, per-call clustering config
+- Add `Provisioner.ensureDiarizationModels()` for pyannote segmentation model
+- Critical: verify byte offsets against C header — wrong offsets cause SIGSEGV
+
+**Batch 3: Avatar Integration** (Tasks 4-5)
+- Task 4: Protocol messages (`SpeakerPrompt`, `SpeakerIdentify`, `SpeakerIdentified`), `ConversationTurn` speaker field, `PromptAssembler` speaker formatting, `MessageCodec` encode/decode
+- Task 5: `SpeechSession` ring buffer (5s, ~320KB), speaker ID parallel with STT, auto-enrollment state machine, explicit enrollment, CDI wiring in `SpeechProducers`
+
+### Key Design Decisions
+
+| # | Decision | Rationale |
+|---|----------|-----------|
+| D1 | Merge #191 + #211 | Shared campplus foundation, single developer, primary use case requires both |
+| D2 | Both real-time + offline | Real-time speaker ID is primary (family avatar), offline diarization is secondary |
+| D5 | Dual inference paths | sherpa-onnx C API for offline, ORT for real-time — each mode uses its best tool |
+| D6 | 3 composable SPIs | Extractor, Registry, DiarizationService — independently usable |
+| D8 | campplus model | Already provisioned for CosyVoice3, 192-dim, adequate for 2-8 family speakers |
+
+### Repo State
+
+| Repo | Branch | Status |
+|------|--------|--------|
+| blocks | `issue-231-summarisation-api-extraction` | 2 commits (Task 1 + Task 2), tests green |
+| blocks-ui | `issue-190-speech-denoising` | Design artifacts only (specs, plans, decisions) |
