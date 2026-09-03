@@ -21,9 +21,9 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#168 — Cache_offline_recognizer
 - [x] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
 - [ ] casehubio/blocks#191 — Speaker_diarization ← active
-  - [ ] Batch 1: Embedding+Registry
-    - [ ] Task 1: SPI types + Campplus embedding extractor
-    - [ ] Task 2: Voiceprint registry + file persistence
+  - [x] Batch 1: Embedding+Registry
+    - [x] Task 1: SPI types + Campplus embedding extractor
+    - [x] Task 2: Voiceprint registry + file persistence
   - [ ] Batch 2: Offline Diarization
     - [ ] Task 3: FFM bindings + SherpaOnnxDiarizationService
   - [ ] Batch 3: Avatar Integration
