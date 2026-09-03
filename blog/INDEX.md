@@ -17,3 +17,4 @@
 | [2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md](2026-07-25-mdp02-namespace-hygiene-and-the-barrel-that-bites.md) | 2026-07-25 | blocks- prefix rename and barrel export gotcha |
 | [2026-07-29-mdp01-the-property-that-does-nothing.md](2026-07-29-mdp01-the-property-that-does-nothing.md) | 2026-07-29 | pages-table selectedKeys silently ignored without selection attribute |
 | [2026-09-02-mdp01-the-audio-pipeline-nobody-documents.md](2026-09-02-mdp01-the-audio-pipeline-nobody-documents.md) | 2026-09-02 | sherpa-onnx speech pre-processing pipeline: denoising (DPDFNet/GTCRN), VAD (Silero), FFM integration patterns, composable runtime-toggleable architecture |
+| [2026-09-03-mdp01-the-native-lib-problem.md](2026-09-03-mdp01-the-native-lib-problem.md) | 2026-09-03 | Zero-install native lib distribution via Maven classifier JARs with tiered classpath extraction |
