@@ -53,16 +53,21 @@
 
 ## D6: SPI shape — SpeakerDiarizationService only (pure segmentation)
 
-**Choice:** Single `SpeakerDiarizationService` interface returning pure diarization segments `List<DiarizedSegment>` where each segment contains (startMs, endMs, speakerLabel). No combined diarize-and-transcribe method. `SpeakerEmbeddingExtractor` and `SpeakerRegistry` are #211's scope.
+**Choice:** Single `SpeakerDiarizationService` interface:
+- Input: `List<DiarizedSegment> diarize(Path audioFile, DiarizationOptions options)` — `Path` matches `SpeechToTextService.transcribe(Path, TranscriptionOptions)`. `DiarizationOptions` follows the options-record pattern (initially minimal, provides extension point for numSpeakersHint, languageHint, etc.).
+- Output: `DiarizedSegment(long startMs, long endMs, String speakerLabel, float[] samples, int sampleRate)` — includes extracted audio samples so consumers can compose with STT without re-reading and slicing the original file. sherpa-onnx's C API already has the audio in memory; surfacing it avoids every consumer reimplementing segment extraction.
+- No combined diarize-and-transcribe method. `SpeakerEmbeddingExtractor` and `SpeakerRegistry` are #211's scope.
 **Alternatives:**
 - Three composable interfaces (embedding extractor + registry + diarization) — appropriate if both modes are in scope, but overreaches for offline-only. The "voice cloning reuse (CosyVoice3)" rationale was incorrect — CosyVoice3VoiceEncoder's internal SpeakerExtractor takes preprocessed `float[][] logMel`, not raw audio, and cannot use a raw-audio SPI without restructuring its pipeline.
 - Combined diarize-and-transcribe method — couples diarization and transcription SPIs, violating the platform pattern of independent composable SPIs (SpeechToTextService doesn't know about TextToSpeechService).
 - Unified SpeakerService — conflates concerns.
-**Rationale:** Diarization returns pure segments; transcription is composed by the consumer: `segments.forEach(s -> sttService.transcribe(s.audio(), options))`. This follows the platform's existing pattern of independent, composable SPIs. Issue #211 proposed `SpeakerIdentifier` as its SPI name — that naming belongs to #211.
+- Timestamps-only DiarizedSegment (without samples) — forces every consumer to re-read the original audio and extract segments using timestamps, duplicating work the implementation already did.
+- `float[] samples, int sampleRate` input instead of `Path` — more flexible for in-memory audio but inconsistent with `SpeechToTextService`'s Path-based contract. Offline diarization processes full recordings, making Path the natural input.
+**Rationale:** Diarization returns segments with extracted audio; transcription is composed by the consumer via `StreamingSpeechToTextService` (which accepts `float[]` samples via `RecognitionStream.acceptSamples`) or by writing segments to temp files for `SpeechToTextService.transcribe(Path)`. This follows the platform's existing pattern of independent, composable SPIs. Issue #211 proposed `SpeakerIdentifier` as its SPI name — that naming belongs to #211.
 **Depends on:** D5 (sherpa-onnx C API for implementation)
-**Sources:** speech-api existing SPI pattern (SpeechToTextService, TextToSpeechService — independent, composable), CosyVoice3VoiceEncoder.SpeakerExtractor (`float[][] logMel` signature — can't use raw-audio SPI), R1-03, R1-09
+**Sources:** speech-api existing SPI pattern (SpeechToTextService.transcribe(Path, TranscriptionOptions), TranscriptionOptions — options-record pattern), CosyVoice3VoiceEncoder.SpeakerExtractor (`float[][] logMel` signature — can't use raw-audio SPI), R1-03, R1-09, R2-01, R2-02
 **Exploration:** quick
-**Status:** revised (R1-03, R1-09 — dropped CosyVoice3 reuse claim, removed transcription coupling, scoped to diarization only)
+**Status:** revised (R1-03, R1-09 — dropped CosyVoice3 reuse claim, removed transcription coupling, scoped to diarization only; R2-01 — added audio samples to DiarizedSegment; R2-02 — specified Path-based input signature with DiarizationOptions)
 
 ## D7: Avatar integration — deferred to #211
 
