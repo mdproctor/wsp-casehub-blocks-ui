@@ -488,8 +488,11 @@ VoiceprintStore voiceprintStore() {
 
 @Produces @ApplicationScoped
 SpeakerDiarizationService diarizer() {
-    Provisioner.ensureDiarizationModels();
-    return new SherpaOnnxDiarizationService(SherpaLibrary.load());
+    Path segModelDir = Provisioner.ensureDiarizationModels();
+    Path campplusDir = Provisioner.ensureCampplusModel();
+    return new SherpaOnnxDiarizationService(SherpaLibrary.load(),
+        segModelDir.resolve("model.onnx"),
+        campplusDir.resolve("campplus.onnx"));
 }
 ```
 
