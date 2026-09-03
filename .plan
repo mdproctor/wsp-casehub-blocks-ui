@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-190-speech-denoising
-state: active
+state: transitioning
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui
@@ -19,12 +19,6 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#215 — Shallow_fusion_n-gram
 - [x] casehubio/blocks#184 — Voice_Activity_Detection
 - [x] casehubio/blocks#168 — Cache_offline_recognizer
-- [ ] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling ← active
-  - [x] Batch 1: Runtime
-    - [x] Task 1: NativeJarExtractor
-    - [x] Task 2: SherpaLibrary Tier 1.5
-  - [x] Batch 2: Packaging
-    - [x] Task 3: NativePackager + osx-arm64
-    - [x] Task 4: Remaining 4 modules
-- [ ] casehubio/blocks#191 — Speaker_diarization
+- [x] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
+- [ ] casehubio/blocks#191 — Speaker_diarization ← active
 - [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
