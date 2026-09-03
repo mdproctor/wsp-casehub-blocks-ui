@@ -58,3 +58,29 @@
 **Sources:** [GE-20260826-51c700] FFM struct layout, [GE-20260826-190329] oversized zero-filled allocation, sherpa-onnx c-api.h, SherpaLibrary.java, SherpaLayouts.java
 **Exploration:** quick
 **Status:** captured
+
+## D6: SPI shape — layered, 3 composable interfaces
+
+**Choice:** Three independent interfaces: `SpeakerEmbeddingExtractor` (extract embedding from audio), `SpeakerRegistry` (register/match voiceprints with pluggable `VoiceprintStore` SPI), `SpeakerDiarizationService` (offline diarization + combined diarize-and-transcribe).
+**Alternatives:**
+- Unified `SpeakerService` — simpler API but less composable; can't use embedding extraction without the full service.
+- Two interfaces (online + offline) — clean mode separation but hides the embedding extractor inside each.
+**Rationale:** Each interface serves a distinct consumer: embedding extractor for voice cloning reuse (CosyVoice3), registry for identification, diarization service for batch processing. Real-time speaker ID composes Extractor + Registry. Offline diarization is self-contained.
+**Trade-offs:** Three interfaces to implement and document vs one, but each is small and focused.
+**Depends on:** D5 (embedding architecture determines implementation)
+**Sources:** speech-api existing SPI pattern (SpeechToTextService, TextToSpeechService, VoiceActivityFilterFactory)
+**Exploration:** quick
+**Status:** captured
+
+## D7: Avatar integration — post-STT, per turn
+
+**Choice:** Speaker identification runs in parallel with STT on the same audio buffer, per conversation turn. The speaker label is passed to the LLM as context.
+**Alternatives:**
+- Pre-STT gate — identify speaker before STT starts. Adds latency to the critical path.
+- Parallel with STT (explicit fork-join) — slightly more complex threading for marginal benefit since embedding extraction is faster than STT.
+**Rationale:** Embedding extraction takes ~50ms on a few seconds of speech; STT takes 200-500ms+. Running them in parallel on the same buffer adds zero latency. The speaker label enriches the LLM context ("You are talking to Mark") for personalised responses.
+**Trade-offs:** Speaker ID result must be available before the LLM call — if extraction fails or times out, the turn proceeds without a speaker label.
+**Depends on:** D6 (SPI shape determines what the avatar session calls)
+**Sources:** SpeechSession.java (current avatar pipeline), SpeechWebSocket.java
+**Exploration:** quick
+**Status:** captured
