@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-190-speech-denoising
-state: active
+state: transitioning
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui
@@ -20,10 +20,5 @@ flyway-next-v: unknown
 - [x] casehubio/blocks#184 — Voice_Activity_Detection
 - [x] casehubio/blocks#168 — Cache_offline_recognizer
 - [x] casehubio/blocks#176 — Platform_Maven_JARs_native_lib_bundling
-- [ ] casehubio/blocks#191 — Speaker_diarization ← active
-  - [ ] Batch 1: Batch 1\
-    - [ ] Task 1: Embedding+Registry:Task 1\: SPI types + Campplus embedding extractor
-    - [ ] Task 2: Embedding+Registry:Task 2\: Voiceprint registry + file persistence
-  - [ ] Batch 2: Batch 2\
-    - [ ] Task 3: Offline Diarization:Task 3\: FFM bindings + SherpaOnnxDiarizationService
-- [ ] casehubio/blocks#211 — Speaker_identification_voiceprint
+- [x] casehubio/blocks#191 — Speaker_diarization
+- [x] casehubio/blocks#211 — Speaker_identification_voiceprint
