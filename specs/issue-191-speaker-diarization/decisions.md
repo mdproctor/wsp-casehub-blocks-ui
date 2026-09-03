@@ -1,102 +1,117 @@
-## D1: Scope — offline diarization only (keep #211 separate)
+## D1: Scope — full pipeline with merged #211
 
-**Choice:** Offline speaker diarization (#191) only. Speaker identification (#211) remains a separate, coordinated issue.
+**Choice:** Full pipeline covering offline diarization + real-time speaker identification + speaker-attributed transcription, with #211 merged into this issue.
 **Alternatives:**
-- Merge #191 and #211 — risks conflating different technical approaches (sherpa-onnx C API vs ORT), inflating scope, and creating artificial architectural coupling.
-- Full pipeline covering both diarization and speaker ID — larger scope without proportional benefit since the shared foundation (embedding extraction) operates via different inference paths per mode.
-**Rationale:** #191 (L/High, offline diarization via sherpa-onnx C API) and #211 (M/Med, real-time speaker ID via OnnxRuntimeLibrary) have different models, inference paths, scales, and integration points. The "shared embedding extractor" rationale is weaker than initially assumed — offline diarization bundles its own embedding extraction internally via the sherpa-onnx C API. Model choice (D8) is coordinated across both issues but not code-coupled.
-**Trade-offs:** Two specs instead of one, but each is correctly scoped and independently deliverable.
-**Sources:** casehubio/blocks#191, casehubio/blocks#211, R1-01, R1-02
-**Exploration:** quick
-**Status:** revised (R1-02 — unmerged to match natural scope boundaries and differing technical approaches)
+- Offline diarization only (reviewer revision) — technically cleaner boundary but delivers the secondary feature first. The user's primary use case (avatar recognises family members) requires real-time speaker ID from #211. Splitting creates coordination overhead since both share the embedding model, provisioning, and SPI layer.
+- Diarization engine only — produces segments without transcription. Defers value.
+**Rationale:** "Speaker awareness" is one capability from the user's perspective. The shared foundation (campplus model, provisioning, SPI design) means splitting creates rework at the seam. Both features target the same branch and developer — no benefit from independent delivery.
+**Trade-offs:** XL/High scope, but decomposes into independent batches (shared foundation → offline diarization → real-time speaker ID + avatar integration).
+**Sources:** casehubio/blocks#191, casehubio/blocks#211, user: "think about how a family interacts"
+**Exploration:** quick → reviewer revised → user override (first-principles analysis: shared foundation, single developer, primary use case requires both)
+**Status:** captured (user override of reviewer revision)
 
-## D2: Mode — offline diarization only
+## D2: Mode — both real-time and offline
 
-**Choice:** Offline speaker diarization for recorded audio. Real-time speaker identification is #211's scope.
+**Choice:** Both real-time speaker identification (during live avatar conversations) and offline diarization (for recorded audio).
 **Alternatives:**
-- Both real-time and offline — doubles implementation surface and conflates architecturally different problems (per-turn bounded comparison vs batch spectral clustering).
-- Real-time only — doesn't match #191's stated purpose (multi-speaker transcription with speaker labels).
-**Rationale:** #191 is specifically about multi-speaker transcription with speaker labels — a batch/offline problem. Real-time speaker identification ("which family member is speaking") is #211's scope. The only shared component between modes is embedding extraction, and even that operates via different inference paths (sherpa-onnx C API internally for offline, ORT directly for online).
-**Trade-offs:** Defers real-time speaker ID to #211, which must be designed and implemented separately.
-**Sources:** casehubio/blocks#191 ("Multi-speaker transcription with speaker labels using sherpa-onnx's diarization API"), R1-05
-**Exploration:** quick
-**Status:** revised (R1-05 — scoped to match issue's stated purpose)
+- Offline only (reviewer revision) — technically separate problems (batch clustering vs per-turn matching) but the embedding extractor and model provisioning are shared.
+- Real-time only — misses meeting transcription use case.
+**Rationale:** Real-time speaker ID is the primary use case. Offline diarization is also needed. Different inference paths (sherpa-onnx C API for offline, ORT for real-time) are an implementation detail addressed in the architecture, not a reason to split.
+**Trade-offs:** More implementation surface than either mode alone.
+**Sources:** User requirement: "think about how a family interacts, it would be good if it automatically recognised which family member it's talking to"
+**Exploration:** quick → reviewer revised → user override
+**Status:** captured (user override of reviewer revision)
 
-## D3: Enrollment — deferred to #211
+## D3: Enrollment — hybrid (auto-detect + explicit)
 
-**Choice:** Deferred. Enrollment (auto-detect + explicit) is a speaker identification concern, not a diarization concern.
-**Rationale:** Offline diarization discovers speakers via spectral clustering — no enrollment step. Speaker enrollment is #211's scope, where the reviewer's concerns about minimum audio duration, detection thresholds, and auto-detect UX should be addressed with proper deep-analysis exploration.
-**Sources:** R1-08
-**Exploration:** quick
-**Status:** revised (deferred — out of scope for offline diarization)
-
-## D4: Voiceprint persistence — deferred to #211
-
-**Choice:** Deferred. Voiceprint storage is a speaker identification concern, not a diarization concern.
-**Rationale:** Offline diarization does not persist voiceprints — it discovers and labels speakers within a single recording. The reviewer's privacy analysis concerns (GDPR Article 9, BIPA, encryption at rest, consent requirements) are valid and must be addressed when #211 designs voiceprint persistence. The in-memory-only suggestion for Tier 1 is worth considering there.
-**Sources:** R1-07
-**Exploration:** quick
-**Status:** revised (deferred — out of scope for offline diarization)
-
-## D5: Embedding architecture — sherpa-onnx C API for offline diarization
-
-**Choice:** Use sherpa-onnx's `SherpaOnnxCreateOfflineSpeakerDiarization` C API for offline diarization. Note for #211: real-time embedding extraction should use OnnxRuntimeLibrary with campplus.onnx directly (proven path in CosyVoice3VoiceEncoder).
+**Choice:** Hybrid enrollment: auto-detect unknown speakers and prompt for name, plus an explicit enrollment option for better initial accuracy.
 **Alternatives:**
-- sherpa-onnx C API for everything (original choice) — binds additional C functions for speaker embedding extraction when ORT is already proven for campplus. Creates a second parallel extraction path alongside CosyVoice3's existing ORT-based campplus extraction. The claimed "consistent FFM binding layer matching existing STT/TTS/VAD/denoiser patterns" is factually incorrect — no VAD or denoiser bindings exist in the codebase.
-- Pure Java/ORT for everything — maximum control but reimplements sherpa-onnx's diarization pipeline (segmentation, overlap handling, spectral clustering) which would be massive scope.
-**Rationale:** Offline diarization is sherpa-onnx's strength — the C API bundles segmentation, overlap handling, and spectral clustering that would be prohibitive to reimplement in pure Java. For real-time embedding extraction (recommended for #211), ORT is already proven: `CosyVoice3VoiceEncoder.extractSpeakerEmbedding` extracts campplus embeddings via `OnnxRuntimeLibrary.Session.runFloat()` with established preprocessing (CAMPPLUS_MEL config → log mel → mean normalize → model). Issue #211 explicitly specifies: "Inference via existing OnnxRuntimeLibrary in speech-sherpa — no new native dependencies."
-**Trade-offs:** Offline diarization's internal embeddings may be in a different space than ORT-extracted campplus embeddings, but this is acceptable — offline discovers speakers via internal clustering, not by comparing against externally enrolled voiceprints.
-**Depends on:** none
-**Sources:** SherpaLibrary.java (STT/TTS bindings only — no VAD/denoiser), CosyVoice3VoiceEncoder.extractSpeakerEmbedding (ORT-based campplus path), casehubio/blocks#211, R1-01
+- Auto-enroll only — zero friction but lower initial voiceprint quality.
+- Explicit enrollment only — higher accuracy but breaks conversation flow.
+- Deferred to #211 (reviewer revision) — no longer applicable since #211 is merged.
+**Rationale:** Auto-detect provides zero-friction onboarding for families. Explicit enrollment option gives better initial accuracy when desired. Both paths feed the same voiceprint registry.
+**Trade-offs:** Two enrollment paths to implement and test. Reviewer flagged minimum audio duration and detection thresholds as design concerns — addressed in the spec.
+**Sources:** Avatar demo interaction flow (SpeechSession.java, SpeechWebSocket.java), R1-08
 **Exploration:** quick
-**Status:** revised (R1-01 — split approach, corrected false VAD/denoiser rationale)
+**Status:** captured (restored from user override of D1)
 
-## D6: SPI shape — SpeakerDiarizationService only (pure segmentation)
+## D4: Voiceprint persistence — dual (local + server-side)
 
-**Choice:** Single `SpeakerDiarizationService` interface:
-- Input: `List<DiarizedSegment> diarize(Path audioFile, DiarizationOptions options)` — `Path` matches `SpeechToTextService.transcribe(Path, TranscriptionOptions)`. `DiarizationOptions` follows the options-record pattern (initially minimal, provides extension point for numSpeakersHint, languageHint, etc.).
-- Output: `DiarizedSegment(long startMs, long endMs, String speakerLabel, float[] samples, int sampleRate)` — includes extracted audio samples so consumers can compose with STT without re-reading and slicing the original file. sherpa-onnx's C API already has the audio in memory; surfacing it avoids every consumer reimplementing segment extraction.
-- No combined diarize-and-transcribe method. `SpeakerEmbeddingExtractor` and `SpeakerRegistry` are #211's scope.
+**Choice:** SPI-abstracted voiceprint store with both file-system and REST API implementations.
 **Alternatives:**
-- Three composable interfaces (embedding extractor + registry + diarization) — appropriate if both modes are in scope, but overreaches for offline-only. The "voice cloning reuse (CosyVoice3)" rationale was incorrect — CosyVoice3VoiceEncoder's internal SpeakerExtractor takes preprocessed `float[][] logMel`, not raw audio, and cannot use a raw-audio SPI without restructuring its pipeline.
-- Combined diarize-and-transcribe method — couples diarization and transcription SPIs, violating the platform pattern of independent composable SPIs (SpeechToTextService doesn't know about TextToSpeechService).
+- In-memory only (reviewer Tier 1 suggestion) — reasonable for initial development, but the SPI abstraction costs nothing and file persistence is trivial to add.
+- Local file system only — simple but no multi-device access.
+- Server-side only — adds server dependency, privacy concerns for biometric data.
+- Deferred to #211 (reviewer revision) — no longer applicable.
+**Rationale:** Local storage works offline and fits the local-first sherpa-onnx model. Server-side enables multi-device access in production. SPI abstraction keeps the core engine agnostic to storage backend. Reviewer's privacy concerns (GDPR Article 9, BIPA, encryption at rest) are valid and addressed in the spec.
+**Trade-offs:** Two storage implementations to maintain. Privacy considerations for biometric data.
+**Sources:** Existing pattern: Provisioner caches to ~/.casehub/, platform APIs for production, R1-07
+**Exploration:** quick
+**Status:** captured (restored from user override of D1)
+
+## D5: Embedding architecture — dual inference paths
+
+**Choice:** sherpa-onnx C API (`SherpaOnnxCreateOfflineSpeakerDiarization`) for offline diarization. ORT with campplus.onnx (`OnnxRuntimeLibrary`) for real-time speaker embedding extraction, following the proven path in `CosyVoice3VoiceEncoder.extractSpeakerEmbedding`.
+**Alternatives:**
+- sherpa-onnx C API for everything (original D5) — binds additional C functions for speaker embedding extraction when ORT is already proven for campplus.
+- Pure Java/ORT for everything — reimplements sherpa-onnx's diarization pipeline (segmentation, overlap handling, spectral clustering).
+**Rationale:** Offline diarization is sherpa-onnx's strength — the C API bundles segmentation, overlap handling, and spectral clustering. For real-time embedding extraction, ORT is already proven: `CosyVoice3VoiceEncoder.extractSpeakerEmbedding` extracts campplus embeddings via `OnnxRuntimeLibrary.Session.runFloat()` with established preprocessing. Each mode uses its best tool. Both use campplus embeddings — the model is shared even though inference paths differ.
+**Trade-offs:** Offline diarization's internal embeddings and ORT-extracted embeddings are both campplus 192-dim, but offline discovers speakers via internal clustering while real-time compares against enrolled voiceprints — they don't need to interoperate.
+**Depends on:** D8 (campplus model choice)
+**Sources:** SherpaLibrary.java, CosyVoice3VoiceEncoder.extractSpeakerEmbedding, R1-01 (reviewer's insight about dual paths — adopted)
+**Exploration:** quick
+**Status:** captured (incorporates reviewer's dual-path insight)
+
+## D6: SPI shape — layered, 3 composable interfaces
+
+**Choice:** Three independent interfaces in `speech-api`:
+- `SpeakerEmbeddingExtractor`: `SpeakerEmbedding extract(float[] samples, int sampleRate)` — real-time embedding extraction for speaker ID.
+- `SpeakerRegistry`: `register(String name, SpeakerEmbedding)`, `identify(SpeakerEmbedding) → SpeakerMatch(name, confidence)` — with pluggable `VoiceprintStore` SPI for persistence.
+- `SpeakerDiarizationService`: `List<DiarizedSegment> diarize(Path audioFile, DiarizationOptions options)` — offline diarization. `DiarizedSegment(long startMs, long endMs, String speakerLabel, float[] samples, int sampleRate)` includes extracted audio samples so consumers can compose with STT without re-reading the original file.
+**Alternatives:**
+- Single SpeakerDiarizationService only (reviewer revision for offline-only scope) — insufficient for merged scope.
 - Unified SpeakerService — conflates concerns.
-- Timestamps-only DiarizedSegment (without samples) — forces every consumer to re-read the original audio and extract segments using timestamps, duplicating work the implementation already did.
-- `float[] samples, int sampleRate` input instead of `Path` — more flexible for in-memory audio but inconsistent with `SpeechToTextService`'s Path-based contract. Offline diarization processes full recordings, making Path the natural input.
-**Rationale:** Diarization returns segments with extracted audio; transcription is composed by the consumer via `StreamingSpeechToTextService` (which accepts `float[]` samples via `RecognitionStream.acceptSamples`) or by writing segments to temp files for `SpeechToTextService.transcribe(Path)`. This follows the platform's existing pattern of independent, composable SPIs. Issue #211 proposed `SpeakerIdentifier` as its SPI name — that naming belongs to #211.
-**Depends on:** D5 (sherpa-onnx C API for implementation)
-**Sources:** speech-api existing SPI pattern (SpeechToTextService.transcribe(Path, TranscriptionOptions), TranscriptionOptions — options-record pattern), CosyVoice3VoiceEncoder.SpeakerExtractor (`float[][] logMel` signature — can't use raw-audio SPI), R1-03, R1-09, R2-01, R2-02
+- Combined diarize-and-transcribe method — couples diarization and transcription SPIs, violating platform's composable SPI pattern.
+**Rationale:** Each interface serves a distinct consumer. Real-time speaker ID composes Extractor + Registry. Offline diarization is self-contained. The embedding extractor is NOT reusable by CosyVoice3 (its internal SpeakerExtractor takes preprocessed `float[][] logMel`, not raw audio) — the SPI serves speaker ID, not voice cloning.
+**Trade-offs:** Three interfaces to implement, but each is small and focused.
+**Depends on:** D5 (dual inference paths determine implementations)
+**Sources:** speech-api SPI pattern, R1-03 (CosyVoice3 incompatibility — adopted), R2-01 (audio samples in DiarizedSegment — adopted), R2-02 (Path-based input — adopted)
 **Exploration:** quick
-**Status:** revised (R1-03, R1-09 — dropped CosyVoice3 reuse claim, removed transcription coupling, scoped to diarization only; R2-01 — added audio samples to DiarizedSegment; R2-02 — specified Path-based input signature with DiarizationOptions)
+**Status:** captured (incorporates reviewer's SPI improvements while restoring 3-interface design)
 
-## D7: Avatar integration — deferred to #211
+## D7: Avatar integration — post-STT, per turn
 
-**Choice:** Deferred. Avatar pipeline integration (SpeechSession, ConversationTurn, PromptAssembler) is a real-time speaker identification concern.
-**Rationale:** The current avatar pipeline requires significant structural changes for speaker ID: SpeechSession.handleAudio passes chunks to RecognitionStream with no accumulation buffer; ConversationTurn(String role, String text) has no speaker field; PromptAssembler.assemble(String, List<ConversationTurn>) has no speaker parameter; AssembledPrompt(String, String, @Nullable String) has no speaker context. These changes should be designed as part of #211's spec where the integration naturally belongs.
-**Sources:** SpeechSession.handleAudio (stream.acceptSamples — no accumulation), ConversationTurn.java, PromptAssembler.java, AssembledPrompt.java, R1-04
+**Choice:** Speaker identification runs in parallel with STT on the same audio buffer, per conversation turn. The speaker label is passed to the LLM as context ("You are talking to Mark").
+**Alternatives:**
+- Pre-STT gate — adds latency to the critical path.
+- Deferred to #211 (reviewer revision) — no longer applicable since #211 is merged.
+**Rationale:** Embedding extraction takes ~50ms on a few seconds of speech; STT takes 200-500ms+. Running in parallel adds zero latency. The speaker label enriches LLM context for personalised responses. Requires structural changes to SpeechSession (accumulation buffer), ConversationTurn (speaker field), PromptAssembler (speaker parameter).
+**Trade-offs:** Speaker ID result must be available before the LLM call — if extraction fails or times out, the turn proceeds without a speaker label.
+**Depends on:** D6 (SPI shape — avatar composes Extractor + Registry)
+**Sources:** SpeechSession.java, ConversationTurn.java, PromptAssembler.java, R1-04 (structural change analysis — adopted)
 **Exploration:** quick
-**Status:** revised (R1-04 — deferred to #211 where structural changes naturally belong)
+**Status:** captured (restored from user override of D1, incorporates reviewer's structural analysis)
 
 ## D8: Model architecture — campplus (explicit choice)
 
-**Choice:** campplus as the default speaker embedding model for offline diarization (and recommended for #211's real-time speaker ID).
+**Choice:** campplus as the default speaker embedding model for both offline diarization and real-time speaker ID.
 **Alternatives:**
-- ECAPA-TDNN (SpeechBrain) — issue #211's explicit suggestion, strong VoxCeleb benchmark performance, widely used in speaker verification research, ~192-dim output, ~20MB model. Would require a new model download.
+- ECAPA-TDNN (SpeechBrain) — strong VoxCeleb benchmark performance, ~192-dim, ~20MB. Upgrade path if campplus accuracy is insufficient.
 - WeSpeaker / 3D-Speaker — potentially better multilingual support, supported by sherpa-onnx.
-- TitaNet (NVIDIA) — state-of-the-art speaker verification accuracy, available as ONNX export.
-**Rationale:** campplus is already provisioned and loaded for CosyVoice3 voice cloning (campplus.onnx, 192-dim embeddings). It is sherpa-onnx's default embedding model for its diarization API. Using the same model across CosyVoice3 TTS and speaker diarization avoids provisioning and managing additional model artifacts. For #211's real-time speaker ID via ORT, campplus shares the same model file and preprocessing (CAMPPLUS_MEL config, proven in CosyVoice3VoiceEncoder). ECAPA-TDNN may offer marginally better accuracy on VoxCeleb benchmarks, but campplus is adequate for the family interaction use case, and #211 can revisit if accuracy requirements demand it.
-**Trade-offs:** campplus is not the highest-accuracy option available. If #211's evaluation shows insufficient discrimination for the target use case, ECAPA-TDNN is the recommended upgrade path.
-**Sources:** campplus.onnx (Provisioner.java — already provisioned), CosyVoice3VoiceEncoder (192-dim embeddings via CAMPPLUS_MEL), sherpa-onnx default diarization model, R1-06
-**Exploration:** quick (surfaced by reviewer as implicit decision)
+- TitaNet (NVIDIA) — state-of-the-art accuracy, available as ONNX export.
+**Rationale:** campplus is already provisioned and loaded for CosyVoice3 voice cloning (campplus.onnx, 192-dim embeddings). Using the same model avoids provisioning additional artifacts. Adequate for the family interaction use case. ECAPA-TDNN is the recommended upgrade path if accuracy demands it.
+**Trade-offs:** campplus is not the highest-accuracy option. Family use case (2-8 speakers, familiar voices) has modest discrimination requirements.
+**Sources:** campplus.onnx (Provisioner.java), CosyVoice3VoiceEncoder (192-dim, CAMPPLUS_MEL config), R1-06
+**Exploration:** quick (surfaced by reviewer)
 **Status:** captured
 
 ## D9: Module placement — speech-api SPI, speech-sherpa implementation
 
-**Choice:** `SpeakerDiarizationService` SPI interface in `speech-api` module (zero foundation dependencies). sherpa-onnx implementation in `speech-sherpa` module.
+**Choice:** All three SPI interfaces (`SpeakerEmbeddingExtractor`, `SpeakerRegistry`, `SpeakerDiarizationService`) in `speech-api` module (zero foundation dependencies). sherpa-onnx diarization and ORT embedding implementations in `speech-sherpa` module. `VoiceprintStore` SPI in `speech-api`, file-system implementation in `speech-sherpa`, REST implementation in `speech-sherpa` or a separate module.
 **Alternatives:**
-- All in speech-sherpa — loses the provider-agnostic SPI abstraction that makes implementations swappable.
-- New dedicated module — unnecessary; the established two-module pattern handles this cleanly.
-**Rationale:** Following the established pattern: pure SPI interfaces → `speech-api` (where SpeechToTextService, StreamingSpeechToTextService, TextToSpeechService already live, all zero foundation deps), implementations → `speech-sherpa` (where SherpaLibrary, OnnxRuntimeLibrary, and all sherpa-onnx bindings live). Since `SpeakerDiarizationService` returns pure segments without transcription coupling, it adds no internal dependency on `SpeechToTextService` at the API level — both remain independently pluggable.
-**Sources:** speech-api module (SpeechToTextService.java, TextToSpeechService.java — zero foundation deps), speech-sherpa module (SherpaLibrary.java, OnnxRuntimeLibrary.java), R1-10
-**Exploration:** quick (surfaced by reviewer as implicit decision)
+- All in speech-sherpa — loses provider-agnostic SPI abstraction.
+- New dedicated module — unnecessary; established two-module pattern handles this.
+**Rationale:** Following the established pattern: pure SPI interfaces → `speech-api`, implementations → `speech-sherpa`. All three interfaces add no internal dependencies to `speech-api` — they use pure Java records as return types.
+**Sources:** speech-api module, speech-sherpa module, R1-10
+**Exploration:** quick (surfaced by reviewer)
 **Status:** captured
