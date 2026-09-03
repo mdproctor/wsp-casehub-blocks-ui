@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-190-speech-denoising
-state: transitioning
+state: active
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui

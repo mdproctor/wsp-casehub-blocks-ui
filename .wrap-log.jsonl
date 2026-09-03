@@ -9,3 +9,5 @@
 {"ts": "2026-09-02T20:14:46.696819+00:00", "mode": "wrap", "action": "user_input", "step": "garden_feedback", "steps_executed": [], "error": ""}
 {"ts": "2026-09-02T20:14:53.706862+00:00", "mode": "wrap", "action": "user_input", "step": "notes", "steps_executed": [], "error": ""}
 {"ts": "2026-09-02T20:14:59.503926+00:00", "mode": "wrap", "action": "user_input", "step": "handoff_write", "steps_executed": [], "error": ""}
+{"ts": "2026-09-02T20:15:57.111548+00:00", "mode": "wrap", "action": "complete", "step": "", "steps_executed": ["wip_commit"], "error": ""}
+{"ts": "2026-09-03T00:06:31.957063+00:00", "mode": "wrap", "action": "complete", "step": "", "steps_executed": [], "error": ""}
