@@ -79,11 +79,13 @@ record DiarizationOptions(int numSpeakersHint,
 ```
 
 - `DiarizedSegment` includes extracted `float[] samples` so consumers can compose with STT without re-reading and slicing the original file. The diarization C API returns `(start, end, speaker)` tuples only — `SherpaOnnxDiarizationService.diarize()` extracts samples by:
-  1. Read the full audio file into `float[]` via `WavReader` (16-bit PCM WAV only)
-  2. Query expected sample rate from `SherpaOnnxOfflineSpeakerDiarizationGetSampleRate(handle)`
-  3. Pass audio to C API, receive segment tuples
-  4. For each segment: convert start/end seconds to sample indices via `(int)(start * sampleRate)`, slice the original `float[]` via `Arrays.copyOfRange()`
-  5. Overlapping segments (possible with pyannote): slices may overlap — each `DiarizedSegment` gets its own independent copy of the overlapping region
+  1. Read the full audio file into `float[]` via `WavReader` (16-bit PCM WAV only) → `WavData(samples, sampleRate, channels)`
+  2. Query expected sample rate from `SherpaOnnxOfflineSpeakerDiarizationGetSampleRate(handle)` (typically 16kHz)
+  3. If the WAV sample rate differs from the expected rate, resample via `AudioResampler.resample(samples, wavSampleRate, expectedRate)` — same utility used in §Real-Time Embedding Extraction
+  4. Pass (resampled) audio to C API, receive segment tuples
+  5. For each segment: convert start/end seconds to sample indices via `(int)(start * expectedRate)`, slice the (resampled) `float[]` via `Arrays.copyOfRange()`
+  6. Overlapping segments (possible with pyannote): slices may overlap — each `DiarizedSegment` gets its own independent copy of the overlapping region
+  7. `DiarizedSegment.sampleRate` is set to the expected rate (post-resampling), not the original WAV rate
 - `DiarizationOptions.numSpeakersHint` — set to `-1` for automatic speaker count detection via threshold-based clustering. When set to a positive integer, forces that exact number of clusters.
 - `DiarizationOptions.clusterThreshold` — clustering distance threshold used when `numSpeakersHint` is `-1`. Larger values → fewer speakers. `0.0` for sherpa-onnx default.
 
@@ -95,6 +97,7 @@ interface SpeakerEmbeddingExtractor {
 }
 
 interface SpeakerRegistry {
+    /** Register or re-enroll — if a speaker with the given name exists, their embedding is replaced. */
     void register(String name, SpeakerEmbedding embedding);
     Optional<SpeakerMatch> identify(SpeakerEmbedding embedding,
                                      double confidenceThreshold);
@@ -181,6 +184,36 @@ static final long DIARIZATION_MIN_DURATION_OFF          = 60; // float
 ```
 
 Config struct is 64 bytes — significantly simpler than the STT config (~800+ bytes with 17 nested model sub-configs). Layout computed from C header `SherpaOnnxOfflineSpeakerDiarizationConfig`: pointers = 8 bytes, int32/float = 4 bytes, pointer fields aligned to 8-byte boundaries.
+
+### SherpaOnnxDiarizationService Handle Lifecycle
+
+**Per-instance handle** — the diarization handle is created once at construction and reused across `diarize()` calls. `createDiarization` loads the segmentation and embedding models, which is expensive (~100-500ms). Destroying and recreating per-call wastes this initialization.
+
+**Per-call clustering config** — `DiarizationOptions` parameters (`numSpeakersHint`, `clusterThreshold`) map to the `SherpaOnnxFastClusteringConfig` sub-struct. Before each `diarizationProcess` call, `diarizationSetConfig` updates the clustering parameters on the existing handle without reloading models.
+
+```java
+class SherpaOnnxDiarizationService implements SpeakerDiarizationService, AutoCloseable {
+    private final SherpaLibrary lib;
+    private final MemorySegment handle;  // created once
+    private final int expectedSampleRate;
+
+    SherpaOnnxDiarizationService(SherpaLibrary lib, Path segmentationModel, Path embeddingModel) {
+        this.lib = lib;
+        // build config with model paths, create handle
+        this.handle = createHandle(lib, segmentationModel, embeddingModel);
+        this.expectedSampleRate = getSampleRate(lib, handle);
+    }
+
+    List<DiarizedSegment> diarize(Path audioFile, DiarizationOptions options) {
+        updateClusteringConfig(handle, options);  // diarizationSetConfig
+        // read audio, resample, process, extract segments
+    }
+
+    public void close() { lib.destroyDiarization(handle); }
+}
+```
+
+**Thread safety:** the diarization handle is NOT thread-safe for concurrent `diarizationProcess` calls. If concurrent diarization is needed, use separate `SherpaOnnxDiarizationService` instances. For the current use case (offline batch processing), single-threaded access is expected.
 
 ### Result Struct Reading
 
@@ -349,11 +382,15 @@ record SpeakerIdentified(String name, double confidence) implements AvatarMessag
 | `SpeakerIdentify` | client → server | `"speakerIdentify"` |
 | `SpeakerIdentified` | server → client | `"speakerIdentified"` |
 
-**`MessageCodec.encode()`** — add cases to the exhaustive switch:
+**`MessageCodec.encode()`** — add cases to the exhaustive switch (all three required — the sealed interface demands a case per subtype, even for client→server messages like `SpeakerIdentify`, matching the existing pattern for `Start`, `Stop`, `Text`):
 ```java
 case AvatarMessage.SpeakerPrompt sp -> {
     obj.addProperty("type", "speakerPrompt");
     obj.addProperty("message", sp.message());
+}
+case AvatarMessage.SpeakerIdentify si -> {
+    obj.addProperty("type", "speakerIdentify");
+    obj.addProperty("name", si.name());
 }
 case AvatarMessage.SpeakerIdentified si -> {
     obj.addProperty("type", "speakerIdentified");
