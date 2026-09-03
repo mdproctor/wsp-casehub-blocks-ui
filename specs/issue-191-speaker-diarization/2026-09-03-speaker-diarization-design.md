@@ -25,7 +25,7 @@ Both produce campplus 192-dim embeddings. The offline path discovers speakers vi
 ```
 speech-api (SPI)                    speech-sherpa (implementations)
 ┌─────────────────────────┐         ┌──────────────────────────────────────┐
-│ SpeakerEmbeddingExtractor│────────▸│ SherpaOnnxSpeakerEmbeddingExtractor  │
+│ SpeakerEmbeddingExtractor│────────▸│ CampplusSpeakerEmbeddingExtractor  │
 │                          │         │   (ORT + campplus.onnx)              │
 ├─────────────────────────┤         ├──────────────────────────────────────┤
 │ SpeakerRegistry          │────────▸│ CosineDistanceSpeakerRegistry        │
@@ -56,7 +56,7 @@ audio → denoiser → VAD → ┬─ STT (existing)
                             TTS → avatar
 ```
 
-Speaker ID runs in parallel with STT on the same audio buffer. Embedding extraction (~50ms) completes before STT (200-500ms+), adding zero latency.
+When recording stops, both STT final decode and embedding extraction are triggered concurrently on the same buffered audio. Embedding extraction (~50ms) completes well before STT final decode (200-500ms+), adding zero latency to the pipeline. If speaker ID fails or times out, the turn proceeds without a speaker label — graceful degradation, never a gate on the conversation.
 
 ## SPI Layer (`speech-api`)
 
@@ -123,7 +123,7 @@ for (DiarizedSegment seg : segments) {
 **Real-time speaker ID (avatar):**
 ```java
 SpeakerEmbedding emb = extractor.extract(turnAudio, 16000);
-Optional<SpeakerMatch> match = registry.identify(emb, 0.7);
+Optional<SpeakerMatch> match = registry.identify(emb, 0.7); // threshold is a tunable default
 String speaker = match.map(SpeakerMatch::name).orElse("Unknown");
 ```
 
@@ -157,7 +157,7 @@ SherpaOnnxOfflineSpeakerDiarizationConfig:
   DIARIZATION_SEGMENTATION_DEBUG       // int32
   DIARIZATION_SEGMENTATION_PROVIDER    // const char*
 
-  // SherpaOnnxSpeakerEmbeddingExtractorConfig embedding
+  // CampplusSpeakerEmbeddingExtractorConfig embedding
   DIARIZATION_EMBEDDING_MODEL          // const char* — campplus path
   DIARIZATION_EMBEDDING_NUM_THREADS    // int32
   DIARIZATION_EMBEDDING_DEBUG          // int32
@@ -187,7 +187,7 @@ Stride: 12 bytes (possibly 16 with padding — verify from C header). Read via `
 
 ## Real-Time Embedding Extraction
 
-### SherpaOnnxSpeakerEmbeddingExtractor
+### CampplusSpeakerEmbeddingExtractor
 
 Implements `SpeakerEmbeddingExtractor` using `OnnxRuntimeLibrary` with `campplus.onnx`. Follows the exact preprocessing path proven in `CosyVoice3VoiceEncoder.extractSpeakerEmbedding`:
 
@@ -263,11 +263,13 @@ Speaker embeddings are biometric data under GDPR Article 9 and BIPA:
    "The current speaker is {speaker}. Previous speakers in this conversation: {history}."
    ```
 
-3. **`SpeechSession`** — after `finalResult()`:
-   - Extract embedding from the buffered audio (already accumulated in `WhisperSpeechToText`'s 30s buffer)
-   - Call `registry.identify(embedding, 0.7)`
+3. **`SpeechSession`** — when recording stops (same trigger as `finalResult()`):
+   - Extract embedding from the buffered audio concurrently with STT final decode (already accumulated in `WhisperSpeechToText`'s 30s buffer)
+   - **Minimum audio duration:** skip extraction if the turn is shorter than 1.5 seconds — insufficient audio for a reliable embedding. Proceed without a speaker label.
+   - Call `registry.identify(embedding, 0.7)` — the 0.7 confidence threshold is a tunable default, subject to empirical calibration during testing
    - If unknown: send `SpeakerPrompt` to client
    - If known: attach `speakerLabel` to the conversation turn
+   - **Graceful degradation:** if extraction fails, times out, or the turn is too short, the conversation continues normally without a speaker label. Speaker ID is never a gate on the conversation flow.
 
 4. **`SpeechWebSocket`** — inject `SpeakerEmbeddingExtractor` and `SpeakerRegistry` via CDI
 
@@ -318,6 +320,10 @@ Both enrollment paths feed the same registry.
 
 No new native libraries. `libsherpa-onnx-c-api.dylib` (already loaded by `SherpaLibrary`) includes the diarization functions.
 
+### Model Accuracy Trade-off
+
+campplus is adequate for the family interaction use case (2-8 speakers, familiar voices, modest discrimination requirements) but is not the highest-accuracy speaker embedding model available. If testing reveals insufficient discrimination (e.g., family members with similar vocal characteristics being confused), ECAPA-TDNN is the recommended upgrade path — strong VoxCeleb benchmark performance, ~192-dim output, ~20MB model, available as ONNX export. The `SpeakerEmbeddingExtractor` SPI makes model swapping a single implementation change.
+
 ## CDI Wiring (`speech-demo`)
 
 New producer methods in `SpeechProducers`:
@@ -326,7 +332,7 @@ New producer methods in `SpeechProducers`:
 @Produces @ApplicationScoped
 SpeakerEmbeddingExtractor embeddingExtractor() {
     // Reuse campplus session from CosyVoice3 if available, else create new
-    return new SherpaOnnxSpeakerEmbeddingExtractor(campplusSession);
+    return new CampplusSpeakerEmbeddingExtractor(campplusSession);
 }
 
 @Produces @Singleton
@@ -354,7 +360,7 @@ SpeakerDiarizationService diarizer() {
 | SPI records | Unit | `SpeakerEmbedding`, `DiarizedSegment`, `DiarizationOptions` construction |
 | `CosineDistanceSpeakerRegistry` | Unit | Register, identify (match/no-match/threshold), remove, thread safety, cosine similarity edge cases (zero vector, identical vectors) |
 | `FileVoiceprintStore` | Unit | Save/load/delete round-trip, atomic write, corrupt file handling |
-| `SherpaOnnxSpeakerEmbeddingExtractor` | Integration | Extract embedding from known WAV → verify 192-dim output, same speaker → high similarity, different speakers → low similarity |
+| `CampplusSpeakerEmbeddingExtractor` | Integration | Extract embedding from known WAV → verify 192-dim output, same speaker → high similarity, different speakers → low similarity |
 | `SherpaOnnxDiarizationService` | Integration | Diarize `0-four-speakers-zh.wav` (sherpa-onnx test file) → verify segment count, speaker labels, DiarizedSegment.samples non-empty |
 | Diarization + STT composition | Integration | Diarize → feed segments to STT → verify speaker-attributed transcript |
 | Avatar pipeline | Integration | Speak → identify → transcript includes speaker label, auto-enrollment flow |
