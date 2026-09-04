@@ -1,24 +1,86 @@
 # HANDOFF — casehub-blocks-ui
 
-**Branch:** main (no active branch)
-**Date:** 2026-08-05
+## Last Session
 
-## What landed
+**Issue:** casehubio/blocks#191 — Speaker diarization & identification (merged with #211)
+**Queue position:** 8/10 (issue #191 active — all 5 tasks complete)
+**Branch:** `issue-190-speech-denoising` (both blocks and blocks-ui repos)
 
-Generic `<status-badge>` component with a 10-domain status registry (#109). Replaces 4 ad-hoc status badge implementations (work-item-inbox, session-list, commitment-state-pill, badge-mappings) with one component and one source of truth. Registry uses cross-domain defaults so new domains get sensible rendering for shared state names (COMPLETED, PENDING, RUNNING, etc.) without explicit registration. `toDecoration()` in graph-stencil-case converts the same descriptors to graph node decorations via a separate `BADGE_COLORS` hex palette. Case-level status badge added to diagram toolbar. Consumer and contributor guides updated.
+### What Was Done
 
-Filed 6 new epics (#106–#111) for the remaining blocks-ui modelling gaps: SWF diagram, HTN/DAG visualiser, worker function drill-down, runtime state expansion (done), conversation protocol viewer, orchestration monitor. Slot 85 created for #106 (SWF diagram).
+**All 3 batches complete — 5 commits on blocks repo:**
 
-## What's left
+**Batch 1: Embedding + Registry (Tasks 1-2)**
 
-- pages-table pagination buttons still use light backgrounds (upstream pages fix) · S · Low
+Task 1 — SPI types + campplus embedding extractor (`94cf7ae`):
+- 8 SPI files in `speech-api`: `SpeakerEmbedding`, `SpeakerMatch`, `DiarizedSegment`, `DiarizationOptions`, `SpeakerEmbeddingExtractor`, `SpeakerRegistry`, `VoiceprintStore`, `SpeakerDiarizationService`
+- `CampplusSpeakerEmbeddingExtractor` in `speech-sherpa` — ORT with campplus.onnx, 192-dim embeddings, replicates CosyVoice3VoiceEncoder preprocessing path
+- `Provisioner.ensureCampplusModel()` — standalone campplus provisioning from HuggingFace
+- 3 integration tests passing
 
-## What's next
+Task 2 — voiceprint registry + file persistence (`a6a3362`):
+- `CosineDistanceSpeakerRegistry` — ConcurrentHashMap cache, pluggable VoiceprintStore
+- `FileVoiceprintStore` — JSON to `~/.casehub/voiceprints/`, atomic rename
+- 12 unit tests passing
 
-| # | Description | Scale | Complexity | Notes |
-|---|-------------|-------|------------|-------|
-| #106 | SWF diagram — complete graph-stencil-swf | L | Med | Slot 85 ready, `@openworkflowspec/sdk` available |
-| #107 | HTN decomposition tree and DAG plan visualiser | L | High | Needs design |
-| #108 | Worker function drill-down — agent/flow/a2a/mcp config | M | Med | Partially independent of #106 |
-| #110 | Conversation protocol viewer — convergence, epistemic status | L | High | Needs design |
-| #111 | Orchestration monitor — execution lifecycle, audit chain | L | High | Needs design |
+**Batch 2: Offline Diarization (Task 3)**
+
+Task 3 — FFM diarization bindings (`a436428`):
+- 9 diarization MethodHandles added to `SherpaLibrary`
+- Config byte offsets in `SherpaLayouts` — 72 bytes total (not 64 as spec assumed)
+- Key finding: `SherpaOnnxOfflineSpeakerSegmentationPyannoteModelConfig` has `window_shift_ratio` float field making pyannote sub-struct 16 bytes, not 8 — shifts all subsequent offsets
+- `SherpaOnnxDiarizationService` with per-instance handle, per-call clustering config
+- `Provisioner.ensureDiarizationModels()` for pyannote segmentation model
+- Explicit "cpu" provider strings required (NULL causes SIGSEGV in strlen)
+- 3 integration tests passing
+
+**Batch 3: Avatar Integration (Tasks 4-5)**
+
+Task 4 — protocol messages + ConversationTurn (`a1ddda2`):
+- `SpeakerPrompt`, `SpeakerIdentify`, `SpeakerIdentified` added to `AvatarMessage` sealed interface
+- `MessageCodec` encode/decode for all 3 new message types
+- `ConversationTurn` gains nullable `speaker` field with backward-compatible 2-arg constructor
+- `DefaultPromptAssembler` formats speaker labels (`Mark (User): Hi`) and adds `Speaking with:` to system prompt
+- 8 new tests (23 total MessageCodec + PromptAssembler)
+
+Task 5 — SpeechSession speaker ID + enrollment + CDI (`03ea47b`):
+- Ring buffer (5s, 320KB at 16kHz mono float) in `SpeechSession` — caps at RING_BUFFER_SIZE, doesn't wrap
+- Speaker identification in `handleStop()` — concurrent with STT, minimum 1.5s audio required
+- Auto-enrollment state machine: unknown speaker triggers `SpeakerPrompt`, `SpeakerIdentify` response enrolls
+- Explicit enrollment: `SpeakerIdentify` during recording queues name, enrolled on stop
+- `withSpeakerServices()` fluent setter (matches existing patterns)
+- `SpeechWebSocket` injects `Instance<SpeakerEmbeddingExtractor>` and `Instance<SpeakerRegistry>` with graceful degradation
+- 4 CDI producers in `SpeechProducers`: embeddingExtractor, speakerRegistry, voiceprintStore, diarizer
+- 7 new tests (108 total speech-ws)
+
+### What's Next
+
+**Issue #211 (Speaker identification/voiceprint) should be closed** — its work was delivered as part of the #191 merge. Use `work next` to advance, then close #211.
+
+**After closing #191/#211, queue position moves to 10/10 — queue drained.** Run `work end` to close the branch.
+
+**Deferred work (from spec):**
+- RestVoiceprintStore — REST-backed persistence against platform endpoint
+- ECAPA-TDNN upgrade — if campplus insufficient for family use case
+- Privacy/GDPR compliance for cloud voiceprint storage
+- Confidence threshold calibration — 0.7 cosine threshold is a tunable default
+- SpeechSession refactoring — constructor parameter explosion
+
+### Key Design Decisions
+
+| # | Decision | Rationale |
+|---|----------|-----------|
+| D1 | Merge #191 + #211 | Shared campplus foundation, single developer, primary use case requires both |
+| D2 | Both real-time + offline | Real-time speaker ID is primary (family avatar), offline diarization is secondary |
+| D5 | Dual inference paths | sherpa-onnx C API for offline, ORT for real-time — each mode uses its best tool |
+| D6 | 3 composable SPIs | Extractor, Registry, DiarizationService — independently usable |
+| D8 | campplus model | Already provisioned for CosyVoice3, 192-dim, adequate for 2-8 family speakers |
+| NEW | 72-byte config | Pyannote sub-struct has window_shift_ratio field — spec assumed 64 bytes, SIGSEGV caught this |
+| NEW | Explicit provider strings | NULL provider causes strlen crash — must set "cpu" explicitly |
+
+### Repo State
+
+| Repo | Branch | Status |
+|------|--------|--------|
+| blocks | `issue-190-speech-denoising` | 5 new commits (Tasks 1-5), 108 speech-ws tests green |
+| blocks-ui | `issue-190-speech-denoising` | Design artifacts only (specs, plans) |
