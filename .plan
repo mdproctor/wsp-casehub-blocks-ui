@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-190-speech-denoising
-state: active
+state: closing:promoted
 project-sha: slot-creation
 date: 2026-08-31
 issue-repo: casehubio/blocks-ui
@@ -11,6 +11,7 @@ design-repo: project
 design-section-hashes: 
 flyway-next-v: unknown
 
+evidence-era: true
 ## Queue
 - [x] casehubio/blocks-ui#139 — Issue #139
 - [x] casehubio/blocks-ui#148 — Align_deps_rebuild_whisper_remap_Kokoro
