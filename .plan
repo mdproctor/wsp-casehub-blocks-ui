@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-117-extract-shared-primitives
-state: scaffolded
+state: active
 project-sha: f52ffca1df0d39124cf3987cb577747cf3fcd4c8
 date: 2026-09-06
 issue-repo: casehubio/blocks-ui
@@ -13,12 +13,12 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#117 — Issue #117 ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: formatTimestamp and statusBorderColour
-    - [ ] Task 2: Shared CSS tagged templates
-  - [ ] Batch 2: Migrate debate-conv
-    - [ ] Task 3: debate-feed review-tracker selection-threads
-    - [ ] Task 4: conversation-viewer components
-  - [ ] Batch 3: Remaining
-    - [ ] Task 5: Migrate remaining formatTimestamp consumers
-    - [ ] Task 6: Update CLAUDE.md and docs
+  - [x] Batch 1: Foundation
+    - [x] Task 1: formatTimestamp and statusBorderColour
+    - [x] Task 2: Shared CSS tagged templates
+  - [x] Batch 2: Migrate debate-conv
+    - [x] Task 3: debate-feed review-tracker selection-threads
+    - [x] Task 4: conversation-viewer components
+  - [x] Batch 3: Remaining
+    - [x] Task 5: Migrate remaining formatTimestamp consumers
+    - [x] Task 6: Update CLAUDE.md and docs
