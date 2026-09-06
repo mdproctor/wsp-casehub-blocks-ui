@@ -13,3 +13,12 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#117 — Issue #117 ← active
+  - [ ] Batch 1: Foundation
+    - [ ] Task 1: formatTimestamp and statusBorderColour
+    - [ ] Task 2: Shared CSS tagged templates
+  - [ ] Batch 2: Migrate debate-conv
+    - [ ] Task 3: debate-feed review-tracker selection-threads
+    - [ ] Task 4: conversation-viewer components
+  - [ ] Batch 3: Remaining
+    - [ ] Task 5: Migrate remaining formatTimestamp consumers
+    - [ ] Task 6: Update CLAUDE.md and docs
