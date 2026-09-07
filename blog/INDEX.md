@@ -24,3 +24,4 @@
 | [2026-09-02-mdp01-the-audio-pipeline-nobody-documents.md](2026-09-02-mdp01-the-audio-pipeline-nobody-documents.md) | 2026-09-02 | sherpa-onnx speech pre-processing pipeline: denoising (DPDFNet/GTCRN), VAD (Silero), FFM integration patterns, composable runtime-toggleable architecture |
 | [2026-09-03-mdp01-the-native-lib-problem.md](2026-09-03-mdp01-the-native-lib-problem.md) | 2026-09-03 | Zero-install native lib distribution via Maven classifier JARs with tiered classpath extraction |
 >>>>>>> issue-190-speech-denoising
+| [2026-09-07-mdp01-zod-schemas-from-source.md](2026-09-07-mdp01-zod-schemas-from-source.md) | 2026-09-07 | Schema generation from source — ts-morph generator, BlocksComponentRegistry, 55 Zod schemas, typed configure() |
