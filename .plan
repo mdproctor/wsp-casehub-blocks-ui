@@ -17,8 +17,8 @@ flyway-next-v: none
     - [x] Task 1: Create blocks-ui-schema package and generator
     - [x] Task 2: Extract Props interfaces for 5 initial components
     - [x] Task 3: Generate schemas and staleness test
-  - [ ] Batch 2: Full coverage
-    - [ ] Task 4: Extract Props interfaces for all remaining components
-  - [ ] Batch 3: Cleanup
-    - [ ] Task 5: Fix untyped configure methods
-    - [ ] Task 6: Registry completeness test
+  - [x] Batch 2: Full coverage
+    - [x] Task 4: Extract Props interfaces for all remaining components
+  - [x] Batch 3: Cleanup
+    - [x] Task 5: Fix untyped configure methods
+    - [x] Task 6: Registry completeness test
