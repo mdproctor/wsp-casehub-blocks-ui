@@ -20,3 +20,15 @@
 **Exploration:** quick
 **Depends on:** D1 (registry interface lives in blocks-ui-core, schemas package reads from it)
 **Status:** captured
+
+## D3: Fix untyped configure() methods
+
+**Choice:** Fix the ~16 untyped `configure(props: Record<string, unknown>)` methods as part of this issue — replace with typed Props interface from the registry
+**Alternatives:**
+- Defer to a separate issue — schemas would still be correct (generated from registry, not configure), but runtime enforcement gap remains
+**Rationale:** Mechanical fix that completes the audit task from the issue. Ensures runtime behaviour matches what schemas declare. Leaving untyped configure() creates a gap where undeclared properties still pass through at runtime.
+**Trade-offs:** Increases scope slightly (~16 files to touch), but each change is a simple type annotation + cast removal
+**Sources:** execution-monitor.ts:186 `configure(props: Record<string, unknown>)`, audit finding of ~16 components with this pattern
+**Exploration:** quick
+**Depends on:** D1 (Props interfaces must exist before configure() can reference them)
+**Status:** captured
