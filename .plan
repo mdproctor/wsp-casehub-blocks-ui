@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-156-zod-schemas
-state: scaffolded
+state: active
 project-sha: 82f697adb4b7c620cc606a492a88aaea90d41a14
 date: 2026-09-07
 issue-repo: casehubio/blocks-ui
@@ -13,10 +13,10 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#156 — Issue #156 ← active
-  - [ ] Batch 1: Infrastructure
-    - [ ] Task 1: Create blocks-ui-schema package and generator
-    - [ ] Task 2: Extract Props interfaces for 5 initial components
-    - [ ] Task 3: Generate schemas and staleness test
+  - [x] Batch 1: Infrastructure
+    - [x] Task 1: Create blocks-ui-schema package and generator
+    - [x] Task 2: Extract Props interfaces for 5 initial components
+    - [x] Task 3: Generate schemas and staleness test
   - [ ] Batch 2: Full coverage
     - [ ] Task 4: Extract Props interfaces for all remaining components
   - [ ] Batch 3: Cleanup
