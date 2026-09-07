@@ -13,3 +13,12 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#156 — Issue #156 ← active
+  - [ ] Batch 1: Infrastructure
+    - [ ] Task 1: Create blocks-ui-schema package and generator
+    - [ ] Task 2: Extract Props interfaces for 5 initial components
+    - [ ] Task 3: Generate schemas and staleness test
+  - [ ] Batch 2: Full coverage
+    - [ ] Task 4: Extract Props interfaces for all remaining components
+  - [ ] Batch 3: Cleanup
+    - [ ] Task 5: Fix untyped configure methods
+    - [ ] Task 6: Registry completeness test
