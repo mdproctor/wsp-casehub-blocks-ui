@@ -22,3 +22,6 @@ flyway-next-v: none
   - [x] Batch 3: Cleanup
     - [x] Task 5: Fix untyped configure methods
     - [x] Task 6: Registry completeness test
+
+## Deferred
+- [ ] Fix document-workbench internal configure() methods (S / Low) [] — 6 non-blocks-prefixed sub-components (brainstorm-options, debate-feed, document-timeline, review-tracker, document-diff, selection-threads) — need Props interfaces outside the registry
