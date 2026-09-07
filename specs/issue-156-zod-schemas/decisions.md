@@ -32,3 +32,15 @@
 **Exploration:** quick
 **Depends on:** D1 (Props interfaces must exist before configure() can reference them)
 **Status:** captured
+
+## D4: Domain type and callback handling
+
+**Choice:** Filter out function/callback properties, generate inline object schemas for domain types via ts-morph structural walking
+**Alternatives:**
+- Hand-write Zod schemas for each domain type in blocks-ui-core — explicit control but high maintenance burden for types ts-morph can derive automatically
+**Rationale:** Render callbacks (renderAgent, renderModel, renderCandidate) are runtime-only and meaningless in YAML. Domain types like ExecutionSnapshot and TabDefinition are object types that ts-morph can walk structurally. Pages generator already has depth guard (depth > 6 → z.unknown()) for safety. Only add hand-written schemas if recursion or branded types surface.
+**Trade-offs:** Generated schemas for complex domain types may be verbose; deeply nested types fall back to z.unknown() at depth 6
+**Sources:** pages generator `typeToZod()` and `isFunction()` at `packages/pages-schema/scripts/generate-schemas.ts`, pages `FUNCTION_PROPS` set
+**Exploration:** quick
+**Depends on:** D2 (generator lives in blocks-ui-schema)
+**Status:** captured
