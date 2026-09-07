@@ -8,3 +8,15 @@
 **Sources:** pages `ComponentTypeRegistry` at `packages/pages-component/src/model/type-guards.ts`, pages generator at `packages/pages-schema/scripts/generate-schemas.ts`
 **Exploration:** quick
 **Status:** captured
+
+## D2: Schema package location
+
+**Choice:** New `packages/blocks-ui-schema` package, mirroring pages-schema structure
+**Alternatives:**
+- Inside `packages/blocks-ui-core` — fewer packages but mixes domain types with generated schemas and adds ts-morph dev dependency to core
+**Rationale:** Clean separation of concerns. Generator machinery (ts-morph, code generation) stays out of the core package. Mirrors pages-schema for cross-repo consistency.
+**Trade-offs:** One more package in the workspace to maintain
+**Sources:** pages `packages/pages-schema/package.json`
+**Exploration:** quick
+**Depends on:** D1 (registry interface lives in blocks-ui-core, schemas package reads from it)
+**Status:** captured
