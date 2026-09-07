@@ -44,3 +44,15 @@
 **Exploration:** quick
 **Depends on:** D2 (generator lives in blocks-ui-schema)
 **Status:** captured
+
+## D5: Schema consumption and distribution
+
+**Choice:** Publish blocks-ui-schema as a Maven SNAPSHOT artifact (WebJar pattern) exporting Zod schemas. Pages-code-editor imports the schema map and merges with pages-schema's map.
+**Alternatives:**
+- Export a JSON schema manifest — more portable but loses Zod runtime validation for desugarers, and blocks-ui already uses the Maven SNAPSHOT WebJar pattern
+**Rationale:** Consistent with existing blocks-ui distribution. Zod schemas serve both validation (desugarers strip undeclared props) and completion (editor knows valid properties) from one artifact. No new distribution mechanism needed.
+**Trade-offs:** Downstream consumers must add blocks-ui-schema as a dependency to get completion for blocks-ui components
+**Sources:** CLAUDE.md Frontend Dependencies section (Maven SNAPSHOT WebJar pattern), pages-code-editor schema integration
+**Exploration:** quick
+**Depends on:** D2 (schemas package must exist), D4 (generator produces the schemas)
+**Status:** captured
