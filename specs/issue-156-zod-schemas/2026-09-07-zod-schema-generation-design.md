@@ -15,9 +15,12 @@ components exist or what they accept.
 
 Three layers, mirroring the casehub-pages #411 pattern:
 
-### 1. BlocksComponentRegistry (blocks-ui-core)
+### 1. BlocksComponentRegistry (blocks-ui-schema)
 
-A TypeScript interface mapping element tag names to their Props interfaces:
+A TypeScript interface in the schema package mapping element tag names to
+their Props interfaces. Lives in blocks-ui-schema (not blocks-ui-core)
+to avoid circular dependencies — component packages depend on core for
+domain types, so core cannot depend back on them for Props types:
 
 ```typescript
 export interface BlocksComponentRegistry {
@@ -29,8 +32,10 @@ export interface BlocksComponentRegistry {
 ```
 
 Each component package exports a `FooProps` interface extracted from its
-public `@property()` declarations. The registry aggregates them in one
-place, providing a single source of truth for the component surface area.
+public `@property()` declarations. The registry aggregates them via
+`import type` — the component packages are devDependencies of
+blocks-ui-schema, used only for type resolution by ts-morph at
+generation time.
 
 **What goes in Props:**
 - All public `@property()` declarations (the YAML-facing contract)
@@ -54,6 +59,7 @@ packages/blocks-ui-schema/
   scripts/
     generate-schemas.ts      # ts-morph generator
   src/
+    registry.ts                     # BlocksComponentRegistry interface
     component-schemas.generated.ts  # generated output
     component-schemas.test.ts       # staleness + parse tests
     index.ts                        # re-exports
