@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-157-rich-org-diagram
-state: scaffolded
+state: active
 project-sha: e05eadaee9379d3240b4933dad2f84edc15de26a
 date: 2026-09-07
 issue-repo: casehubio/blocks-ui
@@ -13,15 +13,15 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#157 — Issue #157 ← active
-  - [ ] Batch 1: Adapter enrichment
-    - [ ] Task 1: Types and enrichWithDescriptors
-    - [ ] Task 2: computeDerivedData
-  - [ ] Batch 2: Visual helpers
-    - [ ] Task 3: resolveKindColors computeNodeSizes applyCollapsedUnits
-    - [ ] Task 4: Edge label and selection highlight
-  - [ ] Batch 3: Rich stencils
-    - [ ] Task 5: Rich org-agent and org-unit stencils
-  - [ ] Batch 4: Integration
-    - [ ] Task 6: Wire pipeline into blocks-org-diagram
-    - [ ] Task 7: Internal panels and hover tooltip
-    - [ ] Task 8: OrgDiagramProps registry entry
+  - [x] Batch 1: Adapter enrichment
+    - [x] Task 1: Types and enrichWithDescriptors
+    - [x] Task 2: computeDerivedData
+  - [x] Batch 2: Visual helpers
+    - [x] Task 3: resolveKindColors computeNodeSizes applyCollapsedUnits
+    - [x] Task 4: Edge label and selection highlight
+  - [x] Batch 3: Rich stencils
+    - [x] Task 5: Rich org-agent and org-unit stencils
+  - [x] Batch 4: Integration
+    - [x] Task 6: Wire pipeline into blocks-org-diagram
+    - [x] Task 7: Internal panels and hover tooltip
+    - [x] Task 8: OrgDiagramProps registry entry
