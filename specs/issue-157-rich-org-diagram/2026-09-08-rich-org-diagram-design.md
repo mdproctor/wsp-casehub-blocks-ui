@@ -25,6 +25,7 @@ The component receives two data sources via a single API surface:
 |----------|------|--------|----------|
 | `yaml` / `src` | `string` | Org YAML (units, members, relationships) | Yes — via DiagramBaseMixin pipeline |
 | `agents` | `Record<string, AgentDescriptor>` | Agent descriptors keyed by agentId | No — read-only enrichment |
+| `kindColors` | `Record<string, {start: string, end: string}>` | Kind-to-gradient color overrides | No — optional configuration |
 
 ```typescript
 interface AgentDescriptor {
@@ -142,12 +143,14 @@ export function computeNodeSizes(
   model: GraphModel,
 ): ReadonlyMap<string, { width: number; height: number }>;
 
-// Filter collapsed units from the model
+// Filter collapsed units — removes agent nodes AND their edges
 export function applyCollapsedUnits(
   model: GraphModel,
   yamlPaths: ReadonlyMap<string, readonly (string | number)[]>,
   collapsedUnits: ReadonlySet<string>,
 ): { model: GraphModel; yamlPaths: ReadonlyMap<string, readonly (string | number)[]> };
+// Edges where source or target is inside a collapsed unit are removed entirely.
+// Cross-unit edges where only one end is collapsed are also removed (not re-routed).
 ```
 
 The full pipeline in the org-diagram component:
@@ -171,9 +174,15 @@ const nodeSizes = computeNodeSizes(layoutModel);
 | `supervisionTargets` | Outgoing SUPERVISES edges from this agent → `string[]` of target agentIds |
 | `escalationChain` | Walk ESCALATES_TO from this agent to terminal → `string[]` ordered chain |
 | `backupAgents` | BACKS_UP edges involving this agent → `{agentId, scope?, direction}[]` |
-| `attestationGrants` | From SUPERVISES edges with attestation → `{targetAgentId, scope?, dimensions, signalTypes?}[]` |
+| `attestationGrants` | From ANY relationship kind with attestation field → `{targetAgentId, scope?, dimensions, signalTypes?}[]` |
 
 D3 is independent of D1 — derived data comes from the relationship graph (edges), not descriptor data.
+
+**Attestation grants:** Derived from ALL relationship kinds that carry an `attestation` field, not just SUPERVISES. The `AgentRelationship` type allows any kind to have attestation.
+
+**Cycle detection:** Escalation chain walking tracks visited nodes. If a cycle is detected, the chain is truncated at the revisit point and the `terminal` field is set to the cycle entry node with a `(cycle)` marker. The escalation chain panel renders cycles distinctly.
+
+**Stencil typing:** Node properties are accessed via a typed cast: `const data = node.properties as OrgAgentNodeData`. The cast is the enforcement mechanism — `GraphNode.properties` is `Record<string, unknown>` in graph-core.
 
 ### Color Resolution
 
@@ -238,7 +247,17 @@ Each row is conditionally rendered based on data availability. Long values are t
 
 Format: `axis-short-name: value` in a rounded pill (3px radius, 14px height).
 
-Short names: `autonomy`, `rules`, `social`, `risk`, `conflict`.
+Short names defined as a constant:
+
+```typescript
+const DISPOSITION_SHORT_NAMES: Record<keyof DispositionAxes, string> = {
+  autonomy: 'autonomy',
+  ruleFollowing: 'rules',
+  socialOrient: 'social',
+  riskAppetite: 'risk',
+  conflictMode: 'conflict',
+};
+```
 
 ### Node Sizing (D5)
 
@@ -268,6 +287,8 @@ function computeAgentHeight(data: OrgAgentNodeData): number {
 ```
 
 The `nodeSizes` map is passed to `computeElkLayout()` so ELK allocates correct space.
+
+**Unit sizing:** `computeNodeSizes` also computes unit container heights: header (30px) + capability pills row (20px if capabilities present) + padding for ELK child layout. Unit width is determined by ELK based on children.
 
 **Height sync test:** A test renders nodes with known data, applies the same row-counting logic used by the stencil, and asserts it matches `computeAgentHeight`. This structurally couples sizing and rendering — drift fails in CI.
 
@@ -334,15 +355,28 @@ Sets ReactFlow label properties based on edge data:
 
 ReactFlow properties set per edge: `label`, `labelStyle: { fontSize: 8, fontWeight: 600 }`, `labelBgStyle: { fill, stroke }`, `labelBgPadding: [3, 6]`, `labelBgBorderRadius: 3`.
 
-### `applySelectionHighlight(edges: Edge[], nodes: Node[], selectedAgentId?: string): Edge[]`
+### `applySelectionHighlight(edges: Edge[], selectedNodeId?: string): Edge[]`
 
-When `selectedAgentId` is provided, edges connected to that agent get `className: 'org-edge-highlighted'`. All other edges get `style: { opacity: 0.15 }`. Clearing selection (no `selectedAgentId`) restores all edges to full opacity.
+When `selectedNodeId` is provided (format: `agent:<unitId>:<agentId>`), edges whose `source` or `target` matches the node ID get `className: 'org-edge-highlighted'`. All other edges get `style: { opacity: 0.15 }`. Clearing selection restores all edges to full opacity. Uses node IDs throughout — no agentId extraction needed.
 
-The org-diagram chains them:
+### Lightweight Selection Update Path
+
+Selection changes must NOT trigger `_fullRender` (which runs ELK layout). Instead, the component caches the post-`toReactFlowGraph` edges as `_baseEdges`. On selection change, it re-applies the two edge functions to the cached edges:
+
 ```typescript
-let edges = applyOrgEdgeLabels(rfEdges);
-edges = applySelectionHighlight(edges, rfNodes, this._selectedNodeId || undefined);
+// In _fullRender (after toReactFlowGraph):
+this._baseEdges = rfEdges;
+this._updateEdgeStyles();
+
+// On selection change (lightweight — no layout):
+private _updateEdgeStyles(): void {
+  let edges = applyOrgEdgeLabels(this._baseEdges);
+  edges = applySelectionHighlight(edges, this._selectedNodeId || undefined);
+  (this as any)._edges = edges;
+}
 ```
+
+This ensures agent clicks update edge highlighting instantly without re-parsing YAML or re-running ELK.
 
 ---
 
@@ -536,3 +570,34 @@ This type is defined in `graph-stencil-org/src/types.ts` alongside the existing 
 - ReactFlow Edge API — label, labelBgStyle, labelBgPadding, labelBgBorderRadius
 - `casehubio/blocks-ui#157` — issue with full requirements
 - `casehubio/blocks-ui#157` comment — OrgDiagramData shape guidance
+
+---
+
+## BlocksComponentRegistry — OrgDiagram
+
+The existing `blocks-org-diagram` component is not yet registered in `BlocksComponentRegistry`. This spec adds new properties (`agents`, `kindColors`). Must add:
+
+```typescript
+export interface OrgDiagramProps {
+  yaml?: string;
+  src?: string;
+  agents?: Record<string, AgentDescriptor>;
+  kindColors?: Record<string, { start: string; end: string }>;
+  layoutStrategy?: OrgLayoutStrategy | 'auto';
+  selectionTopic?: string;
+  readonly?: boolean;
+}
+```
+
+Add to registry in `packages/blocks-ui-schema/src/registry.ts`. Run `yarn workspace @casehubio/blocks-ui-schema run generate`.
+
+---
+
+## Deferred Items
+
+These issue requirements are not addressed by this spec and should be filed as follow-up issues:
+
+| Requirement | Issue §  | Reason |
+|-------------|----------|--------|
+| Draggable agent repositioning within units | §7 | Requires position persistence, container bounds constraints, and interaction with re-layout. Separate concern from information density. |
+| Double-click inline editing | §7 | Current editing is via property panel + YAML pane. Inline editing is a UX enhancement beyond the information density scope. |
