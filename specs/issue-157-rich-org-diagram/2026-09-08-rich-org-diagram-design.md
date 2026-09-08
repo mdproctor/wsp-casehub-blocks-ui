@@ -70,7 +70,10 @@ export function toOrgGraph(yaml: string): OrgAdapterResult;
 export function toOrgGraph(
   yaml: string,
   agents?: Readonly<Record<string, AgentDescriptor>>,
-  options?: { collapsedUnits?: ReadonlySet<string> },
+  options?: {
+    collapsedUnits?: ReadonlySet<string>;
+    kindColors?: Readonly<Record<string, { start: string; end: string }>>;
+  },
 ): OrgAdapterResult;
 
 // OrgAdapterResult extended
@@ -90,6 +93,15 @@ export interface OrgAdapterResult {
 `escalationChains` and `attestationSummary` are org-wide derived data consumed by the standalone panels (D4). They're computed during the same graph walk that produces per-agent derived properties.
 
 When `collapsedUnits` contains a unit ID, the adapter omits that unit's agent nodes and their edges from the graph model, and produces the unit node at a compact height (~40px, header only).
+
+### Color Resolution in the Adapter
+
+The adapter resolves kind-to-color mappings and stores them in node properties so stencils remain pure renderers:
+
+- **Unit nodes** get `kindColorStart` and `kindColorEnd` properties (resolved from `kindColors` option → default palette → auto-assignment fallback).
+- **Agent nodes** get `unitKind` (parent unit's kind) and `unitColorStart`/`unitColorEnd` (parent unit's resolved colors) so the agent stencil can tint its header, circle indicator, and border without accessing the parent node.
+
+This ensures stencils never need the palette or the parent graph — everything they render is in their own `node.properties`.
 
 ---
 
