@@ -9,7 +9,7 @@
 
 ## Overview
 
-Enrich the existing org-diagram component with full information density: rich agent cards showing descriptor properties (slot, disposition, capabilities, supervision targets, escalation paths, backup, attestation), kind-differentiated unit containers with capability pills, labeled relationship lines with scope badges, standalone panels (escalation chain, attestation grants, legend), and interactive features (collapsible units, hover tooltips, relationship highlighting).
+Enrich the existing org-diagram component with full information density: rich agent cards showing descriptor properties (slot, disposition, capabilities, supervision targets, escalation paths, backup, attestation), kind-differentiated unit containers with capability pills, labeled relationship lines with scope badges, internal sub-panels (escalation chain, attestation grants, legend), and interactive features (collapsible units, hover tooltips, relationship highlighting).
 
 The reference target is `casehubio/eidos/docs/diagrams/gastown-org-structure.svg` — this spec matches or exceeds its information density in an interactive, editable form.
 
@@ -45,44 +45,71 @@ interface DispositionAxes {
 }
 ```
 
-The adapter `toOrgGraph(yaml, agents?)` merges descriptor data into `GraphNode.properties` for each agent node. When `agents` is undefined or a descriptor is missing for an agent, the card degrades gracefully to the basic rendering (agentId + role only).
+### Typed Node Data Interfaces
 
-### Derived Relationship Data (D3)
-
-After building nodes and edges, the adapter computes per-agent derived data by walking the relationship graph:
-
-| Derived property | Computation | Stored in |
-|-----------------|-------------|-----------|
-| `supervisionTargets` | Outgoing SUPERVISES edges from this agent | `string[]` — target agentIds |
-| `escalationChain` | Walk ESCALATES_TO from this agent to terminal | `string[]` — ordered chain of agentIds |
-| `backupAgents` | BACKS_UP edges involving this agent | `{agentId: string, scope?: string, direction: 'backs' \| 'backed-by'}[]` |
-| `attestationGrants` | From SUPERVISES edges with attestation property | `{targetAgentId: string, scope?: string, dimensions: string[], signalTypes?: string[]}[]` |
-
-These are stored in `GraphNode.properties` alongside the descriptor data. The stencil renderer reads them like any other property.
-
-### Adapter Signature Change
+All node properties are typed — no untyped `Record<string, unknown>` access in stencils:
 
 ```typescript
-// Before
+interface OrgAgentNodeData {
+  agentId: string;
+  role?: string;
+  roleVocabulary?: string;
+  unitId: string;
+  label: string;
+  // From descriptor (D1)
+  slot?: string;
+  capabilities?: AgentCapability[];
+  disposition?: Partial<DispositionAxes>;
+  // From derived computation (D3)
+  supervisionTargets?: string[];
+  escalationChain?: string[];
+  backupAgents?: { agentId: string; scope?: string; direction: 'backs' | 'backed-by' }[];
+  attestationGrants?: { targetAgentId: string; scope?: string; dimensions: string[]; signalTypes?: string[] }[];
+  // From color resolution
+  unitKind?: string;
+  unitColorStart?: string;
+  unitColorEnd?: string;
+}
+
+interface OrgUnitNodeData {
+  unitId: string;
+  name: string;
+  kind?: string;
+  kindVocabulary?: string;
+  label: string;
+  memberCount: number;
+  capabilities: AgentCapability[];
+  goals: AgentGoal[];
+  constraints: AgentConstraint[];
+  // From color resolution
+  kindColorStart?: string;
+  kindColorEnd?: string;
+}
+```
+
+### Adapter Decomposition — Three Pure Functions
+
+The adapter is decomposed into three independent pure functions chained by the org-diagram component. This keeps `toOrgGraph` as a pure YAML→GraphModel function, makes each step independently testable, and respects the protocol's "definition data parsed from YAML" semantics.
+
+```typescript
+// Step 1: Pure YAML → GraphModel (unchanged contract)
 export function toOrgGraph(yaml: string): OrgAdapterResult;
 
-// After
-export function toOrgGraph(
-  yaml: string,
-  agents?: Readonly<Record<string, AgentDescriptor>>,
-  options?: {
-    collapsedUnits?: ReadonlySet<string>;
-    kindColors?: Readonly<Record<string, { start: string; end: string }>>;
-  },
-): OrgAdapterResult;
+// Step 2: Merge descriptor data into agent node properties
+export function enrichWithDescriptors(
+  model: GraphModel,
+  agents: Readonly<Record<string, AgentDescriptor>>,
+): GraphModel;
 
-// OrgAdapterResult extended
-export interface OrgAdapterResult {
-  readonly model: GraphModel;
-  readonly yamlPaths: ReadonlyMap<string, readonly (string | number)[]>;
-  readonly nodeSizes: ReadonlyMap<string, { width: number; height: number }>;
-  readonly escalationChains: readonly { path: string[]; terminal: string }[];
-  readonly attestationSummary: readonly {
+// Step 3: Compute derived data from relationship graph
+export function computeDerivedData(
+  model: GraphModel,
+): DerivedOrgData;
+
+interface DerivedOrgData {
+  model: GraphModel;  // nodes enriched with supervision/escalation/backup/attestation
+  escalationChains: readonly { path: string[]; terminal: string }[];
+  attestationSummary: readonly {
     source: string; target: string;
     scope?: string; dimensions: string[];
     signalTypes?: string[];
@@ -90,18 +117,70 @@ export interface OrgAdapterResult {
 }
 ```
 
-`escalationChains` and `attestationSummary` are org-wide derived data consumed by the standalone panels (D4). They're computed during the same graph walk that produces per-agent derived properties.
+The org-diagram component chains them:
+```typescript
+const base = toOrgGraph(yaml);
+const enriched = this.agents
+  ? enrichWithDescriptors(base.model, this.agents)
+  : base.model;
+const derived = computeDerivedData(enriched);
+```
 
-When `collapsedUnits` contains a unit ID, the adapter omits that unit's agent nodes and their edges from the graph model, and produces the unit node at a compact height (~40px, header only).
+`toOrgGraph` stays pure — same YAML always produces the same graph. `enrichWithDescriptors` adds descriptor data. `computeDerivedData` walks the relationship graph for escalation chains, supervision targets, backup agents, and attestation grants.
 
-### Color Resolution in the Adapter
+### Additional Adapter Functions
 
-The adapter resolves kind-to-color mappings and stores them in node properties so stencils remain pure renderers:
+```typescript
+// Resolve kind colors into node properties
+export function resolveKindColors(
+  model: GraphModel,
+  kindColors?: Readonly<Record<string, { start: string; end: string }>>,
+): GraphModel;
 
-- **Unit nodes** get `kindColorStart` and `kindColorEnd` properties (resolved from `kindColors` option → default palette → auto-assignment fallback).
-- **Agent nodes** get `unitKind` (parent unit's kind) and `unitColorStart`/`unitColorEnd` (parent unit's resolved colors) so the agent stencil can tint its header, circle indicator, and border without accessing the parent node.
+// Compute node sizes based on populated content rows
+export function computeNodeSizes(
+  model: GraphModel,
+): ReadonlyMap<string, { width: number; height: number }>;
 
-This ensures stencils never need the palette or the parent graph — everything they render is in their own `node.properties`.
+// Filter collapsed units from the model
+export function applyCollapsedUnits(
+  model: GraphModel,
+  yamlPaths: ReadonlyMap<string, readonly (string | number)[]>,
+  collapsedUnits: ReadonlySet<string>,
+): { model: GraphModel; yamlPaths: ReadonlyMap<string, readonly (string | number)[]> };
+```
+
+The full pipeline in the org-diagram component:
+```typescript
+const base = toOrgGraph(yaml);
+let model = this.agents ? enrichWithDescriptors(base.model, this.agents) : base.model;
+const derived = computeDerivedData(model);
+model = resolveKindColors(derived.model, this.kindColors);
+const { model: layoutModel, yamlPaths } = this._collapsedUnits.size > 0
+  ? applyCollapsedUnits(model, base.yamlPaths, this._collapsedUnits)
+  : { model, yamlPaths: base.yamlPaths };
+const nodeSizes = computeNodeSizes(layoutModel);
+```
+
+### Derived Relationship Data (D3)
+
+`computeDerivedData` walks the relationship graph and stores per-agent derived data in `OrgAgentNodeData`:
+
+| Derived property | Computation |
+|-----------------|-------------|
+| `supervisionTargets` | Outgoing SUPERVISES edges from this agent → `string[]` of target agentIds |
+| `escalationChain` | Walk ESCALATES_TO from this agent to terminal → `string[]` ordered chain |
+| `backupAgents` | BACKS_UP edges involving this agent → `{agentId, scope?, direction}[]` |
+| `attestationGrants` | From SUPERVISES edges with attestation → `{targetAgentId, scope?, dimensions, signalTypes?}[]` |
+
+D3 is independent of D1 — derived data comes from the relationship graph (edges), not descriptor data.
+
+### Color Resolution
+
+`resolveKindColors` stores resolved colors in node properties so stencils remain pure renderers:
+
+- **Unit nodes** get `kindColorStart` and `kindColorEnd` (from `kindColors` param → default palette → auto-assignment fallback)
+- **Agent nodes** get `unitKind`, `unitColorStart`, `unitColorEnd` (from parent unit's resolved colors)
 
 ---
 
@@ -129,15 +208,15 @@ Replace the current minimal card with a multi-row rendered card matching the ref
 
 ### Row Rendering Rules
 
-Each row is conditionally rendered based on data availability:
+Each row is conditionally rendered based on data availability. Long values are truncated with ellipsis — no text wrapping. This keeps the height formula deterministic.
 
 | Row | Condition | Label style | Value style |
 |-----|-----------|-------------|-------------|
-| SLOT | `descriptor.slot` present | Gray 9px bold | Dark 9px |
-| CAPS | `descriptor.capabilities` non-empty | Gray 9px bold | Dark 9px, comma-separated |
+| SLOT | `slot` present | Gray 9px bold | Dark 9px |
+| CAPS | `capabilities` non-empty | Gray 9px bold | Dark 9px, comma-separated, truncated |
 | DISPOSITION | Any axis populated | Gray 9px bold | Color-coded pills (see below) |
-| SUPERVISES | `supervisionTargets` non-empty | Gray 9px bold | Dark 9px, comma-separated agentIds |
-| ESCALATES | `escalationChain` non-empty | Gray 9px bold | Red 9px, `→` separated chain |
+| SUPERVISES | `supervisionTargets` non-empty | Gray 9px bold | Dark 9px, comma-separated agentIds, truncated |
+| ESCALATES | `escalationChain` non-empty | Gray 9px bold | Red 9px, `→` separated chain, truncated |
 | BACKUP | `backupAgents` non-empty | Gray 9px bold | Dark 9px, with scope in parens |
 | ATTESTATION | `attestationGrants` non-empty | Gray 9px bold | Purple dimension pills + signal text |
 
@@ -163,7 +242,7 @@ Short names: `autonomy`, `rules`, `social`, `risk`, `conflict`.
 
 ### Node Sizing (D5)
 
-The adapter pre-computes each agent node's height based on populated rows:
+`computeNodeSizes` pre-computes each agent node's height based on populated rows:
 
 ```typescript
 const ROW_HEIGHT = 16;
@@ -173,23 +252,24 @@ const ATTESTATION_HEIGHT = 32;
 const PADDING = 12;
 const AGENT_WIDTH = 280;
 
-function computeAgentHeight(props: Record<string, unknown>): number {
+function computeAgentHeight(data: OrgAgentNodeData): number {
   let h = HEADER_HEIGHT + PADDING;
-  if (props['slot']) h += ROW_HEIGHT;
-  if ((props['capabilities'] as unknown[])?.length) h += ROW_HEIGHT;
-  const disposition = props['disposition'] as Record<string, string> | undefined;
-  if (disposition && Object.keys(disposition).length > 0) {
-    h += DISPOSITION_ROW_HEIGHT;  // pills wrap on one line
+  if (data.slot) h += ROW_HEIGHT;
+  if (data.capabilities?.length) h += ROW_HEIGHT;
+  if (data.disposition && Object.keys(data.disposition).length > 0) {
+    h += DISPOSITION_ROW_HEIGHT;
   }
-  if ((props['supervisionTargets'] as string[])?.length) h += ROW_HEIGHT;
-  if ((props['escalationChain'] as string[])?.length) h += ROW_HEIGHT;
-  if ((props['backupAgents'] as unknown[])?.length) h += ROW_HEIGHT;
-  if ((props['attestationGrants'] as unknown[])?.length) h += ATTESTATION_HEIGHT;
+  if (data.supervisionTargets?.length) h += ROW_HEIGHT;
+  if (data.escalationChain?.length) h += ROW_HEIGHT;
+  if (data.backupAgents?.length) h += ROW_HEIGHT;
+  if (data.attestationGrants?.length) h += ATTESTATION_HEIGHT;
   return h;
 }
 ```
 
 The `nodeSizes` map is passed to `computeElkLayout()` so ELK allocates correct space.
+
+**Height sync test:** A test renders nodes with known data, applies the same row-counting logic used by the stencil, and asserts it matches `computeAgentHeight`. This structurally couples sizing and rendering — drift fails in CI.
 
 ---
 
@@ -227,17 +307,21 @@ Style: `#ebf8ff` background, `#90cdf4` border, `#2b6cb0` text, 8px font, 4px rad
 
 ### Collapsible (D8)
 
-Clicking the unit header toggles collapse. The component maintains a `_collapsedUnits: Set<string>` state. On toggle, re-runs the adapter with `{ collapsedUnits }` and re-layouts.
+Clicking the unit header toggles collapse. The component maintains a `_collapsedUnits: Set<string>` state. On toggle, re-runs the pipeline with `applyCollapsedUnits` and re-layouts.
 
 Collapsed state: header bar only (~40px), no agents visible, member count badge shows how many are hidden.
 
+**ARIA:** Unit header gets `aria-expanded="true|false"` reflecting collapse state. Screen readers announce the toggle.
+
 ---
 
-## Edge Labels (D7)
+## Edge Labels (D7) and Selection Highlighting (D10)
 
-A pure function `applyOrgEdgeLabels(edges, selectedAgentId?)` post-processes ReactFlow edges:
+Two separate pure functions — label enrichment and selection highlighting are independent concerns:
 
-### Label Rules
+### `applyOrgEdgeLabels(edges: Edge[]): Edge[]`
+
+Sets ReactFlow label properties based on edge data:
 
 | Edge type | Label | Background | Border | Text color |
 |-----------|-------|------------|--------|------------|
@@ -250,17 +334,25 @@ A pure function `applyOrgEdgeLabels(edges, selectedAgentId?)` post-processes Rea
 
 ReactFlow properties set per edge: `label`, `labelStyle: { fontSize: 8, fontWeight: 600 }`, `labelBgStyle: { fill, stroke }`, `labelBgPadding: [3, 6]`, `labelBgBorderRadius: 3`.
 
-### Selection Highlighting (D10)
+### `applySelectionHighlight(edges: Edge[], nodes: Node[], selectedAgentId?: string): Edge[]`
 
-When `selectedAgentId` is provided, edges connected to that agent get `className: 'org-edge-highlighted'`. All other edges get `style: { opacity: 0.15 }`. Clearing selection restores all edges to full opacity.
+When `selectedAgentId` is provided, edges connected to that agent get `className: 'org-edge-highlighted'`. All other edges get `style: { opacity: 0.15 }`. Clearing selection (no `selectedAgentId`) restores all edges to full opacity.
+
+The org-diagram chains them:
+```typescript
+let edges = applyOrgEdgeLabels(rfEdges);
+edges = applySelectionHighlight(edges, rfNodes, this._selectedNodeId || undefined);
+```
 
 ---
 
-## Standalone Panel Components (D4)
+## Internal Sub-Panels (D4)
 
-### `<blocks-escalation-chain-panel>`
+These start as internal modules within `components/org-diagram/src/panels/`. Each is a Lit element exported from the org-diagram package. When a second consumer needs them, they get promoted to standalone packages — following the established promotion pipeline.
 
-**Location:** `components/escalation-chain-panel/`
+### `OrgEscalationChainPanel` (internal element)
+
+**File:** `components/org-diagram/src/panels/escalation-chain-panel.ts`
 
 **Properties:**
 
@@ -275,11 +367,11 @@ When `selectedAgentId` is provided, edges connected to that agent get `className
 **Rendering:**
 Red-tinted panel (`#fff5f5` background, `#feb2b2` border). Title: "ESCALATION CHAIN" bold red. Each chain as a horizontal sequence: agent names in dark text, red `→` arrows between them, `(terminal)` gray text after the final agent. The highlighted agent (if any) gets a bold + underline treatment.
 
-**ARIA:** `role="region"`, `aria-label="Escalation chains"`. Each chain is a list item.
+**ARIA:** `role="region"`, `aria-label="Escalation chains"`. Each chain rendered as an ordered list (`role="list"` + `role="listitem"`).
 
-### `<blocks-attestation-panel>`
+### `OrgAttestationPanel` (internal element)
 
-**Location:** `components/attestation-panel/`
+**File:** `components/org-diagram/src/panels/attestation-panel.ts`
 
 **Properties:**
 
@@ -296,9 +388,9 @@ Purple-tinted panel (`#faf5ff` background, `#d6bcfa` border). Title: "ATTESTATIO
 
 **ARIA:** `role="region"`, `aria-label="Attestation grants"`.
 
-### `<blocks-org-legend>`
+### `OrgLegend` (internal element)
 
-**Location:** `components/org-legend/`
+**File:** `components/org-diagram/src/panels/org-legend.ts`
 
 **Properties:**
 
@@ -335,9 +427,11 @@ The org-diagram component renders a floating tooltip on agent node mouseover. Th
 - Constraints (name + severity)
 - Briefing (truncated to 2 lines)
 
-**Positioning:** Above the hovered node, clamped to viewport. Dismisses on mouseout with a small delay (150ms) to prevent flicker when moving between adjacent cards.
+**Positioning:** Above the hovered node, clamped to viewport. Dismisses on mouseout with a 150ms delay to prevent flicker when moving between adjacent cards.
 
-**Relationship to property panel:** The tooltip is a quick preview. The property panel (on click/selection) shows everything the tooltip shows plus editing forms for editable fields (agentId, role via the org YAML).
+**ARIA:** The tooltip element has `role="tooltip"` and a unique ID. The triggering node references it via `aria-describedby`. The tooltip content is announced to screen readers when it appears.
+
+**Relationship to property panel:** The tooltip is a quick preview for scanning. The property panel (on click/selection) shows everything plus editing forms for editable fields (agentId, role via the org YAML).
 
 ---
 
@@ -362,7 +456,7 @@ The org-diagram composes the panels below the canvas:
 └─────────────────────────────────────────────────────────┘
 ```
 
-The panels receive data from the adapter result (`escalationChains`, `attestationSummary`). The legend receives `kindColors`. Agent click events from panels trigger node selection in the canvas.
+The panels receive data from `computeDerivedData` results (`escalationChains`, `attestationSummary`). The legend receives the resolved `kindColors`. Agent click events from panels trigger node selection in the canvas.
 
 ---
 
@@ -393,48 +487,36 @@ This type is defined in `graph-stencil-org/src/types.ts` alongside the existing 
 
 ## Testing
 
-### graph-stencil-org tests (adapter enrichment)
+### graph-stencil-org tests
 
-- **Descriptor merge:** Parse org YAML + agents map → verify agent nodes have descriptor properties (slot, disposition, capabilities)
-- **Missing descriptors:** Parse with partial agents map → verify missing descriptors produce basic nodes (agentId + role only)
-- **Supervision targets:** Verify each agent's `supervisionTargets` matches outgoing SUPERVISES edges
-- **Escalation chains:** Verify full chain walk from leaf to terminal (e.g. polecat-1 → witness-alpha → deacon → boot)
-- **Backup agents:** Verify bidirectional backup with scope
-- **Attestation grants:** Verify grants derived from SUPERVISES edges with attestation property
-- **Node sizing:** Verify `nodeSizes` map has correct heights based on populated rows. Agent with all fields → max height. Agent with only role → min height.
-- **Collapsed units:** Verify adapter omits agent nodes for collapsed units, produces compact unit height
-- **Edge labels:** Verify `applyOrgEdgeLabels` sets correct label/style on scoped edges, no label on unscoped SUPERVISES
+- **toOrgGraph purity:** Same YAML always produces same GraphModel regardless of external state
+- **enrichWithDescriptors:** Merge agents map → verify agent nodes have descriptor properties (slot, disposition, capabilities). Partial map → verify missing descriptors produce basic nodes.
+- **computeDerivedData:**
+  - Supervision targets: verify each agent's `supervisionTargets` matches outgoing SUPERVISES edges
+  - Escalation chains: verify full chain walk (e.g. polecat-1 → witness-alpha → deacon → boot)
+  - Backup agents: verify bidirectional backup with scope
+  - Attestation grants: verify grants derived from SUPERVISES edges with attestation
+- **resolveKindColors:** Default palette applied. Custom override applied. Unknown kinds auto-assigned.
+- **computeNodeSizes:** Agent with all fields → max height. Agent with only role → min height. Height sync test: row-counting logic matches stencil rendering.
+- **applyCollapsedUnits:** Collapsed unit omits agent nodes, produces compact unit height.
+- **applyOrgEdgeLabels:** Scoped SUPERVISES → label with scope badge. Unscoped SUPERVISES → no label. BACKS_UP → label with scope.
+- **applySelectionHighlight:** Selected agent → connected edges highlighted, others dimmed. No selection → all edges full opacity.
 
 ### org-diagram tests
 
-- **ARIA:** Verify role, aria-label on host, canvas, toolbar, tooltip
+- **ARIA:** Verify role, aria-label on host, canvas, toolbar, tooltip. Verify `aria-expanded` on collapsible units. Verify tooltip has `role="tooltip"`.
 - **Agents property:** Set `agents` map → verify rich card rendering (disposition pills visible)
 - **Hover tooltip:** Mouseover agent node → verify tooltip appears with goals/constraints
-- **Collapsible units:** Click unit header → verify member count shown, agents hidden. Click again → verify expanded.
+- **Collapsible units:** Click unit header → verify `aria-expanded` toggles, member count shown, agents hidden
 - **Selection highlighting:** Click agent → verify connected edges highlighted, others dimmed
-- **Layout override:** Set layoutStrategy → verify ELK options correct
 - **Kind colors:** Set custom kindColors → verify unit header uses override color
 
-### Standalone panel tests
+### Internal panel tests
 
-- **Escalation chain panel:** Pass chains → verify rendered paths with arrows and terminal markers. Click agent name → verify event emitted.
+- **Escalation chain panel:** Pass chains → verify rendered paths with arrows and terminal markers. Click agent name → verify event emitted. Verify ARIA list structure.
 - **Attestation panel:** Pass grants → verify dimension pills and signal pills rendered. Verify scope text.
 - **Legend:** Pass kindColors → verify swatches rendered. Toggle showDisposition → verify section hidden.
 - **ARIA:** All three panels: verify role and aria-label.
-
----
-
-## BlocksComponentRegistry Entries
-
-Per the component-registry-props protocol, each new component needs:
-
-| Component | Tag | Props interface | Registry entry |
-|-----------|-----|-----------------|----------------|
-| Escalation chain panel | `blocks-escalation-chain-panel` | `EscalationChainPanelProps` | Yes |
-| Attestation panel | `blocks-attestation-panel` | `AttestationPanelProps` | Yes |
-| Org legend | `blocks-org-legend` | `OrgLegendProps` | Yes |
-
-After adding entries, run `yarn workspace @casehubio/blocks-ui-schema run generate` to regenerate Zod schemas.
 
 ---
 
