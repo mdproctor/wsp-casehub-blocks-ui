@@ -1,1 +1,2 @@
 {"event":"land","repo":"blocks-ui","branch":"issue-156-zod-schemas","base_branch":"main","landed_sha":"9352293402ffaeff8235f27a6bceedb4a79ea79c","push_target":"upstream","mirrored":true,"stamped":true,"timestamp":"2026-09-07T11:17:26.081288+00:00"}
+{"event":"promote","branch":"issue-157-rich-org-diagram","files":[],"timestamp":"2026-09-10T23:20:24.751567+00:00"}
