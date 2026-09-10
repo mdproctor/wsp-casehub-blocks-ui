@@ -13,15 +13,15 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#157 — Issue #157 ← active
-  - [x] Batch 1: Adapter enrichment
-    - [x] Task 1: Types and enrichWithDescriptors
-    - [x] Task 2: computeDerivedData
-  - [x] Batch 2: Visual helpers
-    - [x] Task 3: resolveKindColors computeNodeSizes applyCollapsedUnits
-    - [x] Task 4: Edge label and selection highlight
-  - [x] Batch 3: Rich stencils
-    - [x] Task 5: Rich org-agent and org-unit stencils
-  - [x] Batch 4: Integration
-    - [x] Task 6: Wire pipeline into blocks-org-diagram
-    - [x] Task 7: Internal panels and hover tooltip
-    - [x] Task 8: OrgDiagramProps registry entry
+  - [ ] Batch 1: Engine framework
+    - [ ] Task 1: Types + FactBase
+    - [ ] Task 2: OrgLayoutEngine core
+  - [ ] Batch 2: Classification rules
+    - [ ] Task 3: Classification rules
+  - [ ] Batch 3: Layout rules
+    - [ ] Task 4: Layout transform + constraint rules
+  - [ ] Batch 4: Integration
+    - [ ] Task 5: Wire engine + delete old files
+  - [ ] Batch 5: Explain + composition
+    - [ ] Task 6: Explain mode
+    - [ ] Task 7: Archetype composition tests
