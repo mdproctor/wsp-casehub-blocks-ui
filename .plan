@@ -13,15 +13,15 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#157 — Issue #157 ← active
-  - [ ] Batch 1: Engine framework
-    - [ ] Task 1: Types + FactBase
-    - [ ] Task 2: OrgLayoutEngine core
-  - [ ] Batch 2: Classification rules
-    - [ ] Task 3: Classification rules
-  - [ ] Batch 3: Layout rules
-    - [ ] Task 4: Layout transform + constraint rules
-  - [ ] Batch 4: Integration
-    - [ ] Task 5: Wire engine + delete old files
-  - [ ] Batch 5: Explain + composition
-    - [ ] Task 6: Explain mode
-    - [ ] Task 7: Archetype composition tests
+  - [x] Batch 1: Engine framework
+    - [x] Task 1: Types + FactBase
+    - [x] Task 2: OrgLayoutEngine core
+  - [x] Batch 2: Classification rules
+    - [x] Task 3: Classification rules
+  - [x] Batch 3: Layout rules
+    - [x] Task 4: Layout transform + constraint rules
+  - [x] Batch 4: Integration
+    - [x] Task 5: Wire engine + delete old files
+  - [x] Batch 5: Explain + composition
+    - [x] Task 6: Explain mode
+    - [x] Task 7: Archetype composition tests
