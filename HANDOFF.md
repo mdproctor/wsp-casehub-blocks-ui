@@ -8,105 +8,80 @@
 
 ### What Was Done
 
-**Session 6 — design + implementation of #157:**
+**Session 7 — layout rule engine + cross-repo refactoring:**
 
-- Brainstormed and captured 10 design decisions (D1-D10) with light decision review and light post-spec review
-- Wrote full design spec: `specs/issue-157-rich-org-diagram/2026-09-08-rich-org-diagram-design.md`
-- Wrote implementation plan: `plans/2026-09-08-rich-org-diagram.md`
-- Implemented all 8 tasks across 4 batches:
+- Designed and implemented a forward-chaining layout rule engine
+- Refactored generic engine into casehub-pages (graph-renderer), org-specific layer stays in blocks-ui
+- Added supervision panel and chip bar UI for panel toggling
 
-**Batch 1 — Adapter enrichment (graph-stencil-org):**
-- `types.ts`: Added `AgentDescriptor`, `DispositionAxes`, `OrgAgentNodeData`, `OrgUnitNodeData`
-- `adapter/enrichment.ts`: `enrichWithDescriptors(model, agents)` — merges descriptor data into agent node properties
-- `adapter/derived-data.ts`: `computeDerivedData(model)` — walks relationship graph for supervision targets, escalation chains (with cycle detection), backup agents, attestation grants
+**Layout Rule Engine (7 commits → then refactored to pages):**
+1. Types + FactBase — Phase, Fact, FactBase, LayoutRule, ClassificationRule, HardConstraint, CompositionReport
+2. LayoutEngine — phase execution, group resolution (mutual exclusion), composition validation, explain mode
+3. Classification rules — 5 generic structural detectors + archetype selector (replaces archetype-detection.ts)
+4. Layout rules — horizontal-internal, vertical-stacking, position-aware-handles (parameterized by node type)
+5. Hard constraints — no-container-overlap, child-containment, no-sibling-overlap
+6. Integration — wired engine into blocks-org-diagram.ts, deleted 8 old scattered files
+7. Explain mode + archetype composition tests for 6 archetypes
 
-**Batch 2 — Visual helpers (graph-stencil-org):**
-- `adapter/kind-colors.ts`: `resolveKindColors(model, kindColors?)` — default palette + override, auto-assigns unknown kinds
-- `adapter/node-sizing.ts`: `computeNodeSizes(model)` — pre-computes agent card heights based on populated rows
-- `adapter/collapse.ts`: `applyCollapsedUnits(model, yamlPaths, collapsed)` — filters agent nodes + edges for collapsed units
-- `adapter/edge-labels.ts`: `applyOrgEdgeLabels(edges)` — sets ReactFlow native label/labelBgStyle per edge type
-- `adapter/selection-highlight.ts`: `applySelectionHighlight(edges, selectedNodeId?)` — CSS class on connected edges, opacity on others
+**Cross-Repo Refactoring to Pages:**
+- Generic layout engine moved to `pages/packages/graph-renderer/src/layout/` (5 new files)
+- blocks-ui now re-exports from `@casehubio/graph-renderer` with thin wrappers
+- blocks-ui retains only: `sizingClassifier` (org-specific agent card heights), node type bindings (`'org-unit'`, `'org-agent'`)
+- Pages SNAPSHOT built and installed, `.casehub-packages` updated (both `src/` and `dist/`)
 
-**Batch 3 — Rich stencils (graph-stencil-org):**
-- `stencils/org-agent.ts`: Multi-row card with header (colored circle + role badge), conditional rows (SLOT, CAPS, DISPOSITION pills, SUPERVISES, ESCALATES, BACKUP, ATTESTATION)
-- `stencils/org-unit.ts`: Gradient header by kind color, kind badge, member count, capability pills
+**UI Enhancements:**
+- Supervision hierarchy panel (blue) — aggregated supervisor → targets view
+- Chip bar (ESC / SUP / ATT / LGD) — unified toggle for all panels, replaces toolbar Legend button
+- Derived data enriched with `supervisionSummary` in `DerivedOrgData`
 
-**Batch 4 — Component integration (org-diagram):**
-- `blocks-org-diagram.ts`: `agents` + `kindColors` properties, full adapter pipeline in `_adaptYaml`, lightweight `_updateEdgeStyles` for selection changes, collapse toggle handler, hover/panel agent click handlers
-- `panels/escalation-chain-panel.ts`: Red-tinted panel with chain paths, terminal markers, agent click events
-- `panels/attestation-panel.ts`: Purple-tinted panel with dimension pills, signal pills, scope text
-- `panels/org-legend.ts`: Full legend — relationships, unit kinds, disposition axes, scope & attestation, eidos model layers
-- `panels/tooltip.ts`: Floating hover tooltip with agent properties, 150ms dismiss delay
-- `index.ts` + `OrgDiagramProps` in BlocksComponentRegistry + Zod schema regeneration
-- `examples/src/pages/org-diagram-page.ts`: Gastown showcase with full agent descriptors
+**Test results:** 151 graph-stencil-org tests, 13 org-diagram tests, 11 schema tests — all pass.
 
-**Test results:** 98 graph-stencil-org tests pass (12 new test files), 11 schema tests pass (registry completeness + staleness). 3 pre-existing test file failures from `@xyflow/react` dist issue.
+### CRITICAL: Examples Shell Breakage
 
-### CRITICAL: Blocking Issue — Examples Shell Freeze
+Multiple examples are broken in the dev shell. **Not clear if this session caused it or pre-existing.** User has started a separate session to fix all broken examples before continuing #157 work.
 
-**The examples app (`examples/src/main.ts`) freezes in the browser.** This blocks manual visual verification of the org diagram.
-
-**Root cause:** `.casehub-packages/packages/graph-renderer/dist/mapping.js` contains unstripped `import type {}` — TypeScript syntax in a `.js` file. esbuild (used by vite's dependency scanner) can't parse it.
-
-**File:** `.casehub-packages/packages/graph-renderer/dist/mapping.js`
-**Lines:** Originally lines 1-4 had `import type { ... } from '...'` statements that should have been stripped during the casehub-pages build.
-
-**Why it surfaced now:** This was a latent defect. The #157 changes added new import paths (panel files importing from `@casehubio/graph-stencil-org`, the org-diagram component importing 7 new functions). This widened vite's dependency scan surface, causing it to discover and attempt to parse the broken dist file. Previously, vite's scan avoided this file path.
-
-**Local workaround applied (not committed — in `.casehub-packages` which is gitignored):** Manually stripped the `import type` lines from `mapping.js`. This is fragile — the file comes from a Maven SNAPSHOT artifact and will be overwritten on next `mvn install`.
-
-**Proper fix:** The casehub-pages build for `@casehubio/graph-renderer` must strip TypeScript type imports during compilation. This is likely a tsconfig issue — `isolatedModules: true` or the build tool not running type erasure on `.js` output. The fix belongs in `casehub-pages`, not `blocks-ui`.
-
-**Verification:** The org diagram component DOES work correctly in isolation — a standalone test page (`examples/org-test.html`) rendered successfully via Playwright and a screenshot was captured showing the rich unit container, agent cards, legend, toolbar, and edge routing. The issue is ONLY the examples shell loading all 50+ page modules simultaneously through vite.
+Known from session 6: `.casehub-packages/packages/graph-renderer/dist/mapping.js` had unstripped `import type {}` — a casehub-pages build issue. A local workaround was applied (in gitignored `.casehub-packages`).
 
 ### What's Left To Do
 
-1. **Fix the graph-renderer dist issue** (in casehub-pages or local workaround) so the examples shell loads
-2. **Manually verify the rich org diagram** in the examples shell — compare with the reference SVG at `casehubio/eidos/docs/diagrams/gastown-org-structure.svg`
-3. **Visual QA and iteration** — the Gastown example should show:
-   - Purple gradient header on Oversight Chain, blue gradient on Rig Alpha / Rig Beta
-   - Rich agent cards with SLOT, DISPOSITION pills (color-coded), SUPERVISES targets, ESCALATES chain (red), BACKUP info, ATTESTATION pills
-   - Scope badges on edges (purple pills: "scope: rig-monitoring")
-   - Escalation chain panel (red) showing 3 chains
-   - Attestation grants panel (purple) showing deacon → witness attestations
-   - Legend with all sections
-   - Collapsible units (click header to collapse/expand)
-   - Hover tooltip (mouseover agent for quick property view)
-   - Selection highlighting (click agent to dim non-connected edges)
-4. **Fix any visual issues** found during QA
-5. **Run `work end`** to close the branch (code review, squash, push)
+1. **Fix broken examples** (separate session in progress)
+2. **Edge hover tooltips** — hovering over edge labels/lines should show full label text (labels are often clipped). Needs `graph:edge:mouseenter`/`graph:edge:mouseleave` events added to pages graph-canvas (ReactFlowApp bridge). Cross-repo change.
+3. **Visual QA** — verify org diagram renders correctly with all 4 archetypes after examples are fixed
+4. **Run `work end`** to close the branch (code review, squash, push)
 
-### Deferred from Issue #157 (documented in spec)
+### Deferred from Issue #157
 
-- Draggable agent repositioning within units (separate concern from information density)
-- Double-click inline editing (current editing is via property panel + YAML pane)
+- Draggable agent repositioning within units
+- Double-click inline editing
+- Soft constraint scoring (bounded search over alternative rule selections)
+- User overrides / pins (YAML-stored layout pinning)
 
-### Key Files Changed
+### Key Files Changed (this session)
 
-| Package | Files | What |
-|---------|-------|------|
-| `packages/graph-stencil-org/src/types.ts` | Modified | +4 interfaces (AgentDescriptor, DispositionAxes, OrgAgentNodeData, OrgUnitNodeData) |
-| `packages/graph-stencil-org/src/adapter/` | 7 new files | enrichment, derived-data, kind-colors, node-sizing, collapse, edge-labels, selection-highlight |
-| `packages/graph-stencil-org/src/stencils/` | 2 modified, 1 new test | Rich org-agent + org-unit stencils, render.test.ts |
-| `packages/graph-stencil-org/src/index.ts` | Modified | Exports all new functions + types |
-| `components/org-diagram/src/blocks-org-diagram.ts` | Modified | Pipeline wiring, agents/kindColors props, panels, tooltip |
-| `components/org-diagram/src/panels/` | 4 new files | escalation-chain-panel, attestation-panel, org-legend, tooltip |
-| `components/org-diagram/src/index.ts` | New | OrgDiagramProps export |
-| `components/org-diagram/package.json` | Modified | main → dist/index.js |
-| `packages/blocks-ui-schema/src/registry.ts` | Modified | OrgDiagramProps registry entry |
-| `examples/src/pages/org-diagram-page.ts` | Modified | Gastown showcase with agents map |
+| Repo | Package | Files | What |
+|------|---------|-------|------|
+| pages | graph-renderer/src/layout/ | 5 new + index.ts | Generic LayoutEngine, types, FactBase, classifiers, layout-rules |
+| blocks-ui | graph-stencil-org/src/layout/ | 7 modified | Thin re-exports from graph-renderer, org-specific sizing classifier |
+| blocks-ui | org-diagram/src/ | 3 modified + 1 new | Engine wiring, chip bar, supervision panel |
+| blocks-ui | org-diagram/src/panels/ | 1 new | supervision-chain-panel.ts |
 
-### Commits on Branch (project repo)
+### Commits on Branch (this session — blocks-ui)
 
 ```
-1bdbd7c fix(org-diagram): prevent render loop and ELK layout hang
-2c02a34 feat(examples): add Gastown rich org diagram showcase
-c2295d2 feat(org-diagram): add OrgDiagramProps to BlocksComponentRegistry
-41b4947 feat(org-diagram): add escalation chain, attestation, legend panels and hover tooltip
-229abdb feat(org-diagram): wire decomposed adapter pipeline with agents, kindColors, collapse
-11c467f feat(graph-stencil-org): rich agent cards and unit containers with full information density
-d6e0950 feat(graph-stencil-org): add edge label and selection highlight post-processors
-20e3c2d feat(graph-stencil-org): add color resolution, node sizing, and collapse filtering
-240c2f7 feat(graph-stencil-org): add computeDerivedData
-792c178 feat(graph-stencil-org): add AgentDescriptor types and enrichWithDescriptors
+1a2bde5 refactor(graph-stencil-org): delegate generic layout engine to pages graph-renderer
+1d43676 feat(org-diagram): move legend to chip bar, remove toolbar legend button
+7f63aa9 feat(org-diagram): add supervision panel and chip bar for panel toggles
+b189ac0 test(graph-stencil-org): add archetype composition tests for layout engine
+c471e2b feat(graph-stencil-org): add explain mode to layout engine
+b5b418c refactor(graph-stencil-org): wire layout engine, delete old scattered layout files
+d4d23de feat(graph-stencil-org): add layout transform and hard constraint rules
+eb2730a feat(graph-stencil-org): add classification rules replacing archetype detection
+9eed42f feat(graph-stencil-org): add OrgLayoutEngine with phase execution and composition validation
+f01cbbe feat(graph-stencil-org): add layout rule engine types and FactBase
+```
+
+### Commits on Branch (this session — pages)
+
+```
+38148fa8 feat(graph-renderer): add generic layout rule engine
 ```
