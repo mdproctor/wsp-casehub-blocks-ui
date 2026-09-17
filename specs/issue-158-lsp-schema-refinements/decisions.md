@@ -60,3 +60,28 @@
 **Sources:** Zod 4 metadata API, pages-builder-shell property palette, generate-domain-schemas.ts (existing generator)
 **Exploration:** quick
 **Status:** captured
+
+## D7: Editor ↔ diagram sync — asymmetric protocol
+
+**Choice:** Asymmetric sync protocol. Editor → Diagram: full YAML string push via CefMessageRouter on every DocumentListener change (simple, read-only rendering). Diagram → Editor: CST-preserving edits produce minimal deltas (offset, length, newText) sent back to Kotlin, applied as document.replaceString() in a WriteAction. The diagram never re-serializes the whole document — only the changed characters are transmitted.
+**Alternatives:**
+- Full YAML push in both directions — simple but destroys comments, blank lines, and custom spacing on diagram-initiated edits.
+- Incremental change tracking in both directions — complex protocol, must maintain synchronized document state on both sides, fragile.
+**Rationale:** Comments, formatting, and blank lines are user intent that must survive structural edits. CST-preserving edits (already used by applySwfPropertyEdit in graph-stencil-swf and computeMinimalChanges in pages-builder) produce targeted patches without touching surrounding text. Full push for rendering is simple and stateless — the diagram components already handle full re-parse efficiently.
+**Trade-offs:** Diagram components must use CST manipulation (yaml library's CST API) rather than parse-modify-serialize for all structural edits. This is already the established pattern across the codebase.
+**Depends on:** D6 (CefMessageRouter is the transport), D4 (split editor architecture)
+**Sources:** applySwfPropertyEdit (graph-stencil-swf, CST-preserving), computeMinimalChanges (pages-builder/diff-patch.ts), yaml-core CST primitives, DocumentListener + WriteAction (IntelliJ API)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D6: JCEF diagram loading — bundled HTML + JS in plugin resources
+
+**Choice:** The esbuild bundler produces a `diagram-panel.bundle.js` alongside the existing `server-node.bundle.cjs`. A small HTML shell in plugin resources loads this bundle. Kotlin creates a `JBCefBrowser`, loads the HTML from plugin resources, and communicates via `CefMessageRouter` (JS ↔ Kotlin bridge). Self-contained, works offline, same bundling pattern as the LSP server.
+**Alternatives:**
+- Dev server with hot reload (Vite) — viable for development only, not distribution. Could complement bundled approach as dev convenience but not worth building in phase 1.
+**Rationale:** Bundled resources are self-contained, require no external dependencies at runtime, and follow the same pattern as the LSP server bundle. Plugin zip size increases but diagram components + Lit + graph renderer are modest.
+**Trade-offs:** No hot reload during development — must rebuild bundle to see changes. Acceptable for phase 1; dev server convenience can be added later if iteration speed becomes a bottleneck.
+**Depends on:** D4 (JCEF is the visual column in the split editor)
+**Sources:** build-bundle.js (existing esbuild pattern), JBCefBrowser API, CefMessageRouter (JS ↔ Kotlin bridge)
+**Exploration:** quick
+**Status:** captured
