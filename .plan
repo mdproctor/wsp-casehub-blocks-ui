@@ -16,11 +16,11 @@ flyway-next-v: none
 - [x] casehubio/blocks-ui#159 — migrate addElement/addOrgUnit to yamlAppendWithUniqueName
 - [x] casehubio/blocks-ui#160 — extend yamlSwitchVariant for multi-key patterns
 - [ ] casehubio/blocks-ui#161 — domain schema assembly for IntelliJ LSP plugin ← active
-  - [ ] Batch 1: Bundle foundation
-    - [ ] Task 1: Shared DIAGRAM_TAGS constant
-    - [ ] Task 2: Esbuild diagram bundle + HTML shell
-  - [ ] Batch 2: IntelliJ split editor
-    - [ ] Task 3: JCEF panel + theme + sync
-    - [ ] Task 4: Split editor provider + Gradle wiring
-  - [ ] Batch 3: CI pipeline
-    - [ ] Task 5: GitHub Actions workflow
+  - [x] Batch 1: Bundle foundation
+    - [x] Task 1: Shared DIAGRAM_TAGS constant
+    - [x] Task 2: Esbuild diagram bundle + HTML shell
+  - [x] Batch 2: IntelliJ split editor
+    - [x] Task 3: JCEF panel + theme + sync
+    - [x] Task 4: Split editor provider + Gradle wiring
+  - [x] Batch 3: CI pipeline
+    - [x] Task 5: GitHub Actions workflow
