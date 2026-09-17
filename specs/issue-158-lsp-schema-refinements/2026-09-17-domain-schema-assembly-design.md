@@ -96,7 +96,34 @@ Asymmetric — optimized for each direction:
 
 **Editor → Diagram (rendering):** `DocumentListener` fires on text changes. Full YAML string pushed to JCEF via `executeJavaScript()`. Debounced (~150ms) to avoid noise during rapid typing. The diagram component accepts YAML as a property and handles re-parse/re-render internally (components already diff efficiently).
 
-**Diagram → Editor (structural edits):** All diagram components use `DiagramBaseMixin`, which stores `_currentYaml: string` as internal state. Edit methods (`_applyPropertyEdit`, `_applyGraphEdit`, `switch*` functions) use the `yaml` library's CST API internally for CST-preserving edits but return a **complete new YAML string** — not a delta. The JCEF bridge layer captures the old and new YAML strings and computes minimal text patches using a diff algorithm (same approach as `computeMinimalChanges` in `pages-builder/diff-patch.ts`). Each edit produces a delta: `{ offset: number, length: number, newText: string }`. The bridge sends the delta to Kotlin via `CefMessageRouter`. Kotlin applies it as `document.replaceString(offset, offset + length, newText)` inside a `WriteAction`. This preserves comments, blank lines, and custom spacing — only the changed characters are modified. The diagram components remain unchanged; the diffing concern is localized to the bridge layer.
+**Content sanitization:** YAML content embedded in `executeJavaScript()` calls must be JSON-encoded to prevent JavaScript injection from crafted YAML files. A YAML string containing `'); maliciousCode(); //` would break out of a naive string literal. The Kotlin side uses `Json.encodeToString(yamlContent)` before interpolation: `browser.executeJavaScript("window.updateYaml($jsonEncoded)", "", 0)`. JSON encoding properly escapes quotes, backslashes, newlines, and control characters. This applies to all Kotlin → JS string transfers (YAML content, theme CSS, cursor paths).
+
+**Diagram → Editor (structural edits):** All diagram components use `DiagramBaseMixin`, which stores `_currentYaml: string` as internal state. Edit methods (`_applyPropertyEdit`, `_applyGraphEdit`, `switch*` functions) use the `yaml` library's CST API internally for CST-preserving edits but return a **complete new YAML string** — not a delta.
+
+**Change observability:** `_currentYaml` is a plain `protected` field in `DiagramBaseMixin` — no Lit decorator, no reactive notification, no `dispatchEvent` call. The bridge layer needs to observe changes. `DiagramBaseMixin` is modified to replace the plain field with a getter/setter pair that dispatches a `yaml-changed` custom event:
+
+```typescript
+// In DiagramBaseMixin:
+private _currentYamlBacking = '';
+
+protected get _currentYaml(): string { return this._currentYamlBacking; }
+protected set _currentYaml(value: string) {
+    const old = this._currentYamlBacking;
+    this._currentYamlBacking = value;
+    if (old !== value) {
+        this.dispatchEvent(new CustomEvent('yaml-changed', {
+            detail: { yaml: value, oldYaml: old },
+            bubbles: false,
+        }));
+    }
+}
+```
+
+This captures ALL write paths — the 11 sites in `DiagramBaseMixin` (edit, undo, redo, load, property change) AND the 6 sites in concrete components like `casehub-diagram.ts` (`switchFunctionType`, `switchBindingTarget`, `switchTriggerType`, `switchMcpTransport`, `switchModelProvider`, `removeElement`) — because TypeScript compiles `this._currentYaml = ...` to the setter call. Individual diagram components remain unchanged. The event includes both `oldYaml` and `yaml`, providing the bridge with both values for diff computation without extra state.
+
+The JCEF bridge layer listens for `yaml-changed` events and computes minimal text patches using a diff algorithm (same approach as `computeMinimalChanges` in `pages-builder/diff-patch.ts`). Each edit produces a delta: `{ offset: number, length: number, newText: string }`. The bridge sends the delta to Kotlin via `CefMessageRouter`. Kotlin applies it as `document.replaceString(offset, offset + length, newText)` inside a `WriteAction`. This preserves comments, blank lines, and custom spacing — only the changed characters are modified.
+
+**Bridge-side echo suppression:** The setter fires on ALL `_currentYaml` writes, including editor→diagram pushes (when `updated()` sets `_currentYaml = this.yaml`). The bridge layer sets `_pushing = true` before setting the component's `yaml` property and ignores `yaml-changed` events during this window. This mirrors the Kotlin-side `suppressEcho` flag — symmetric echo suppression on both ends of the bridge.
 
 **Echo suppression:** Bidirectional sync creates an echo loop: a diagram edit sends a delta to Kotlin → Kotlin applies `document.replaceString()` → `DocumentListener.documentChanged()` fires → attempts to push the full YAML back to JCEF → `DiagramBaseMixin.updated()` resets `_undoStack`, `_redoStack`, and `_selectedNodeId`, destroying undo history and selection.
 
