@@ -6,6 +6,8 @@
 
 ## Overview
 
+**Relationship to issue-407:** This spec is the Batch 4 design pass deferred in the [LSP Server + IDE Plugins spec](../../docs/specs/issue-407-lsp-ide-plugins/2026-09-10-lsp-ide-plugins-design.md). That spec explicitly defers "Diagram Webview" as Batch 4 with "Separate design pass covering: bidirectional sync model, webview lifecycle, theme sync, component bundling." Issue #161 is scoped under the same #158 LSP schema refinements umbrella and delivers the deferred Batch 4 work. Where this spec overlaps with issue-407 (layered architecture, format registrations, file type detection), issue-407 remains authoritative — this spec adds only the diagram webview, workbench extensibility, and CI concerns that issue-407 deferred.
+
 Extend the CaseHub YAML IntelliJ plugin beyond pure LSP text intelligence to include visual diagram editing, make the web-based YAML workbench extensible for domain formats, and add CI distribution.
 
 Three concerns:
@@ -61,13 +63,17 @@ IntelliJ's `TextEditorWithPreview` API provides a split pane: native text editor
 
 A `CaseHubFileEditorProvider` detects file type by extension, wraps the native YAML editor, and creates a `JBCefBrowser` panel rendering the appropriate diagram web component. The provider is registered in `plugin.xml` for CaseHubYAML files.
 
+**JCEF availability fallback:** JCEF is not available in all environments — Remote Development (Gateway, SSH, WSL), headless/test mode, and some Linux configurations with missing Chromium dependencies. The provider checks `JBCefApp.isSupported()` before creating the split editor. When JCEF is unavailable, it falls back to the native text editor alone (retaining full LSP intelligence) and shows a one-time notification explaining that the visual diagram panel requires a local IDE. This is the same pattern used by IntelliJ's Markdown plugin.
+
 ### JCEF Diagram Panel
 
 The diagram web components (LitElement) are bundled via esbuild into `diagram-panel.bundle.js` — the same pattern as the LSP server bundle. A small HTML shell in plugin resources loads the bundle. The Kotlin side creates a `JBCefBrowser`, loads the HTML from plugin resources via `file://` protocol.
 
+**Bundle composition and size:** The diagram components share heavy dependencies — React, ReactFlow, ELK layout engine (via `@casehubio/graph-renderer`), Lit 3 (via `@casehubio/pages-data`), and the `yaml` library. These shared dependencies dominate the bundle. Phase 1 bundles only `casehub-diagram` (one format), so per-format splitting is not yet needed. When remaining formats are wired, a monolithic bundle including all four formats shares the common dependency tree — the format-specific stencil code is small relative to React+ReactFlow+ELK. The bundle size target is ≤3MB gzipped; if the monolithic bundle exceeds this after wiring all formats, per-format code-splitting via esbuild `splitting: true` is the fallback. Since the JCEF panel loads from local plugin resources (`file://` protocol), network transfer is not a concern — only plugin distribution size and initial parse time matter.
+
 Communication uses `CefMessageRouter`:
 - **Kotlin → JS**: `cefBrowser.cefBrowser.executeJavaScript()` to push YAML content
-- **JS → Kotlin**: `CefMessageRouterHandler` receives messages (cursor position, CST edit deltas)
+- **JS → Kotlin**: `CefMessageRouterHandler` receives messages (cursor position, edit deltas)
 
 ### Sync Protocol
 
@@ -75,7 +81,7 @@ Asymmetric — optimized for each direction:
 
 **Editor → Diagram (rendering):** `DocumentListener` fires on text changes. Full YAML string pushed to JCEF via `executeJavaScript()`. Debounced (~150ms) to avoid noise during rapid typing. The diagram component accepts YAML as a property and handles re-parse/re-render internally (components already diff efficiently).
 
-**Diagram → Editor (structural edits):** The diagram uses the `yaml` library's CST API to compute minimal text patches. Each edit produces a delta: `{ offset: number, length: number, newText: string }`. The JCEF panel sends the delta to Kotlin via `CefMessageRouter`. Kotlin applies it as `document.replaceString(offset, offset + length, newText)` inside a `WriteAction`. This preserves comments, blank lines, and custom spacing — only the changed characters are modified.
+**Diagram → Editor (structural edits):** All diagram components use `DiagramBaseMixin`, which stores `_currentYaml: string` as internal state. Edit methods (`_applyPropertyEdit`, `_applyGraphEdit`, `switch*` functions) use the `yaml` library's CST API internally for CST-preserving edits but return a **complete new YAML string** — not a delta. The JCEF bridge layer captures the old and new YAML strings and computes minimal text patches using a diff algorithm (same approach as `computeMinimalChanges` in `pages-builder/diff-patch.ts`). Each edit produces a delta: `{ offset: number, length: number, newText: string }`. The bridge sends the delta to Kotlin via `CefMessageRouter`. Kotlin applies it as `document.replaceString(offset, offset + length, newText)` inside a `WriteAction`. This preserves comments, blank lines, and custom spacing — only the changed characters are modified. The diagram components remain unchanged; the diffing concern is localized to the bridge layer.
 
 **Diagram → Editor (cursor sync):** When the user clicks a node in the diagram, the JCEF panel sends the YAML path (e.g., `spec.workers[1].name`). Kotlin resolves the path to a document offset via the PSI tree and moves the caret.
 
@@ -85,13 +91,13 @@ The `CaseHubFileEditorProvider` maps file extension to diagram component:
 
 | Extension | Diagram Component |
 |-----------|-------------------|
-| `.case.yaml` | `casehub-diagram` (read-only case flow) |
+| `.case.yaml` | `casehub-diagram` (full case editor with graph editing, property palette, undo/redo) |
 | `.swf.yaml` | `swf-diagram` |
-| `.htn.yaml` | `blocks-dag-viewer` |
-| `.org.yaml` | `org-diagram` |
+| `.htn.yaml` | `htn-diagram` |
+| `.org.yaml` | `blocks-org-diagram` |
 | `.page.yaml` | Page preview (via `renderPreview` callback pattern) |
 
-This mapping is a static config in the provider — one entry per format.
+This mapping mirrors the canonical `DIAGRAM_TAGS` record in `blocks-diagram-workbench` (`components/diagram-workbench/src/diagram-workbench.ts`), which already maps format → component tag for runtime routing (`{swf: 'swf-diagram', case: 'casehub-diagram', htn: 'htn-diagram'}`). The JCEF panel does NOT embed `blocks-diagram-workbench` — that component is case-centric with drill-down navigation (case → embedded SWF/HTN), designed for runtime case exploration. The JCEF panel opens individual format files directly (e.g., `.swf.yaml` shows `swf-diagram` at the top level), which the workbench's hardcoded case root level doesn't support. The format → tag mapping will be extracted to a shared constant in `blocks-ui-core` to avoid duplication between the workbench and the provider.
 
 ### Extensible Workbench SPI (Pages)
 
@@ -99,14 +105,14 @@ This mapping is a static config in the provider — one entry per format.
 
 ```typescript
 interface WorkbenchFormatRegistration {
-  formatId: string;
-  schema: z.ZodType;              // Zod schema — tree, properties, fragment rules derived at runtime
+  formatId: string;                // Must match a FormatRegistration.formatId in the schema registry
   visualElement: string;           // Custom element tag name for the visual column
-  extensions: string[];            // File extensions this format handles
 }
 ```
 
-The workbench derives everything else from the Zod schema via Zod 4 introspection:
+**Relationship to `FormatRegistration`:** The existing `FormatRegistration` in `@casehubio/pages-lsp` (`pages-lsp/src/types.ts`) already carries `formatId`, `extensions`, and `documentSchema` (Zod) for each format — all four domain formats are already registered in `packages/lsp-schemas/src/formats/`. `WorkbenchFormatRegistration` deliberately does NOT duplicate these fields. Instead, the workbench resolves the Zod schema and extensions from the `SchemaRegistry` using the `formatId`. This eliminates the maintenance liability of two registration interfaces with overlapping fields that could diverge.
+
+The workbench derives everything else from the Zod schema (obtained via the registry) using Zod 4 introspection:
 - **Tree structure**: `z.array()` → expandable collection node, `z.object()` → leaf with named keys
 - **Property forms**: `z.string()` → text input, `z.enum([...])` → dropdown, `z.number().min().max()` → number with range, `z.boolean()` → toggle, `z.string().datetime()` → date picker
 - **Fragment rules**: Array membership determines valid paste targets — a node serialized from `spec.capabilities[0]` can paste into any `spec.capabilities[]` slot
@@ -128,9 +134,11 @@ Schema-driven property editing in IntelliJ's native UI. The LSP server can expos
 
 ### Structural Editing (Phase 3)
 
-Clipboard-based structural editing following the `BuilderClipboard` pattern from pages. In IntelliJ, the tree (native Structure view) handles cut/copy/paste via IntelliJ's native clipboard and undo system. The JCEF diagram handles its own structural operations and syncs back via CST delta patches (D7).
+**UX rationale:** The native Structure view and JCEF diagram serve different interaction models. The Structure view provides keyboard-driven tree editing — speed search, Ctrl+F12 file structure popup, bookmarks, breadcrumbs, and IntelliJ's native cut/copy/paste with undo integration. The JCEF diagram provides mouse-driven visual editing with spatial layout awareness. Users who prefer keyboard-centric workflows (common among IntelliJ power users) can add/remove/reorganize nodes from the Structure view without switching to the diagram. The two views complement each other; neither replaces the other.
 
-Validation rules (fragment type → valid targets) are expressed as data (JSON config per format) consumed by both the Kotlin and TypeScript implementations. The clipboard format is serialized YAML fragments — portable across both runtimes.
+Clipboard-based structural editing following the `BuilderClipboard` pattern from pages. In IntelliJ, the tree (native Structure view) handles cut/copy/paste via IntelliJ's native clipboard and undo system. The JCEF diagram handles its own structural operations (already implemented via `DiagramBaseMixin._applyGraphEdit()` in `casehub-diagram`, `swf-diagram`, and `blocks-org-diagram`) and syncs back via the bridge layer's diff-based delta protocol (§Sync Protocol).
+
+**Clipboard bridge:** Users can copy a structural node (e.g., a capability) from the native Structure view and paste it into the JCEF diagram's drop target, or vice versa. The bridge uses a shared clipboard format — serialized YAML fragments with a format-type header — portable across both runtimes. Validation rules (fragment type → valid paste targets) are expressed as JSON config per format, consumed by both the Kotlin and TypeScript implementations. For example, a capability fragment copied from the tree can paste into any `spec.capabilities[]` slot in either the tree or the diagram.
 
 ### CI Pipeline
 
@@ -150,7 +158,7 @@ intellij-plugin:
     - Upload plugins/intellij-casehub/build/distributions/*.zip as artifact
 ```
 
-Triggers: main pushes only (paths include `plugins/intellij-casehub/**` and `packages/lsp-schemas/**`). PRs verify the Gradle build succeeds but do not upload artifacts.
+The `intellij-plugin` job has no additional path filters of its own — it runs whenever the CI workflow triggers. The existing CI workflow already triggers on `packages/**`, `components/**`, and `examples/**`, which covers all sources that affect the plugin bundle (diagram components, graph-stencil packages, lsp-schemas). Adding `plugins/intellij-casehub/**` to the workflow-level path triggers ensures Kotlin-only changes also trigger CI. The `needs: build-and-test` dependency ensures the full TypeScript build passes before the Gradle build starts. Artifact upload is conditional on `github.ref == 'refs/heads/main'`; PR builds verify the Gradle build succeeds but do not upload artifacts.
 
 ## Delivery Phases
 
@@ -210,6 +218,8 @@ File a pages issue for the workbench extensibility SPI with this contract:
 - All existing page builder behavior must be preserved (regression test)
 
 **Consumer:** blocks-ui domain formats (case/swf/htn/org) will register via this SPI
+
+**Delivery:** This is substantial cross-repo work — refactoring `pages-builder-shell` from hardcoded page-specific logic to a generic format SPI while preserving all existing behavior. The pages issue should include its own design spec with adversarial review in the pages repo, not just an issue body. This spec defines the contract (`WorkbenchFormatRegistration` interface and Zod derivation strategy); the pages spec defines the implementation approach and migration plan.
 
 **Not in scope:** IntelliJ integration (handled by blocks-ui), domain-specific visual renderers (already exist in blocks-ui)
 
