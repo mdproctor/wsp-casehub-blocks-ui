@@ -6,7 +6,7 @@
 
 ## Overview
 
-Enhance the `generate-domain-schemas.ts` generator to produce `z.union()` schemas at discriminated type points, enabling the existing pages-lsp completion engine to narrow suggestions based on which variant key is present in the YAML. No new infrastructure (variantDispatchers, JSON manifests) is needed — the existing `schemaToCompletions` ZodUnion sibling-based narrowing handles it automatically.
+Enhance the `generate-domain-schemas.ts` generator to produce `z.union()` schemas at discriminated type points, and fix the `schemaToCompletions` narrowing algorithm in pages-lsp to use discriminant-key detection, enabling the completion engine to narrow suggestions based on which variant key is present in the YAML.
 
 ## Problem
 
@@ -14,9 +14,20 @@ The generated Zod schemas for CaseDefinition, Org, and HTN produce flat `z.objec
 
 ## Solution
 
-The generator reads a per-format discriminator config that declares which TypeScript type names have key-presence variants. At those types, it splits properties into common and variant groups, producing `z.union([common.extend({variant1}), common.extend({variant2}), ...])` instead of a flat object.
+Two coordinated changes:
 
-The pages-lsp completion engine already narrows `ZodUnion` completions by matching sibling keys against each option's shape (`schema-navigation.js:273-298`). When only one option's shape contains a sibling key, completions narrow to that option. This is the same mechanism the hand-written SWF schema already uses successfully.
+1. **Generator enhancement (lsp-schemas):** The generator reads a per-format discriminator config that declares which TypeScript type names have key-presence variants. At those types, it splits properties into common and variant groups, producing `z.union([common.extend({variant1}), common.extend({variant2}), ...])` instead of a flat object.
+
+2. **Narrowing algorithm fix (pages-lsp):** The existing `schemaToCompletions` ZodUnion narrowing checks if ANY sibling key is in a branch's shape. With `.extend()`, common keys appear in every branch, so all branches always match and narrowing never fires. The algorithm must be enhanced to detect discriminant keys — sibling keys that are unique to exactly one branch.
+
+### Why not variantDispatchers?
+
+Issue #158 proposes wiring `FormatRegistration.variantDispatchers`. However, the issue's claim that "the `navigateSchema()` walker in pages-lsp already consults `variantDispatchers`" is factually incorrect — `navigateSchema` handles ZodUnion by trying each option sequentially (`schema-navigation.ts:185-192`), and `handleCompletion` never calls `getVariantSchema`. The `variantDispatchers` field and `SchemaRegistry.getVariantSchema()` are dead infrastructure — defined but never invoked from the completion pipeline.
+
+Fixing the narrowing algorithm is architecturally cleaner:
+- The schema structure IS the discrimination data — no separate map needed
+- The fix works generically for any ZodUnion with discriminant keys, including the hand-written SWF schema (which has the same latent narrowing bug with shared `then`/`if` keys)
+- No additional FormatRegistration fields, registry changes, or per-format wiring needed
 
 ## Discriminator Config
 
@@ -26,37 +37,58 @@ A TypeScript config file per format, referenced by `FormatConfig.discriminatorMa
 // packages/lsp-schemas/scripts/discriminators/case-definition.ts
 
 export interface DiscriminatorRule {
-  variantKeys: string[];
+  strategy: 'key-presence';
+  discriminatorKeys: string[];
 }
 
 export const discriminators: Record<string, DiscriminatorRule> = {
   Binding: {
-    variantKeys: ['capability', 'subCase', 'humanTask'],
+    strategy: 'key-presence',
+    discriminatorKeys: ['capability', 'subCase', 'humanTask'],
   },
   Trigger: {
-    variantKeys: ['contextChange', 'cloudEvent', 'schedule', 'scopeActivated'],
+    strategy: 'key-presence',
+    discriminatorKeys: ['contextChange', 'cloudEvent', 'schedule', 'scopeActivated'],
   },
 };
 ```
 
-Each entry maps a **TypeScript type name** (as seen by ts-morph) to its variant keys. The remaining properties on that type become common fields shared across all variants.
+Each entry maps a **TypeScript type name** (as seen by ts-morph) to its discriminator keys. The remaining properties on that type become common fields shared across all variants. Shared keys are derived automatically — no explicit `sharedKeys` field needed.
+
+### Relationship to existing infrastructure
+
+The generator already declares (lines 18-24):
+```typescript
+interface DiscriminatorRule {
+  strategy: 'key-presence';
+  discriminatorKeys: string[];
+  sharedKeys: string[];
+}
+type DiscriminatorManifest = Record<string, DiscriminatorRule>;
+```
+
+And `discriminators/case-definition.json` exists with path-based keys (`spec.bindings[]`). This JSON file and the existing interface are dead code — the `discriminatorManifest` field on `FormatConfig` is declared but no FORMATS entry sets it.
+
+This design replaces the dead code:
+- **TypeScript over JSON** — type-safe, catches config errors at compile time
+- **Type-name keys over path-based keys** — the generator walks types by name, not by YAML path
+- **Derived shared keys** — all non-discriminator-key properties are automatically common; no manual `sharedKeys` maintenance
+- **Field alignment:** `discriminatorKeys` matches the existing interface name (renamed from the original draft's `variantKeys`)
+- **`sharedKeys` dropped** — redundant with automatic derivation
+- The existing `case-definition.json` (which also has an incorrect key: `trigger` instead of `capability`) is deleted
 
 ### CaseDefinition Discriminators
 
-| TypeScript Type | Variant Keys | Strategy |
-|----------------|-------------|----------|
+| TypeScript Type | Discriminator Keys | Strategy |
+|----------------|-------------------|----------|
 | `Binding` | `capability`, `subCase`, `humanTask` | key-presence |
 | `Trigger` | `contextChange`, `cloudEvent`, `schedule`, `scopeActivated` | key-presence |
 
-The issue body lists 5 discriminated unions (adding WorkerFunction, McpTransport, ModelProvider), but the current CaseDefinition TypeScript types (`graph-stencil-case/src/types/generated/case-definition.ts`) don't include worker function types — those are in `graph-stencil-case/src/worker-function/types.ts`, which is a separate type hierarchy not part of the `CaseHub` root type that the generator walks. Worker function types are only reachable through the diagram editor, not the YAML document schema.
-
-The generator walks from the `CaseHub` root type. Only `Binding` and `Trigger` are discriminated unions within that type tree. If the worker function types are later added to the CaseDefinition YAML schema (via the engine's `CaseDefinition.yaml`), they'll automatically appear in the generated types and can be added to the discriminator config at that point.
+The issue body lists 5 discriminated unions (adding WorkerFunction, McpTransport, ModelProvider), but these types aren't part of the CaseDefinition YAML schema type tree. They exist in `graph-stencil-case/src/worker-function/types.ts`, which is a separate type hierarchy not reachable from the `CaseHub` root type that the generator walks. Tracked in casehubio/blocks-ui#TBD-worker-function-discriminators.
 
 ### Org Discriminators
 
-| TypeScript Type | Variant Keys | Strategy |
-|----------------|-------------|----------|
-| `RelationshipScope` | `capabilityName`, `domain`, `custom` | key-presence |
+None. `RelationshipScope` has three optional fields (`capabilityName`, `domain`, `custom`) but they are NOT mutually exclusive — a relationship can be scoped to both a capability and a domain simultaneously. The TypeScript interface (`graph-stencil-org/src/types.ts:28-32`) has all three fields independently optional with no exclusivity constraint. Converting to a union would prevent valid multi-scope relationships.
 
 ### HTN Discriminators
 
@@ -64,7 +96,7 @@ None identified in the current type tree. HTN types (`HtnTask`, `HtnMethod`) don
 
 ### SWF
 
-No generator change. SWF continues using its hand-written schema (`lsp-schemas/src/schemas/swf.ts`) which already has a proper `z.union([callTaskSchema, setTaskSchema, switchTaskSchema, ...])`. The source TypeScript type is `do: Record<string, unknown>[]` — too flat for the generator to produce union types from.
+No generator change. SWF continues using its hand-written schema (`lsp-schemas/src/schemas/swf.ts`) which already has a proper `z.union([callTaskSchema, setTaskSchema, switchTaskSchema, ...])` with discriminant keys (`call`, `set`, `switch`, `raise`, `emit`, `wait`, `listen`). The enhanced narrowing algorithm benefits SWF too — the hand-written schema has shared `then`/`if` keys that cause the same latent narrowing bug that this design fixes.
 
 ## Generator Enhancement
 
@@ -86,12 +118,20 @@ TypeScript interface + discriminator config → ts-morph → typeToZod() →
 
 When processing an object type (the `type.isObject()` branch, line 131), the generator checks if the type's symbol name exists in the loaded discriminator config. If so:
 
-1. **Partition properties** into common (not in `variantKeys`) and variant (in `variantKeys`).
+1. **Partition properties** into common (not in `discriminatorKeys`) and discriminator (in `discriminatorKeys`).
 2. **Generate a common base schema** from the common properties: `z.object({ name: z.string(), on: ..., when: ... })`.
-3. **Generate per-variant schemas** by extending the common base with each variant key and its type: `commonSchema.extend({ capability: z.string() })`.
+3. **Generate per-variant schemas** by extending the common base with each discriminator key and its type: `commonSchema.extend({ capability: z.string() })`.
 4. **Emit `z.union([...])`** wrapping all variant schemas.
 
-Variant keys that are optional on the source type (they always are, since only one is present at runtime) become **required** on their variant schema — if you're in the `capability` variant, `capability` is not optional. The other variant keys are absent (not optional — absent).
+Discriminator keys that are optional on the source type (they always are, since only one is present at runtime) become **required** on their variant schema — if you're in the `capability` variant, `capability` is not optional. The other discriminator keys are absent (not optional — absent).
+
+### Validation semantics note
+
+The union is for **schema-guided completion**, not Zod validation. The schemas are consumed by `navigateSchema` and `schemaToCompletions` — never by `z.parse()`. Consequences:
+
+- **Bindings without any variant key:** `schemaToCompletions` falls through to the fallback path (show all branch completions, deduplicated). The user sees all variant keys as suggestions. This is the desired behavior during editing — the user hasn't picked a variant yet.
+- **Bindings with multiple variant keys:** The enhanced narrowing finds the first sibling that's a discriminant key and narrows to that branch. The other variant key is no longer suggested. This is also desired — you shouldn't have both.
+- **Schema navigation (`navigateSchema`):** ZodUnion handling tries each option and returns the first match. Common and variant fields remain navigable regardless of which variant is active.
 
 ### Generated Output Example
 
@@ -143,68 +183,159 @@ if (config.discriminatorManifest) {
 }
 ```
 
-The config path is added to `FormatConfig`:
+### FORMATS Array Change
+
+The `caseDefinition` entry gains `discriminatorManifest`:
 
 ```typescript
-{
-  formatId: 'caseDefinition',
-  rootTypeName: 'CaseHub',
-  sourceFile: '../../graph-stencil-case/src/types/generated/case-definition.ts',
-  outputFile: '../src/schemas/case-definition.generated.ts',
-  exportName: 'caseDefinitionDocumentSchema',
-  discriminatorManifest: './discriminators/case-definition.js',
-},
+export const FORMATS: FormatConfig[] = [
+  {
+    formatId: 'caseDefinition',
+    rootTypeName: 'CaseHub',
+    sourceFile: '../../graph-stencil-case/src/types/generated/case-definition.ts',
+    outputFile: '../src/schemas/case-definition.generated.ts',
+    exportName: 'caseDefinitionDocumentSchema',
+    discriminatorManifest: './discriminators/case-definition.js',
+  },
+  // org, htn, swf — unchanged (no discriminators)
+];
 ```
+
+Only `caseDefinition` gets a manifest. Org has no discriminators (RelationshipScope is not mutually exclusive). HTN has none identified. SWF uses hand-written schemas.
 
 ### Validation at Generation Time
 
 The generator validates each discriminator config entry against the actual TypeScript type:
 
 1. **Type exists:** ts-morph resolves the type name. If not found, error with "Discriminator config references unknown type: X".
-2. **Variant keys exist:** Each variant key must be a property on the type. If not, error with "Variant key 'foo' not found on type X. Available properties: [...]".
-3. **Variant keys are optional:** Each variant key should be optional on the source type (since they're mutually exclusive). Warn if a variant key is required — it may indicate a config error.
+2. **Discriminator keys exist:** Each discriminator key must be a property on the type. If not, error with "Discriminator key 'foo' not found on type X. Available properties: [...]".
+3. **Discriminator keys are optional:** Each discriminator key should be optional on the source type (since they're mutually exclusive). Warn if a discriminator key is required — it may indicate a config error.
+
+## Narrowing Algorithm Enhancement (pages-lsp)
+
+### Current algorithm (`schemaToCompletions`, `schema-navigation.ts:285-297`)
+
+```typescript
+if (siblings && Object.keys(siblings).length > 0) {
+  const siblingKeys = new Set(Object.keys(siblings));
+  const matching = options.filter(opt => {
+    const optShape = getShape(unwrap(opt));
+    if (!optShape) return false;
+    return [...siblingKeys].some(k => k in optShape);
+  });
+  if (matching.length === 1) {
+    return schemaToCompletions(matching[0]!, siblings);
+  }
+}
+```
+
+This checks if ANY sibling key is in a branch's shape. With `.extend()`, common keys (`name`, `on`, `when`, etc.) appear in every branch. When siblings include `name` — which is essentially always — ALL branches match and narrowing never fires.
+
+The same bug affects the hand-written SWF schema: shared `then`/`if` keys cause all task branches to match when those are siblings.
+
+### Enhanced algorithm
+
+Replace the filter with discriminant-key detection:
+
+```typescript
+if (siblings && Object.keys(siblings).length > 0) {
+  const siblingKeys = new Set(Object.keys(siblings));
+
+  // Build a map: key → how many branches contain it
+  const keyBranchCount = new Map<string, number>();
+  const keyBranch = new Map<string, z.ZodType>();
+  for (const opt of options) {
+    const optShape = getShape(unwrap(opt));
+    if (!optShape) continue;
+    for (const k of Object.keys(optShape)) {
+      const count = (keyBranchCount.get(k) ?? 0) + 1;
+      keyBranchCount.set(k, count);
+      if (count === 1) keyBranch.set(k, opt);
+    }
+  }
+
+  // Find if any sibling is a discriminant (unique to one branch)
+  for (const sk of siblingKeys) {
+    if (keyBranchCount.get(sk) === 1) {
+      return schemaToCompletions(keyBranch.get(sk)!, siblings);
+    }
+  }
+}
+```
+
+This finds keys that appear in exactly one branch's shape. If a sibling contains such a key, that branch is the match. For the binding union:
+- `capability` appears only in branch 1 → discriminant
+- `subCase` appears only in branch 2 → discriminant
+- `humanTask` appears only in branch 3 → discriminant
+- `name`, `on`, `when` appear in all branches → not discriminants
+
+If siblings are `{name: "myBinding", on: {...}, capability: "cap1"}`:
+- `name` → in 3 branches, not a discriminant
+- `on` → in 3 branches, not a discriminant
+- `capability` → in 1 branch → **discriminant match** → narrow to capability branch
+
+The fallback behavior (show all completions, deduplicated) remains unchanged when no discriminant key is found in siblings.
 
 ## Format Registration Updates
 
 ### CaseDefinition
 
-Switch from the generated schema import to the new union-aware generated schema. The import path doesn't change — only the generated content does:
+No import change needed — the import path stays the same, only the generated content changes:
 
 ```typescript
-// formats/case-definition.ts — no import change needed
+// formats/case-definition.ts — unchanged
 import { caseDefinitionDocumentSchema } from '../schemas/case-definition.generated.js';
 ```
 
 ### Org
 
-Same — `org.generated.ts` now contains `RelationshipScope` as a union.
+Same — `org.generated.ts` content unchanged (no discriminators for org).
 
-### Hand-Written Schema Cleanup
+### Dead Code Cleanup
 
-After the generated schemas produce unions, the hand-written schema files become redundant for case and org:
+The hand-written schema files are already unused — format registrations already import from `.generated.ts` files:
+- `formats/case-definition.ts:3` imports from `../schemas/case-definition.generated.js`
+- `formats/org.ts:3` imports from `../schemas/org.generated.js`
+- `formats/htn.ts:2` imports from `../schemas/htn.generated.js`
 
-- `schemas/case-definition.ts` — **delete** (replaced by union-aware `case-definition.generated.ts`)
-- `schemas/org.ts` — **delete** (replaced by union-aware `org.generated.ts`)
-- `schemas/swf.ts` — **keep** (hand-written, already has unions, no generated equivalent)
-- `schemas/htn.ts` — check if it exists and whether it adds value over the generated schema
+The hand-written files have no remaining references:
 
-The format registration imports switch from `.ts` to `.generated.ts` where applicable. For SWF, the import stays on the hand-written schema.
+- `schemas/case-definition.ts` — **delete** (dead code, not imported by any format registration)
+- `schemas/org.ts` — **delete** (dead code, not imported by any format registration)
+- `schemas/htn.ts` — **delete** (dead code, `formats/htn.ts` imports from `htn.generated.js`)
+- `schemas/swf.ts` — **keep** (hand-written, actively used by `formats/swf.ts`, has union types the generated `swf.generated.ts` cannot produce)
+- `schemas/swf.generated.ts` — **keep** (used by staleness tests as the generated reference; its flat `z.record(z.unknown())` for `do` tasks is correct output from the generator given the source type `do: Record<string, unknown>[]`)
+
+This cleanup is independent of the union-aware generation — these files are dead code regardless. It is included here for completeness since the spec touches the schema directory.
+
+### Discriminator JSON Cleanup
+
+- `discriminators/case-definition.json` — **delete** (dead code with incorrect keys; replaced by TypeScript config)
 
 ## Testing
 
 ### Generator Tests
 
 1. **Union generation:** Given a type with discriminator config, verify the output contains `z.union([...])` with the correct number of branches.
-2. **Common field extraction:** Verify non-variant properties appear in the common base, not duplicated across branches.
+2. **Common field extraction:** Verify non-discriminator properties appear in the common base, not duplicated across branches.
 3. **Nested discriminators:** Verify a type with unions at multiple levels produces nested unions.
-4. **Validation:** Verify the generator errors when a variant key doesn't exist on the source type.
+4. **Validation:** Verify the generator errors when a discriminator key doesn't exist on the source type.
 
-### Completion Narrowing Tests
+### Narrowing Algorithm Tests (pages-lsp)
 
-Integration tests verifying the end-to-end narrowing works:
+Tests for the enhanced `schemaToCompletions` ZodUnion narrowing:
+
+1. **Discriminant key present with realistic siblings:** Siblings `{name: "b1", on: {...}, capability: "cap1"}` → narrows to capability branch. Only capability-branch fields + common fields returned.
+2. **No discriminant key present:** Siblings `{name: "b1", on: {...}}` → no narrowing, all branch completions returned (deduplicated).
+3. **Multiple discriminant keys present:** Siblings `{capability: "x", subCase: {...}}` → first discriminant found narrows (this is a malformed binding, but should not crash).
+4. **SWF task narrowing:** Siblings `{call: "http", then: "next"}` → narrows to call task branch despite shared `then` key.
+
+### Completion Integration Tests
+
+End-to-end narrowing through the full pipeline:
 
 1. **No variant key present:** Completions include all variant keys + common fields.
-2. **One variant key present:** Completions narrow to that variant's fields + common fields. Other variant keys excluded.
+2. **One variant key present with common siblings:** YAML has `name: myBinding`, `on: {...}`, `capability: myCapability`, cursor on new key — completions show only capability-branch fields, not `subCase` or `humanTask`.
 3. **Common field navigation:** Navigating to a common field (e.g., `name`) works regardless of which variant is active.
 4. **Nested narrowing:** Within a binding that has `capability` set, navigating to `on` and setting `contextChange` further narrows trigger completions.
 
@@ -214,27 +345,33 @@ The existing staleness test pattern (compare generated output against fresh gene
 
 ## Scope — What This Issue Does NOT Cover
 
-- **variantDispatchers wiring** — not needed (D2). The `FormatRegistration.variantDispatchers` field stays unused.
-- **JSON manifest files** — not created (D1). The schema structure IS the discrimination data.
-- **SWF schema restructuring** — SWF already has unions. No change.
-- **WorkerFunction/McpTransport/ModelProvider discriminators** — these types aren't part of the CaseDefinition YAML schema type tree. They exist in the diagram editor's worker-function module. If they're added to the YAML schema via the engine, the discriminator config can be extended.
+- **variantDispatchers wiring** — not needed. The `FormatRegistration.variantDispatchers` field and `SchemaRegistry.getVariantSchema()` are dead infrastructure never invoked by the completion pipeline. The enhanced narrowing algorithm makes them redundant. (Whether to remove the dead infrastructure is a separate cleanup decision.)
+- **JSON manifest files** — not created. TypeScript configs replace the dead `case-definition.json`.
+- **SWF schema restructuring** — SWF already has unions. The narrowing fix benefits SWF automatically.
+- **WorkerFunction/McpTransport/ModelProvider discriminators** — these types aren't part of the CaseDefinition YAML schema type tree. They exist in the diagram editor's worker-function module. Tracked in casehubio/blocks-ui#TBD-worker-function-discriminators.
 - **Zod v4 migration** — tracked separately in casehubio/casehub-pages#451. This work uses stable APIs (`z.union()`, `z.object()`, `.extend()`) that are identical across v3 and v4.
-- **pages-lsp changes** — none needed. The existing ZodUnion handling works.
 
 ## References
 
-- `packages/lsp-schemas/scripts/generate-domain-schemas.ts` — existing generator (290 lines, `discriminatorManifest` hook on line 15)
-- `packages/lsp-schemas/src/formats/case-definition.ts` — format registration (imports generated schema)
-- `packages/lsp-schemas/src/schemas/case-definition.ts` — hand-written schema (to be deleted)
-- `packages/lsp-schemas/src/schemas/swf.ts` — hand-written SWF schema (kept, already has unions)
-- `node_modules/@casehubio/pages-lsp/dist/schema-navigation.js:273-298` — ZodUnion sibling narrowing
-- `node_modules/@casehubio/pages-lsp/dist/types.d.ts` — FormatRegistration, VariantDispatch interfaces
+- `packages/lsp-schemas/scripts/generate-domain-schemas.ts` — existing generator (290 lines, `discriminatorManifest` hook on line 15, existing `DiscriminatorRule`/`DiscriminatorManifest` interfaces on lines 18-24)
+- `packages/lsp-schemas/scripts/discriminators/case-definition.json` — existing dead discriminator config (to be deleted)
+- `packages/lsp-schemas/src/formats/case-definition.ts` — format registration (imports generated schema from `case-definition.generated.js`)
+- `packages/lsp-schemas/src/formats/org.ts` — format registration (imports generated schema from `org.generated.js`)
+- `packages/lsp-schemas/src/formats/htn.ts` — format registration (imports generated schema from `htn.generated.js`)
+- `packages/lsp-schemas/src/formats/swf.ts` — format registration (imports hand-written schema from `swf.js`)
+- `packages/lsp-schemas/src/schemas/case-definition.ts` — hand-written schema (dead code, to be deleted)
+- `packages/lsp-schemas/src/schemas/org.ts` — hand-written schema (dead code, to be deleted)
+- `packages/lsp-schemas/src/schemas/htn.ts` — hand-written schema (dead code, to be deleted)
+- `packages/lsp-schemas/src/schemas/swf.ts` — hand-written SWF schema (kept, actively used, already has unions)
+- `packages/lsp-schemas/src/schemas/swf.generated.ts` — generated SWF schema (kept for staleness tests)
+- `casehub-pages/packages/pages-lsp/src/schema-navigation.ts:219-308` — `schemaToCompletions` ZodUnion handling (to be enhanced)
+- `casehub-pages/packages/pages-lsp/src/schema-navigation.ts:185-192` — `navigateSchema` ZodUnion handling (works correctly, no change)
+- `casehub-pages/packages/pages-lsp/src/completion.ts` — `handleCompletion` (no change)
+- `casehub-pages/packages/pages-lsp/src/types.ts` — FormatRegistration, VariantDispatch interfaces (no change)
 - `packages/graph-stencil-case/src/types/generated/case-definition.ts` — CaseDefinition TypeScript types (source for generator)
 - `packages/graph-stencil-case/src/worker-function/types.ts` — WorkerFunctionType, McpTransportType, ModelProviderKey
 - `packages/graph-stencil-case/src/adapter/yaml-editor.ts` — switchBindingTarget, switchTriggerType (documents variant keys)
-- `packages/graph-stencil-org/src/types.ts` — RelationshipScope (3 variant keys)
-- `docs/specs/issue-407-lsp-ide-plugins/2026-09-10-lsp-ide-plugins-design.md` — LSP architecture spec
+- `packages/graph-stencil-org/src/types.ts` — RelationshipScope (3 independently optional fields, NOT mutually exclusive)
 - `docs/specs/issue-408-yaml-schema-completion/2026-09-05-yaml-schema-completion-design.md` — schema completion design
-- [ts-to-zod](https://github.com/fabien0102/ts-to-zod) — prior art for `@discriminator` JSDoc pattern
 - [Zod v4 release notes](https://zod.dev/v4) — z.discriminatedUnion deprecation, z.union stability
 - casehubio/casehub-pages#451 — Zod v4 migration (separate, not blocking)
