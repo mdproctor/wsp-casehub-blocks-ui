@@ -55,6 +55,7 @@
 - Extend generate-domain-schemas.ts to emit tree adapters, fragment rules, and property descriptors alongside Zod schemas — build-time derivation, validated by tests, but adds generator complexity and artifacts to track.
 - Separate WorkbenchRegistration alongside FormatRegistration — explicit hand-coded SPI per format, full control but high maintenance.
 **Rationale:** Zod 4 metadata makes runtime introspection clean: z.string() → text input, z.enum() → dropdown, z.number().min().max() → number with range, z.array() → collection tree node. The schema IS the workbench descriptor. No extra artifacts, no drift, no staleness tests needed for workbench metadata.
+**Scope:** This applies to the web workbench (pages-builder-shell) only. The IntelliJ tree (phase 2, D4) derives structure from the YAML PSI tree directly — no Zod access in Kotlin. Both derive from the same underlying YAML structure but via different mechanisms appropriate to their runtime.
 **Trade-offs:** Runtime introspection has a small startup cost. Complex property layouts (e.g. conditional fields, grouped sections) may need supplementary hints beyond what Zod encodes. Acceptable: hints can be added as Zod metadata annotations without changing the overall approach.
 **Depends on:** D4 (architecture determines what the SPI needs to provide)
 **Sources:** Zod 4 metadata API, pages-builder-shell property palette, generate-domain-schemas.ts (existing generator)
