@@ -13,6 +13,11 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#158 — Issue #158 ← active
+  - [ ] Batch 1: Generator Union Support
+    - [ ] Task 1: Discriminator config + union generation helper (TDD)
+    - [ ] Task 2: Wire config into generator pipeline + regenerate
+  - [ ] Batch 2: Cleanup
+    - [ ] Task 3: Delete dead schemas and JSON discriminator
 - [ ] casehubio/blocks-ui#159 — migrate addElement/addOrgUnit to yamlAppendWithUniqueName
 - [ ] casehubio/blocks-ui#160 — extend yamlSwitchVariant for multi-key patterns
 - [ ] casehubio/blocks-ui#161 — domain schema assembly for IntelliJ LSP plugin
