@@ -117,12 +117,16 @@ TypeScript interface + discriminator config → ts-morph → typeToZod() →
 
 ### Implementation in `typeToZod()`
 
-When processing an object type (the `type.isObject()` branch, line 131), the generator checks if the type's symbol name exists in the loaded discriminator config. If so:
+**Intersection type consideration:** The CaseDefinition types (`Binding`, `Trigger`) are intersection types, not plain object types — `json-schema-to-typescript` emits `export type Binding = {...} & Binding1` where `Binding1 = { [k: string]: unknown | undefined }` is a passthrough index-signature type. In `typeToZod()`, intersection types enter the `type.isIntersection()` branch (line 109) before the `type.isObject()` branch (line 131). Both branches produce the same `z.object({...})` output (the intersection handler merges properties and filters index signatures), but the discriminator check must fire in both.
 
-1. **Partition properties** into common (not in `discriminatorKeys`) and discriminator (in `discriminatorKeys`).
-2. **Generate a common base schema** from the common properties: `z.object({ name: z.string(), on: ..., when: ... })`.
-3. **Generate per-variant schemas** by extending the common base with each discriminator key and its type: `commonSchema.extend({ capability: z.string() })`.
-4. **Emit `z.union([...])`** wrapping all variant schemas.
+The discriminator check is extracted into a shared helper called from both the intersection handler and the object handler. When either handler resolves the type's properties, the helper:
+
+1. **Extracts the symbol name** via `type.getSymbol() || type.getAliasSymbol()` (for intersection type aliases like `Binding`, `getAliasSymbol()` returns the alias name).
+2. **Checks the discriminator config** — if the symbol name exists as a key, the helper takes over; otherwise falls through to flat `z.object({...})`.
+3. **Partitions properties** into common (not in `discriminatorKeys`) and discriminator (in `discriminatorKeys`).
+4. **Generates a common base schema** from the common properties: `z.object({ name: z.string(), on: ..., when: ... })`.
+5. **Generates per-variant schemas** by extending the common base with each discriminator key and its type: `commonSchema.extend({ capability: z.string().optional() })`.
+6. **Emits `z.union([...])`** wrapping all variant schemas.
 
 Discriminator keys stay **optional** on their variant schema — matching the source TypeScript type where they are optional. The other discriminator keys are absent (not optional — absent). Keeping the active discriminator key optional is critical because `computeDiagnostics` in pages-lsp calls `format.documentSchema.safeParse()` on every document change (`diagnostics.ts:40`). Making the key required would cause all union branches to fail for bindings mid-edit (no variant key chosen yet), producing false diagnostic errors.
 
