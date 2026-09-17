@@ -75,7 +75,8 @@ This design replaces the dead code:
 - **Derived shared keys** — all non-discriminator-key properties are automatically common; no manual `sharedKeys` maintenance
 - **Field alignment:** `discriminatorKeys` matches the existing interface name (renamed from the original draft's `variantKeys`)
 - **`sharedKeys` dropped** — redundant with automatic derivation
-- The existing `case-definition.json` (which also has an incorrect key: `trigger` instead of `capability`) is deleted
+- The existing `DiscriminatorRule` and `DiscriminatorManifest` interfaces at lines 18-24 of `generate-domain-schemas.ts` are **replaced** by the new `DiscriminatorRule` from the TypeScript config (exported from the config file, imported by the generator)
+- The existing `case-definition.json` (which also has an incorrect key: `trigger` instead of `capability`) is **deleted**
 
 ### CaseDefinition Discriminators
 
@@ -123,15 +124,18 @@ When processing an object type (the `type.isObject()` branch, line 131), the gen
 3. **Generate per-variant schemas** by extending the common base with each discriminator key and its type: `commonSchema.extend({ capability: z.string() })`.
 4. **Emit `z.union([...])`** wrapping all variant schemas.
 
-Discriminator keys that are optional on the source type (they always are, since only one is present at runtime) become **required** on their variant schema — if you're in the `capability` variant, `capability` is not optional. The other discriminator keys are absent (not optional — absent).
+Discriminator keys stay **optional** on their variant schema — matching the source TypeScript type where they are optional. The other discriminator keys are absent (not optional — absent). Keeping the active discriminator key optional is critical because `computeDiagnostics` in pages-lsp calls `format.documentSchema.safeParse()` on every document change (`diagnostics.ts:40`). Making the key required would cause all union branches to fail for bindings mid-edit (no variant key chosen yet), producing false diagnostic errors.
 
-### Validation semantics note
+Optional keys do NOT affect narrowing: the enhanced discriminant-key detection checks key presence in the shape (`k in optShape`), not whether the key's Zod type is required. An optional `capability` still appears in branch 1's shape, still counts as a discriminant (present in exactly 1 branch), and still enables narrowing.
 
-The union is for **schema-guided completion**, not Zod validation. The schemas are consumed by `navigateSchema` and `schemaToCompletions` — never by `z.parse()`. Consequences:
+### Validation and completion semantics
 
-- **Bindings without any variant key:** `schemaToCompletions` falls through to the fallback path (show all branch completions, deduplicated). The user sees all variant keys as suggestions. This is the desired behavior during editing — the user hasn't picked a variant yet.
-- **Bindings with multiple variant keys:** The enhanced narrowing finds the first sibling that's a discriminant key and narrows to that branch. The other variant key is no longer suggested. This is also desired — you shouldn't have both.
+The document schema serves **both** validation (via `safeParse()` in `computeDiagnostics`) **and** completion (via `navigateSchema` + `schemaToCompletions`). The union design must be correct for both paths:
+
+- **`safeParse` (diagnostics):** With optional discriminator keys, a binding without any variant key matches all branches (all discriminator keys are optional → missing is OK). `z.union` takes the first match. No false diagnostic errors. A binding WITH `capability: 'cap1'` also matches all branches (since `subCase` and `humanTask` are optional on their branches too), but Zod takes the first match — correct behavior.
+- **Completion narrowing (`schemaToCompletions`):** Discriminant-key detection narrows based on shape key presence, independent of optionality. When `capability` is a sibling, only branch 1 has it in its shape → narrow to branch 1.
 - **Schema navigation (`navigateSchema`):** ZodUnion handling tries each option and returns the first match. Common and variant fields remain navigable regardless of which variant is active.
+- **Transient editing states:** `switchBindingTarget` in `yaml-editor.ts` removes the old variant key before setting the new one. During this transition, no variant key is present. With optional discriminator keys, `safeParse` succeeds → no flash of diagnostic errors.
 
 ### Generated Output Example
 
@@ -160,9 +164,9 @@ const bindingCommon = z.object({
 });
 
 export const bindingSchema = z.union([
-  bindingCommon.extend({ capability: z.string() }),
-  bindingCommon.extend({ subCase: subCaseSchema }),
-  bindingCommon.extend({ humanTask: humanTaskSchema }),
+  bindingCommon.extend({ capability: z.string().optional() }),
+  bindingCommon.extend({ subCase: subCaseSchema.optional() }),
+  bindingCommon.extend({ humanTask: humanTaskSchema.optional() }),
 ]);
 ```
 
@@ -172,16 +176,37 @@ When a type has discriminated unions at multiple levels (e.g., `Binding` has tar
 
 ### Config Loading
 
-The generator loads the config dynamically based on `FormatConfig.discriminatorManifest`:
+The discriminator config is loaded externally and passed to `generateFormatSchema` as a parameter, keeping the function synchronous and testable:
 
 ```typescript
-// In generateFormatSchema():
-let discriminatorConfig: Record<string, DiscriminatorRule> = {};
-if (config.discriminatorManifest) {
-  const manifest = await import(resolve(__dirname, config.discriminatorManifest));
-  discriminatorConfig = manifest.discriminators;
+// Signature change: added optional discriminatorConfig parameter
+export function generateFormatSchema(
+  project: Project,
+  config: FormatConfig,
+  discriminatorConfig?: Record<string, DiscriminatorRule>,
+): string {
+```
+
+The main block loads configs with top-level `await` (the file uses ES module `import.meta.url`):
+
+```typescript
+for (const config of FORMATS) {
+  let discriminatorConfig: Record<string, DiscriminatorRule> | undefined;
+  if (config.discriminatorManifest) {
+    const manifest = await import(resolve(__dirname, config.discriminatorManifest));
+    discriminatorConfig = manifest.discriminators;
+  }
+  const output = generateFormatSchema(project, config, discriminatorConfig);
+  const outPath = resolve(__dirname, config.outputFile);
+  writeFileSync(outPath, output, 'utf-8');
+  console.log(`Generated ${config.formatId} schema to ${outPath}`);
 }
 ```
+
+This design:
+- **Keeps `generateFormatSchema` synchronous** — no signature break for callers or tests
+- **Separates config loading from generation** — tests pass discriminator configs directly without filesystem access
+- **`await import()` stays in the main block** — the entry point, which is the only place that needs async
 
 ### FORMATS Array Change
 
@@ -212,6 +237,12 @@ The generator validates each discriminator config entry against the actual TypeS
 3. **Discriminator keys are optional:** Each discriminator key should be optional on the source type (since they're mutually exclusive). Warn if a discriminator key is required — it may indicate a config error.
 
 ## Narrowing Algorithm Enhancement (pages-lsp)
+
+**Cross-repo dependency:** This change is in `casehub-pages/packages/pages-lsp`, a different repository from this spec's project (`blocks-ui`). Tracked as casehubio/casehub-pages#TBD-narrowing-fix.
+
+**Independent deployability:** The two changes are independently deployable in either order:
+- **Narrowing fix alone** (without union schemas): Fixes the latent SWF narrowing bug (`then`/`if` shared keys). CaseDefinition schemas are still flat — no narrowing to do, no regression.
+- **Union schemas alone** (without narrowing fix): Falls back to showing all branch completions (deduplicated) — identical to today's flat schema behavior. No regression, but no narrowing benefit until the fix lands.
 
 ### Current algorithm (`schemaToCompletions`, `schema-navigation.ts:285-297`)
 
@@ -339,6 +370,15 @@ End-to-end narrowing through the full pipeline:
 3. **Common field navigation:** Navigating to a common field (e.g., `name`) works regardless of which variant is active.
 4. **Nested narrowing:** Within a binding that has `capability` set, navigating to `on` and setting `contextChange` further narrows trigger completions.
 
+### Validation Compatibility Tests
+
+Verify that `safeParse()` succeeds for editing-state documents:
+
+1. **Binding with no variant key:** `{ name: "b1", on: { contextChange: {} } }` — no capability, subCase, or humanTask. `safeParse` must succeed (no false diagnostic errors).
+2. **Binding with one variant key:** `{ name: "b1", on: { contextChange: {} }, capability: "cap1" }` — `safeParse` succeeds.
+3. **Trigger with no variant key:** `{ }` — no contextChange, cloudEvent, schedule, or scopeActivated. `safeParse` must succeed.
+4. **Existing test fixtures:** All existing `generator-core.test.ts` `safeParse` test cases must continue to pass unchanged.
+
 ### Staleness Test
 
 The existing staleness test pattern (compare generated output against fresh generation) continues to work. No change needed — the test verifies the committed `.generated.ts` matches what the generator produces.
@@ -350,6 +390,7 @@ The existing staleness test pattern (compare generated output against fresh gene
 - **SWF schema restructuring** — SWF already has unions. The narrowing fix benefits SWF automatically.
 - **WorkerFunction/McpTransport/ModelProvider discriminators** — these types aren't part of the CaseDefinition YAML schema type tree. They exist in the diagram editor's worker-function module. Tracked in casehubio/blocks-ui#TBD-worker-function-discriminators.
 - **Zod v4 migration** — tracked separately in casehubio/casehub-pages#451. This work uses stable APIs (`z.union()`, `z.object()`, `.extend()`) that are identical across v3 and v4.
+- **pages-lsp narrowing algorithm fix** — tracked as casehubio/casehub-pages#TBD-narrowing-fix. Independently deployable from the union schema generation (see §Narrowing Algorithm Enhancement for deployment ordering).
 
 ## References
 
@@ -367,6 +408,7 @@ The existing staleness test pattern (compare generated output against fresh gene
 - `casehub-pages/packages/pages-lsp/src/schema-navigation.ts:219-308` — `schemaToCompletions` ZodUnion handling (to be enhanced)
 - `casehub-pages/packages/pages-lsp/src/schema-navigation.ts:185-192` — `navigateSchema` ZodUnion handling (works correctly, no change)
 - `casehub-pages/packages/pages-lsp/src/completion.ts` — `handleCompletion` (no change)
+- `casehub-pages/packages/pages-lsp/src/diagnostics.ts:40` — `computeDiagnostics` calls `format.documentSchema.safeParse()` (union schemas must remain compatible)
 - `casehub-pages/packages/pages-lsp/src/types.ts` — FormatRegistration, VariantDispatch interfaces (no change)
 - `packages/graph-stencil-case/src/types/generated/case-definition.ts` — CaseDefinition TypeScript types (source for generator)
 - `packages/graph-stencil-case/src/worker-function/types.ts` — WorkerFunctionType, McpTransportType, ModelProviderKey
