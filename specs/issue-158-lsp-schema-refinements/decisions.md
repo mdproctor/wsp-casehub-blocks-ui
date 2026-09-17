@@ -35,3 +35,28 @@
 **Sources:** generate-domain-schemas.ts (existing generator with discriminatorManifest hook), ts-to-zod @discriminator JSDoc pattern (prior art — we use config file instead since source types are auto-generated from engine), Zod v4 deprecation of z.discriminatedUnion (z.union() is the stable path)
 **Exploration:** deep-analysis
 **Status:** captured
+
+## D4: Native-first hybrid architecture, delivered progressively
+
+**Choice:** Target architecture is native IntelliJ for text editor (existing LSP), tree (custom PsiStructureViewFactory), and property panel (native typed form editors). Visual diagram is JCEF via TextEditorWithPreview. Structural editing reimplemented in Kotlin with shared validation rules. Delivered in three phases: (1) JCEF diagram split editor, (2) native tree + property panel, (3) structural editing with clipboard bridge.
+**Alternatives:**
+- JCEF-heavy — tree + diagram + properties all in JCEF. Maximum code reuse from web components but non-native feel, higher memory, split UX between native editor and web panels.
+- Diagram-only without progressive layering — ships faster but no path to structural editing or native tree.
+**Rationale:** Native IntelliJ components for tree and properties give the best UX and integrate with IntelliJ's undo, VCS, and search. JCEF is reserved for the visual diagram where no native equivalent exists. Progressive delivery lets each phase ship independently and learn from usage.
+**Trade-offs:** Structural editing logic exists in two implementations (Kotlin + TypeScript). Mitigated by shared validation rules expressed as data (JSON config per format) and shared clipboard format (serialized YAML fragments).
+**Sources:** pages-builder-shell (existing workbench pattern), TextEditorWithPreview (IntelliJ API), structural-editing-design.md (clipboard spec)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D5: Workbench SPI — Zod schema + visual component only
+
+**Choice:** Format registration for the extensible workbench is just two things: the Zod schema and the visual editor component tag name. Tree structure, property forms, and fragment rules are all derived from the Zod schema at runtime via Zod 4 introspection. No separate build-time generator for workbench metadata.
+**Alternatives:**
+- Extend generate-domain-schemas.ts to emit tree adapters, fragment rules, and property descriptors alongside Zod schemas — build-time derivation, validated by tests, but adds generator complexity and artifacts to track.
+- Separate WorkbenchRegistration alongside FormatRegistration — explicit hand-coded SPI per format, full control but high maintenance.
+**Rationale:** Zod 4 metadata makes runtime introspection clean: z.string() → text input, z.enum() → dropdown, z.number().min().max() → number with range, z.array() → collection tree node. The schema IS the workbench descriptor. No extra artifacts, no drift, no staleness tests needed for workbench metadata.
+**Trade-offs:** Runtime introspection has a small startup cost. Complex property layouts (e.g. conditional fields, grouped sections) may need supplementary hints beyond what Zod encodes. Acceptable: hints can be added as Zod metadata annotations without changing the overall approach.
+**Depends on:** D4 (architecture determines what the SPI needs to provide)
+**Sources:** Zod 4 metadata API, pages-builder-shell property palette, generate-domain-schemas.ts (existing generator)
+**Exploration:** quick
+**Status:** captured
