@@ -6,7 +6,9 @@
 
 ## Overview
 
-**Relationship to issue-407:** This spec is the Batch 4 design pass deferred in the [LSP Server + IDE Plugins spec](../../docs/specs/issue-407-lsp-ide-plugins/2026-09-10-lsp-ide-plugins-design.md). That spec explicitly defers "Diagram Webview" as Batch 4 with "Separate design pass covering: bidirectional sync model, webview lifecycle, theme sync, component bundling." Issue #161 is scoped under the same #158 LSP schema refinements umbrella and delivers the deferred Batch 4 work. Where this spec overlaps with issue-407 (layered architecture, format registrations, file type detection), issue-407 remains authoritative — this spec adds only the diagram webview, workbench extensibility, and CI concerns that issue-407 deferred.
+**Relationship to issue-407:** This spec is the Batch 4 design pass deferred in the [LSP Server + IDE Plugins spec](../../docs/specs/issue-407-lsp-ide-plugins/2026-09-10-lsp-ide-plugins-design.md). That spec explicitly defers "Diagram Webview" as Batch 4 with "Separate design pass covering: bidirectional sync model, webview lifecycle, theme sync, component bundling, VS Code `WebviewPanel` vs IntelliJ `JBCefBrowser` tradeoffs." Issue #161 is scoped under the same #158 LSP schema refinements umbrella and delivers the IntelliJ portion of the deferred Batch 4 work. Where this spec overlaps with issue-407 (layered architecture, format registrations, file type detection), issue-407 remains authoritative — this spec adds only the diagram webview, workbench extensibility, and CI concerns that issue-407 deferred.
+
+**VS Code scope:** This spec covers IntelliJ only. VS Code's `WebviewPanel` has different constraints — stricter CSP, message-passing serialization, no direct DOM access — that require a separate design pass. A follow-up spec for the VS Code diagram webview will be filed as a separate issue. The diagram web components and esbuild bundling strategy are shared infrastructure; the hosting, lifecycle, and sync bridging are IDE-specific.
 
 Extend the CaseHub YAML IntelliJ plugin beyond pure LSP text intelligence to include visual diagram editing, make the web-based YAML workbench extensible for domain formats, and add CI distribution.
 
@@ -45,8 +47,8 @@ IntelliJ Plugin
 │  domain-aware    │                      │  visual renderer │
 └─────────────────┴──────────────────────┴──────────────────┘
                             ↕ sync
-              Editor → Diagram: full YAML push
-              Diagram → Editor: CST delta patches
+              Editor → Diagram: full YAML push (debounced)
+              Diagram → Editor: bridge-computed minimal patches
 
 Web Workbench (pages-builder-shell)
 ┌──────────┬──────────────────┬──────────────────┐
@@ -65,14 +67,27 @@ A `CaseHubFileEditorProvider` detects file type by extension, wraps the native Y
 
 **JCEF availability fallback:** JCEF is not available in all environments — Remote Development (Gateway, SSH, WSL), headless/test mode, and some Linux configurations with missing Chromium dependencies. The provider checks `JBCefApp.isSupported()` before creating the split editor. When JCEF is unavailable, it falls back to the native text editor alone (retaining full LSP intelligence) and shows a one-time notification explaining that the visual diagram panel requires a local IDE. This is the same pattern used by IntelliJ's Markdown plugin.
 
+**Webview lifecycle management:** `JBCefBrowser` requires explicit lifecycle management to prevent resource leaks:
+
+1. **Disposal:** `CaseHubDiagramPanel` implements `Disposable`. The `JBCefBrowser` instance is registered with `Disposer.register(parentDisposable, browser)` where the parent is the `FileEditor`. When the editor tab is closed, the Chromium process is terminated. Failure to dispose leaks Chromium processes.
+2. **Tab visibility:** When the user switches to a different editor tab, the JCEF panel is no longer visible but continues consuming memory and CPU. A `FileEditorManagerListener.selectionChanged()` callback pauses the debounced document push timer and suspends diagram re-renders when the editor loses focus. Rendering resumes with a single full push when the tab regains focus.
+3. **Split editor mode switching:** `TextEditorWithPreview` supports three modes — editor-only, split, and preview-only. When the user switches to editor-only mode, the JCEF browser is disposed to free resources. On switch back to split or preview mode, a new `JBCefBrowser` is created and initialized with the current document content. The `TextEditorWithPreview.getLayout()` callback detects mode changes.
+
 ### JCEF Diagram Panel
 
 The diagram web components (LitElement) are bundled via esbuild into `diagram-panel.bundle.js` — the same pattern as the LSP server bundle. A small HTML shell in plugin resources loads the bundle. The Kotlin side creates a `JBCefBrowser`, loads the HTML from plugin resources via `file://` protocol.
 
 **Bundle composition and size:** The diagram components share heavy dependencies — React, ReactFlow, ELK layout engine (via `@casehubio/graph-renderer`), Lit 3 (via `@casehubio/pages-data`), and the `yaml` library. These shared dependencies dominate the bundle. Phase 1 bundles only `casehub-diagram` (one format), so per-format splitting is not yet needed. When remaining formats are wired, a monolithic bundle including all four formats shares the common dependency tree — the format-specific stencil code is small relative to React+ReactFlow+ELK. The bundle size target is ≤3MB gzipped; if the monolithic bundle exceeds this after wiring all formats, per-format code-splitting via esbuild `splitting: true` is the fallback. Since the JCEF panel loads from local plugin resources (`file://` protocol), network transfer is not a concern — only plugin distribution size and initial parse time matter.
 
+**Theme sync:** The diagram components use `--pages-*` CSS custom properties (`--pages-surface-color`, `--pages-border-color`, `--pages-text-color`, `--pages-accent-color`, etc.) with light-themed fallback values. Without theme sync, the diagram renders with hardcoded light colors regardless of IntelliJ's theme — making it unreadable in Darcula/dark modes.
+
+1. **Detection:** Register a `LafManagerListener` callback. `lookAndFeelChanged()` fires when IntelliJ switches themes.
+2. **Mapping:** A static table maps IntelliJ UIManager colors to `--pages-*` CSS custom properties — e.g., `UIManager.getColor("Panel.background")` → `--pages-surface-color`, `UIManager.getColor("Label.foreground")` → `--pages-text-color`. The mapping covers the ~15 CSS custom properties used by diagram components.
+3. **Application:** Inject a `<style>:root { ... }` element via `executeJavaScript()` with the resolved CSS custom property values.
+4. **Initial render:** The HTML shell template includes the theme CSS computed at `JBCefBrowser` creation time — before loading the diagram bundle. No flash of wrong-theme content on first load. Subsequent theme switches re-inject the style element.
+
 Communication uses `CefMessageRouter`:
-- **Kotlin → JS**: `cefBrowser.cefBrowser.executeJavaScript()` to push YAML content
+- **Kotlin → JS**: `cefBrowser.cefBrowser.executeJavaScript()` to push YAML content and theme updates
 - **JS → Kotlin**: `CefMessageRouterHandler` receives messages (cursor position, edit deltas)
 
 ### Sync Protocol
@@ -82,6 +97,10 @@ Asymmetric — optimized for each direction:
 **Editor → Diagram (rendering):** `DocumentListener` fires on text changes. Full YAML string pushed to JCEF via `executeJavaScript()`. Debounced (~150ms) to avoid noise during rapid typing. The diagram component accepts YAML as a property and handles re-parse/re-render internally (components already diff efficiently).
 
 **Diagram → Editor (structural edits):** All diagram components use `DiagramBaseMixin`, which stores `_currentYaml: string` as internal state. Edit methods (`_applyPropertyEdit`, `_applyGraphEdit`, `switch*` functions) use the `yaml` library's CST API internally for CST-preserving edits but return a **complete new YAML string** — not a delta. The JCEF bridge layer captures the old and new YAML strings and computes minimal text patches using a diff algorithm (same approach as `computeMinimalChanges` in `pages-builder/diff-patch.ts`). Each edit produces a delta: `{ offset: number, length: number, newText: string }`. The bridge sends the delta to Kotlin via `CefMessageRouter`. Kotlin applies it as `document.replaceString(offset, offset + length, newText)` inside a `WriteAction`. This preserves comments, blank lines, and custom spacing — only the changed characters are modified. The diagram components remain unchanged; the diffing concern is localized to the bridge layer.
+
+**Echo suppression:** Bidirectional sync creates an echo loop: a diagram edit sends a delta to Kotlin → Kotlin applies `document.replaceString()` → `DocumentListener.documentChanged()` fires → attempts to push the full YAML back to JCEF → `DiagramBaseMixin.updated()` resets `_undoStack`, `_redoStack`, and `_selectedNodeId`, destroying undo history and selection.
+
+The `DiagramSyncListener` uses an **origin flag** to suppress echoes. Before applying a JCEF-originated delta, set `suppressEcho = true`. The `DocumentListener.documentChanged()` callback checks this flag — if true, skip the push and return. The flag is reset in a `finally` block after the `WriteAction` completes. All operations run on the EDT (Event Dispatch Thread), so no race condition exists. This is the standard IntelliJ pattern for bidirectional editor sync (used by Markdown, AsciiDoc, and database tool plugins).
 
 **Diagram → Editor (cursor sync):** When the user clicks a node in the diagram, the JCEF panel sends the YAML path (e.g., `spec.workers[1].name`). Kotlin resolves the path to a document offset via the PSI tree and moves the caret.
 
@@ -97,7 +116,7 @@ The `CaseHubFileEditorProvider` maps file extension to diagram component:
 | `.org.yaml` | `blocks-org-diagram` |
 | `.page.yaml` | Page preview (via `renderPreview` callback pattern) |
 
-This mapping mirrors the canonical `DIAGRAM_TAGS` record in `blocks-diagram-workbench` (`components/diagram-workbench/src/diagram-workbench.ts`), which already maps format → component tag for runtime routing (`{swf: 'swf-diagram', case: 'casehub-diagram', htn: 'htn-diagram'}`). The JCEF panel does NOT embed `blocks-diagram-workbench` — that component is case-centric with drill-down navigation (case → embedded SWF/HTN), designed for runtime case exploration. The JCEF panel opens individual format files directly (e.g., `.swf.yaml` shows `swf-diagram` at the top level), which the workbench's hardcoded case root level doesn't support. The format → tag mapping will be extracted to a shared constant in `blocks-ui-core` to avoid duplication between the workbench and the provider.
+This mapping mirrors the canonical `DIAGRAM_TAGS` record in `blocks-diagram-workbench` (`components/diagram-workbench/src/diagram-workbench.ts`), which already maps format → component tag for runtime routing (`{swf: 'swf-diagram', case: 'casehub-diagram', htn: 'htn-diagram'}`). The JCEF panel does NOT embed `blocks-diagram-workbench` — that component is case-centric with drill-down navigation (case → embedded SWF/HTN), designed for runtime case exploration. The JCEF panel opens individual format files directly (e.g., `.swf.yaml` shows `swf-diagram` at the top level), which the workbench's hardcoded case root level doesn't support. The format → tag mapping will be extracted to a shared constant in `blocks-ui-core` to avoid duplication between the workbench and the provider. The shared constant adds `org: 'blocks-org-diagram'` — the existing `DIAGRAM_TAGS` in `blocks-diagram-workbench` only has three entries (swf, case, htn) because the workbench doesn't handle org diagrams. The extraction is not a straight copy.
 
 ### Extensible Workbench SPI (Pages)
 
@@ -166,14 +185,15 @@ The `intellij-plugin` job has no additional path filters of its own — it runs 
 
 No pages dependency. Can proceed immediately.
 
-1. `CaseHubFileEditorProvider` — `TextEditorWithPreview` with native YAML editor + JCEF panel
+1. `CaseHubFileEditorProvider` — `TextEditorWithPreview` with native YAML editor + JCEF panel, JCEF availability fallback, `Disposable` lifecycle
 2. `diagram-panel.bundle.js` — esbuild bundle of diagram web components + HTML shell
-3. `CaseHubDiagramPanel` — Kotlin JCEF wrapper with `CefMessageRouter` bridge
-4. Sync: `DocumentListener` → debounced YAML push to JCEF
-5. Format routing: file extension → diagram component
-6. Gradle `copyDiagramBundle` task (mirrors existing `copyServerBundle`)
-7. CI job: build plugin zip, upload as artifact on main push
-8. Start with one format (`.case.yaml` → `casehub-diagram`) to prove the integration, then wire remaining formats
+3. `CaseHubDiagramPanel` — Kotlin JCEF wrapper with `CefMessageRouter` bridge, tab visibility handling, split mode disposal
+4. Sync: `DocumentListener` → debounced YAML push to JCEF, echo suppression via origin flag
+5. Theme sync: `LafManagerListener` → CSS custom property injection, initial theme in HTML shell
+6. Format routing: file extension → diagram component (shared `DIAGRAM_TAGS` constant)
+7. Gradle `copyDiagramBundle` task (mirrors existing `copyServerBundle`)
+8. CI job: build plugin zip, upload as artifact on main push
+9. Start with one format (`.case.yaml` → `casehub-diagram`) to prove the integration, then wire remaining formats
 
 ### Phase 2 — Extensible workbench + native IntelliJ panels (pages dependency)
 
@@ -209,7 +229,7 @@ File a pages issue for the workbench extensibility SPI with this contract:
 **Title:** feat: extensible workbench — format registration SPI for builder-shell
 
 **Scope:**
-- `WorkbenchFormatRegistration` interface: `formatId`, `schema` (Zod), `visualElement` (tag name), `extensions`
+- `WorkbenchFormatRegistration` interface: `formatId` (must match a `FormatRegistration.formatId` in the schema registry), `visualElement` (custom element tag name). Schema and extensions are resolved from the `SchemaRegistry` — no duplication.
 - Refactor `pages-builder-shell` to consume registrations instead of hardcoding `PageDocument`/`dashboardSchema`
 - Page format becomes first consumer: `pageFormat` registration
 - Tree derivation from Zod schema (array → collection, object → leaf)
@@ -230,9 +250,10 @@ File a pages issue for the workbench extensibility SPI with this contract:
 | File | Change |
 |------|--------|
 | `plugins/intellij-casehub/src/main/kotlin/.../CaseHubFileEditorProvider.kt` | **New** — TextEditorWithPreview provider |
-| `plugins/intellij-casehub/src/main/kotlin/.../CaseHubDiagramPanel.kt` | **New** — JCEF wrapper + CefMessageRouter bridge |
-| `plugins/intellij-casehub/src/main/kotlin/.../DiagramSyncListener.kt` | **New** — DocumentListener with debounced YAML push |
-| `plugins/intellij-casehub/src/main/resources/diagram/diagram-shell.html` | **New** — HTML shell for JCEF |
+| `plugins/intellij-casehub/src/main/kotlin/.../CaseHubDiagramPanel.kt` | **New** — JCEF wrapper + CefMessageRouter bridge + Disposable lifecycle |
+| `plugins/intellij-casehub/src/main/kotlin/.../DiagramSyncListener.kt` | **New** — DocumentListener with debounced YAML push + echo suppression |
+| `plugins/intellij-casehub/src/main/kotlin/.../DiagramThemeSync.kt` | **New** — LafManagerListener + UIManager → CSS custom property mapping |
+| `plugins/intellij-casehub/src/main/resources/diagram/diagram-shell.html` | **New** — HTML shell for JCEF (includes initial theme CSS) |
 | `plugins/intellij-casehub/src/main/resources/META-INF/plugin.xml` | Add FileEditorProvider registration |
 | `plugins/intellij-casehub/build.gradle.kts` | Add `copyDiagramBundle` task |
 | `packages/lsp-schemas/build-diagram-bundle.js` | **New** — esbuild script for diagram components |
