@@ -2,48 +2,68 @@
 
 ## Last Session
 
-Brainstormed, designed, and implemented #161 — JCEF split editor for
-IntelliJ plugin. The plugin now shows a native YAML editor alongside a
-JCEF panel rendering case definition diagrams when opening `.case.yaml`
-files. Nodes, edges, and ELK layout render correctly. Theme sync maps
-IntelliJ dark/light to `--pages-*` CSS vars. Editor edits push YAML to
-diagram in real time (debounced 150ms).
+Extended the IIFE diagram bundle from a read-only viewer into a fully
+interactive editor. 22 commits on blocks-ui, 2 on pages. 17 Playwright
+tests covering all features.
 
-Fixed a pre-existing regression in pages (`PagesGraphCanvas` — pages#452):
-the component only supported data-source mode but casehub-diagram passes
-nodes/edges directly. Also fixed Vite `?raw` CSS imports in the esbuild
-IIFE bundle — ReactFlow's base CSS was missing, causing invisible edges.
+### IIFE Bundle Foundation
+- `ignoreAnnotations: true` preserves all web component registrations
+- External stencil rendering (stale dist rebuild)
+- SWF stencils + thumbnail renderer registered
+- Selection outline matches content (`height: auto` on wrapper)
+- `nodesselection-rect` hidden in JCEF shell
 
-CI workflow added for plugin distribution (zip artifact on main push).
+### Diagram Workbench + Drill-down
+- Case format uses `blocks-diagram-workbench` for drill-down navigation
+- Drilled-down SWF diagrams are editable (removed `readonly`)
+- Drill-down button clickable (buttons at z-index 3 above source-full handle)
+
+### Node Picker (DiagramBaseMixin — shared)
+- Canvas click and connect-end-on-empty show `PagesNodeChooser`
+- Grammar-derived filtering (outbound allowedTo + inbound allowedFrom)
+- Dynamic filtering (hides types when source at max connections, excludes auto-generated edges)
+- 800ms mouse-leave auto-dismiss
+- `composedPath()` fix for shadow DOM click-outside
+
+### Connect-End Auto-Wiring (casehub-diagram)
+- binding→worker: shared capability
+- worker→binding: shared capability (reverse)
+- binding→milestone: condition expression
+- binding→goal / milestone→goal: expression.all
+- New bindings get capability set via `parseDocument`
+
+### Pages Fixes (on pages `main` + `issue-433-structural-editing`)
+- `getNodeTypes()` memoized (stable React Flow handles)
+- Default handle positions for new nodes
+- `isEligible` allows root-children for hold-to-drag
+- Wrapper z-index removed so buttons punch through source-full
+- `PagesNodeChooser` mouse-leave timeout
+
+## Open Issues
+
+Three issues filed for next session:
+
+| # | Title | Priority |
+|---|-------|----------|
+| #163 | SWF palette adds connected instead of standalone | Start here |
+| #164 | Canvas pans during hold-to-drag | After #165 |
+| #165 | Showcase gallery SWF diagram not rendering | Blocks #163/#164 |
 
 ## Immediate Next Step
 
-Fix bundled stencil palette and property panel in the IIFE diagram bundle.
-The `<pages-diagram-palette>` web component renders empty in the bundle —
-its content elements aren't initializing. Same issue likely affects the
-property palette. The examples gallery (Vite dev server) works because
-imports resolve individually; the IIFE bundle needs all page component
-registrations to be included and initialized.
-
-Debug approach: check if `pages-diagram-palette` custom element is
-registered in the IIFE context, verify its dependencies are bundled,
-and trace why its render produces empty content.
-
-Also: selection highlight offset (a few pixels top-left) needs CSS
-investigation.
+Start with **#165** — get the showcase gallery SWF diagram rendering.
+This is needed to investigate and verify #163 (standalone task add) and
+#164 (hold-to-drag panning), both of which the user reports were working
+in the gallery previously.
 
 ## Cross-Module
 
-- pages#452: PagesGraphCanvas direct property pass-through — committed
-  to pages main, needs push to remote.
-- pages workbench extensibility SPI — design spec written, pages issue
-  to be filed for `WorkbenchFormatRegistration` interface refactor.
-- DiagramBaseMixin `yaml-changed` event — needed for diagram→editor sync
-  (Phase 2). Requires pages PR to add getter/setter on `_currentYaml`.
+- pages `main`: graph-renderer fixes (handles, nodeTypes, z-index, coordinator eligibility)
+- pages `issue-433-structural-editing`: DiagramBaseMixin picker + chooser composedPath fix
+- pages-diagram-palette: mouse-leave timeout on PagesNodeChooser
 
 ## References
 
 - Spec: `specs/issue-158-lsp-schema-refinements/2026-09-17-domain-schema-assembly-design.md`
-- Plan: `plans/2026-09-17-jcef-split-editor.md`
 - Decisions: `specs/issue-158-lsp-schema-refinements/decisions.md`
-- Pages issue: casehubio/casehub-pages#452
+- Playwright tests: `examples/tests/diagram-iife-bundle.spec.ts` (17 tests)
