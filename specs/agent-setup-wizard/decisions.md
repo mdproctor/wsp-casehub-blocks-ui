@@ -83,10 +83,14 @@
 
 ## D8: Relationship management approach
 
-**Choice:** TBD — needs research and proposal
-**Alternatives:** Under exploration
-**Rationale:** Org diagram auto-layout is poor for editing. Table-based relationship editing preferred. Ego-centric visualization (current agent's connections before/after, not full graph). Must stay linear and avoid spaghetti.
-**Trade-offs:** TBD
-**Sources:** graph-stencil-org relationship types (SUPERVISES, DELEGATES_TO, ESCALATES_TO, REPORTS_TO, BACKS_UP, EXTENDED)
-**Exploration:** pending
-**Status:** pending
+**Choice:** Table-based editing + multiple experimental visualization views
+**Alternatives:**
+- Layered ego star + table — more spatial but needs ~400px, still has crossing risk
+- Neo4j-style card panel + mini force graph — spaghetti risk at 15+ nodes
+- Dual-column matrix — zero spaghetti but no spatial intuition
+- Arc diagram strip + table — low spaghetti but not zero, adds complexity
+**Rationale:** Table is the primary editing interface (grouped by relationship kind, add/remove via forms). Multiple "views" for visualization: table view, arc diagram view, ego-centric org diagram view. The ego org diagram view reuses the existing graph-stencil-org renderer + ELK layout as an experiment — filter the org YAML to the selected agent's 1-hop neighbourhood and render in read-only mode. If ELK handles the star topology cleanly, we get ego-centric visualization for free. If not, a custom renderer follows later.
+**Trade-offs:** Multiple views means more code surface, but avoids premature commitment to a single visualization approach. Ego org diagram reuse is an experiment — may need custom renderer.
+**Sources:** graph-stencil-org (existing renderer), ELK layout engine, 2024 ScienceDirect ego network study (layered node-link preferred), arc diagram pattern (data-to-viz.com)
+**Exploration:** deep-analysis
+**Status:** captured
