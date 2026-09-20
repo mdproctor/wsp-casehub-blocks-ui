@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-166-agent-setup-wizard
-state: scaffolded
+state: active
 project-sha: slot-creation
 date: 2026-09-20
 issue-repo: casehubio/blocks-ui
@@ -13,18 +13,18 @@ flyway-next-v: unknown
 
 ## Queue
 - [ ] casehubio/blocks-ui#166 — Issue #166 ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: Manifest types
-    - [ ] Task 2: AgentDescriptor and AgentDisposition types
-    - [ ] Task 3: Event topics and relationship registry
-  - [ ] Batch 2: Avatar-2D
-    - [ ] Task 4: Canonical term registry
-    - [ ] Task 5: DiceBear integration and avatar generation
-  - [ ] Batch 3: Manifest-Editor
-    - [ ] Task 6: Provider card grid scaffold
-    - [ ] Task 7: Credential editing and model/alias config
+  - [x] Batch 1: Foundation
+    - [x] Task 1: Manifest types
+    - [x] Task 2: AgentDescriptor and AgentDisposition types
+    - [x] Task 3: Event topics and relationship registry
+  - [x] Batch 2: Avatar-2D
+    - [x] Task 4: Canonical term registry
+    - [x] Task 5: DiceBear integration and avatar generation
+  - [x] Batch 3: Manifest-Editor
+    - [x] Task 6: Provider card grid scaffold
+    - [x] Task 7: Credential editing and model/alias config
   - [ ] Batch 4: Agent-Catalog
-    - [ ] Task 8: Filter bar and catalog grid
+    - [x] Task 8: Filter bar and catalog grid
     - [ ] Task 9: From-scratch wizard
   - [ ] Batch 5: Agent-Profile
     - [ ] Task 10: Character sheet display
