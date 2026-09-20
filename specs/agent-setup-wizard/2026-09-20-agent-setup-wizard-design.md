@@ -41,10 +41,30 @@ simulatable without it.
 types (AgentDescriptor, AgentDisposition, DispositionValue) and platform
 agent-config-core types (Manifest, CredentialRef, ProviderDeclaration). TS
 type mirrors follow the pattern established by graph-stencil-org (types.ts).
-New mirrors added to blocks-ui-core.
+New mirrors added to blocks-ui-core. Precedent: `packages/avatar/` and
+`packages/graph-stencil-org/` already live directly in blocks-ui without
+domain-app promotion.
 
 **C3: ARIA.** Every component ships with ARIA attributes per blocks-ui
 requirements. Tests include ARIA assertions.
+
+**C4: Disposition model — deliberate simplification.** The Java
+`AgentDisposition` supports multi-term weighted values per axis
+(`List<DispositionValue>` where each has `term` + `weight`). The wizard
+deliberately simplifies to single-term selection for ergonomics — the common
+case. An "advanced" toggle allows multi-term weighted profiles for power
+users. Avatar generation uses `primaryTerm()` (first/highest-weight term per
+axis). Round-tripping preserves multi-term if the original had it — the
+simplified view shows the primary term but does not discard secondary terms.
+
+**C5: Data integration pattern.** These components consume object-tree data
+(Manifest, AgentDescriptor), not tabular data. They do NOT use
+DataSourceMixin/TypedDataSet — those are for column-oriented table data.
+Instead, they follow a direct-fetch pattern: `endpoint` property for backend
+URL (returns JSON object), `data` property for inline payload, component
+manages its own fetch lifecycle. This matches `gdpr-erasure-action` (which
+extends LitElement directly, no DataSourceMixin) and `worker-task-pane`
+(direct fetch, no DataSourceMixin).
 
 ---
 
@@ -92,8 +112,8 @@ it does not discover providers. If the endpoint includes detection state
 
 ### Data Contract
 
-- **Input:** `Manifest` object (inline property or from `GET /llm/configured`)
-- **Output:** emits `pages-event` with the configured `Manifest` payload
+- **Input:** `Manifest` object (inline `data` property or from `endpoint` → `GET /llm/configured`)
+- **Output:** emits `pages-event` topic `manifest:configured` with the configured `Manifest` payload
 - **Detection:** consumes `GET /llm/providers` for availability state
 - **Validation:** `POST /llm/configure` for step-by-step validation (when available)
 
@@ -132,10 +152,13 @@ tag, one-line description.
 **From-scratch wizard** — "Create Custom Agent" button. Guided steps:
 1. Name, domain, slot
 2. Capabilities — add from library or define custom (name, quality/latency/cost
-   hints, epistemic domains)
-3. Disposition — term picker per axis (SOCIAL_ORIENTATION, RULE_FOLLOWING,
-   RISK_APPETITE, AUTONOMY, CONFLICT_MODE) with vocabulary-controlled terms
-   and plain-language descriptions
+   hints, epistemic domains). Includes `delegation` toggle ("can spawn
+   sub-agents") — this is a platform capability, not a disposition trait.
+3. Disposition — primary term picker per axis (SOCIAL_ORIENTATION,
+   RULE_FOLLOWING, RISK_APPETITE, AUTONOMY, CONFLICT_MODE) with
+   vocabulary-controlled terms and plain-language descriptions. "Advanced"
+   toggle reveals multi-term weighted entry per axis (add secondary terms
+   with weights). See constraint C4.
 4. Goals and constraints — add/remove with priority/severity
 5. Briefing — voice/identity/mannerisms (max 2000 chars), template composition
 6. Avatar — generates from disposition, browse candidates, customise
@@ -143,8 +166,8 @@ tag, one-line description.
 
 ### Data Contract
 
-- **Input:** `AgentDescriptor[]` templates (inline property or from endpoint)
-- **Output:** emits `pages-event` with selected/customised `AgentDescriptor`
+- **Input:** `AgentDescriptor[]` templates (inline `data` property or from `endpoint`)
+- **Output:** emits `pages-event` topic `agent:selected` on pick, `agent:created` on from-scratch completion, with `AgentDescriptor` payload
 - **Catalog content:** shipped as static JSON, extensible via endpoint
 
 ---
@@ -171,9 +194,11 @@ Rich agent summary — the "character sheet." Every section is editable inline.
   types as pills, epistemic domains as mini bar chart
 
 **Disposition section:**
-- 5-axis radar chart for at-a-glance profile
-- Per-axis rows: term, weight, plain-language explanation
+- 5-axis radar chart using primary term weight per axis (single scalar per
+  axis — for multi-term dispositions, shows the dominant term's weight)
+- Per-axis rows: primary term + weight, secondary terms if present, plain-language explanation
 - Disposition pills matching org diagram stencil for visual consistency
+- `delegation` badge if enabled
 
 **Goals & Constraints section:**
 - Two-column: goals (left, priority badges), constraints (right, severity badges)
@@ -190,12 +215,12 @@ Rich agent summary — the "character sheet." Every section is editable inline.
 - "Edit relationships" link opens agent-relationship-editor
 
 **Editing:** pencil icon per section toggles inline edit mode. Changes emit
-`pages-event` with updated `AgentDescriptor`.
+`pages-event` topic `agent:updated` with updated `AgentDescriptor`.
 
 ### Data Contract
 
-- **Input:** single `AgentDescriptor` (inline or from endpoint)
-- **Output:** emits `pages-event` with modified `AgentDescriptor` on edits
+- **Input:** single `AgentDescriptor` (inline `data` property or from `endpoint`)
+- **Output:** emits `pages-event` topic `agent:updated` with modified `AgentDescriptor` on edits
 
 ---
 
@@ -223,11 +248,13 @@ relationships shown are from/to this agent (ego-centric).
 - **Arc** — horizontal arc diagram. Ego on left, connected agents arranged
   right sorted by kind. Arcs above for outgoing, below for incoming, coloured
   by kind. Hover highlights table row. Read-only.
-- **Ego diagram** — experimental reuse of graph-stencil-org + ELK. Filters org
-  YAML to 1-hop neighbourhood. Read-only. If ELK produces poor layout for star
-  topology, this view is replaced with a custom renderer later. Note: toOrgGraph
-  adapter does not currently support subgraph extraction — a neighbourhood
-  filter must be built.
+- **Ego diagram** — experimental reuse of graph-stencil-org + ELK. Read-only.
+  **Prerequisite:** a neighbourhood filter function must be built in
+  graph-stencil-org: `extractEgoSubgraph(model: GraphModel, egoAgentId: string): GraphModel`
+  — returns the 1-hop neighbourhood with unit context preserved (the ego
+  agent's unit becomes the root container). Without this, the view renders the
+  entire graph and defeats the ego-centric purpose. If ELK produces poor layout
+  for the resulting star topology, this view is replaced with a custom renderer.
 
 **Relationship form** (for add / complex edit):
 - Target agent picker (searchable dropdown from org roster)
@@ -239,9 +266,9 @@ relationships shown are from/to this agent (ego-centric).
 ### Data Contract
 
 - **Input:** `AgentRelationship[]` for the selected agent + agent roster
-  (inline or from endpoint)
-- **Output:** emits `pages-event` with relationship changeset
-  (additions/removals)
+  (inline `data` property or from `endpoint`)
+- **Output:** emits `pages-event` topic `relationship:changed` with relationship
+  changeset (additions/removals)
 
 ---
 
@@ -263,7 +290,8 @@ Maps known disposition vocabulary terms to DiceBear Avataaars visual features:
 | ruleFollowing | strict → straight eyebrows, uniform; adaptive → relaxed eyebrows, business; creative → raised eyebrows, casual |
 | conflictMode | assertive → set jaw, angled eyebrows; diplomatic → relaxed jaw, gentle eyebrows; avoidant → soft jaw, neutral eyebrows |
 
-Unknown vocabulary terms fall back to nearest known term or neutral default.
+Unknown vocabulary terms fall back to the axis's neutral default (not
+"nearest known term" — no similarity metric). Deterministic and predictable.
 
 ### API
 
@@ -289,26 +317,59 @@ visual features.
 ## Type Additions to blocks-ui-core
 
 Extend `packages/blocks-ui-core/src/types.ts` with TS mirrors for platform
-types, following the existing pattern (AgentDescriptor, DispositionAxes are
-already mirrored):
+and eidos types. Verified against decompiled Java bytecode from
+`casehub-platform-agent-config-core-0.2-SNAPSHOT.jar` and `casehub-eidos-api`.
+
+### Manifest types (from platform agent-config-core)
 
 ```typescript
-// From platform agent-config-core
+export type ModelTier = 'FLAGSHIP' | 'STANDARD' | 'FAST' | 'EMBEDDING';
+export type ModelLocality = 'CLOUD' | 'LOCAL' | 'HYBRID';
+export type CostTier = 'FREE' | 'LOW' | 'MEDIUM' | 'HIGH' | 'PREMIUM';
+
 export interface ProviderDeclaration {
   vendor: string;
-  credential?: string;
+  credential?: string | Record<string, string>;
   host?: string;
 }
 
 export interface ModelDescriptor {
   id: string;
-  metadata?: Record<string, unknown>;
+  apiModelId?: string;
+  backendKey?: string;
+  backendInstanceId?: string;
+  vendor?: string;
+  family?: string;
+  displayName?: string;
+  tier?: ModelTier;
+  capabilities?: string[];
+  contextWindow?: number;
+  maxOutput?: number;
+  locality?: ModelLocality;
+  costTier?: CostTier;
+  authMethod?: string;
+  properties?: Record<string, string>;
 }
 
-export interface ManifestAlias {
-  tier?: string;
+export interface AliasDeclaration {
+  tier?: ModelTier;
   capabilities?: string[];
+  locality?: ModelLocality;
+  maxCost?: CostTier;
   minContext?: number;
+  minOutput?: number;
+  preferVendor?: string;
+}
+
+export interface SourceDeclaration {
+  uri: string;
+  priority?: number;
+}
+
+export interface LocalModelDeclaration {
+  id: string;
+  backendKey?: string;
+  host?: string;
 }
 
 export interface ManifestDefaults {
@@ -316,11 +377,11 @@ export interface ManifestDefaults {
 }
 
 export interface Manifest {
-  providers?: Record<string, ProviderDeclaration>;
-  models?: Record<string, ModelDescriptor>;
-  aliases?: Record<string, ManifestAlias>;
+  providers?: ProviderDeclaration[];
+  models?: ModelDescriptor[];
+  aliases?: Record<string, AliasDeclaration>;
   defaults?: ManifestDefaults;
-  sources?: ManifestSource[];
+  sources?: SourceDeclaration[];
   localModels?: LocalModelDeclaration[];
 }
 
@@ -328,6 +389,70 @@ export type CredentialRef =
   | { type: 'env'; name: string }
   | { type: 'file'; path: string }
   | { type: 'ref'; name: string };
+```
+
+### Expanded AgentDescriptor (extending graph-stencil-org mirror)
+
+The existing `AgentDescriptor` in graph-stencil-org has 6 optional fields.
+The agent-facing components need a broader mirror. Rather than duplicating,
+extend `blocks-ui-core` with the full descriptor:
+
+```typescript
+export interface DispositionValue {
+  term: string;
+  weight: number;
+}
+
+export interface AgentDisposition {
+  socialOrient?: DispositionValue[];
+  ruleFollowing?: DispositionValue[];
+  riskAppetite?: DispositionValue[];
+  autonomy?: DispositionValue[];
+  conflictMode?: DispositionValue[];
+  delegation?: boolean;
+  dispositionProfile?: DispositionValue[];
+  styleProfile?: DispositionValue[];
+}
+
+export interface FullAgentDescriptor {
+  agentId: string;
+  name: string;
+  version?: string;
+  slot?: string;
+  tenancyId: string;
+  provider?: string;
+  modelFamily?: string;
+  modelVersion?: string;
+  domainVocabulary?: string;
+  slotVocabulary?: string;
+  dispositionVocabulary?: string;
+  axisVocabularies?: Record<string, string>;
+  capabilities?: AgentCapability[];
+  disposition?: AgentDisposition;
+  goals?: AgentGoal[];
+  constraints?: AgentConstraint[];
+  briefing?: string;
+  templates?: Record<string, string>;
+  extensionData?: Record<string, unknown>;
+}
+```
+
+The existing graph-stencil-org `AgentDescriptor` (6 fields) remains for
+enrichment — it is a subset. `FullAgentDescriptor` is used by the agent
+catalog, profile, and from-scratch wizard. The avatar generator accepts
+`AgentDisposition` and uses `primaryTerm()` logic: first element of each
+axis's `DispositionValue[]`.
+
+### Event topics
+
+Register in `blocks-ui-core/src/types/events.ts`:
+
+```typescript
+'manifest:configured'    // Manifest payload
+'agent:selected'         // FullAgentDescriptor payload (catalog pick)
+'agent:created'          // FullAgentDescriptor payload (from-scratch)
+'agent:updated'          // FullAgentDescriptor payload (profile edit)
+'relationship:changed'   // AgentRelationship[] changeset
 ```
 
 ---
@@ -341,6 +466,36 @@ export type CredentialRef =
 | #325 | platform | YAML-driven simulation config — aligns with payload-driven approach |
 | #175 | eidos | Standardised demo launchers — catalog + profile serve this |
 | #157 | blocks-ui | Rich org diagram — relationship editor complements this |
+
+---
+
+## Test Strategy
+
+All components use vitest + jsdom, following the existing blocks-ui pattern.
+
+**Per-component:**
+- **Manifest editor:** Mock `GET /llm/providers` responses for detection
+  states (all detected, partial, none). Test credential type switching
+  (env/file/ref). Test preset selection populates fields. Test connection
+  validation emits correct event.
+- **Agent catalog:** Unit tests on filter pipeline (pill selection → filtered
+  results). Test from-scratch wizard step navigation. Test catalog card
+  rendering from fixture data.
+- **Agent profile:** Test inline edit toggle per section. Test disposition
+  radar chart renders from multi-term weighted data. Test event emission on
+  edit.
+- **Relationship editor:** Test grouped table rendering from fixture
+  relationships. Test add/remove changeset emission. Test before/after
+  highlighting (pending additions/deletions).
+- **Avatar-2d:** Test canonical term registry mapping (known terms → expected
+  features). Test unknown term → neutral default fallback. Test determinism
+  (same disposition → same SVG).
+
+**ARIA:** Every component test file includes assertions verifying `role` and
+`aria-label` attributes per blocks-ui ARIA requirements.
+
+**Inline data mode:** Every component tested with inline `data` property
+(no endpoint) to verify payload-driven rendering.
 
 ---
 
