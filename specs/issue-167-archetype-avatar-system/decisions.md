@@ -2,51 +2,54 @@
 
 ## D1: Scope — SVG templates only
 
-**Choice:** Build the 60-template SVG system + updated `<agent-avatar>` component. Faceted personality selector is a separate issue.
+**Choice:** Build the 48-template SVG system + updated `<agent-avatar>` component. Faceted personality selector is a separate issue.
 **Alternatives:**
 - Both subsystems — delivers complete pipeline but doubles scope
 - Templates + basic wiring — middle ground, but the faceted selector UI deserves its own design cycle
 **Rationale:** The faceted selector is a complex interactive UI with its own interaction model, conflict detection, and state management. Separating it allows focused delivery of the visual system.
-**Trade-offs:** Callers must provide pre-resolved archetype data until the selector is built.
+**Trade-offs:** Callers must provide pre-resolved archetype data until the selector is built. Transition path: server-side ArchetypeResolver already converges disposition → archetype identity. Agents store resolved archetype as part of their entity, returned via existing API endpoints. Frontend callers receive archetype data alongside other agent metadata — no frontend ArchetypeResolver needed.
 **Sources:** eidos avatar-generator-contract.md (Sections 1-5 vs Section 3)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — corrected count from 60 to 48 (ArchetypeTerm has 12 × 4); added transition path for archetype data resolution
 
 ## D2: Visual fidelity — composable SVG parts
 
 **Choice:** Build a template system from composable SVG parts (head shapes, hair, props, costumes, palettes) that combine programmatically.
 **Alternatives:**
-- 60 hand-drawn SVGs — highest quality but enormous art effort, hard to maintain
+- 48 hand-drawn SVGs — highest quality but enormous art effort, hard to maintain
+- 48 monolithic SVGs with CSS custom property palettes — guaranteed visual coherence, simpler testing, but adjective modifiers limited to palette/opacity/filter (shape language, pose dynamism, and prop changes require SVG path modifications that CSS cannot express)
 - Parameterised single template — simpler but insufficient visual distinction
 - 12 family templates + parametric variants — middle ground, but limits sub-archetype differentiation
-**Rationale:** Composable parts give maximum flexibility with manageable complexity. New sub-archetypes added by registering part combinations. Each part independently testable.
+**Rationale:** Composable parts give maximum flexibility with manageable complexity. New sub-archetypes added by registering part combinations. Each part independently testable. Critically, the adjective visual effect system (D5) requires modifying individual visual layers (face expression, pose, line quality) — composable parts make this a layer swap rather than DOM manipulation of monolithic SVG paths.
 **Trade-offs:** Requires designing a coherent part system where pieces compose well together.
 **Sources:** Issue #167 design references, previous session prototyping insights
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — corrected count from 60 to 48; added monolithic SVG alternative with CSS properties; strengthened rationale to foreground adjective system dependency
 
 ## D3: Component API — archetype payload only
 
 **Choice:** Accept `{ family, subArchetype, adjectives?, canonicalAxes? }`. Clean break from DiceBear. Old disposition-only mode removed.
 **Alternatives:**
+- Accept `{ archetype, adjectives?, canonicalAxes? }` — derive family internally, eliminates redundancy but requires a family-lookup table in the component
 - Dual-mode with fallback — backward compatible but adds complexity
 - Extend AgentDisposition — muddies personality axes vs archetype identity
-**Rationale:** Archetype identity is a fundamentally different data model from disposition axes. Clean API avoids confusion. The faceted selector (future) handles convergence from disposition to archetype.
-**Trade-offs:** Breaking change for existing callers (agent-catalog, agent-profile, agent-wizard). All must provide archetype data.
+**Rationale:** Archetype identity is a fundamentally different data model from disposition axes. Clean API avoids confusion. The faceted selector (future) handles convergence from disposition to archetype. The `family` field is intentional denormalization — the component receives a pre-resolved payload matching the contract's Section 5 input schema, avoiding the need for an internal family-lookup table. Callers (or the server API layer) resolve once; the component renders without needing vocabulary knowledge.
+**Trade-offs:** Breaking change for existing callers (agent-catalog, agent-profile, agent-wizard). All must provide archetype data. Redundant family field creates theoretical inconsistency risk (`{ family: "Hero", subArchetype: "detective" }`), mitigated by validation at the API boundary.
 **Sources:** eidos avatar-generator-contract.md Section 5 (input schema)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — added derive-family alternative, documented denormalization rationale and consistency risk mitigation
 
 ## D4: SVG composition — layered builder with part registries
 
 **Choice:** Layered composition with part registries. Avatar is an SVG canvas with stacked layers (body → costume → head → hair → face → facial hair → props → accessories). Each part is a pure function: `(palette, modifiers) → SVG path string`.
 **Alternatives:**
 - Monolithic templates with parametric fills — faster to build but harder to maintain, testing individual parts is harder, adjective modifiers need DOM manipulation
-**Rationale:** Full adjective system and 60 sub-archetypes make composability essential. Monolithic templates become unmanageable at this scale. Part registry aligns with how the spec organises visual elements.
+- Monolithic templates with CSS custom properties — visual coherence guaranteed per template, but adjective effects (shape language, pose dynamism, line quality) cannot be expressed via CSS alone
+**Rationale:** Composability is essential not because of scale (48 is manageable for monolithic templates) but because adjective modifiers (D5) and canonical axes (D6) operate on individual visual layers. The part registry enables: face expression changes without touching body/costume, prop swaps per adjective effect, pose dynamism via body layer variants. Monolithic templates force adjective effects into DOM manipulation of specific SVG paths — fragile and hard to test.
 **Trade-offs:** More upfront work to design the part system and ensure visual coherence across combinations.
 **Sources:** eidos avatar-generator-contract.md Section 5 (visual template guidelines)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — corrected count from 60 to 48; revised rationale from scale-based to adjective-system-based; added CSS custom property alternative
 
 ## D5: Adjective system — full implementation
 
@@ -54,22 +57,23 @@
 **Alternatives:**
 - Include basic modifiers only — forward-compatible but limited
 - Defer adjectives entirely — simpler scope but incomplete payload support
-**Rationale:** The adjective catalog is fully defined in the eidos contract. Implementing it now means the avatar system is complete when the faceted selector lands.
-**Trade-offs:** Significant scope — need to define visual effects for 5 adjective categories across all 60 sub-archetypes.
-**Sources:** eidos avatar-generator-contract.md Section 4 (adjective catalog + visual effects)
+- Defer adjective VISUAL EFFECTS to a follow-on issue — implement valid/invalid lists now but only apply family palette + archetype template + props; visual effect taxonomy ships separately
+**Rationale:** The adjective catalog (valid/invalid lists per archetype) is fully defined in ArchetypeTerm.java. The 5 adjective effect categories are defined in avatar-generator-contract.md Section 4 (Adjective Visual Effects table). The per-adjective classification into categories is semantic — "meticulous" maps to precision, "gentle" maps to intensity — but the full mapping across all 48 archetypes needs explicit documentation as part of implementation. Implementing now means the avatar system is complete when the faceted selector lands.
+**Trade-offs:** Significant scope — need to define visual effects for 5 adjective categories across all 48 sub-archetypes. The per-adjective-to-category mapping is inferable from semantics but should be codified explicitly. Effects at xs/sm sizes (24-40px) may be imperceptible — size-responsive application applies (see D8).
+**Sources:** ArchetypeTerm.java (valid/invalid adjective lists), eidos avatar-generator-contract.md Section 4 (adjective effect categories and visual effect mappings)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — corrected count from 60 to 48; clarified that effect categories exist in the contract (Section 4); acknowledged per-adjective mapping design effort; added size-responsiveness note
 
 ## D6: Canonical axes — tertiary expression modifiers
 
 **Choice:** Map the 5 canonical axes to subtle SVG expression adjustments (brow angle, mouth curve, eye openness). Tertiary layer — archetype template dominates.
 **Alternatives:**
 - Defer — archetype + adjectives enough visual variation
-**Rationale:** The axes are the same 5 the current DiceBear system uses, so the mapping concept is proven. They add personality nuance without conflicting with the archetype template.
-**Trade-offs:** Additional complexity in the face layer rendering.
-**Sources:** eidos avatar-generator-contract.md Section 5 (canonical axes → expression geometry)
+**Rationale:** The axes are the same 5 the current DiceBear system uses (socialOrientation, ruleFollowing, riskAppetite, autonomy, conflictMode — see canonical-registry.js). The current system maps these axes to categorical DiceBear feature selections (e.g., socialOrient.collaborative → `{ mouth: 'smile', eyes: 'happy' }`). The proposed system maps to SVG expression variants — the CONCEPT (axis → visual differentiation) is proven, though the MECHANISM differs (categorical selection → discrete SVG variants rather than continuous geometric transforms). Mapping can use 2-3 discrete expression variants per axis endpoint rather than continuous interpolation.
+**Trade-offs:** Additional complexity in the face layer rendering. Expression adjustments may be imperceptible at xs/sm sizes — apply only at md+ (64px+).
+**Sources:** eidos avatar-generator-contract.md Section 5 (canonical axes → expression geometry), packages/agent-avatar-2d/dist/canonical-registry.js (current axis mapping)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — clarified what "proven" means (concept not mechanism); specified discrete variants over continuous interpolation; added size-responsiveness note
 
 ## D7: DiceBear removal
 
@@ -77,11 +81,11 @@
 **Alternatives:**
 - Keep as fallback for missing archetype data
 **Rationale:** The inline SVG builder replaces DiceBear completely. Keeping it adds bundle size and maintenance burden for no benefit since the API is a clean break anyway (D3).
-**Trade-offs:** No fallback if archetype data is missing — component must handle missing data gracefully itself.
+**Trade-offs:** No DiceBear fallback. On missing archetype data, the component renders a neutral "unresolved" avatar — the Everyman/Citizen template with a desaturated greyscale palette. This is visually distinct from any assigned archetype (no user will mistake it for a real identity) while still producing a valid, non-broken avatar output. Matches DiceBear's guarantee that `generateAvatar({})` always returns something, but signals that identity needs resolution rather than silently assigning a random appearance.
 **Depends on:** D3 (archetype payload only API)
 **Sources:** packages/agent-avatar-2d/dist/generator.js (current DiceBear usage)
 **Exploration:** quick
-**Status:** captured
+**Status:** revised — specified concrete fallback behavior (Everyman/Citizen template with desaturated palette)
 
 ## D8: Visual design constraints (from prototyping)
 
@@ -91,9 +95,50 @@
 3. Archetype-specific props (magnifying glass, orb/wand, paintbrush/palette, shield, crown/scepter, compass/hat, juggling balls, gavel, etc.)
 4. Character variety — diverse facial hair (Einstein wild, manicured moustache, bushy beard), diverse hair styles
 5. Family colour palettes from spec (cool blues for Sage, deep purples for Magician, bold primaries for Hero, etc.)
-**Alternatives:** None — these are validated design constraints from iterative prototyping
-**Rationale:** Previous session validated these through v1-v4 prototype iterations. They produce visually distinctive, recognisable archetypes.
-**Trade-offs:** Head shape variety increases the number of base body/head SVG parts needed.
+6. Size-responsive detail tiers:
+   - **xs (24px):** Family silhouette + palette only. No props, no facial detail. Head shape is the primary differentiator.
+   - **sm (40px):** Family silhouette + palette + head shape variation. Props omitted. Facial features simplified.
+   - **md (64px):** Full archetype template visible. Props rendered. Facial features present but simplified. Adjective effects limited to palette/intensity.
+   - **lg (128px):** Full detail — props, facial hair variety, head shapes, adjective effects (pose, line quality, shape language), canonical axis expression adjustments.
+**Alternatives:** None — these are validated design constraints from iterative prototyping. Size tiers are new — added to address rendering fidelity at actual component sizes.
+**Rationale:** Previous session validated constraints 1-5 through v1-v4 prototype iterations. They produce visually distinctive, recognisable archetypes. Size tiers ensure the system doesn't invest rendering effort in details invisible at the target size — props at 24px are sub-pixel, head shape differences at 40px are marginal.
+**Trade-offs:** Head shape variety increases the number of base body/head SVG parts needed. Size-responsive rendering adds conditional logic to the layer builder.
 **Sources:** eidos avatar-generator-contract.md Section 5 (visual template guidelines, colour tendencies), previous session prototyping
 **Exploration:** quick
+**Status:** revised — added size-responsive detail tiers (constraint 6) with explicit per-size rendering rules
+
+## D9: Client-side SVG generation
+
+**Choice:** Generate avatars client-side in the TypeScript component. No server-side SVG rendering.
+**Alternatives:**
+- Server-side SVG generation — Quarkus endpoint takes archetype payload, returns rendered SVG. Single implementation language, direct access to eidos vocabulary, cacheable responses.
+- Hybrid — server renders base templates, client applies runtime modifiers (adjectives, axes)
+**Rationale:** blocks-ui components are framework-agnostic Web Components that must work standalone in test harnesses without backend connectivity (ARC42STORIES §1: "Components work standalone in a test harness AND embedded via pages hostPanel"). Server-side rendering couples the component to backend availability, adds network latency to every avatar display, and violates blocks-ui's zero-domain-coupling constraint (ARC42STORIES §3). The eidos Java vocabulary is the IDENTITY model; the avatar system is the VISUAL model — data flows from identity to visual at the API boundary, not at render time. The component needs no runtime access to ArchetypeResolver or ArchetypeTerm — it receives a resolved payload and renders.
+**Trade-offs:** Archetype visual logic is duplicated in TypeScript rather than reusing Java vocabulary classes. This is intentional — the visual rendering concern belongs in the UI layer, and the "duplication" is minimal (48 template configurations, not the full compatibility matrix).
+**Sources:** ARC42STORIES.MD §1 (standalone test harness requirement), §3 (zero domain coupling)
+**Exploration:** surfaced by review (R1-10)
+**Status:** captured
+
+## D10: Package placement — replace agent-avatar-2d in-place
+
+**Choice:** New source code lives in `packages/agent-avatar-2d/src/`, replacing the current compiled-only package. Package name and npm scope remain unchanged.
+**Alternatives:**
+- New package with new name — avoids confusion but requires import changes across all consuming apps (agent-catalog, agent-profile, agent-wizard, and every app that uses `<agent-avatar>`)
+- Extend into the `packages/avatar/` (3D) package — wrong boundary, 2D and 3D serve different purposes
+**Rationale:** `agent-avatar-2d` currently has no TypeScript sources — only compiled `dist/` files. Adding `src/` with the new implementation is the natural replacement path. The existing custom element name `agent-avatar` is retained, so consumers need no HTML changes — only the data contract changes (D3).
+**Trade-offs:** The existing compiled `dist/` files are removed and rebuilt from new sources. Any consumer relying on the current generator API needs updating (which is already required by D3's API break).
+**Sources:** packages/agent-avatar-2d/ (current structure: dist-only, no src/)
+**Exploration:** surfaced by review (R1-12)
+**Status:** captured
+
+## D11: 2D/3D avatar boundary
+
+**Choice:** The 2D archetype avatar system (agent-avatar-2d) and the 3D TalkingHead avatar system (packages/avatar/) are independent rendering systems. Both consume archetype identity from the agent entity but share no rendering code or visual assets.
+**Alternatives:**
+- Unified rendering pipeline — archetype identity drives both 2D and 3D from a shared visual model
+- 2D as 3D fallback — 2D renders when WebGL is unavailable
+**Rationale:** The 2D system serves static identification (lists, headers, profiles — xs through lg sizes). The 3D system serves interactive conversation (WebGL rendering, viseme-driven lip sync, camera controls). These are fundamentally different rendering contexts with different technology stacks (SVG vs WebGL), different performance profiles, and different interaction models. The shared data is the archetype identity (family, sub-archetype, adjectives) — not the rendering pipeline. The archetype payload API (D3) is designed to serve any renderer.
+**Trade-offs:** Visual consistency between 2D and 3D representations of the same archetype requires separate design work — the systems won't automatically match.
+**Sources:** packages/avatar/src/ (3D TalkingHead implementation), packages/agent-avatar-2d/ (2D SVG implementation)
+**Exploration:** surfaced by review (R1-13)
 **Status:** captured
