@@ -566,12 +566,15 @@ Third-party collections skip the build step — they load at runtime via fetch a
 ### Public API
 
 ```typescript
-function renderAvatar(code: string, modifiers?: AvatarModifiers): string
+function renderAvatar(code: string, options?: {
+  size?: AvatarSize;           // default: 'md'
+  modifiers?: AvatarModifiers;
+}): string
 ```
 
-Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts from collection → apply palette as CSS custom properties → apply modifiers (if provided) → assemble layers → return SVG string.
+Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts from collection → apply palette via string substitution → resolve modifiers (if provided) → resolve part variants → assemble layers at the requested detail tier → return SVG string.
 
-Without `modifiers`, the output is the base visual — part selections and palette only. With `modifiers`, adjective and canonical axis effects are applied. This separation is intentional: codes identify WHICH parts; modifiers express HOW those parts render.
+`size` controls the detail tier (xs silhouette-only through lg full detail) — without it, renders at `md`. Without `modifiers`, the output is the base visual — part selections and palette only. With `modifiers`, adjective and canonical axis effects are applied. This separation is intentional: codes identify WHICH parts; modifiers express HOW those parts render.
 
 ## Package Structure
 
