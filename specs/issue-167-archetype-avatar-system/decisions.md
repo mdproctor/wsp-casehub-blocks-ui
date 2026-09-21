@@ -178,3 +178,34 @@ When `overrides` is empty (most agents), the avatar is purely determined by the 
 **Sources:** DiceBear seed-based generation (prior art), eidos avatar-generator-contract.md Section 5 (input schema)
 **Exploration:** quick
 **Status:** captured
+
+## D14: Collection-based theming — abstract part IDs, swappable renderers
+
+**Choice:** Part IDs are abstract semantic identifiers (`hair-bald-sides`, `glasses-round-wire`), not visual assets. A **collection** provides concrete SVG renderers for every abstract part ID. Different collections render the same part differently (flat illustration, pixel art, watercolour, etc.). The assignment table (which parts go with which archetype) is collection-agnostic — it lives above the rendering layer.
+**Alternatives:**
+- Single hardcoded renderer per part — simpler, but locks to one art style forever
+- CSS-only theming (colour swaps, filters) — limited to palette changes, can't change shape language or line quality
+**Rationale:** Collections make the system extensible without touching the archetype model. A new art style is a new set of part renderers, not a new assignment table. This separates identity (what the avatar IS) from presentation (how it LOOKS). The eidos personality model → archetype config → part assignment is stable; only the visual rendering varies.
+**Trade-offs:** Each collection must implement renderers for every part ID in the registry. New parts added to the registry require updates across all collections. Mitigated by: (1) the part registry is finite and grows slowly; (2) collections can provide a fallback renderer for unknown parts.
+**Depends on:** D12 (mechanical composition)
+**Sources:** DiceBear style system (prior art — multiple styles rendering same seed), part-catalogue.md
+**Exploration:** quick
+**Status:** captured
+
+## D15: Compact avatar identity code
+
+**Choice:** Avatar identity is a compact reproducible code: `collection:config`. Two tiers:
+- **Preset** (no overrides, ~90% of agents): `mythic:P1B` — collection slug + `P` + archetype index (base36). 3-char config portion.
+- **Customised** (user tweaked parts): `mythic:C` + base64-encoded part selections. ~9-char config portion. 44 bits encodes the full part assignment (head 4b + hair 4b + facialHair 4b + costume 5b + prop1 6b + prop2 6b + glasses 4b + eyebrows 3b + accessory 4b + palette 4b = 44 bits = 6 bytes = 8 base64 chars).
+
+Same code → same SVG, always. Deterministic, printable, shareable, loggable.
+**Alternatives:**
+- SHA-256 of full config JSON — opaque, can't decode back to parts without a lookup table
+- Full config JSON — human-readable but verbose, not suitable for URLs or compact storage
+- UUID — unique but not deterministic from config
+**Rationale:** The two-tier encoding keeps the common case ultra-compact (6-8 chars total) while supporting full customisation. The code is decodable — given `mythic:P1B`, you can reconstruct the exact part list without a database lookup. The collection prefix ensures the code renders correctly even when multiple collections exist.
+**Trade-offs:** Part registry changes (adding new options, reordering) can invalidate existing codes. Mitigated by: append-only part registries (new parts get new indices, existing indices are stable). Version field could be added if registry evolution becomes a concern.
+**Depends on:** D13 (deterministic config identity), D14 (collection theming)
+**Sources:** DiceBear seed encoding, base64/base36 encoding
+**Exploration:** quick
+**Status:** captured
