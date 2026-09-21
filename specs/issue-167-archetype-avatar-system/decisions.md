@@ -196,15 +196,15 @@ When `overrides` is empty (most agents), the avatar is purely determined by the 
 
 **Choice:** Avatar identity is a compact reproducible code: `collection:config`. Two tiers:
 - **Preset** (no overrides, ~90% of agents): `mythic:P1B` — collection slug + `P` + archetype index (base36). 3-char config portion.
-- **Customised** (user tweaked parts): `mythic:C` + base64-encoded part selections. ~9-char config portion. 44 bits encodes the full part assignment (head 4b + hair 4b + facialHair 4b + costume 5b + prop1 6b + prop2 6b + glasses 4b + eyebrows 3b + accessory 4b + palette 4b = 44 bits = 6 bytes = 8 base64 chars).
+- **Customised** (user tweaked parts): `mythic:C` + base64-encoded part selections. ~9-char config portion. 48 bits encodes the full part assignment (version 2b + head 4b + hair 5b + facialHair 4b + costume 5b + glasses 4b + eyebrows 4b + accessory 4b + palette 4b + prop1 6b + prop2 6b = 48 bits = 8 base64 chars).
 
-Same code → same SVG, always. Deterministic, printable, shareable, loggable.
+Same code → same base SVG, always. Deterministic, printable, shareable, loggable. Codes encode part identity only — adjective/axis modifiers are not part of the code and require the full AvatarPayload.
 **Alternatives:**
 - SHA-256 of full config JSON — opaque, can't decode back to parts without a lookup table
 - Full config JSON — human-readable but verbose, not suitable for URLs or compact storage
 - UUID — unique but not deterministic from config
 **Rationale:** The two-tier encoding keeps the common case ultra-compact (6-8 chars total) while supporting full customisation. The code is decodable — given `mythic:P1B`, you can reconstruct the exact part list without a database lookup. The collection prefix ensures the code renders correctly even when multiple collections exist.
-**Trade-offs:** Part registry changes (adding new options, reordering) can invalidate existing codes. Mitigated by: append-only part registries (new parts get new indices, existing indices are stable). Version field could be added if registry evolution becomes a concern.
+**Trade-offs:** Part registry changes (adding new options, reordering) can invalidate existing codes. Mitigated by: append-only part registries (new parts get new indices, existing indices are stable) and a 2-bit version field enabling future encoding evolution.
 **Depends on:** D13 (deterministic config identity), D14 (collection theming)
 **Sources:** DiceBear seed encoding, base64/base36 encoding
 **Exploration:** quick

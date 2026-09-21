@@ -3,29 +3,26 @@
 Visual reference for the composable SVG part registry.
 Live preview: `avatar-preview.html` (serve locally to view).
 
-## Hair Styles (8)
+## Hair Styles (16)
 
 | ID | Name | Silhouette | Archetype Affinity |
 |----|------|------------|-------------------|
 | `hair-bald-sides` | Bald + sides | Exposed dome, grey side patches | Sage/Detective, Sage/Translator |
-| `hair-buzz` | Buzz cut | Thin shadow cap, stubble texture | Hero/Warrior, Hero/Athlete |
+| `hair-buzz` | Buzz cut | Thin shadow cap, stubble texture | Hero/Warrior, Hero/Athlete, Hero/Rescuer, Magician/Engineer, Everyman/Servant |
 | `hair-afro-short` | Short afro | Rounded volume extending beyond head | Caregiver/Guardian, Everyman/Citizen |
-| `hair-long-flowing` | Long flowing | Past shoulders, drapes both sides | Magician/Alchemist, Magician/Shaman |
-| `hair-messy-bun` | Messy bun | High knot with loose strands falling | Creator/Artist, Creator/Storyteller |
-| `hair-mohawk` | Mohawk | Tall central spike, shaved sides visible | Rebel/Maverick, Rebel/Gambler |
-| `hair-wild-einstein` | Wild Einstein | Exploding outward, frizzy strands | Sage/Mentor, Sage/Shaman |
-| `hair-slicked` | Slicked back | Swept tight, glossy lines, grey temples | Sovereign/Ruler, Sovereign/Judge |
-
-### Not yet designed (needed for full 48)
-
-- Braids / plaits — Explorer/Pioneer, Rebel/Activist
-- Shoulder-length wavy — Lover/Romantic, Innocent/Muse
-- Cropped with fringe — Jester/Entertainer, Innocent/Child
-- Undercut — Rebel/Reformer
-- Dreadlocks — Explorer/Adventurer variant
-- Pixie / short textured — Creator/Entrepreneur
-- Headscarf / head wrap — Caregiver/Angel, Everyman/Servant
-- Ponytail — Explorer/Seeker, Hero/Liberator
+| `hair-long-flowing` | Long flowing | Past shoulders, drapes both sides | Magician/Alchemist, Sage/Shaman, Jester/Shapeshifter, Lover/Romantic, Caregiver/Healer, Innocent/Dreamer |
+| `hair-messy-bun` | Messy bun | High knot with loose strands falling | Creator/Artist, Innocent/Muse, Lover/Matchmaker |
+| `hair-mohawk` | Mohawk | Tall central spike, shaved sides visible | Rebel/Maverick, Jester/Provocateur |
+| `hair-wild-einstein` | Wild Einstein | Exploding outward, frizzy strands | Sage/Mentor, Jester/Clown, Creator/Visionary |
+| `hair-slicked` | Slicked back | Swept tight, glossy lines, grey temples | Sovereign/Ruler, Sovereign/Judge, Sovereign/Ambassador, Rebel/Gambler, Lover/Hedonist, Everyman/Networker |
+| `hair-braids` | Braids / plaits | Symmetrical braids, textured | Explorer/Pioneer, Rebel/Activist |
+| `hair-shoulder-wavy` | Shoulder-length wavy | Past jawline, soft waves | Caregiver/Angel, Lover/Companion, Explorer/Generalist, Innocent/Idealist, Creator/Storyteller |
+| `hair-cropped-fringe` | Cropped with fringe | Short sides, textured fringe forward | Caregiver/Samaritan, Everyman/Advocate, Jester/Entertainer, Sage/Translator, Everyman/Citizen (alt), Innocent/Child |
+| `hair-undercut` | Undercut | Shaved sides, longer top swept | Rebel/Reformer |
+| `hair-windswept` | Windswept | Swept to one side, tousled by wind | Explorer/Adventurer |
+| `hair-pixie` | Pixie / short textured | Cropped, textured, modern | Creator/Entrepreneur, Magician/Innovator |
+| `hair-ponytail` | Ponytail | Pulled back, tied, practical | Explorer/Seeker, Hero/Liberator |
+| `hair-headwrap` | Headscarf / head wrap | Wrapped fabric, colour accent | Caregiver/Angel (alt), Magician/Shaman (alt) |
 
 ## Facial Hair (8)
 
@@ -40,13 +37,13 @@ Live preview: `avatar-preview.html` (serve locally to view).
 | `beard-rugged` | Rugged stubble | Heavier than stubble, visible dot texture | Explorer/Pioneer, Hero/Rescuer |
 | `beard-heavy` | Heavy stubble | Dense shadow, almost-beard | Rebel/Maverick, Rebel/Reformer |
 
-### Not yet designed
+### Reserved for future expansion
 
-- Van Dyke — Magician/Engineer
+- Van Dyke — Magician/Engineer variant
 - Mutton chops — Sovereign/Patriarch variant
-- Soul patch — Jester/Provocateur
-- Short boxed — Everyman/Advocate
-- Long wizard — Sage/Shaman
+- Soul patch — Jester/Provocateur variant
+- Short boxed — Everyman/Advocate variant
+- Long wizard — Sage/Shaman variant
 
 ## Glasses (8)
 
@@ -74,7 +71,9 @@ Live preview: `avatar-preview.html` (serve locally to view).
 | `brow-asymmetric` | Asymmetric | One higher than other | Skeptical, cocky, questioning |
 | `brow-concerned` | Concerned | Inner ends raised, outer lowered | Worried, empathic, caring |
 
-## Head Shapes (12)
+## Head Shapes (11)
+
+11 shapes for 12 families — Innocent and Caregiver share `head-round`. At xs size (24px), head shape + palette together differentiate: Innocent uses cream white, Caregiver uses forest green. The shared silhouette is intentional — both families share the "soft, approachable" visual language from their Stability/Independence quadrant overlap.
 
 | ID | Name | Shape | Families |
 |----|------|-------|----------|

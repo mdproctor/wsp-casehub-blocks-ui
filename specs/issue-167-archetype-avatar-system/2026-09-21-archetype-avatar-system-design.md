@@ -67,7 +67,34 @@ interface PartAssignment {
   eyebrows: string;
   accessories: string[];
 }
+
+interface AvatarModifiers {
+  adjectives?: string[];
+  canonicalAxes?: Partial<Record<DispositionAxis, { term: string; weight: number }>>;
+}
+
+interface PartModifiers {
+  intensity: number;    // -1 gentle/subtle … 0 neutral … +1 fierce/bold
+  temperament: number;  // -1 cool/measured … 0 neutral … +1 warm/passionate
+  energy: number;       // -1 calm/contemplative … 0 neutral … +1 restless/driven
+  precision: number;    // -1 loose/rough … 0 neutral … +1 meticulous/geometric
+  organic: number;      // -1 structured/angular … 0 neutral … +1 flowing/natural
+  expression: AxisExpression;
+}
+
+interface AxisExpression {
+  socialOrientation?: 'independent' | 'collaborative';
+  ruleFollowing?: 'strict' | 'flexible';
+  riskAppetite?: 'cautious' | 'bold';
+  autonomy?: 'autonomous' | 'directed';
+  conflictMode?: 'competing' | 'avoiding' | 'accommodating';
+}
 ```
+
+`AvatarModifiers` is the top-level input — raw adjective strings and canonical axis terms from the `AvatarPayload`. `PartModifiers` is the resolved numeric state consumed by renderers. `resolveModifiers(input: AvatarModifiers): PartModifiers` converts one to the other:
+1. Each adjective is looked up in the category mapping table (`modifiers.ts`)
+2. Adjectives in the same category combine: multiple "precision" adjectives reinforce, not stack
+3. Each canonical axis is reduced to its discrete endpoint term (weight > 0.5 selects the strong variant)
 
 ### Component
 
@@ -143,15 +170,26 @@ function createRenderer(symbolContent: string): PartRenderer {
 
 This reconciles the two layers:
 - **Collections** provide base SVG geometry (static `<symbol>` elements with `var(--skin)` etc.)
-- **PartRenderers** wrap that geometry, applying palette as CSS custom properties and modifier effects as SVG transforms
+- **PartRenderers** wrap that geometry, applying palette via string substitution of `var()` references and modifier effects via SVG transforms
 
 Modifier effects that go beyond palette operate on the SVG fragment via:
 - **SVG transforms** — rotation, scale, translate for expression/pose adjustments (energy, intensity)
 - **Stroke/path attribute adjustments** — stroke-width, dash patterns for line quality (precision)
 - **SVG filter injection** — blur, saturation for temperament effects
-- **Variant selection** — collections MAY provide multiple symbol variants per part (e.g., `hair:buzz`, `hair:buzz:energy-high`); if a variant exists matching the active modifier, the renderer selects it instead of the base symbol
 
-This means adjective effects on shape (D5's "Expression tension — brow angle, mouth set" for Intensity, "Pose dynamism" for Energy) are achieved either through SVG transforms on the base symbol or through variant symbols in the collection. The collection author decides which approach suits their art style — both are supported.
+### Variant Selection
+
+Collections MAY provide multiple symbol variants per part (e.g., `hair:buzz`, `hair:buzz:energy-high`). Variant selection happens in the **builder**, not the renderer — the builder knows both the modifier state and the full registry:
+
+```typescript
+function resolvePartKey(baseKey: string, modifiers: PartModifiers, registry: PartRegistry): string {
+  const variantKey = deriveVariantKey(baseKey, modifiers); // e.g., "hair:buzz:energy-high"
+  if (variantKey && registry.parts.has(variantKey)) return variantKey;
+  return baseKey;
+}
+```
+
+The builder calls `resolvePartKey` before looking up the renderer. `createRenderer` stays simple — one symbol in, one renderer out. This means adjective effects on shape (D5's "Expression tension — brow angle, mouth set" for Intensity, "Pose dynamism" for Energy) are achieved through either SVG transforms on the base symbol (always available) or variant symbols in the collection (richer, but requires collection author to provide them). Both mechanisms compose: a variant symbol still receives modifier transforms.
 
 ### Archetype Config Table
 
@@ -197,7 +235,11 @@ function buildAvatar(
 ): string {
   const layers: string[] = [];
   const detail = DETAIL_TIERS[size];
-  const render = (id: string) => registry.parts.get(id)!(palette, modifiers);
+  const partMods = resolveModifiers(modifiers);
+  const render = (baseKey: string) => {
+    const key = resolvePartKey(baseKey, partMods, registry);
+    return registry.parts.get(key)!(palette, partMods);
+  };
 
   layers.push(render(`costume:${config.costume}`));
   layers.push(render(`head:${config.head}`));
@@ -349,14 +391,14 @@ A single SVG file containing every composable part as a named `<symbol>`. The bu
 </svg>
 ```
 
-Parts use CSS custom properties for palette colouring:
+Parts use CSS custom property references as palette placeholders:
 - `var(--skin)` — skin tone
 - `var(--primary)` — family primary colour
 - `var(--secondary)` — family secondary colour
 - `var(--accent)` — family accent colour
 - `var(--hair-color)` — hair/beard colour
 
-The builder sets these as inline styles on the wrapping SVG when composing.
+`applyPalette()` performs string substitution: each `var(--skin)` reference in the SVG fragment is replaced with the concrete colour value from the `FamilyPalette` (e.g., `var(--skin)` → `#f5d6c3`). This is required because `renderAvatar()` returns a standalone SVG string that must render without a DOM context — CSS custom property cascade is not available. The `<agent-avatar>` component uses the same string substitution path for consistency.
 
 ### Preview File — `{collection}.preview.svg`
 
