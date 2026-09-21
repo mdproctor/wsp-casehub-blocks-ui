@@ -13,3 +13,16 @@ flyway-next-v: none
 
 ## Queue
 - [ ] casehubio/blocks-ui#167 — Issue #167 ← active
+  - [ ] Batch 1: Foundation
+    - [ ] Task 1: Package scaffold + types
+    - [ ] Task 2: Palettes + config table
+    - [ ] Task 3: Compact code encode/decode
+  - [ ] Batch 2: Builder
+    - [ ] Task 4: Collection registry + builder
+  - [ ] Batch 3: Mythic
+    - [ ] Task 5: Extract script + mythic parts SVG
+  - [ ] Batch 4: Component
+    - [ ] Task 6: agent-avatar component
+    - [ ] Task 7: DiceBear removal + registry
+  - [ ] Batch 5: Wiring
+    - [ ] Task 8: FullAgentDescriptor type additions
