@@ -2,6 +2,8 @@
 
 Replace DiceBear Avataaars with a purpose-built configurable avatar platform driven by the Hartwell & Chen archetype model. 12 families × 4 sub-archetypes = 48 preset configurations, rendered from composable SVG parts via a mechanical builder. Extensible via themed collections.
 
+**Note on count:** The issue title and eidos contract header say "60 sub-archetypes" (12 × 5), but the contract data and ArchetypeTerm.java list exactly 4 per family = 48. This spec uses 48. If eidos adds a 5th sub-archetype per family, the system accommodates it — a new row in the config table and new part renderers for any new props.
+
 ## Architecture
 
 ### Data Flow
@@ -306,6 +308,83 @@ agent:
 
 When `avatar` is absent, the UI derives it from `archetype` using the default collection and preset config.
 
+## SVG Sprite Sheets — Part Asset Format
+
+Parts are authored and stored as SVG sprite sheets — one file per category. Each part is a `<symbol>` element with a unique ID. This format serves two purposes:
+
+1. **Catalogue browsing:** the sheet renders directly in any SVG viewer or the UI catalogue browser
+2. **Build input:** a build step extracts symbols into TypeScript constants for zero-network runtime rendering (D9)
+
+### Sheet Structure
+
+```xml
+<!-- collections/mythic/sheets/heads.svg -->
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="head-oval" viewBox="0 0 200 240">
+    <ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>
+  </symbol>
+  <symbol id="head-round" viewBox="0 0 200 240">
+    <circle cx="100" cy="90" r="42" fill="var(--skin)"/>
+  </symbol>
+  <symbol id="head-square-jaw" viewBox="0 0 200 240">
+    <path d="M65,55 Q62,95 75,115 ..." fill="var(--skin)"/>
+  </symbol>
+  <!-- ... 9 more head shapes -->
+</svg>
+```
+
+Parts use CSS custom properties (`var(--skin)`, `var(--primary)`, `var(--accent)`) for palette-driven fills. The builder sets these properties when composing.
+
+### Sheets per Collection
+
+```
+collections/mythic/sheets/
+├── heads.svg          # 12 symbols
+├── hairs.svg          # 16 symbols
+├── facial-hairs.svg   # 13 symbols
+├── costumes.svg       # 20 symbols
+├── props.svg          # 48 symbols
+├── glasses.svg        # 8 symbols
+├── eyebrows.svg       # 8 symbols
+└── accessories.svg    # 12 symbols
+```
+
+### Build Step: Sheet → TypeScript
+
+A build script reads each sheet, extracts `<symbol>` inner content by ID, and generates TypeScript part maps:
+
+```typescript
+// GENERATED — do not edit. Source: sheets/heads.svg
+export const HEAD_PARTS: Record<string, string> = {
+  'oval': '<ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>',
+  'round': '<circle cx="100" cy="90" r="42" fill="var(--skin)"/>',
+  'square-jaw': '<path d="M65,55 Q62,95 75,115 ..." fill="var(--skin)"/>',
+  // ...
+};
+```
+
+At runtime, the builder reads from these maps — no fetch, no DOM parsing.
+
+### Catalogue Browser
+
+The UI catalogue (for the wizard and part-catalogue review) renders the sheets directly. Each sheet is an SVG file that can be displayed as a grid by referencing symbols:
+
+```html
+<svg viewBox="0 0 200 240" width="64" height="64">
+  <use href="heads.svg#head-oval"/>
+</svg>
+```
+
+This means the same SVG files serve both design review and runtime generation.
+
+### Public API
+
+```typescript
+function renderAvatar(code: string): string
+```
+
+Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts → apply palette → assemble layers.
+
 ## Package Structure
 
 All new code lives in `packages/agent-avatar-2d/src/`, replacing the current dist-only package. The package name (`@casehubio/agent-avatar-2d`) and element tag (`agent-avatar`) are unchanged.
@@ -313,10 +392,10 @@ All new code lives in `packages/agent-avatar-2d/src/`, replacing the current dis
 ```
 packages/agent-avatar-2d/
 ├── src/
-│   ├── index.ts                    # public API exports
+│   ├── index.ts                    # public API: renderAvatar(), AgentAvatar, encode/decode
 │   ├── agent-avatar.ts             # <agent-avatar> LitElement component
 │   ├── types.ts                    # AvatarPayload, PartAssignment, FamilyPalette, etc.
-│   ├── builder.ts                  # buildAvatar() — layer assembly
+│   ├── builder.ts                  # buildAvatar() — layer assembly, palette injection
 │   ├── config-table.ts             # ARCHETYPE_CONFIGS — 48 preset mappings
 │   ├── palettes.ts                 # FAMILY_PALETTES — 12 colour palettes
 │   ├── code.ts                     # encode/decode compact avatar codes
@@ -325,14 +404,26 @@ packages/agent-avatar-2d/
 │   │   ├── registry.ts             # registerCollection(), getCollection()
 │   │   └── mythic/
 │   │       ├── index.ts            # mythicCollection export
-│   │       ├── heads.ts            # head shape renderers (12)
-│   │       ├── hairs.ts            # hair style renderers (8+)
-│   │       ├── facial-hairs.ts     # facial hair renderers (8+)
-│   │       ├── costumes.ts         # costume renderers (20)
-│   │       ├── props.ts            # prop renderers (48)
-│   │       ├── glasses.ts          # glasses renderers (8)
-│   │       ├── eyebrows.ts         # eyebrow renderers (8)
-│   │       └── accessories.ts      # accessory renderers (12)
+│   │       ├── sheets/             # SOURCE OF TRUTH — SVG sprite sheets
+│   │       │   ├── heads.svg
+│   │       │   ├── hairs.svg
+│   │       │   ├── facial-hairs.svg
+│   │       │   ├── costumes.svg
+│   │       │   ├── props.svg
+│   │       │   ├── glasses.svg
+│   │       │   ├── eyebrows.svg
+│   │       │   └── accessories.svg
+│   │       └── generated/          # GENERATED from sheets — do not edit
+│   │           ├── head-parts.ts
+│   │           ├── hair-parts.ts
+│   │           ├── facial-hair-parts.ts
+│   │           ├── costume-parts.ts
+│   │           ├── prop-parts.ts
+│   │           ├── glasses-parts.ts
+│   │           ├── eyebrow-parts.ts
+│   │           └── accessory-parts.ts
+│   ├── scripts/
+│   │   └── extract-sheets.ts       # SVG sheet → TypeScript part maps
 │   └── __tests__/
 │       ├── agent-avatar.test.ts    # component tests + ARIA
 │       ├── builder.test.ts         # layer assembly tests
