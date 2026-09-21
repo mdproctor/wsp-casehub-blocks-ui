@@ -142,3 +142,39 @@
 **Sources:** packages/avatar/src/ (3D TalkingHead implementation), packages/agent-avatar-2d/ (2D SVG implementation)
 **Exploration:** surfaced by review (R1-13)
 **Status:** captured
+
+## D12: Mechanical composition with preset configurations
+
+**Choice:** The 48 archetypes are preset configurations in a lookup table, not hand-drawn illustrations. A mechanical builder assembles SVG from composable part renderers given a config object. Each part renderer is a pure function `(palette, modifiers) → SVG path string`. The builder stacks layers in order (body → costume → head → hair → facial hair → face → glasses → props → accessories).
+**Alternatives:**
+- Hand-craft each archetype SVG independently — maximum visual quality per archetype, but no composability, no user customisation, no part reuse
+- Hybrid: hand-craft family bases, compose only for sub-archetype differentiation — middle ground but inconsistent rendering pipeline
+**Rationale:** Mechanical composition means: (1) the part-catalogue.md assignment table translates directly to TypeScript config data — no creative interpretation gap between spec and code; (2) end users can customise avatars by overriding parts from the preset; (3) new archetypes are added by registering a new config row, not drawing new art; (4) the wizard generates everything at setup time from the converged archetype + user tweaks.
+**Trade-offs:** Visual quality is bounded by how well parts compose together. Hand-drawn archetypes would have perfect per-archetype coherence. Mitigated by designing parts to compose well (shared viewBox, consistent anchor points, palette-driven colouring).
+**Depends on:** D4 (layered builder with part registries)
+**Sources:** part-catalogue.md (the config table), DiceBear architecture (prior art for configurable avatar builders)
+**Exploration:** quick — natural consequence of D4
+**Status:** captured
+
+## D13: Deterministic reproducible avatars via config identity
+
+**Choice:** An avatar is fully determined by its config — store the config, not the SVG. The config is a compact delta from the archetype preset:
+```json
+{
+  "archetype": "Sage/Detective",
+  "overrides": { "hair": "afro-short", "glasses": "aviator" },
+  "adjectives": ["meticulous", "persistent"],
+  "canonicalAxes": { "ruleFollowing": { "term": "strict", "weight": 1.0 } }
+}
+```
+When `overrides` is empty (most agents), the avatar is purely determined by the archetype identity. When present, it records user customisations from the wizard. A SHA-256 of the resolved config (preset + overrides merged) serves as a cache key — same config always produces the same SVG output, no storage of rendered SVGs needed.
+**Alternatives:**
+- Store rendered SVG blobs — guaranteed pixel-identical across sessions, but large storage, stale when part renderers improve
+- Store only archetype name (no overrides) — simpler, but no user customisation survives
+- Random seed like DiceBear — reproducible but semantically meaningless, can't be reverse-engineered to parts
+**Rationale:** Storing config-as-identity means: (1) avatars survive part renderer upgrades — when a hair style SVG improves, all agents using that hair style get the improvement automatically; (2) the config is human-readable and debuggable; (3) the SHA gives a fast equality check without comparing full configs; (4) the wizard stores the result as data on the agent entity, not as a rendered artifact.
+**Trade-offs:** Avatars change when part renderers change (not pixel-stable across versions). This is a feature, not a bug — renderer improvements propagate to all agents. If pixel-stability is ever needed (e.g., for printed materials), render-and-cache at that point.
+**Depends on:** D12 (mechanical composition), D3 (archetype payload API)
+**Sources:** DiceBear seed-based generation (prior art), eidos avatar-generator-contract.md Section 5 (input schema)
+**Exploration:** quick
+**Status:** captured
