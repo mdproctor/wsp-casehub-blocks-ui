@@ -1,0 +1,1161 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<!-- Collection: geometric — Bauhaus / Constructivist style
+     Pure geometric primitives: circles, rectangles, triangles, polygons.
+     Bold flat colour blocks. No freehand curves, no gradients, no organic shapes.
+     Half-body framing. Abstract, modernist, high-contrast silhouette language. -->
+
+<!-- ═══ Heads ═══ -->
+<symbol id="head:round" viewBox="0 0 200 240">
+  <!-- Soft circle head for Innocent / Caregiver -->
+  <circle cx="100" cy="85" r="55" fill="var(--skin)"/>
+  <!-- Simple geometric neck -->
+  <rect x="85" y="135" width="30" height="25" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:standard" viewBox="0 0 200 240">
+  <!-- Neutral rounded-rect head -->
+  <rect x="50" y="35" width="100" height="110" rx="20" ry="20" fill="var(--skin)"/>
+  <rect x="85" y="140" width="30" height="25" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:soft-oval" viewBox="0 0 200 240">
+  <!-- Wider soft oval via overlapping shapes -->
+  <ellipse cx="100" cy="90" rx="60" ry="55" fill="var(--skin)"/>
+  <rect x="82" y="140" width="36" height="22" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:oval" viewBox="0 0 200 240">
+  <!-- Elongated scholarly oval -->
+  <ellipse cx="100" cy="95" rx="48" ry="62" fill="var(--skin)"/>
+  <rect x="88" y="152" width="24" height="20" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:square-jaw" viewBox="0 0 200 240">
+  <!-- Strong square jaw Hero -->
+  <rect x="48" y="30" width="104" height="90" fill="var(--skin)"/>
+  <polygon points="48,120 100,145 152,120 152,30 48,30" fill="var(--skin)"/>
+  <rect x="82" y="140" width="36" height="28" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:diamond" viewBox="0 0 200 240">
+  <!-- Diamond Magician: narrow top/bottom, wide cheeks -->
+  <polygon points="100,25 155,90 100,155 45,90" fill="var(--skin)"/>
+  <rect x="88" y="145" width="24" height="22" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:heart" viewBox="0 0 200 240">
+  <!-- Heart Lover: wide forehead, pointed chin via triangle + circle -->
+  <circle cx="70" cy="70" r="40" fill="var(--skin)"/>
+  <circle cx="130" cy="70" r="40" fill="var(--skin)"/>
+  <polygon points="40,80 100,160 160,80" fill="var(--skin)"/>
+  <rect x="88" y="150" width="24" height="18" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:angular" viewBox="0 0 200 240">
+  <!-- Sharp angular Rebel -->
+  <polygon points="55,30 145,30 160,80 140,140 100,155 60,140 40,80" fill="var(--skin)"/>
+  <rect x="85" y="148" width="30" height="22" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:strong-sym" viewBox="0 0 200 240">
+  <!-- Sovereign commanding hybrid -->
+  <rect x="55" y="35" width="90" height="70" fill="var(--skin)"/>
+  <polygon points="55,105 100,150 145,105 145,35 55,35" fill="var(--skin)"/>
+  <rect x="82" y="145" width="36" height="25" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:weathered" viewBox="0 0 200 240">
+  <!-- Explorer stronger bone structure -->
+  <ellipse cx="100" cy="90" rx="52" ry="58" fill="var(--skin)"/>
+  <rect x="55" y="70" width="20" height="40" fill="var(--skin)"/>
+  <rect x="125" y="70" width="20" height="40" fill="var(--skin)"/>
+  <rect x="85" y="142" width="30" height="24" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="head:round-wide" viewBox="0 0 200 240">
+  <!-- Jester wider animated -->
+  <circle cx="100" cy="85" r="62" fill="var(--skin)"/>
+  <rect x="80" y="140" width="40" height="22" fill="var(--skin)"/>
+</symbol>
+
+<!-- ═══ Hair Styles ═══ -->
+<symbol id="hair:bald-sides" viewBox="0 0 200 240">
+  <!-- Exposed dome, side patches -->
+  <rect x="45" y="70" width="18" height="40" fill="var(--hair-color)"/>
+  <rect x="137" y="70" width="18" height="40" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:buzz" viewBox="0 0 200 240">
+  <!-- Very short stubble cap -->
+  <rect x="48" y="30" width="104" height="18" fill="var(--hair-color)"/>
+  <rect x="45" y="45" width="12" height="30" fill="var(--hair-color)"/>
+  <rect x="143" y="45" width="12" height="30" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:afro-short" viewBox="0 0 200 240">
+  <!-- Rounded volume beyond head: cluster of circles -->
+  <circle cx="55" cy="55" r="28" fill="var(--hair-color)"/>
+  <circle cx="145" cy="55" r="28" fill="var(--hair-color)"/>
+  <circle cx="100" cy="35" r="32" fill="var(--hair-color)"/>
+  <circle cx="70" cy="40" r="25" fill="var(--hair-color)"/>
+  <circle cx="130" cy="40" r="25" fill="var(--hair-color)"/>
+  <circle cx="100" cy="60" r="30" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:long-flowing" viewBox="0 0 200 240">
+  <!-- Past shoulders, geometric drapes -->
+  <rect x="30" y="40" width="25" height="160" fill="var(--hair-color)"/>
+  <rect x="145" y="40" width="25" height="160" fill="var(--hair-color)"/>
+  <rect x="50" y="30" width="100" height="25" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:messy-bun" viewBox="0 0 200 240">
+  <!-- High knot + loose strands -->
+  <circle cx="100" cy="28" r="22" fill="var(--hair-color)"/>
+  <rect x="90" y="45" width="20" height="15" fill="var(--hair-color)"/>
+  <rect x="40" y="60" width="15" height="50" fill="var(--hair-color)"/>
+  <rect x="145" y="55" width="12" height="45" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:mohawk" viewBox="0 0 200 240">
+  <!-- Tall central spike, shaved sides -->
+  <polygon points="90,5 110,5 105,80 95,80" fill="var(--hair-color)"/>
+  <rect x="92" y="70" width="16" height="20" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:wild-einstein" viewBox="0 0 200 240">
+  <!-- Exploding outward frizzy: radial triangles -->
+  <polygon points="100,20 120,5 130,40" fill="var(--hair-color)"/>
+  <polygon points="100,20 80,5 70,40" fill="var(--hair-color)"/>
+  <polygon points="130,50 160,30 150,70" fill="var(--hair-color)"/>
+  <polygon points="70,50 40,30 50,70" fill="var(--hair-color)"/>
+  <polygon points="140,80 170,70 155,110" fill="var(--hair-color)"/>
+  <polygon points="60,80 30,70 45,110" fill="var(--hair-color)"/>
+  <circle cx="100" cy="50" r="25" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:slicked" viewBox="0 0 200 240">
+  <!-- Swept back tight -->
+  <rect x="50" y="30" width="100" height="30" fill="var(--hair-color)"/>
+  <polygon points="50,60 150,60 140,90 60,90" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:shoulder-wavy" viewBox="0 0 200 240">
+  <!-- Wavy shoulder length: stepped rectangles -->
+  <rect x="35" y="40" width="20" height="120" fill="var(--hair-color)"/>
+  <rect x="145" y="40" width="20" height="120" fill="var(--hair-color)"/>
+  <rect x="50" y="30" width="100" height="25" fill="var(--hair-color)"/>
+  <rect x="30" y="100" width="15" height="40" fill="var(--hair-color)"/>
+  <rect x="155" y="110" width="15" height="35" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:cropped-fringe" viewBox="0 0 200 240">
+  <!-- Short with fringe -->
+  <rect x="48" y="30" width="104" height="35" fill="var(--hair-color)"/>
+  <rect x="45" y="55" width="20" height="40" fill="var(--hair-color)"/>
+  <rect x="135" y="55" width="20" height="40" fill="var(--hair-color)"/>
+  <rect x="55" y="60" width="90" height="12" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:pixie" viewBox="0 0 200 240">
+  <!-- Short textured crop -->
+  <rect x="50" y="32" width="100" height="28" fill="var(--hair-color)"/>
+  <rect x="48" y="50" width="15" height="35" fill="var(--hair-color)"/>
+  <rect x="137" y="50" width="15" height="35" fill="var(--hair-color)"/>
+  <polygon points="60,55 80,45 90,60" fill="var(--hair-color)"/>
+  <polygon points="110,55 130,45 140,60" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:windswept" viewBox="0 0 200 240">
+  <!-- Blowing to one side -->
+  <polygon points="50,35 140,25 155,50 145,80 60,70" fill="var(--hair-color)"/>
+  <rect x="140" y="40" width="30" height="50" fill="var(--hair-color)"/>
+  <polygon points="160,50 190,40 180,90 155,80" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:braids" viewBox="0 0 200 240">
+  <!-- Plaited geometric -->
+  <rect x="40" y="50" width="18" height="100" fill="var(--hair-color)"/>
+  <rect x="142" y="50" width="18" height="100" fill="var(--hair-color)"/>
+  <rect x="55" y="30" width="90" height="25" fill="var(--hair-color)"/>
+  <!-- braid segments -->
+  <rect x="42" y="70" width="14" height="12" fill="var(--secondary)"/>
+  <rect x="42" y="95" width="14" height="12" fill="var(--secondary)"/>
+  <rect x="42" y="120" width="14" height="12" fill="var(--secondary)"/>
+  <rect x="144" y="70" width="14" height="12" fill="var(--secondary)"/>
+  <rect x="144" y="95" width="14" height="12" fill="var(--secondary)"/>
+  <rect x="144" y="120" width="14" height="12" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="hair:ponytail" viewBox="0 0 200 240">
+  <!-- Pulled back -->
+  <rect x="50" y="30" width="100" height="30" fill="var(--hair-color)"/>
+  <rect x="130" y="50" width="20" height="15" fill="var(--hair-color)"/>
+  <rect x="140" y="60" width="18" height="90" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="hair:undercut" viewBox="0 0 200 240">
+  <!-- Shaved sides, longer on top -->
+  <rect x="55" y="25" width="90" height="40" fill="var(--hair-color)"/>
+  <rect x="60" y="50" width="80" height="20" fill="var(--hair-color)"/>
+</symbol>
+
+<!-- ═══ Facial Hair ═══ -->
+<symbol id="beard:stubble" viewBox="0 0 200 240">
+  <rect x="60" y="115" width="80" height="12" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="70" y="125" width="60" height="8" fill="var(--hair-color)" opacity="0.4"/>
+</symbol>
+
+<symbol id="beard:goatee" viewBox="0 0 200 240">
+  <polygon points="85,120 100,150 115,120" fill="var(--hair-color)"/>
+  <rect x="75" y="110" width="50" height="8" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="beard:full-round" viewBox="0 0 200 240">
+  <ellipse cx="100" cy="145" rx="50" ry="30" fill="var(--hair-color)"/>
+  <rect x="55" y="110" width="90" height="25" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="beard:bushy-white" viewBox="0 0 200 240">
+  <!-- Large textured white -->
+  <ellipse cx="100" cy="150" rx="55" ry="40" fill="#f0f0f0"/>
+  <rect x="50" y="105" width="100" height="30" fill="#f0f0f0"/>
+  <circle cx="70" cy="140" r="12" fill="#e0e0e0"/>
+  <circle cx="130" cy="140" r="12" fill="#e0e0e0"/>
+  <circle cx="100" cy="165" r="15" fill="#e8e8e8"/>
+</symbol>
+
+<symbol id="beard:handlebar" viewBox="0 0 200 240">
+  <rect x="55" y="110" width="90" height="8" fill="var(--hair-color)"/>
+  <polygon points="55,114 40,100 45,115 55,118" fill="var(--hair-color)"/>
+  <polygon points="145,114 160,100 155,115 145,118" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="beard:rugged" viewBox="0 0 200 240">
+  <rect x="55" y="115" width="90" height="20" fill="var(--hair-color)"/>
+  <rect x="65" y="130" width="70" height="12" fill="var(--hair-color)"/>
+  <polygon points="60,135 70,150 80,135" fill="var(--hair-color)"/>
+  <polygon points="120,135 130,150 140,135" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="beard:heavy" viewBox="0 0 200 240">
+  <rect x="50" y="110" width="100" height="30" fill="var(--hair-color)"/>
+  <rect x="60" y="135" width="80" height="15" fill="var(--hair-color)"/>
+</symbol>
+
+<!-- ═══ Costumes ═══ -->
+<symbol id="costume:blazer-tie" viewBox="0 0 200 240">
+  <!-- Formal jacket + tie -->
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <polygon points="40,155 100,180 160,155 160,240 40,240" fill="var(--primary)"/>
+  <rect x="90" y="160" width="20" height="80" fill="var(--secondary)"/>
+  <polygon points="90,160 100,200 110,160" fill="var(--accent)"/>
+  <!-- lapels -->
+  <polygon points="40,155 70,175 70,240 40,240" fill="var(--secondary)"/>
+  <polygon points="160,155 130,175 130,240 160,240" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:tweed-patches" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="45" y="180" width="25" height="30" fill="var(--secondary)"/>
+  <rect x="130" y="180" width="25" height="30" fill="var(--secondary)"/>
+  <rect x="85" y="155" width="30" height="20" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:robes" viewBox="0 0 200 240">
+  <polygon points="30,155 170,155 180,240 20,240" fill="var(--primary)"/>
+  <rect x="40" y="160" width="120" height="10" fill="var(--accent)"/>
+  <rect x="90" y="155" width="20" height="85" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:lab-coat" viewBox="0 0 200 240">
+  <rect x="35" y="155" width="130" height="85" fill="#f5f5f5"/>
+  <rect x="90" y="160" width="20" height="50" fill="var(--secondary)"/>
+  <circle cx="100" cy="180" r="4" fill="var(--primary)"/>
+  <circle cx="100" cy="200" r="4" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="costume:armour" viewBox="0 0 200 240">
+  <rect x="45" y="155" width="110" height="70" fill="var(--secondary)"/>
+  <rect x="50" y="160" width="100" height="15" fill="var(--accent)"/>
+  <rect x="40" y="150" width="25" height="40" fill="var(--primary)"/>
+  <rect x="135" y="150" width="25" height="40" fill="var(--primary)"/>
+  <polygon points="70,155 100,175 130,155" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:utility-vest" viewBox="0 0 200 240">
+  <rect x="45" y="155" width="110" height="85" fill="var(--primary)"/>
+  <rect x="55" y="170" width="30" height="20" fill="var(--secondary)"/>
+  <rect x="115" y="170" width="30" height="20" fill="var(--secondary)"/>
+  <rect x="55" y="200" width="30" height="15" fill="var(--secondary)"/>
+  <rect x="115" y="200" width="30" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:leather-jacket" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <polygon points="40,155 70,170 70,240 40,240" fill="var(--secondary)"/>
+  <polygon points="160,155 130,170 130,240 160,240" fill="var(--secondary)"/>
+  <rect x="95" y="160" width="10" height="60" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:smock" viewBox="0 0 200 240">
+  <rect x="35" y="155" width="130" height="85" fill="var(--primary)"/>
+  <circle cx="60" cy="180" r="8" fill="var(--accent)" opacity="0.6"/>
+  <circle cx="140" cy="200" r="10" fill="var(--secondary)" opacity="0.5"/>
+  <rect x="90" y="170" width="20" height="40" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:formal-sash" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <polygon points="40,155 160,200 160,210 40,165" fill="var(--accent)"/>
+  <rect x="40" y="150" width="25" height="15" fill="var(--secondary)"/>
+  <rect x="135" y="150" width="25" height="15" fill="var(--secondary)"/>
+  <circle cx="70" cy="190" r="6" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:diplomatic" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="90" y="160" width="20" height="70" fill="var(--secondary)"/>
+  <rect x="120" y="170" width="25" height="12" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:vest-cross" viewBox="0 0 200 240">
+  <rect x="45" y="155" width="110" height="85" fill="var(--primary)"/>
+  <rect x="90" y="170" width="20" height="40" fill="var(--accent)"/>
+  <rect x="80" y="185" width="40" height="10" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:soft-wrap" viewBox="0 0 200 240">
+  <polygon points="30,155 170,155 175,240 25,240" fill="var(--primary)"/>
+  <rect x="50" y="160" width="100" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:plain-shirt" viewBox="0 0 200 240">
+  <rect x="45" y="155" width="110" height="85" fill="var(--primary)"/>
+  <rect x="90" y="155" width="20" height="30" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:polo" viewBox="0 0 200 240">
+  <rect x="45" y="155" width="110" height="85" fill="var(--primary)"/>
+  <polygon points="80,155 100,175 120,155" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:simple-dress" viewBox="0 0 200 240">
+  <polygon points="50,155 150,155 165,240 35,240" fill="var(--primary)"/>
+  <rect x="70" y="160" width="60" height="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:performer" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="50" y="170" width="30" height="20" fill="var(--accent)"/>
+  <rect x="120" y="190" width="30" height="20" fill="var(--secondary)"/>
+  <polygon points="90,155 110,155 100,180" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:hoodie" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="70" y="150" width="60" height="25" fill="var(--secondary)"/>
+  <rect x="90" y="165" width="20" height="50" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:romantic" viewBox="0 0 200 240">
+  <polygon points="35,155 165,155 170,240 30,240" fill="var(--primary)"/>
+  <rect x="60" y="160" width="80" height="12" fill="var(--secondary)"/>
+  <circle cx="100" cy="185" r="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="costume:business" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="90" y="160" width="20" height="70" fill="var(--secondary)"/>
+  <rect x="45" y="155" width="15" height="85" fill="var(--secondary)"/>
+  <rect x="140" y="155" width="15" height="85" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:explorer-jacket" viewBox="0 0 200 240">
+  <rect x="40" y="155" width="120" height="85" fill="var(--primary)"/>
+  <rect x="50" y="175" width="25" height="20" fill="var(--secondary)"/>
+  <rect x="125" y="175" width="25" height="20" fill="var(--secondary)"/>
+  <rect x="40" y="155" width="30" height="15" fill="var(--secondary)"/>
+  <rect x="130" y="155" width="30" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<!-- ═══ Props ═══ -->
+<!-- Academic / Sage -->
+<symbol id="prop:magnifying-glass" viewBox="0 0 200 240">
+  <circle cx="145" cy="180" r="22" fill="none" stroke="var(--accent)" stroke-width="6"/>
+  <circle cx="145" cy="180" r="14" fill="none" stroke="var(--secondary)" stroke-width="2"/>
+  <rect x="158" y="195" width="8" height="30" transform="rotate(45 162 210)" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:notebook" viewBox="0 0 200 240">
+  <rect x="130" y="160" width="45" height="55" fill="var(--secondary)"/>
+  <rect x="135" y="165" width="35" height="5" fill="var(--accent)"/>
+  <rect x="135" y="175" width="35" height="5" fill="var(--primary)"/>
+  <rect x="135" y="185" width="35" height="5" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:book-open" viewBox="0 0 200 240">
+  <polygon points="120,170 150,160 150,210 120,200" fill="var(--secondary)"/>
+  <polygon points="150,160 180,170 180,200 150,210" fill="var(--primary)"/>
+  <line x1="150" y1="160" x2="150" y2="210" stroke="var(--accent)" stroke-width="2"/>
+</symbol>
+
+<symbol id="prop:chalk" viewBox="0 0 200 240">
+  <rect x="150" y="170" width="12" height="40" fill="#f5f5f5"/>
+  <rect x="148" y="165" width="16" height="8" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:crystal-ball" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="25" fill="var(--accent)" opacity="0.7"/>
+  <circle cx="150" cy="185" r="18" fill="none" stroke="var(--secondary)" stroke-width="3"/>
+  <rect x="140" y="208" width="20" height="8" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:feathers" viewBox="0 0 200 240">
+  <polygon points="140,160 155,200 145,205" fill="var(--primary)"/>
+  <polygon points="155,165 170,195 160,200" fill="var(--secondary)"/>
+  <polygon points="160,155 175,185 168,190" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:scroll" viewBox="0 0 200 240">
+  <rect x="125" y="165" width="50" height="50" fill="var(--secondary)"/>
+  <rect x="125" y="160" width="50" height="10" fill="var(--primary)"/>
+  <rect x="125" y="210" width="50" height="10" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:rosetta-stone" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="55" fill="var(--secondary)"/>
+  <rect x="135" y="175" width="30" height="6" fill="var(--accent)"/>
+  <rect x="135" y="185" width="30" height="6" fill="var(--primary)"/>
+  <rect x="135" y="195" width="30" height="6" fill="var(--accent)"/>
+</symbol>
+
+<!-- Hero / Warrior -->
+<symbol id="prop:shield" viewBox="0 0 200 240">
+  <polygon points="140,155 175,170 170,220 140,230 110,220 105,170" fill="var(--primary)"/>
+  <polygon points="140,165 160,175 155,210 140,215 125,210 120,175" fill="var(--secondary)"/>
+  <rect x="135" y="185" width="10" height="20" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:sword-hilt" viewBox="0 0 200 240">
+  <rect x="145" y="160" width="12" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="155" width="32" height="12" fill="var(--primary)"/>
+  <polygon points="140,205 162,205 151,230" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:medal" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="18" fill="var(--accent)"/>
+  <circle cx="150" cy="185" r="12" fill="var(--primary)"/>
+  <rect x="145" y="155" width="10" height="20" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:wristbands" viewBox="0 0 200 240">
+  <rect x="130" y="190" width="40" height="12" fill="var(--primary)"/>
+  <rect x="135" y="205" width="30" height="8" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Explorer / Rebel -->
+<symbol id="prop:torch" viewBox="0 0 200 240">
+  <rect x="145" y="180" width="12" height="40" fill="var(--secondary)"/>
+  <polygon points="140,175 160,175 150,150" fill="var(--accent)"/>
+  <polygon points="142,160 158,160 150,140" fill="#ff6600"/>
+</symbol>
+
+<symbol id="prop:broken-chain" viewBox="0 0 200 240">
+  <rect x="130" y="175" width="15" height="8" fill="var(--secondary)"/>
+  <rect x="150" y="175" width="15" height="8" fill="var(--secondary)"/>
+  <rect x="140" y="185" width="15" height="8" fill="var(--primary)"/>
+  <rect x="155" y="195" width="15" height="8" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:first-aid" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="#ffffff"/>
+  <rect x="145" y="175" width="10" height="30" fill="#cc0000"/>
+  <rect x="135" y="185" width="30" height="10" fill="#cc0000"/>
+</symbol>
+
+<symbol id="prop:rope" viewBox="0 0 200 240">
+  <rect x="145" y="160" width="10" height="60" fill="var(--secondary)"/>
+  <circle cx="150" cy="165" r="8" fill="none" stroke="var(--primary)" stroke-width="3"/>
+  <circle cx="150" cy="185" r="8" fill="none" stroke="var(--primary)" stroke-width="3"/>
+  <circle cx="150" cy="205" r="8" fill="none" stroke="var(--primary)" stroke-width="3"/>
+</symbol>
+
+<!-- Magician -->
+<symbol id="prop:glowing-orb" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="22" fill="var(--accent)"/>
+  <circle cx="150" cy="185" r="12" fill="#ffffff" opacity="0.6"/>
+</symbol>
+
+<symbol id="prop:smoke-wisps" viewBox="0 0 200 240">
+  <rect x="140" y="160" width="8" height="30" fill="var(--secondary)" opacity="0.5"/>
+  <rect x="155" y="170" width="6" height="40" fill="var(--primary)" opacity="0.4"/>
+  <rect x="148" y="185" width="10" height="25" fill="var(--accent)" opacity="0.5"/>
+</symbol>
+
+<symbol id="prop:wrench-gear" viewBox="0 0 200 240">
+  <circle cx="150" cy="180" r="20" fill="var(--secondary)"/>
+  <circle cx="150" cy="180" r="10" fill="var(--primary)"/>
+  <rect x="145" y="155" width="10" height="15" fill="var(--accent)"/>
+  <rect x="145" y="200" width="10" height="15" fill="var(--accent)"/>
+  <rect x="125" y="175" width="15" height="10" fill="var(--accent)"/>
+  <rect x="160" y="175" width="15" height="10" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:schematic" viewBox="0 0 200 240">
+  <rect x="125" y="160" width="50" height="60" fill="var(--secondary)"/>
+  <line x1="135" y1="175" x2="165" y2="175" stroke="var(--primary)" stroke-width="2"/>
+  <line x1="135" y1="190" x2="165" y2="190" stroke="var(--primary)" stroke-width="2"/>
+  <line x1="145" y1="165" x2="145" y2="205" stroke="var(--accent)" stroke-width="2"/>
+  <circle cx="155" cy="185" r="5" fill="var(--accent)"/>
+</symbol>
+
+<!-- Creator / Inventor -->
+<symbol id="prop:lightbulb" viewBox="0 0 200 240">
+  <circle cx="150" cy="175" r="18" fill="var(--accent)"/>
+  <rect x="142" y="190" width="16" height="20" fill="var(--secondary)"/>
+  <rect x="145" y="208" width="10" height="6" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:circuit-traces" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--secondary)"/>
+  <line x1="140" y1="175" x2="160" y2="175" stroke="var(--accent)" stroke-width="2"/>
+  <line x1="150" y1="175" x2="150" y2="200" stroke="var(--accent)" stroke-width="2"/>
+  <line x1="140" y1="190" x2="160" y2="200" stroke="var(--primary)" stroke-width="2"/>
+  <circle cx="140" cy="175" r="3" fill="var(--primary)"/>
+  <circle cx="160" cy="200" r="3" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:flask" viewBox="0 0 200 240">
+  <rect x="145" y="160" width="12" height="20" fill="var(--secondary)"/>
+  <polygon points="140,180 160,180 165,220 135,220" fill="var(--accent)" opacity="0.7"/>
+</symbol>
+
+<symbol id="prop:periodic-table" viewBox="0 0 200 240">
+  <rect x="125" y="160" width="50" height="60" fill="var(--secondary)"/>
+  <rect x="130" y="165" width="12" height="12" fill="var(--primary)"/>
+  <rect x="145" y="165" width="12" height="12" fill="var(--accent)"/>
+  <rect x="160" y="165" width="12" height="12" fill="var(--primary)"/>
+  <rect x="130" y="180" width="12" height="12" fill="var(--accent)"/>
+  <rect x="145" y="180" width="12" height="12" fill="var(--primary)"/>
+</symbol>
+
+<!-- Rebel / Activist -->
+<symbol id="prop:megaphone" viewBox="0 0 200 240">
+  <polygon points="130,175 170,160 170,210 130,195" fill="var(--primary)"/>
+  <rect x="120" y="180" width="15" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:raised-fist" viewBox="0 0 200 240">
+  <rect x="140" y="170" width="25" height="40" fill="var(--skin)"/>
+  <rect x="145" y="160" width="8" height="15" fill="var(--skin)"/>
+  <rect x="155" y="155" width="8" height="20" fill="var(--skin)"/>
+  <rect x="135" y="165" width="8" height="18" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="prop:dice" viewBox="0 0 200 240">
+  <rect x="135" y="170" width="30" height="30" fill="#ffffff"/>
+  <circle cx="145" cy="180" r="3" fill="#000"/>
+  <circle cx="155" cy="190" r="3" fill="#000"/>
+  <circle cx="145" cy="190" r="3" fill="#000"/>
+</symbol>
+
+<symbol id="prop:poker-chip" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="20" fill="var(--primary)"/>
+  <circle cx="150" cy="185" r="12" fill="var(--accent)"/>
+  <circle cx="150" cy="185" r="6" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Maker / Builder -->
+<symbol id="prop:wrench" viewBox="0 0 200 240">
+  <rect x="145" y="165" width="12" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="160" width="32" height="12" fill="var(--primary)"/>
+  <rect x="140" y="210" width="22" height="10" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:motorcycle-key" viewBox="0 0 200 240">
+  <circle cx="150" cy="175" r="12" fill="var(--secondary)"/>
+  <rect x="148" y="185" width="4" height="30" fill="var(--primary)"/>
+  <rect x="145" y="210" width="10" height="6" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:hammer" viewBox="0 0 200 240">
+  <rect x="145" y="175" width="12" height="45" fill="var(--secondary)"/>
+  <rect x="130" y="165" width="42" height="18" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:blueprint-torn" viewBox="0 0 200 240">
+  <polygon points="125,160 170,165 165,220 130,215" fill="var(--secondary)"/>
+  <line x1="135" y1="175" x2="160" y2="180" stroke="var(--primary)" stroke-width="2"/>
+  <line x1="135" y1="190" x2="155" y2="195" stroke="var(--primary)" stroke-width="2"/>
+</symbol>
+
+<!-- Explorer -->
+<symbol id="prop:compass" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="22" fill="var(--secondary)"/>
+  <circle cx="150" cy="185" r="15" fill="var(--primary)"/>
+  <polygon points="150,170 155,185 150,200 145,185" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:backpack" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--primary)"/>
+  <rect x="135" y="170" width="30" height="15" fill="var(--secondary)"/>
+  <rect x="140" y="160" width="20" height="10" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:swiss-army" viewBox="0 0 200 240">
+  <rect x="140" y="170" width="25" height="40" fill="var(--primary)"/>
+  <rect x="145" y="165" width="8" height="15" fill="var(--secondary)"/>
+  <rect x="155" y="175" width="15" height="6" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:flag" viewBox="0 0 200 240">
+  <rect x="145" y="155" width="6" height="70" fill="var(--secondary)"/>
+  <rect x="151" y="155" width="30" height="25" fill="var(--primary)"/>
+  <rect x="151" y="168" width="30" height="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:machete" viewBox="0 0 200 240">
+  <rect x="145" y="180" width="10" height="40" fill="var(--secondary)"/>
+  <polygon points="140,175 160,175 155,155 145,155" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:lantern" viewBox="0 0 200 240">
+  <rect x="140" y="175" width="25" height="30" fill="var(--secondary)"/>
+  <rect x="145" y="180" width="15" height="15" fill="var(--accent)"/>
+  <rect x="147" y="165" width="12" height="12" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:journal" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--primary)"/>
+  <rect x="135" y="170" width="30" height="5" fill="var(--accent)"/>
+  <rect x="135" y="180" width="30" height="3" fill="var(--secondary)"/>
+  <rect x="135" y="188" width="30" height="3" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Creator / Artist -->
+<symbol id="prop:paintbrush" viewBox="0 0 200 240">
+  <rect x="148" y="170" width="8" height="45" fill="var(--secondary)"/>
+  <polygon points="145,165 160,165 155,145 150,145" fill="var(--primary)"/>
+  <rect x="147" y="210" width="10" height="12" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:palette" viewBox="0 0 200 240">
+  <ellipse cx="150" cy="190" rx="25" ry="20" fill="var(--secondary)"/>
+  <circle cx="140" cy="180" r="5" fill="var(--primary)"/>
+  <circle cx="155" cy="185" r="5" fill="var(--accent)"/>
+  <circle cx="145" cy="200" r="5" fill="#2ecc71"/>
+  <circle cx="160" cy="195" r="4" fill="#3498db"/>
+</symbol>
+
+<symbol id="prop:blueprint" viewBox="0 0 200 240">
+  <rect x="125" y="160" width="50" height="60" fill="#a0c4e8"/>
+  <line x1="135" y1="175" x2="165" y2="175" stroke="var(--primary)" stroke-width="2"/>
+  <line x1="135" y1="190" x2="165" y2="190" stroke="var(--primary)" stroke-width="2"/>
+  <rect x="140" y="200" width="20" height="10" fill="none" stroke="var(--accent)" stroke-width="2"/>
+</symbol>
+
+<symbol id="prop:laptop" viewBox="0 0 200 240">
+  <rect x="125" y="175" width="50" height="30" fill="var(--secondary)"/>
+  <rect x="130" y="180" width="40" height="20" fill="var(--primary)"/>
+  <rect x="120" y="205" width="60" height="8" fill="var(--accent)"/>
+</symbol>
+
+<!-- Sage / Scholar -->
+<symbol id="prop:quill" viewBox="0 0 200 240">
+  <rect x="148" y="165" width="6" height="50" fill="var(--secondary)"/>
+  <polygon points="145,160 158,160 151,140" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:open-book" viewBox="0 0 200 240">
+  <polygon points="120,170 150,160 150,210 120,200" fill="var(--secondary)"/>
+  <polygon points="150,160 180,170 180,200 150,210" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:telescope" viewBox="0 0 200 240">
+  <rect x="140" y="170" width="15" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="160" width="25" height="15" fill="var(--primary)"/>
+  <circle cx="147" cy="155" r="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:star-chart" viewBox="0 0 200 240">
+  <rect x="125" y="160" width="50" height="60" fill="var(--primary)"/>
+  <circle cx="140" cy="175" r="3" fill="var(--accent)"/>
+  <circle cx="160" cy="185" r="2" fill="var(--accent)"/>
+  <circle cx="145" cy="200" r="3" fill="var(--accent)"/>
+  <line x1="140" y1="175" x2="160" y2="185" stroke="var(--secondary)" stroke-width="1"/>
+</symbol>
+
+<!-- Nature / Innocent -->
+<symbol id="prop:butterfly" viewBox="0 0 200 240">
+  <circle cx="145" cy="180" r="10" fill="var(--primary)"/>
+  <circle cx="160" cy="175" r="12" fill="var(--accent)"/>
+  <circle cx="160" cy="190" r="10" fill="var(--secondary)"/>
+  <rect x="150" y="178" width="8" height="4" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:dandelion" viewBox="0 0 200 240">
+  <rect x="148" y="180" width="4" height="35" fill="var(--secondary)"/>
+  <circle cx="150" cy="170" r="15" fill="var(--accent)"/>
+  <circle cx="145" cy="165" r="4" fill="#ffffff"/>
+  <circle cx="155" cy="168" r="3" fill="#ffffff"/>
+  <circle cx="150" cy="175" r="3" fill="#ffffff"/>
+</symbol>
+
+<symbol id="prop:cloud" viewBox="0 0 200 240">
+  <circle cx="140" cy="185" r="15" fill="#e0e0e0"/>
+  <circle cx="155" cy="180" r="18" fill="#f0f0f0"/>
+  <circle cx="165" cy="190" r="12" fill="#e8e8e8"/>
+</symbol>
+
+<symbol id="prop:stars" viewBox="0 0 200 240">
+  <polygon points="145,165 148,175 158,175 150,182 153,192 145,186 137,192 140,182 132,175 142,175" fill="var(--accent)"/>
+  <polygon points="165,185 167,192 174,192 168,197 170,204 165,200 160,204 162,197 156,192 163,192" fill="var(--primary)"/>
+</symbol>
+
+<!-- Ritual / Magician -->
+<symbol id="prop:candle" viewBox="0 0 200 240">
+  <rect x="145" y="175" width="12" height="40" fill="#f5f0e0"/>
+  <polygon points="147,170 155,170 151,155" fill="#ff9900"/>
+  <rect x="140" y="210" width="22" height="8" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:banner" viewBox="0 0 200 240">
+  <rect x="145" y="155" width="6" height="65" fill="var(--secondary)"/>
+  <rect x="151" y="160" width="30" height="35" fill="var(--primary)"/>
+  <polygon points="151,195 181,195 166,210" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:spark" viewBox="0 0 200 240">
+  <polygon points="150,160 155,180 175,175 160,190 170,210 150,198 130,210 140,190 125,175 145,180" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:music-notes" viewBox="0 0 200 240">
+  <ellipse cx="145" cy="200" rx="8" ry="6" fill="var(--primary)"/>
+  <rect x="151" y="165" width="4" height="40" fill="var(--primary)"/>
+  <ellipse cx="165" cy="190" rx="8" ry="6" fill="var(--secondary)"/>
+  <rect x="171" y="160" width="4" height="35" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Jester / Performer -->
+<symbol id="prop:juggling-balls" viewBox="0 0 200 240">
+  <circle cx="140" cy="170" r="12" fill="var(--primary)"/>
+  <circle cx="160" cy="185" r="12" fill="var(--accent)"/>
+  <circle cx="145" cy="205" r="12" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:red-nose" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="15" fill="#cc0000"/>
+</symbol>
+
+<symbol id="prop:microphone" viewBox="0 0 200 240">
+  <rect x="145" y="175" width="12" height="40" fill="var(--secondary)"/>
+  <circle cx="151" cy="170" r="12" fill="var(--primary)"/>
+  <rect x="148" y="210" width="6" height="10" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:spotlight" viewBox="0 0 200 240">
+  <polygon points="140,160 160,160 170,200 130,200" fill="var(--accent)" opacity="0.6"/>
+  <rect x="145" y="200" width="12" height="20" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Shadow / Identity -->
+<symbol id="prop:mirror-mask" viewBox="0 0 200 240">
+  <ellipse cx="150" cy="185" rx="22" ry="28" fill="var(--secondary)"/>
+  <ellipse cx="150" cy="185" rx="15" ry="20" fill="var(--accent)" opacity="0.5"/>
+  <rect x="148" y="210" width="4" height="15" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:speech-bubble" viewBox="0 0 200 240">
+  <rect x="125" y="160" width="50" height="35" rx="5" fill="var(--secondary)"/>
+  <polygon points="140,195 150,210 155,195" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:playing-cards" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="30" height="45" fill="#ffffff"/>
+  <rect x="140" y="170" width="30" height="45" fill="var(--primary)"/>
+  <text x="145" y="195" font-size="14" fill="var(--accent)">A</text>
+</symbol>
+
+<symbol id="prop:shadow-self" viewBox="0 0 200 240">
+  <ellipse cx="150" cy="190" rx="20" ry="30" fill="#1a1a1a" opacity="0.7"/>
+  <circle cx="150" cy="170" r="12" fill="#1a1a1a" opacity="0.7"/>
+</symbol>
+
+<!-- Lover / Caregiver -->
+<symbol id="prop:gift-box" viewBox="0 0 200 240">
+  <rect x="130" y="180" width="40" height="30" fill="var(--primary)"/>
+  <rect x="145" y="170" width="10" height="40" fill="var(--accent)"/>
+  <rect x="130" y="185" width="40" height="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:scarf-shared" viewBox="0 0 200 240">
+  <rect x="130" y="175" width="40" height="12" fill="var(--primary)"/>
+  <rect x="135" y="185" width="10" height="30" fill="var(--secondary)"/>
+  <rect x="155" y="185" width="10" height="25" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:wine-glass" viewBox="0 0 200 240">
+  <polygon points="140,175 160,175 155,200 145,200" fill="var(--accent)" opacity="0.6"/>
+  <rect x="148" y="200" width="6" height="20" fill="var(--secondary)"/>
+  <rect x="142" y="218" width="18" height="5" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:grapes" viewBox="0 0 200 240">
+  <circle cx="145" cy="180" r="8" fill="var(--primary)"/>
+  <circle cx="155" cy="185" r="8" fill="var(--primary)"/>
+  <circle cx="150" cy="195" r="8" fill="var(--primary)"/>
+  <circle cx="140" cy="190" r="7" fill="var(--secondary)"/>
+  <rect x="148" y="165" width="4" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:ribbon" viewBox="0 0 200 240">
+  <rect x="140" y="175" width="25" height="8" fill="var(--accent)"/>
+  <polygon points="140,175 130,165 135,180" fill="var(--primary)"/>
+  <polygon points="165,175 175,165 170,180" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:address-book" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="170" width="30" height="5" fill="var(--primary)"/>
+  <rect x="135" y="180" width="20" height="3" fill="var(--accent)"/>
+  <rect x="135" y="188" width="25" height="3" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:rose" viewBox="0 0 200 240">
+  <circle cx="150" cy="175" r="12" fill="var(--primary)"/>
+  <circle cx="150" cy="175" r="6" fill="var(--accent)"/>
+  <rect x="148" y="185" width="4" height="30" fill="var(--secondary)"/>
+  <polygon points="148,200 140,195 148,210" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:poetry-book" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--primary)"/>
+  <rect x="135" y="175" width="30" height="4" fill="var(--accent)"/>
+  <rect x="135" y="185" width="25" height="3" fill="var(--secondary)"/>
+  <rect x="135" y="192" width="28" height="3" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Caregiver / Healer -->
+<symbol id="prop:halo" viewBox="0 0 200 240">
+  <circle cx="150" cy="170" r="20" fill="none" stroke="var(--accent)" stroke-width="5"/>
+</symbol>
+
+<symbol id="prop:dove" viewBox="0 0 200 240">
+  <ellipse cx="150" cy="185" rx="20" ry="12" fill="#f5f5f5"/>
+  <polygon points="165,180 180,175 170,190" fill="#f0f0f0"/>
+  <circle cx="140" cy="180" r="6" fill="#f5f5f5"/>
+</symbol>
+
+<symbol id="prop:umbrella" viewBox="0 0 200 240">
+  <path d="M130,180 Q150,150 170,180" fill="var(--primary)"/>
+  <rect x="148" y="180" width="4" height="40" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:shield-small" viewBox="0 0 200 240">
+  <polygon points="150,160 170,175 165,210 150,220 135,210 130,175" fill="var(--primary)"/>
+  <rect x="145" y="180" width="10" height="20" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:stethoscope" viewBox="0 0 200 240">
+  <circle cx="140" cy="200" r="10" fill="none" stroke="var(--secondary)" stroke-width="3"/>
+  <circle cx="160" cy="200" r="10" fill="none" stroke="var(--secondary)" stroke-width="3"/>
+  <path d="M140,200 Q150,170 160,200" fill="none" stroke="var(--primary)" stroke-width="3"/>
+  <rect x="148" y="160" width="4" height="20" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:herb-bundle" viewBox="0 0 200 240">
+  <rect x="148" y="180" width="6" height="35" fill="var(--secondary)"/>
+  <polygon points="145,175 155,175 160,160 140,160" fill="var(--primary)"/>
+  <polygon points="142,170 150,155 158,170" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:bandage" viewBox="0 0 200 240">
+  <rect x="130" y="180" width="40" height="15" fill="#f5f0e0"/>
+  <rect x="140" y="175" width="20" height="25" fill="#e8e0d0"/>
+</symbol>
+
+<symbol id="prop:toolkit" viewBox="0 0 200 240">
+  <rect x="125" y="175" width="50" height="35" fill="var(--primary)"/>
+  <rect x="130" y="180" width="15" height="10" fill="var(--secondary)"/>
+  <rect x="150" y="180" width="15" height="10" fill="var(--accent)"/>
+  <rect x="140" y="165" width="20" height="12" fill="var(--secondary)"/>
+</symbol>
+
+<!-- Everyman / Business -->
+<symbol id="prop:clipboard" viewBox="0 0 200 240">
+  <rect x="130" y="160" width="40" height="55" fill="var(--secondary)"/>
+  <rect x="135" y="165" width="30" height="40" fill="#ffffff"/>
+  <rect x="140" y="155" width="20" height="10" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:pen" viewBox="0 0 200 240">
+  <rect x="148" y="165" width="6" height="50" fill="var(--primary)"/>
+  <polygon points="148,160 154,160 151,150" fill="var(--accent)"/>
+  <rect x="147" y="210" width="8" height="8" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:phone" viewBox="0 0 200 240">
+  <rect x="140" y="165" width="25" height="50" rx="3" fill="var(--primary)"/>
+  <rect x="145" y="175" width="15" height="25" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:business-cards" viewBox="0 0 200 240">
+  <rect x="130" y="175" width="40" height="25" fill="var(--secondary)"/>
+  <rect x="135" y="180" width="30" height="5" fill="var(--primary)"/>
+  <rect x="135" y="190" width="20" height="3" fill="var(--accent)"/>
+</symbol>
+
+<!-- Humble / Caregiver -->
+<symbol id="prop:broom" viewBox="0 0 200 240">
+  <rect x="148" y="165" width="6" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="210" width="32" height="15" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:cloth" viewBox="0 0 200 240">
+  <rect x="130" y="175" width="40" height="30" fill="var(--primary)"/>
+  <rect x="135" y="180" width="30" height="5" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:megaphone-small" viewBox="0 0 200 240">
+  <polygon points="135,180 165,170 165,200 135,190" fill="var(--primary)"/>
+  <rect x="125" y="182" width="12" height="12" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:leaflet" viewBox="0 0 200 240">
+  <rect x="130" y="165" width="40" height="50" fill="var(--secondary)"/>
+  <rect x="135" y="175" width="30" height="4" fill="var(--primary)"/>
+  <rect x="135" y="185" width="25" height="3" fill="var(--accent)"/>
+  <rect x="135" y="195" width="28" height="3" fill="var(--accent)"/>
+</symbol>
+
+<!-- Sovereign / Diplomat -->
+<symbol id="prop:olive-branch" viewBox="0 0 200 240">
+  <rect x="148" y="170" width="4" height="45" fill="var(--secondary)"/>
+  <ellipse cx="140" cy="180" rx="10" ry="5" fill="var(--primary)"/>
+  <ellipse cx="160" cy="190" rx="10" ry="5" fill="var(--primary)"/>
+  <ellipse cx="145" cy="200" rx="8" ry="4" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:treaty" viewBox="0 0 200 240">
+  <rect x="125" y="165" width="50" height="55" fill="var(--secondary)"/>
+  <rect x="135" y="180" width="30" height="4" fill="var(--primary)"/>
+  <rect x="140" y="195" width="20" height="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:gavel" viewBox="0 0 200 240">
+  <rect x="145" y="175" width="12" height="40" fill="var(--secondary)"/>
+  <rect x="130" y="165" width="42" height="18" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:scales" viewBox="0 0 200 240">
+  <rect x="148" y="165" width="4" height="50" fill="var(--secondary)"/>
+  <rect x="125" y="175" width="50" height="4" fill="var(--primary)"/>
+  <rect x="125" y="180" width="15" height="12" fill="var(--accent)"/>
+  <rect x="160" y="180" width="15" height="12" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="prop:scepter" viewBox="0 0 200 240">
+  <rect x="148" y="165" width="6" height="60" fill="var(--secondary)"/>
+  <circle cx="151" cy="160" r="12" fill="var(--accent)"/>
+  <rect x="145" y="220" width="12" height="8" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:family-crest" viewBox="0 0 200 240">
+  <polygon points="150,160 175,180 165,220 135,220 125,180" fill="var(--primary)"/>
+  <circle cx="150" cy="190" r="12" fill="var(--accent)"/>
+  <rect x="145" y="185" width="10" height="10" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="prop:crown" viewBox="0 0 200 240">
+  <rect x="130" y="175" width="40" height="15" fill="var(--accent)"/>
+  <polygon points="130,175 140,160 150,175" fill="var(--accent)"/>
+  <polygon points="150,175 160,155 170,175" fill="var(--accent)"/>
+  <circle cx="140" cy="165" r="4" fill="var(--primary)"/>
+  <circle cx="160" cy="160" r="4" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="prop:orb-of-state" viewBox="0 0 200 240">
+  <circle cx="150" cy="185" r="22" fill="var(--accent)"/>
+  <circle cx="150" cy="185" r="12" fill="var(--primary)"/>
+  <rect x="148" y="160" width="4" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<!-- ═══ Glasses ═══ -->
+<symbol id="glasses:round-wire" viewBox="0 0 200 240">
+  <circle cx="75" cy="90" r="18" fill="none" stroke="#333" stroke-width="3"/>
+  <circle cx="125" cy="90" r="18" fill="none" stroke="#333" stroke-width="3"/>
+  <line x1="93" y1="90" x2="107" y2="90" stroke="#333" stroke-width="2"/>
+  <line x1="57" y1="90" x2="45" y2="85" stroke="#333" stroke-width="2"/>
+  <line x1="143" y1="90" x2="155" y2="85" stroke="#333" stroke-width="2"/>
+</symbol>
+
+<symbol id="glasses:thick-rect" viewBox="0 0 200 240">
+  <rect x="55" y="75" width="35" height="30" fill="none" stroke="#111" stroke-width="5"/>
+  <rect x="110" y="75" width="35" height="30" fill="none" stroke="#111" stroke-width="5"/>
+  <line x1="90" y1="90" x2="110" y2="90" stroke="#111" stroke-width="3"/>
+</symbol>
+
+<symbol id="glasses:aviator" viewBox="0 0 200 240">
+  <ellipse cx="75" cy="90" rx="20" ry="16" fill="none" stroke="#444" stroke-width="3"/>
+  <ellipse cx="125" cy="90" rx="20" ry="16" fill="none" stroke="#444" stroke-width="3"/>
+  <line x1="95" y1="90" x2="105" y2="90" stroke="#444" stroke-width="2"/>
+  <line x1="55" y1="85" x2="40" y2="75" stroke="#444" stroke-width="2"/>
+  <line x1="145" y1="85" x2="160" y2="75" stroke="#444" stroke-width="2"/>
+</symbol>
+
+<symbol id="glasses:cat-eye" viewBox="0 0 200 240">
+  <polygon points="55,95 60,75 90,75 95,95" fill="none" stroke="#222" stroke-width="4"/>
+  <polygon points="105,95 110,75 140,75 145,95" fill="none" stroke="#222" stroke-width="4"/>
+  <line x1="95" y1="85" x2="105" y2="85" stroke="#222" stroke-width="2"/>
+</symbol>
+
+<symbol id="glasses:half-rim" viewBox="0 0 200 240">
+  <path d="M55,90 Q75,70 95,90" fill="none" stroke="#333" stroke-width="4"/>
+  <path d="M105,90 Q125,70 145,90" fill="none" stroke="#333" stroke-width="4"/>
+  <line x1="55" y1="90" x2="95" y2="90" stroke="#333" stroke-width="2"/>
+  <line x1="105" y1="90" x2="145" y2="90" stroke="#333" stroke-width="2"/>
+  <line x1="95" y1="90" x2="105" y2="90" stroke="#333" stroke-width="2"/>
+</symbol>
+
+<symbol id="glasses:monocle" viewBox="0 0 200 240">
+  <circle cx="125" cy="90" r="18" fill="none" stroke="#555" stroke-width="3"/>
+  <line x1="143" y1="95" x2="155" y2="120" stroke="#555" stroke-width="2"/>
+  <circle cx="155" cy="125" r="3" fill="#555"/>
+</symbol>
+
+<symbol id="glasses:pince-nez" viewBox="0 0 200 240">
+  <circle cx="75" cy="90" r="16" fill="none" stroke="#444" stroke-width="3"/>
+  <circle cx="125" cy="90" r="16" fill="none" stroke="#444" stroke-width="3"/>
+  <path d="M91,90 Q100,80 109,90" fill="none" stroke="#444" stroke-width="2"/>
+</symbol>
+
+<symbol id="glasses:goggles" viewBox="0 0 200 240">
+  <rect x="50" y="75" width="40" height="30" rx="8" fill="var(--secondary)" stroke="#222" stroke-width="3"/>
+  <rect x="110" y="75" width="40" height="30" rx="8" fill="var(--secondary)" stroke="#222" stroke-width="3"/>
+  <line x1="90" y1="90" x2="110" y2="90" stroke="#222" stroke-width="4"/>
+  <line x1="50" y1="85" x2="35" y2="80" stroke="#222" stroke-width="3"/>
+  <line x1="150" y1="85" x2="165" y2="80" stroke="#222" stroke-width="3"/>
+</symbol>
+
+<!-- ═══ Eyebrows ═══ -->
+<symbol id="brow:thin-arched" viewBox="0 0 200 240">
+  <path d="M55,70 Q75,55 95,70" fill="none" stroke="var(--hair-color)" stroke-width="3"/>
+  <path d="M105,70 Q125,55 145,70" fill="none" stroke="var(--hair-color)" stroke-width="3"/>
+</symbol>
+
+<symbol id="brow:thick-straight" viewBox="0 0 200 240">
+  <rect x="55" y="68" width="40" height="8" fill="var(--hair-color)"/>
+  <rect x="105" y="68" width="40" height="8" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="brow:angular" viewBox="0 0 200 240">
+  <polygon points="55,75 75,60 95,75" fill="var(--hair-color)"/>
+  <polygon points="105,75 125,60 145,75" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="brow:soft-rounded" viewBox="0 0 200 240">
+  <path d="M55,72 Q75,60 95,72" fill="none" stroke="var(--hair-color)" stroke-width="5"/>
+  <path d="M105,72 Q125,60 145,72" fill="none" stroke="var(--hair-color)" stroke-width="5"/>
+</symbol>
+
+<symbol id="brow:bushy-wild" viewBox="0 0 200 240">
+  <rect x="50" y="65" width="45" height="12" fill="var(--hair-color)"/>
+  <rect x="105" y="65" width="45" height="12" fill="var(--hair-color)"/>
+  <polygon points="55,65 60,55 70,65" fill="var(--hair-color)"/>
+  <polygon points="120,65 130,55 140,65" fill="var(--hair-color)"/>
+</symbol>
+
+<symbol id="brow:raised" viewBox="0 0 200 240">
+  <path d="M55,65 Q75,50 95,65" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+  <path d="M105,65 Q125,50 145,65" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+</symbol>
+
+<symbol id="brow:asymmetric" viewBox="0 0 200 240">
+  <path d="M55,60 Q75,50 95,65" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+  <path d="M105,70 Q125,65 145,70" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+</symbol>
+
+<symbol id="brow:concerned" viewBox="0 0 200 240">
+  <path d="M55,70 Q75,55 95,65" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+  <path d="M105,65 Q125,55 145,70" fill="none" stroke="var(--hair-color)" stroke-width="4"/>
+</symbol>
+
+<!-- ═══ Accessories ═══ -->
+<symbol id="acc:ear-piercings" viewBox="0 0 200 240">
+  <circle cx="45" cy="95" r="4" fill="#c0c0c0"/>
+  <circle cx="42" cy="105" r="3" fill="#c0c0c0"/>
+  <circle cx="48" cy="112" r="3" fill="#c0c0c0"/>
+  <circle cx="155" cy="95" r="4" fill="#c0c0c0"/>
+</symbol>
+
+<symbol id="acc:pendant-amulet" viewBox="0 0 200 240">
+  <circle cx="100" cy="170" r="12" fill="var(--accent)"/>
+  <circle cx="100" cy="170" r="6" fill="var(--primary)"/>
+  <rect x="98" y="155" width="4" height="15" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="acc:headband" viewBox="0 0 200 240">
+  <rect x="45" y="55" width="110" height="12" fill="var(--primary)"/>
+  <rect x="50" y="57" width="20" height="8" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="acc:scarf-bandana" viewBox="0 0 200 240">
+  <rect x="60" y="140" width="80" height="15" fill="var(--primary)"/>
+  <polygon points="60,140 40,160 55,165" fill="var(--secondary)"/>
+  <polygon points="140,140 160,160 145,165" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="acc:hat-explorer" viewBox="0 0 200 240">
+  <ellipse cx="100" cy="50" rx="70" ry="15" fill="var(--primary)"/>
+  <rect x="60" y="25" width="80" height="30" fill="var(--secondary)"/>
+  <rect x="70" y="20" width="60" height="10" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="acc:beret" viewBox="0 0 200 240">
+  <ellipse cx="100" cy="40" rx="50" ry="20" fill="var(--primary)"/>
+  <circle cx="130" cy="35" r="8" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="acc:flower-crown" viewBox="0 0 200 240">
+  <circle cx="60" cy="50" r="10" fill="var(--accent)"/>
+  <circle cx="85" cy="40" r="10" fill="var(--primary)"/>
+  <circle cx="115" cy="40" r="10" fill="var(--secondary)"/>
+  <circle cx="140" cy="50" r="10" fill="var(--accent)"/>
+  <circle cx="100" cy="55" r="8" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="acc:epaulettes" viewBox="0 0 200 240">
+  <rect x="35" y="155" width="30" height="15" fill="var(--accent)"/>
+  <rect x="135" y="155" width="30" height="15" fill="var(--accent)"/>
+  <circle cx="50" cy="162" r="5" fill="var(--primary)"/>
+  <circle cx="150" cy="162" r="5" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="acc:scar" viewBox="0 0 200 240">
+  <line x1="70" y1="80" x2="90" y2="110" stroke="#8b4513" stroke-width="3"/>
+  <line x1="72" y1="85" x2="85" y2="105" stroke="#a0522d" stroke-width="1"/>
+</symbol>
+
+<symbol id="acc:freckles" viewBox="0 0 200 240">
+  <circle cx="70" cy="100" r="2" fill="#c08060"/>
+  <circle cx="80" cy="105" r="2" fill="#c08060"/>
+  <circle cx="90" cy="100" r="1.5" fill="#c08060"/>
+  <circle cx="110" cy="100" r="2" fill="#c08060"/>
+  <circle cx="120" cy="105" r="2" fill="#c08060"/>
+  <circle cx="130" cy="100" r="1.5" fill="#c08060"/>
+  <circle cx="100" cy="110" r="1.5" fill="#c08060"/>
+</symbol>
+
+<symbol id="acc:tattoo" viewBox="0 0 200 240">
+  <rect x="155" y="160" width="20" height="40" fill="none"/>
+  <path d="M160,170 Q170,180 160,190 Q170,200 160,210" fill="none" stroke="var(--primary)" stroke-width="2"/>
+  <circle cx="165" cy="185" r="4" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="acc:nose-ring" viewBox="0 0 200 240">
+  <circle cx="100" cy="105" r="5" fill="none" stroke="#c0c0c0" stroke-width="2"/>
+  <circle cx="100" cy="108" r="2" fill="#c0c0c0"/>
+</symbol>
+
+</svg>
