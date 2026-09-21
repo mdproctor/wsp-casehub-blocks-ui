@@ -226,16 +226,142 @@ The 5 canonical axes map to discrete expression variants (not continuous interpo
 
 Part IDs are abstract. A **collection** provides concrete SVG renderers for every part ID. Different collections render the same archetype in different visual styles.
 
+**A collection IS two SVG files.** That's the entire deliverable:
+
+| File | Purpose | Contents |
+|------|---------|----------|
+| `mythic.parts.svg` | Construction — all parts for mechanical composition | ~140 `<symbol>` elements (heads, hairs, costumes, props, etc.) |
+| `mythic.preview.svg` | Browsing — pre-rendered family roots for theme selection | 12 `<symbol>` elements, one per family, fully composed |
+
+Drop two files in = new collection. No TypeScript, no config, no registration code.
+
+### Parts File — `{collection}.parts.svg`
+
+A single SVG file containing every composable part as a named `<symbol>`. The builder locates parts by ID using the convention `{category}:{part-id}`.
+
+```xml
+<!-- mythic.parts.svg -->
+<svg xmlns="http://www.w3.org/2000/svg">
+  <!-- ═══ Heads ═══ -->
+  <symbol id="head:oval" viewBox="0 0 200 240">
+    <ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>
+  </symbol>
+  <symbol id="head:round" viewBox="0 0 200 240">
+    <circle cx="100" cy="90" r="42" fill="var(--skin)"/>
+  </symbol>
+  <symbol id="head:square-jaw" viewBox="0 0 200 240">
+    <path d="M65,55 Q62,95 75,115 ..." fill="var(--skin)"/>
+  </symbol>
+
+  <!-- ═══ Hairs ═══ -->
+  <symbol id="hair:bald-sides" viewBox="0 0 200 240">
+    <path d="M62,88 Q62,55 80,50 ..." fill="var(--hair-color)"/>
+  </symbol>
+  <symbol id="hair:wild-einstein" viewBox="0 0 200 240">
+    <path d="M55,80 Q45,50 60,35 ..." fill="var(--hair-color)"/>
+  </symbol>
+
+  <!-- ═══ Costumes ═══ -->
+  <symbol id="costume:blazer-tie" viewBox="0 0 200 240">
+    <path d="M60,240 L60,160 ..." fill="var(--primary)"/>
+    <path d="M75,145 L100,160 ..." fill="var(--accent)"/>
+  </symbol>
+
+  <!-- ═══ Props ═══ -->
+  <symbol id="prop:magnifying-glass" viewBox="0 0 200 240">
+    <circle cx="158" cy="175" r="18" fill="none" stroke="var(--accent)" stroke-width="4"/>
+    <line x1="145" y1="188" x2="132" y2="210" stroke="var(--accent)" stroke-width="5"/>
+  </symbol>
+
+  <!-- ═══ Glasses ═══ -->
+  <symbol id="glasses:round-wire" viewBox="0 0 200 240">
+    <circle cx="85" cy="92" r="12" fill="none" stroke="#333" stroke-width="2.5"/>
+    <circle cx="115" cy="92" r="12" fill="none" stroke="#333" stroke-width="2.5"/>
+    <line x1="97" y1="92" x2="103" y2="92" stroke="#333" stroke-width="2"/>
+  </symbol>
+
+  <!-- ═══ Eyebrows ═══ -->
+  <symbol id="brow:thin-arched" viewBox="0 0 200 240">
+    <path d="M74,81 Q80,77 96,80" fill="none" stroke="var(--hair-color)" stroke-width="2.5"/>
+    <path d="M126,81 Q120,77 104,80" fill="none" stroke="var(--hair-color)" stroke-width="2.5"/>
+  </symbol>
+
+  <!-- ═══ Facial Hair ═══ -->
+  <symbol id="beard:goatee" viewBox="0 0 200 240">
+    <path d="M93,118 Q96,125 100,138 Q104,125 107,118" fill="var(--hair-color)"/>
+  </symbol>
+
+  <!-- ═══ Accessories ═══ -->
+  <symbol id="acc:ear-piercings" viewBox="0 0 200 240">
+    <circle cx="63" cy="85" r="2.5" fill="#888"/>
+    <circle cx="63" cy="85" r="1.2" fill="#c0c0c0"/>
+  </symbol>
+
+  <!-- ... ~130 more symbols -->
+</svg>
+```
+
+Parts use CSS custom properties for palette colouring:
+- `var(--skin)` — skin tone
+- `var(--primary)` — family primary colour
+- `var(--secondary)` — family secondary colour
+- `var(--accent)` — family accent colour
+- `var(--hair-color)` — hair/beard colour
+
+The builder sets these as inline styles on the wrapping SVG when composing.
+
+### Preview File — `{collection}.preview.svg`
+
+Pre-rendered family root avatars — one fully composed avatar per family. Used by the collection/theme browser to show what a collection looks like without running the builder.
+
+```xml
+<!-- mythic.preview.svg -->
+<svg xmlns="http://www.w3.org/2000/svg">
+  <symbol id="preview:Caregiver" viewBox="0 0 200 240">
+    <!-- Complete Caregiver root avatar — all layers pre-composed -->
+  </symbol>
+  <symbol id="preview:Sage" viewBox="0 0 200 240">
+    <!-- Complete Sage root avatar -->
+  </symbol>
+  <!-- ... 10 more family previews -->
+</svg>
+```
+
+A theme browser renders all 12 previews in a row per collection:
+
+```html
+<!-- Theme browser — one row per collection -->
+<div class="collection-row">
+  <span>Mythic</span>
+  <svg viewBox="0 0 200 240" width="48"><use href="mythic.preview.svg#preview:Caregiver"/></svg>
+  <svg viewBox="0 0 200 240" width="48"><use href="mythic.preview.svg#preview:Sage"/></svg>
+  <svg viewBox="0 0 200 240" width="48"><use href="mythic.preview.svg#preview:Hero"/></svg>
+  <!-- ... 9 more -->
+</div>
+<div class="collection-row">
+  <span>Pixel</span>
+  <svg viewBox="0 0 200 240" width="48"><use href="pixel.preview.svg#preview:Caregiver"/></svg>
+  <!-- ... -->
+</div>
+```
+
+At a glance, you see every collection's interpretation of all 12 families. Pick a row = pick a theme.
+
+### Collection Loading
+
 ```typescript
 interface AvatarCollection {
-  id: string;                    // e.g., 'mythic'
-  name: string;                  // e.g., 'Mythic'
-  version: number;               // renderer version for cache invalidation
-  registry: PartRegistry;        // concrete renderers for all part IDs
-  palettes: Record<ArchetypeFamily, FamilyPalette>;
-  fallbackRenderer: PartRenderer; // used when a part ID has no specific renderer
+  id: string;
+  partsUrl: string;       // URL to {collection}.parts.svg
+  previewUrl: string;     // URL to {collection}.preview.svg
+  parts: Map<string, string>;  // populated after load: symbol ID → SVG content
 }
+
+async function loadCollection(id: string, partsUrl: string, previewUrl: string): Promise<AvatarCollection>;
+function registerCollection(collection: AvatarCollection): void;
 ```
+
+For the built-in `mythic` collection, the parts file is inlined at build time (extracted into a TypeScript map) for zero-network rendering. Third-party collections load at runtime via fetch.
 
 ### mythic — First Collection
 
@@ -250,17 +376,6 @@ Visual language:
 
 Full visual reference: `avatar-preview.html`
 Part assignments: `part-catalogue.md`
-
-### Registering a Collection
-
-```typescript
-import { registerCollection } from '@casehubio/agent-avatar-2d';
-import { mythicCollection } from './collections/mythic.js';
-
-registerCollection(mythicCollection);
-```
-
-The default collection is `mythic`. If a compact code references a collection that isn't registered, the component falls back to `mythic`.
 
 ## Compact Avatar Identity
 
@@ -308,74 +423,24 @@ agent:
 
 When `avatar` is absent, the UI derives it from `archetype` using the default collection and preset config.
 
-## SVG Sprite Sheets — Part Asset Format
+## Build Pipeline
 
-Parts are authored and stored as SVG sprite sheets — one file per category. Each part is a `<symbol>` element with a unique ID. This format serves two purposes:
+### Source of Truth → Runtime
 
-1. **Catalogue browsing:** the sheet renders directly in any SVG viewer or the UI catalogue browser
-2. **Build input:** a build step extracts symbols into TypeScript constants for zero-network runtime rendering (D9)
-
-### Sheet Structure
-
-```xml
-<!-- collections/mythic/sheets/heads.svg -->
-<svg xmlns="http://www.w3.org/2000/svg">
-  <symbol id="head-oval" viewBox="0 0 200 240">
-    <ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>
-  </symbol>
-  <symbol id="head-round" viewBox="0 0 200 240">
-    <circle cx="100" cy="90" r="42" fill="var(--skin)"/>
-  </symbol>
-  <symbol id="head-square-jaw" viewBox="0 0 200 240">
-    <path d="M65,55 Q62,95 75,115 ..." fill="var(--skin)"/>
-  </symbol>
-  <!-- ... 9 more head shapes -->
-</svg>
-```
-
-Parts use CSS custom properties (`var(--skin)`, `var(--primary)`, `var(--accent)`) for palette-driven fills. The builder sets these properties when composing.
-
-### Sheets per Collection
-
-```
-collections/mythic/sheets/
-├── heads.svg          # 12 symbols
-├── hairs.svg          # 16 symbols
-├── facial-hairs.svg   # 13 symbols
-├── costumes.svg       # 20 symbols
-├── props.svg          # 48 symbols
-├── glasses.svg        # 8 symbols
-├── eyebrows.svg       # 8 symbols
-└── accessories.svg    # 12 symbols
-```
-
-### Build Step: Sheet → TypeScript
-
-A build script reads each sheet, extracts `<symbol>` inner content by ID, and generates TypeScript part maps:
+The `.parts.svg` file is the source of truth. A build step extracts its `<symbol>` elements into a TypeScript map for the built-in collection (zero-network runtime rendering per D9):
 
 ```typescript
-// GENERATED — do not edit. Source: sheets/heads.svg
-export const HEAD_PARTS: Record<string, string> = {
-  'oval': '<ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>',
-  'round': '<circle cx="100" cy="90" r="42" fill="var(--skin)"/>',
-  'square-jaw': '<path d="M65,55 Q62,95 75,115 ..." fill="var(--skin)"/>',
-  // ...
+// GENERATED — do not edit. Source: mythic.parts.svg
+export const MYTHIC_PARTS: Record<string, string> = {
+  'head:oval': '<ellipse cx="100" cy="95" rx="38" ry="42" fill="var(--skin)"/>',
+  'head:round': '<circle cx="100" cy="90" r="42" fill="var(--skin)"/>',
+  'costume:blazer-tie': '<path d="M60,240 L60,160 ..." fill="var(--primary)"/>...',
+  'prop:magnifying-glass': '<circle cx="158" cy="175" r="18" .../>...',
+  // ... ~140 entries
 };
 ```
 
-At runtime, the builder reads from these maps — no fetch, no DOM parsing.
-
-### Catalogue Browser
-
-The UI catalogue (for the wizard and part-catalogue review) renders the sheets directly. Each sheet is an SVG file that can be displayed as a grid by referencing symbols:
-
-```html
-<svg viewBox="0 0 200 240" width="64" height="64">
-  <use href="heads.svg#head-oval"/>
-</svg>
-```
-
-This means the same SVG files serve both design review and runtime generation.
+Third-party collections skip the build step — they load at runtime via fetch and DOM parsing of the `.parts.svg` file.
 
 ### Public API
 
@@ -383,7 +448,7 @@ This means the same SVG files serve both design review and runtime generation.
 function renderAvatar(code: string): string
 ```
 
-Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts → apply palette → assemble layers.
+Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts from collection → apply palette as CSS custom properties → assemble layers → return SVG string.
 
 ## Package Structure
 
@@ -401,29 +466,14 @@ packages/agent-avatar-2d/
 │   ├── code.ts                     # encode/decode compact avatar codes
 │   ├── modifiers.ts                # adjective→effect mapping, axis→expression mapping
 │   ├── collections/
-│   │   ├── registry.ts             # registerCollection(), getCollection()
+│   │   ├── registry.ts             # registerCollection(), loadCollection()
 │   │   └── mythic/
-│   │       ├── index.ts            # mythicCollection export
-│   │       ├── sheets/             # SOURCE OF TRUTH — SVG sprite sheets
-│   │       │   ├── heads.svg
-│   │       │   ├── hairs.svg
-│   │       │   ├── facial-hairs.svg
-│   │       │   ├── costumes.svg
-│   │       │   ├── props.svg
-│   │       │   ├── glasses.svg
-│   │       │   ├── eyebrows.svg
-│   │       │   └── accessories.svg
-│   │       └── generated/          # GENERATED from sheets — do not edit
-│   │           ├── head-parts.ts
-│   │           ├── hair-parts.ts
-│   │           ├── facial-hair-parts.ts
-│   │           ├── costume-parts.ts
-│   │           ├── prop-parts.ts
-│   │           ├── glasses-parts.ts
-│   │           ├── eyebrow-parts.ts
-│   │           └── accessory-parts.ts
+│   │       ├── mythic.parts.svg    # SOURCE OF TRUTH — all ~140 parts as <symbol> elements
+│   │       ├── mythic.preview.svg  # 12 pre-rendered family root avatars for theme browsing
+│   │       ├── mythic-parts.ts     # GENERATED from mythic.parts.svg — do not edit
+│   │       └── index.ts            # mythicCollection export (wraps generated parts)
 │   ├── scripts/
-│   │   └── extract-sheets.ts       # SVG sheet → TypeScript part maps
+│   │   └── extract-parts.ts        # SVG parts file → TypeScript part map
 │   └── __tests__/
 │       ├── agent-avatar.test.ts    # component tests + ARIA
 │       ├── builder.test.ts         # layer assembly tests
