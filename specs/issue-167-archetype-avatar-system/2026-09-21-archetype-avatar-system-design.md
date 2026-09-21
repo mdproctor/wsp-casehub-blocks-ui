@@ -87,40 +87,71 @@ Two input modes:
 
 If both set, `archetype` takes precedence. If neither, renders the Everyman/Citizen fallback in desaturated greyscale.
 
+**Overrides vs Tier 2 codes:** `AvatarPayload.overrides` is a payload-mode concept — it records user deltas from the archetype preset (e.g., "Sage/Detective but with aviator glasses"). Tier 2 custom codes encode the resolved absolute part selection (preset merged with overrides). Decoding a Tier 2 code produces a flat `PartAssignment`, not a base-plus-delta. The override information is consumed during encoding and does not survive roundtrip — once encoded, the code IS the identity.
+
 ### ARIA
 
 ```typescript
 connectedCallback() {
   this.setAttribute('role', 'img');
-  if (!this.hasAttribute('aria-label')) {
-    this.setAttribute('aria-label',
-      `${this.archetype?.family ?? 'Unknown'} ${this.archetype?.subArchetype ?? ''} agent avatar`);
+}
+
+protected willUpdate(changed: PropertyValues) {
+  if (changed.has('archetype') || changed.has('code')) {
+    if (!this.hasAttribute('aria-label') || this._ariaManaged) {
+      const family = this.archetype?.family ?? 'Unknown';
+      const sub = this.archetype?.subArchetype ?? '';
+      this.setAttribute('aria-label', `${family} ${sub} agent avatar`.trim());
+      this._ariaManaged = true;
+    }
   }
 }
 ```
+
+The ARIA label updates reactively when `archetype` or `code` properties change. If the consumer provides an explicit `aria-label` attribute, the component does not override it.
 
 ## Mechanical Composition
 
 ### Part Registry
 
-Each part category has a finite set of options. Parts are abstract semantic identifiers — the rendering is provided by the active collection.
+Each part category has a finite set of options. Parts are abstract semantic identifiers — the rendering is provided by the active collection's SVG symbols.
 
 ```typescript
 interface PartRegistry {
-  heads: Map<string, HeadRenderer>;
-  hairs: Map<string, HairRenderer>;
-  facialHairs: Map<string, FacialHairRenderer>;
-  costumes: Map<string, CostumeRenderer>;
-  props: Map<string, PropRenderer>;
-  glasses: Map<string, GlassesRenderer>;
-  eyebrows: Map<string, EyebrowRenderer>;
-  accessories: Map<string, AccessoryRenderer>;
+  parts: Map<string, PartRenderer>;
 }
 
 type PartRenderer = (palette: FamilyPalette, modifiers: PartModifiers) => string;
 ```
 
-Every renderer is a pure function: `(palette, modifiers) → SVG path string`. No side effects, no DOM access, fully testable.
+Every renderer is a pure function: `(palette, modifiers) → SVG fragment string`. No side effects, no DOM access, fully testable.
+
+### How Collections Populate the Registry
+
+The PartRegistry is built FROM a collection's SVG symbol content. When a collection is loaded, each `<symbol>` element is wrapped in a renderer function:
+
+```typescript
+function createRenderer(symbolContent: string): PartRenderer {
+  return (palette, modifiers) => {
+    let svg = symbolContent;
+    svg = applyPalette(svg, palette);       // inject CSS custom property values
+    svg = applyModifiers(svg, modifiers);   // SVG transforms, attribute adjustments
+    return svg;
+  };
+}
+```
+
+This reconciles the two layers:
+- **Collections** provide base SVG geometry (static `<symbol>` elements with `var(--skin)` etc.)
+- **PartRenderers** wrap that geometry, applying palette as CSS custom properties and modifier effects as SVG transforms
+
+Modifier effects that go beyond palette operate on the SVG fragment via:
+- **SVG transforms** — rotation, scale, translate for expression/pose adjustments (energy, intensity)
+- **Stroke/path attribute adjustments** — stroke-width, dash patterns for line quality (precision)
+- **SVG filter injection** — blur, saturation for temperament effects
+- **Variant selection** — collections MAY provide multiple symbol variants per part (e.g., `hair:buzz`, `hair:buzz:energy-high`); if a variant exists matching the active modifier, the renderer selects it instead of the base symbol
+
+This means adjective effects on shape (D5's "Expression tension — brow angle, mouth set" for Intensity, "Pose dynamism" for Energy) are achieved either through SVG transforms on the base symbol or through variant symbols in the collection. The collection author decides which approach suits their art style — both are supported.
 
 ### Archetype Config Table
 
@@ -166,27 +197,28 @@ function buildAvatar(
 ): string {
   const layers: string[] = [];
   const detail = DETAIL_TIERS[size];
+  const render = (id: string) => registry.parts.get(id)!(palette, modifiers);
 
-  layers.push(registry.costumes.get(config.costume)!(palette, modifiers));
-  layers.push(registry.heads.get(config.head)!(palette, modifiers));
-  layers.push(registry.hairs.get(config.hair)!(palette, modifiers));
+  layers.push(render(`costume:${config.costume}`));
+  layers.push(render(`head:${config.head}`));
+  layers.push(render(`hair:${config.hair}`));
 
   if (detail >= DetailLevel.MD) {
     if (config.facialHair !== 'none') {
-      layers.push(registry.facialHairs.get(config.facialHair)!(palette, modifiers));
+      layers.push(render(`beard:${config.facialHair}`));
     }
-    layers.push(renderFace(config.eyebrows, modifiers, registry));
+    layers.push(render(`brow:${config.eyebrows}`));
     if (config.glasses) {
-      layers.push(registry.glasses.get(config.glasses)!(palette, modifiers));
+      layers.push(render(`glasses:${config.glasses}`));
     }
     for (const prop of config.props) {
-      layers.push(registry.props.get(prop)!(palette, modifiers));
+      layers.push(render(`prop:${prop}`));
     }
   }
 
   if (detail >= DetailLevel.LG) {
     for (const acc of config.accessories) {
-      layers.push(registry.accessories.get(acc)!(palette, modifiers));
+      layers.push(render(`acc:${acc}`));
     }
   }
 
@@ -207,6 +239,22 @@ Adjectives map to one of 5 effect categories. Each category modifies specific la
 | Organic (intuitive, flowing, natural, earthy) | Shape language — softer curves, textures | All part shapes |
 
 Modifiers are passed to part renderers via the `PartModifiers` object. Each renderer decides how to apply them (or ignore them at smaller sizes).
+
+### Adjective-to-Category Mapping Principle
+
+Every adjective in `ArchetypeTerm.java` maps to exactly one of the 5 effect categories. The mapping follows from the adjective's semantic domain:
+
+| Category | Mapping Rule | Examples from ArchetypeTerm.java |
+|----------|-------------|--------------------------------|
+| Intensity | Adjectives describing force, restraint, or emotional magnitude | fierce, gentle, bold, subtle, intense, soft, firm, passionate |
+| Temperament | Adjectives describing warmth, coolness, or emotional tone | warm, serene, measured, radiant, compassionate, cool |
+| Energy | Adjectives describing motion, pace, or dynamism | restless, driven, energetic, contemplative, spontaneous, calm, relentless |
+| Precision | Adjectives describing exactness, method, or rigour | meticulous, precise, methodical, systematic, rigorous, analytical, disciplined |
+| Organic | Adjectives describing naturalness, intuition, or fluidity | intuitive, flowing, natural, holistic, empathic, perceptive, mystical |
+
+Adjectives that don't clearly fit one category (e.g., "resourceful", "strategic") map to the category most relevant to their visual expression — typically Precision for cognitive/structural adjectives and Energy for action/behavior adjectives.
+
+`ArchetypeTerm.java` is the single source of truth for adjective lists. The full adjective → category mapping table is implementation data generated from ArchetypeTerm.java and codified in `modifiers.ts`. The avatar-generator-contract's adjective tables in Section 4 diverge from ArchetypeTerm.java in several places (e.g., Angel has 8 adjectives in the contract vs 7 in Java, Clown uses "absurd/silly/self-deprecating" in the contract vs "absurdist/surprising/expressive" in Java) — where they conflict, ArchetypeTerm.java prevails.
 
 ### Canonical Axis Expression Geometry
 
@@ -347,6 +395,8 @@ A theme browser renders all 12 previews in a row per collection:
 
 At a glance, you see every collection's interpretation of all 12 families. Pick a row = pick a theme.
 
+**Note on rendering:** The `<use href>` examples above are illustrative of the ID convention. In practice, preview SVG content is inlined into the DOM rather than referenced via external `<use href>` — cross-origin `<use>` with external SVG files is unreliable across browsers (CORS restrictions, shadow DOM limitations). The theme browser loads the preview file via fetch, extracts symbols, and renders them inline — the same approach as the parts file.
+
 ### Collection Loading
 
 ```typescript
@@ -363,6 +413,28 @@ function registerCollection(collection: AvatarCollection): void;
 
 For the built-in `mythic` collection, the parts file is inlined at build time (extracted into a TypeScript map) for zero-network rendering. Third-party collections load at runtime via fetch.
 
+### SVG Sanitization
+
+Runtime-loaded collections are sanitized before storage in the parts map. The sanitizer strips:
+- `<script>` elements
+- Event handler attributes (`onload`, `onclick`, `onerror`, etc.)
+- `<foreignObject>` elements
+- `<use>` elements with external `href` (cross-origin references)
+- `javascript:` URI schemes in any attribute
+
+Built-in collections (inlined at build time) are reviewed code and skip runtime sanitization.
+
+### Collection Fallback Behavior
+
+| Scenario | Behavior |
+|----------|----------|
+| Collection loading (async fetch in progress) | Render the Everyman/Citizen silhouette in desaturated palette as placeholder. Re-render when collection loads. |
+| Collection fetch fails (network error, 404) | Log warning. Fall back to `mythic` collection (always available, inlined at build time). |
+| Loaded collection is missing a part | Use the `mythic` collection's renderer for the missing part. Log a warning identifying the gap. |
+| Unknown collection ID | Fall back to `mythic` collection. Log warning. |
+
+The `mythic` collection is always the ultimate fallback — it is inlined at build time and never requires network access.
+
 ### mythic — First Collection
 
 The inaugural collection. Flat illustration style with half-body framing (head to waist).
@@ -371,7 +443,7 @@ Visual language:
 - Distinct head shapes per family (round, square jaw, diamond, heart, oval, angular, etc.)
 - Family colour palettes (cool blues for Sage, deep purples for Magician, bold primaries for Hero)
 - Archetype-specific props (magnifying glass, orb, paintbrush, shield, crown, compass, etc.)
-- Character variety (8+ hair styles, 8+ facial hair, 8 glasses, 8 eyebrow types)
+- Character variety (16 hair styles, 8 facial hair, 8 glasses, 8 eyebrow types)
 - Size-responsive detail tiers (xs silhouette → lg full detail)
 
 Full visual reference: `avatar-preview.html`
@@ -396,17 +468,24 @@ mythic:P1B
 mythic:Co/grLNBF
 ```
 - `C` — custom marker
-- 8 base64 chars encoding 44 bits of part selections:
-  - head (4b) + hair (4b) + facialHair (4b) + costume (5b)
-  - prop1 (6b) + prop2 (6b) + glasses (4b)
-  - eyebrows (3b) + accessory (4b) + palette (4b)
+- 8 base64 chars encoding 48 bits of part selections:
+  - version (2b) + head (4b) + hair (5b) + facialHair (4b) + costume (5b)
+  - glasses (4b) + eyebrows (4b) + accessory (4b) + palette (4b)
+  - prop1 (6b) + prop2 (6b)
+
+Version 0 is the initial encoding. Future encodings (up to 3 more) can redistribute bits if the part registry evolves significantly. 48 bits = 8 base64 chars — no length change from the original 44-bit allocation (which left 4 unused bits in the same 8-char encoding).
+
+### Scope of Compact Codes
+
+Compact codes encode **part identity** — which parts and which palette. They do not encode adjective or canonical axis modifiers. `renderAvatar(code)` produces the base preset or custom visual without modifier effects. This is intentional: codes are identity tokens for persistence and sharing; modifier effects come from the full `AvatarPayload` at render time.
 
 ### Properties
 
-- **Deterministic:** same code → same SVG, always
+- **Deterministic:** same code → same SVG (base visual without modifiers), always
 - **Decodable:** code → full part list without database lookup
 - **Compact:** 6-15 characters total
-- **Versionable:** collection renderers can evolve; codes stay stable (append-only part indices)
+- **Versioned:** 2-bit version field enables encoding evolution without breaking existing codes
+- **Append-only:** new parts get new indices; existing indices are stable across versions
 
 ### eidos YAML Integration
 
@@ -445,10 +524,12 @@ Third-party collections skip the build step — they load at runtime via fetch a
 ### Public API
 
 ```typescript
-function renderAvatar(code: string): string
+function renderAvatar(code: string, modifiers?: AvatarModifiers): string
 ```
 
-Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts from collection → apply palette as CSS custom properties → assemble layers → return SVG string.
+Give it a compact code (e.g., `mythic:P1B`), get back a complete SVG string. Internally: decode → resolve preset + overrides → look up parts from collection → apply palette as CSS custom properties → apply modifiers (if provided) → assemble layers → return SVG string.
+
+Without `modifiers`, the output is the base visual — part selections and palette only. With `modifiers`, adjective and canonical axis effects are applied. This separation is intentional: codes identify WHICH parts; modifiers express HOW those parts render.
 
 ## Package Structure
 
@@ -488,7 +569,7 @@ packages/agent-avatar-2d/
 
 ### BlocksComponentRegistry
 
-Per protocol `component-registry-props.md`: export `AgentAvatarProps` from `index.ts` and register in `packages/blocks-ui-schema/src/registry.ts`.
+Export `AgentAvatarProps` from `index.ts` for type safety. Register `'agent-avatar': AgentAvatarProps` in `BlocksComponentRegistry` in `packages/blocks-ui-schema/src/registry.ts` — following the precedent of `commitment-range-bar` and `commitment-transition-badge` which are also registered without the `blocks-*` prefix. The `agent-avatar` element is not renamed to `blocks-agent-avatar`: the protocol PP-20260907-fd8ee7 explicitly scopes to "Any new @customElement('blocks-*') component" — `agent-avatar` predates this protocol and is a domain-specific visualization, not a generic UI primitive.
 
 ## DiceBear Removal
 
@@ -528,12 +609,34 @@ Affected components: agent-catalog, agent-profile, agent-wizard (all on the paus
 
 Server-side `ArchetypeResolver` already converges disposition → archetype identity. Agents store the resolved archetype as part of their entity. Frontend callers receive archetype data alongside other agent metadata via existing API endpoints — no new frontend resolver needed.
 
+### Wire Format
+
+`FullAgentDescriptor` in `blocks-ui-core` needs new fields to carry archetype data to the frontend:
+
+```typescript
+interface FullAgentDescriptor {
+  // ... existing fields ...
+  archetypeFamily?: string;      // e.g., "Sage"
+  subArchetype?: string;         // e.g., "Detective"
+  archetypeAdjectives?: string[];// e.g., ["meticulous", "persistent"]
+  avatar?: string;               // compact code, e.g., "mythic:P1B"
+}
+```
+
+The component supports two data paths:
+1. **Full payload** — caller constructs `AvatarPayload` from `archetypeFamily`, `subArchetype`, `archetypeAdjectives`, and optionally `disposition` (for canonical axes)
+2. **Compact code** — caller passes `avatar` string directly as `code` property
+
+For the common case (no user customisation), only `avatar` is needed. Full payload enables modifier effects.
+
 ## Cross-Repo Concerns
 
 | Concern | Repo | Action |
 |---------|------|--------|
 | `avatar` field in agent YAML schema | eidos | Add optional `avatar: string` field to agent definition |
 | ArchetypeResolver → avatar code | eidos | Generate `mythic:P<index>` default code when archetype resolves |
+| `FullAgentDescriptor` type changes | blocks-ui-core | Add `archetypeFamily`, `subArchetype`, `archetypeAdjectives`, `avatar` fields |
+| API response augmentation | eidos | Include archetype fields in agent descriptor API responses |
 | Part catalogue rendering | blocks-ui | This issue — the SVG renderers |
 | Faceted selector UI | blocks-ui | Separate future issue — consumes avatar system for preview |
 
