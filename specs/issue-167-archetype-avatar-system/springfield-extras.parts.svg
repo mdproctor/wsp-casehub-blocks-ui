@@ -1,0 +1,186 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<!-- Collection: springfield-extras — modifier layers for character diversity
+     Stack on top of base springfield.parts.svg heads to create distinct characters.
+     Noses, mouths, eye mods, face details, body overlays, neck/collars, hair variants. -->
+
+<!-- ═══ BODY ═══ -->
+<symbol id="extra:body:broad-forearms" viewBox="0 0 200 240">
+      <!-- Massive muscular forearms extending on the sides -->
+      <!-- Left Forearm -->
+      <path d="M 46,160 C 22,165 12,190 28,215 C 38,225 52,220 54,200 C 56,185 52,172 46,160 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Right Forearm -->
+      <path d="M 154,160 C 178,165 188,190 172,215 C 162,225 148,220 146,200 C 144,185 148,172 154,160 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Muscle Definition Lines -->
+      <path d="M 28,182 Q 38,192 34,206 M 172,182 Q 162,192 166,206" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:body:hunched" viewBox="0 0 200 240">
+      <!-- Frail, hunched upper body with visible collarbones and narrow shoulders -->
+      <path d="M 45,210 C 42,185 62,175 75,172 L 78,190 L 122,190 L 125,172 C 138,175 158,185 155,210 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Prominent collarbones and neck tendon lines -->
+      <path d="M 78,178 Q 90,188 96,182 M 122,178 Q 110,188 104,182" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round" />
+      <path d="M 88,162 L 88,178 M 112,162 L 112,178" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
+<!-- ═══ DETAIL ═══ -->
+<symbol id="extra:detail:bags-under-eyes" viewBox="0 0 200 240">
+      <path d="M 68,100 C 72,112 92,112 96,100" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+      <path d="M 104,100 C 108,112 128,112 132,100" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:detail:crow-feet" viewBox="0 0 200 240">
+      <path d="M 65,88 L 58,85 M 64,92 L 56,92 M 65,96 L 58,100" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+      <path d="M 135,88 L 142,85 M 136,92 L 144,92 M 135,96 L 142,100" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:detail:double-chin" viewBox="0 0 200 240">
+      <path d="M 80,162 C 92,172 108,172 120,162" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:detail:face-paint" viewBox="0 0 200 240">
+      <!-- White face makeup covering the central face area for the TV clown -->
+      <path d="M 60,90 C 56,125 60,158 78,166 C 92,172 108,172 122,166 C 140,158 144,125 140,90 C 132,74 122,70 100,70 C 78,70 68,74 60,90 Z" fill="#FFFFFF" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:detail:nasolabial-folds" viewBox="0 0 200 240">
+      <path d="M 88,106 C 80,115 78,130 82,142" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+      <path d="M 112,106 C 120,115 122,130 118,142" fill="none" stroke="var(--line)" stroke-width="2" stroke-linecap="round" />
+    </symbol>
+
+<!-- ═══ EYE-MOD ═══ -->
+<symbol id="extra:eye-mod:heavy-lids" viewBox="0 0 200 240">
+      <path d="M 65,92 C 65,82 83,74 101,84 L 65,84 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3" stroke-linejoin="round" />
+      <path d="M 99,84 C 117,74 135,82 135,92 L 99,84 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:eye-mod:pinpoint-pupils" viewBox="0 0 200 240">
+      <!-- White covers over default pupils -->
+      <circle cx="85" cy="92" r="5" fill="#FFFFFF" />
+      <circle cx="115" cy="92" r="5" fill="#FFFFFF" />
+      <!-- Tiny pinpoint dots -->
+      <circle cx="83" cy="92" r="1.5" fill="var(--line)" />
+      <circle cx="117" cy="92" r="1.5" fill="var(--line)" />
+    </symbol>
+
+<symbol id="extra:eye-mod:squint" viewBox="0 0 200 240">
+      <!-- Upper Lids -->
+      <path d="M 65,85 Q 83,80 101,87 L 65,87 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="2.5" />
+      <path d="M 99,87 Q 117,80 135,85 L 99,85 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="2.5" />
+      <!-- Lower Lids -->
+      <path d="M 65,98 Q 83,103 101,96 L 65,96 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="2.5" />
+      <path d="M 99,96 Q 117,103 135,98 L 99,98 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="2.5" />
+    </symbol>
+
+<!-- ═══ HAIR ═══ -->
+<symbol id="extra:hair:nine-spikes" viewBox="0 0 200 240">
+      <!-- Exactly 9 clean zigzag spikes across the top of the head -->
+      <path d="M 58,72 L 58,40 L 68,48 L 72,36 L 81,46 L 86,34 L 95,45 L 100,32 L 105,45 L 114,34 L 119,46 L 128,36 L 132,48 L 142,40 L 142,72 Z" fill="var(--hair-color)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:hair:star-points" viewBox="0 0 200 240">
+      <!-- Jagged star-shaped hair — 8 sharp radiating points -->
+      <path d="M 58,72 L 42,60 L 58,48 L 48,30 L 68,32 L 68,10 L 88,24 L 100,-2 L 112,24 L 132,10 L 132,32 L 152,30 L 142,48 L 158,60 L 142,72 Z" fill="var(--hair-color)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:hair:tall-tower" viewBox="0 0 200 240">
+      <!-- Impossibly tall cylindrical hair stack — patient wife archetype -->
+      <path d="M 68,52 C 60,50 62,35 64,-30 C 65,-65 66,-100 100,-100 C 134,-100 135,-65 136,-30 C 138,35 140,50 132,52 C 118,48 82,48 68,52 Z" fill="var(--hair-color)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Inner texture loops for beehive structure -->
+      <path d="M 72,-80 Q 100,-72 128,-80 M 70,-40 Q 100,-30 130,-40 M 68,0 Q 100,10 132,0 M 66,30 Q 100,40 134,30" fill="none" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:hair:tufted-sides" viewBox="0 0 200 240">
+      <!-- Wild, asymmetric frizzy tufts on the sides for the TV clown archetype -->
+      <!-- Left Tuft -->
+      <path d="M 58,75 C 45,70 30,78 22,62 C 15,48 28,42 20,28 C 32,25 40,38 48,30 C 52,22 60,32 64,48 Z" fill="var(--hair-color)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Right Tuft -->
+      <path d="M 142,75 C 155,70 170,78 178,62 C 185,48 172,42 180,28 C 168,25 160,38 152,30 C 148,22 140,32 136,48 Z" fill="var(--hair-color)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:hair:wispy-combover" viewBox="0 0 200 240">
+      <!-- 3 thin wispy strands over a bald dome -->
+      <path d="M 56,80 C 50,45 80,32 100,32" fill="none" stroke="var(--hair-color)" stroke-width="3" stroke-linecap="round" />
+      <path d="M 54,88 C 46,40 85,26 108,26" fill="none" stroke="var(--hair-color)" stroke-width="3" stroke-linecap="round" />
+      <path d="M 58,95 C 48,50 92,20 118,20" fill="none" stroke="var(--hair-color)" stroke-width="3" stroke-linecap="round" />
+    </symbol>
+
+<!-- ═══ MOUTH ═══ -->
+<symbol id="extra:mouth:buck-teeth" viewBox="0 0 200 240">
+      <path d="M 76,120 C 76,110 88,110 100,110 C 112,110 124,110 124,120 C 124,136 112,142 100,142 C 88,142 76,136 76,120 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3" />
+      <path d="M 82,124 Q 100,132 118,124" fill="none" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" />
+      <!-- Prominent upper buck teeth -->
+      <path d="M 93,126 L 93,134 L 100,134 L 100,127 M 100,127 L 100,134 L 107,134 L 107,126" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:mouth:gummy-smirk" viewBox="0 0 200 240">
+      <path d="M 76,120 C 76,110 88,110 100,110 C 112,110 124,110 124,120 C 124,136 112,142 100,142 C 88,142 76,136 76,120 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3" />
+      <path d="M 82,122 Q 105,142 122,120" fill="none" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="122" y1="120" x2="125" y2="125" stroke="var(--line)" stroke-width="3" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:mouth:thin-no-muzzle" viewBox="0 0 200 240">
+      <path d="M 84,128 Q 100,136 116,128" fill="none" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" />
+      <line x1="84" y1="128" x2="82" y2="125" stroke="var(--line)" stroke-width="2.5" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:mouth:underbite-snarl" viewBox="0 0 200 240">
+      <path d="M 76,120 C 76,110 88,110 100,110 C 112,110 124,110 124,120 C 124,136 112,142 100,142 C 88,142 76,136 76,120 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3" />
+      <path d="M 82,130 Q 100,122 118,130" fill="none" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" />
+      <!-- Exposed bottom teeth -->
+      <path d="M 92,130 L 92,124 L 97,124 L 97,130 M 103,130 L 103,124 L 108,124 L 108,130" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" stroke-linejoin="round" />
+    </symbol>
+
+<!-- ═══ NECK ═══ -->
+<symbol id="extra:neck:pearl-necklace" viewBox="0 0 200 240">
+      <path d="M 72,175 Q 100,198 128,175" fill="none" stroke="var(--line)" stroke-width="1.5" />
+      <circle cx="76" cy="177" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="84" cy="183" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="92" cy="186" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="100" cy="187" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="108" cy="186" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="116" cy="183" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+      <circle cx="124" cy="177" r="4.5" fill="#FFFFFF" stroke="var(--line)" stroke-width="2" />
+    </symbol>
+
+<symbol id="extra:neck:polo-collar" viewBox="0 0 200 240">
+      <path d="M 62,182 L 100,195 L 138,182 L 150,220 L 50,220 Z" fill="var(--primary)" stroke="var(--line)" stroke-width="3" stroke-linejoin="round" />
+      <path d="M 62,182 L 88,205 L 100,185 L 112,205 L 138,182" fill="none" stroke="var(--line)" stroke-width="3" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:neck:tie-and-collar" viewBox="0 0 200 240">
+      <!-- Shirt background -->
+      <path d="M 68,182 L 132,182 L 145,220 L 55,220 Z" fill="#FFFFFF" stroke="var(--line)" stroke-width="3" />
+      <!-- Collars -->
+      <polygon points="68,182 92,200 85,182" fill="#FFFFFF" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round" />
+      <polygon points="132,182 108,200 115,182" fill="#FFFFFF" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round" />
+      <!-- Tie Knot & Body -->
+      <polygon points="95,190 105,190 103,198 97,198" fill="var(--secondary)" stroke="var(--line)" stroke-width="2" />
+      <polygon points="97,198 103,198 108,220 92,220" fill="var(--secondary)" stroke="var(--line)" stroke-width="2.5" stroke-linejoin="round" />
+    </symbol>
+
+<!-- ═══ NOSE ═══ -->
+<symbol id="extra:nose:bulbous-droop" viewBox="0 0 200 240">
+      <path d="M 96,90 C 94,98 90,108 100,110 C 110,110 110,98 100,98 C 96,98 96,92 96,90 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:nose:crooked-bridge" viewBox="0 0 200 240">
+      <path d="M 97,90 L 103,96 L 98,100 C 95,104 102,106 104,103" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:nose:pig-snout" viewBox="0 0 200 240">
+      <!-- Wide, flat, upturned pig-like snout for police chief archetype -->
+      <path d="M 88,92 C 86,108 114,108 112,92 C 112,88 88,88 88,92 Z" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Large Oval Nostrils -->
+      <ellipse cx="94" cy="98" rx="3.5" ry="4" fill="var(--line)" />
+      <ellipse cx="106" cy="98" rx="3.5" ry="4" fill="var(--line)" />
+    </symbol>
+
+<symbol id="extra:nose:sharp-beak" viewBox="0 0 200 240">
+      <path d="M 98,92 L 108,102 C 110,108 100,108 96,105" fill="var(--skin)" stroke="var(--line)" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+<symbol id="extra:nose:tiny-button" viewBox="0 0 200 240">
+      <path d="M 98,95 Q 104,95 102,100 Q 98,102 96,98" fill="var(--skin)" stroke="var(--line)" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </symbol>
+
+</svg>
