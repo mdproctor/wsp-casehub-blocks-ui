@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-167-archetype-avatar-system
-state: scaffolded
+state: active
 project-sha: a02d762a4b317743512e0ed996fb2f61f6df954b
 date: 2026-09-21
 issue-repo: casehubio/blocks-ui
