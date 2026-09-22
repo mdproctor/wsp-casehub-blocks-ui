@@ -1,0 +1,179 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<!-- Collection: neon-extras — Modifier layers for cyberpunk effects
+     Glow effects, circuit wires, eye mods, mouth variants, nose variants. -->
+
+<symbol id="extra:chromatic-glow" viewBox="0 0 200 240">
+      <!-- Offset Echo Silhouette Channels -->
+      <path d="M 53,48 C 53,26 143,26 143,48 C 152,86 153,138 131,166 L 126,196 L 70,196 L 65,166 C 43,138 44,86 53,48 Z" fill="none" stroke="#ff0055" stroke-width="2" opacity="0.4" transform="translate(-3, -2)" filter="url(#neon-glow-secondary)" />
+      <path d="M 57,52 C 57,30 147,30 147,52 C 156,90 157,142 135,170 L 130,200 L 74,200 L 69,170 C 47,142 48,90 57,52 Z" fill="none" stroke="#00f3ff" stroke-width="2" opacity="0.4" transform="translate(3, 2)" filter="url(#neon-glow-primary)" />
+    </symbol>
+
+<symbol id="extra:cyber-face-wires" viewBox="0 0 200 240">
+      <!-- Cheek Circuit Piping -->
+      <path d="M 60,115 L 75,125 L 75,140 L 65,150" class="tube-secondary" stroke-width="2.5" />
+      <path d="M 60,115 L 75,125 L 75,140 L 65,150" class="tube-core" stroke-width="0.8" />
+      
+      <path d="M 140,115 L 125,125 L 125,140 L 135,150" class="tube-primary" stroke-width="2.5" />
+      <path d="M 140,115 L 125,125 L 125,140 L 135,150" class="tube-core" stroke-width="0.8" />
+
+      <!-- Temple Nodes -->
+      <circle cx="58" cy="113" r="3" class="neon-cap" />
+      <circle cx="142" cy="113" r="3" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:dead-tube-wire" viewBox="0 0 200 240">
+      <!-- Unlit Dark Glass Segment with Spark Gap -->
+      <path d="M 45,110 L 30,140 L 40,170" fill="none" stroke="#25243b" stroke-width="3" stroke-linecap="round" />
+      <path d="M 45,110 L 30,140 L 40,170" class="tube-core" stroke-width="0.8" stroke-dasharray="2,3" />
+      <!-- Electric Arc Spark Peak -->
+      <path d="M 28,138 L 34,142 L 27,146" class="tube-accent" stroke-width="1.5" />
+      <!-- Dangling Broken Wire -->
+      <path d="M 40,170 C 35,185 25,190 28,205" class="neon-wire" stroke-dasharray="4,2" />
+    </symbol>
+
+<symbol id="extra:electric-halo" viewBox="0 0 200 240">
+      <!-- Radiant Spiked Crest -->
+      <path d="M 100,5 L 100,18 M 60,15 L 68,26 M 140,15 L 132,26 M 25,38 L 38,44 M 175,38 L 162,44" class="tube-secondary" stroke-width="3" />
+      <path d="M 100,5 L 100,18 M 60,15 L 68,26 M 140,15 L 132,26 M 25,38 L 38,44 M 175,38 L 162,44" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="extra:eyes:concentric-duo" viewBox="0 0 200 240">
+      <!-- Left Outer & Inner -->
+      <circle cx="72" cy="95" r="18" class="tube-accent" stroke-width="3" />
+      <circle cx="72" cy="95" r="18" class="tube-core" stroke-width="1" />
+      <circle cx="72" cy="95" r="10" class="tube-primary" stroke-width="3" />
+      <circle cx="72" cy="95" r="10" class="tube-core" stroke-width="1" />
+
+      <!-- Right Outer & Inner -->
+      <circle cx="128" cy="95" r="18" class="tube-accent" stroke-width="3" />
+      <circle cx="128" cy="95" r="18" class="tube-core" stroke-width="1" />
+      <circle cx="128" cy="95" r="10" class="tube-primary" stroke-width="3" />
+      <circle cx="128" cy="95" r="10" class="tube-core" stroke-width="1" />
+
+      <!-- Wiring mounts -->
+      <rect x="88" y="93" width="4" height="4" class="neon-cap" />
+      <rect x="108" y="93" width="4" height="4" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:eyes:dead-flicker" viewBox="0 0 200 240">
+      <!-- Left Eye (Lit Secondary) -->
+      <circle cx="72" cy="95" r="15" class="tube-secondary" stroke-width="3.5" />
+      <circle cx="72" cy="95" r="15" class="tube-core" stroke-width="1" />
+      <circle cx="72" cy="95" r="3" fill="#ffffff" class="tube-core" />
+
+      <!-- Right Eye ("Dead" Unlit Glass Tube with Only Dark Core & End Caps) -->
+      <circle cx="128" cy="95" r="15" fill="none" stroke="#2c2a4a" stroke-width="3.5" />
+      <circle cx="128" cy="95" r="15" class="tube-core" stroke-width="0.8" stroke-dasharray="4,2" />
+      <circle cx="128" cy="95" r="2" fill="#3a385e" />
+
+      <!-- Eyebrow Wire Accents -->
+      <path d="M 56,74 L 88,78" class="tube-secondary" stroke-width="3" />
+      <path d="M 56,74 L 88,78" class="tube-core" stroke-width="1" />
+      <path d="M 112,78 L 144,74" stroke="#2c2a4a" stroke-width="3" stroke-linecap="round" />
+    </symbol>
+
+<symbol id="extra:eyes:lit-rings" viewBox="0 0 200 240">
+      <!-- Left Eye -->
+      <circle cx="72" cy="95" r="16" class="tube-primary" stroke-width="3.5" />
+      <circle cx="72" cy="95" r="16" class="tube-core" stroke-width="1" />
+      <circle cx="72" cy="95" r="5" class="tube-secondary" stroke-width="3" />
+      <circle cx="72" cy="95" r="5" class="tube-core" stroke-width="1" />
+
+      <!-- Right Eye -->
+      <circle cx="128" cy="95" r="16" class="tube-primary" stroke-width="3.5" />
+      <circle cx="128" cy="95" r="16" class="tube-core" stroke-width="1" />
+      <circle cx="128" cy="95" r="5" class="tube-secondary" stroke-width="3" />
+      <circle cx="128" cy="95" r="5" class="tube-core" stroke-width="1" />
+
+      <!-- Connecting Electrode Bridge Tube -->
+      <path d="M 88,95 L 112,95" class="tube-primary" stroke-width="2.5" />
+      <path d="M 88,95 L 112,95" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="extra:gas-aura" viewBox="0 0 200 240">
+      <!-- Radiant Background Plasma Glow Circles -->
+      <circle cx="100" cy="100" r="75" fill="none" stroke="url(#aura-grad-1)" stroke-width="12" opacity="0.25" filter="url(#neon-glow-primary)" />
+      <circle cx="100" cy="100" r="85" fill="none" stroke="url(#aura-grad-2)" stroke-width="6" opacity="0.15" filter="url(#neon-glow-secondary)" />
+    </symbol>
+
+<symbol id="extra:grid-backplate" viewBox="0 0 200 240">
+      <rect x="10" y="10" width="180" height="220" rx="12" fill="url(#neon-grid-pattern)" stroke="#2b2854" stroke-width="1.5" class="neon-panel" />
+      <!-- Corner Mounting Screws/Standoffs -->
+      <circle cx="22" cy="22" r="4" fill="#0d0d18" stroke="#444466" stroke-width="1" />
+      <circle cx="178" cy="22" r="4" fill="#0d0d18" stroke="#444466" stroke-width="1" />
+      <circle cx="22" cy="218" r="4" fill="#0d0d18" stroke="#444466" stroke-width="1" />
+      <circle cx="178" cy="218" r="4" fill="#0d0d18" stroke="#444466" stroke-width="1" />
+    </symbol>
+
+<symbol id="extra:mounting-hardware" viewBox="0 0 200 240">
+      <!-- Structural Clamps for Face Tubes -->
+      <rect x="44" y="90" width="8" height="4" rx="1" class="neon-cap" />
+      <rect x="148" y="90" width="8" height="4" rx="1" class="neon-cap" />
+      <rect x="44" y="140" width="8" height="4" rx="1" class="neon-cap" />
+      <rect x="148" y="140" width="8" height="4" rx="1" class="neon-cap" />
+      <!-- Rear Wire Junction Box -->
+      <rect x="92" y="8" width="16" height="12" rx="2" fill="#151424" stroke="#3d3a66" stroke-width="1" />
+      <path d="M 96,20 L 96,30 M 104,20 L 104,30" class="neon-wire" />
+    </symbol>
+
+<symbol id="extra:mouth:arc-contacts" viewBox="0 0 200 240">
+      <path d="M 76,146 C 90,140 110,140 124,146 C 110,165 90,165 76,146 Z" class="tube-accent" stroke-width="3.5" />
+      <path d="M 76,146 C 90,140 110,140 124,146 C 110,165 90,165 76,146 Z" class="tube-core" stroke-width="1" />
+      <!-- Center Tooth Segment Wire -->
+      <line x1="100" y1="142" x2="100" y2="159" class="tube-primary" stroke-width="2.5" />
+      <line x1="100" y1="142" x2="100" y2="159" class="tube-core" stroke-width="0.8" />
+    </symbol>
+
+<symbol id="extra:mouth:smiling-filament" viewBox="0 0 200 240">
+      <path d="M 72,142 C 85,162 115,162 128,142" class="tube-primary" stroke-width="4" />
+      <path d="M 72,142 C 85,162 115,162 128,142" class="tube-core" stroke-width="1.2" />
+      <!-- End Electrodes -->
+      <circle cx="71" cy="141" r="3" class="neon-cap" />
+      <circle cx="129" cy="141" r="3" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:mouth:zigzag-waveform" viewBox="0 0 200 240">
+      <path d="M 70,148 L 82,140 L 94,154 L 106,140 L 118,154 L 130,148" class="tube-secondary" stroke-width="3.5" />
+      <path d="M 70,148 L 82,140 L 94,154 L 106,140 L 118,154 L 130,148" class="tube-core" stroke-width="1" />
+      <rect x="67" y="146" width="5" height="5" class="neon-cap" />
+      <rect x="128" y="146" width="5" height="5" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:neon-badges" viewBox="0 0 200 240">
+      <!-- Triangle Hazard Icon (Chest/Shoulder placement) -->
+      <polygon points="100,200 115,225 85,225" class="tube-accent" stroke-width="3" />
+      <polygon points="100,200 115,225 85,225" class="tube-core" stroke-width="0.8" />
+      <circle cx="100" cy="216" r="2" class="tube-accent" />
+    </symbol>
+
+<symbol id="extra:nose:angled-chevron" viewBox="0 0 200 240">
+      <path d="M 100,92 L 108,114 L 94,120" class="tube-secondary" stroke-width="3.5" />
+      <path d="M 100,92 L 108,114 L 94,120" class="tube-core" stroke-width="1" />
+      <rect x="98" y="89" width="4" height="4" class="neon-cap" />
+      <rect x="91" y="118" width="4" height="4" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:nose:minimal-dot" viewBox="0 0 200 240">
+      <!-- Vertical Drop Tube with Terminal Dot -->
+      <path d="M 100,92 L 100,112" class="tube-accent" stroke-width="3" />
+      <path d="M 100,92 L 100,112" class="tube-core" stroke-width="1" />
+      <circle cx="100" cy="120" r="4" class="tube-accent" stroke-width="3" />
+      <circle cx="100" cy="120" r="4" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="extra:nose:neon-loop" viewBox="0 0 200 240">
+      <path d="M 94,95 L 106,95 L 106,118 C 106,126 94,126 94,118 Z" class="tube-primary" stroke-width="3.5" />
+      <path d="M 94,95 L 106,95 L 106,118 C 106,126 94,126 94,118 Z" class="tube-core" stroke-width="1" />
+      <rect x="92" y="92" width="5" height="5" class="neon-cap" />
+    </symbol>
+
+<symbol id="extra:shutter-shades" viewBox="0 0 200 240">
+      <!-- Outer Frame -->
+      <polygon points="40,82 160,82 150,112 100,118 50,112" class="tube-primary" stroke-width="3.5" />
+      <polygon points="40,82 160,82 150,112 100,118 50,112" class="tube-core" stroke-width="1" />
+      <!-- Shutter Horizontal Tubes -->
+      <path d="M 48,90 L 152,90 M 46,96 L 154,96 M 48,102 L 152,102 M 52,108 L 148,108" class="tube-accent" stroke-width="2" />
+      <path d="M 48,90 L 152,90 M 46,96 L 154,96 M 48,102 L 152,102 M 52,108 L 148,108" class="tube-core" stroke-width="0.6" />
+    </symbol>
+
+</svg>

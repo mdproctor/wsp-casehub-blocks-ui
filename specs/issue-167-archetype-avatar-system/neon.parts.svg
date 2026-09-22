@@ -1,0 +1,242 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+<!-- Collection: neon — Cyberpunk / Synthwave style
+     Glowing wireframes, neon tube outlines, dark backgrounds, visor masks.
+     INCOMPLETE: 15 standard IDs mapped from 33 Gemini symbols. Needs ~162 more. -->
+
+<!-- ═══ COSTUME ═══ -->
+<symbol id="costume:armour" viewBox="0 0 200 240">
+      <polygon points="100,172 142,165 180,185 165,235 35,235 20,185 58,165" class="neon-panel" />
+
+      <!-- Angular Segmented Plate Piping -->
+      <polygon points="100,175 140,168 175,188 162,235 38,235 25,188 60,168" class="tube-secondary" stroke-width="4" />
+      <polygon points="100,175 140,168 175,188 162,235 38,235 25,188 60,168" class="tube-core" stroke-width="1.2" />
+
+      <!-- Inner Armor Rail Lines -->
+      <path d="M 60,168 L 78,235 M 140,168 L 122,235 M 100,175 L 100,235" class="tube-accent" stroke-width="3" />
+      <path d="M 60,168 L 78,235 M 140,168 L 122,235 M 100,175 L 100,235" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="costume:blazer-tie" viewBox="0 0 200 240">
+      <path d="M 38,185 L 75,170 L 100,210 L 125,170 L 162,185 L 175,235 L 25,235 Z" class="neon-panel" />
+
+      <!-- Jacket Outline -->
+      <path d="M 38,188 L 75,172 L 100,215 L 125,172 L 162,188 L 172,235 L 28,235 Z" class="tube-accent" stroke-width="3.5" />
+      <path d="M 38,188 L 75,172 L 100,215 L 125,172 L 162,188 L 172,235 L 28,235 Z" class="tube-core" stroke-width="1" />
+
+      <!-- Lapel Piping Tubes -->
+      <path d="M 75,172 L 88,198 L 100,235 M 125,172 L 112,198 L 100,235" class="tube-primary" stroke-width="3" />
+      <path d="M 75,172 L 88,198 L 100,235 M 125,172 L 112,198 L 100,235" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="costume:diplomatic" viewBox="0 0 200 240">
+      <path d="M 45,185 L 75,168 L 125,168 L 155,185 L 168,235 L 32,235 Z" class="neon-panel" />
+
+      <!-- Sharp Shirt Collar -->
+      <path d="M 48,188 L 75,170 L 100,192 L 125,170 L 152,188 L 165,235 L 35,235 Z" class="tube-primary" stroke-width="3.5" />
+      <path d="M 48,188 L 75,170 L 100,192 L 125,170 L 152,188 L 165,235 L 35,235 Z" class="tube-core" stroke-width="1" />
+
+      <!-- Geometric Neon Tie -->
+      <polygon points="94,192 106,192 110,215 100,235 90,215" class="tube-secondary" stroke-width="3" />
+      <polygon points="94,192 106,192 110,215 100,235 90,215" class="tube-core" stroke-width="0.8" />
+    </symbol>
+
+<symbol id="costume:hoodie" viewBox="0 0 200 240">
+      <path d="M 35,190 C 50,165 72,165 100,178 C 128,165 150,165 165,190 L 178,235 L 22,235 Z" class="neon-panel" />
+
+      <!-- Soft Curved Hood Outer Tube -->
+      <path d="M 38,192 C 52,168 74,168 100,180 C 126,168 148,168 162,192 L 175,235 L 25,235 Z" class="tube-primary" stroke-width="4" />
+      <path d="M 38,192 C 52,168 74,168 100,180 C 126,168 148,168 162,192 L 175,235 L 25,235 Z" class="tube-core" stroke-width="1.2" />
+
+      <!-- Drawstring Neon Loops -->
+      <path d="M 88,182 L 88,212 C 88,218 82,218 82,212 M 112,182 L 112,212 C 112,218 118,218 118,212" class="tube-accent" stroke-width="2.5" />
+      <path d="M 88,182 L 88,212 C 88,218 82,218 82,212 M 112,182 L 112,212 C 112,218 118,218 118,212" class="tube-core" stroke-width="0.8" />
+    </symbol>
+
+<symbol id="costume:robes" viewBox="0 0 200 240">
+      <path d="M 60,185 L 140,185 L 158,235 L 42,235 Z" class="neon-panel" />
+
+      <!-- Neck Ring Loop -->
+      <path d="M 64,188 C 80,180 120,180 136,188 C 145,210 55,210 64,188 Z" class="tube-secondary" stroke-width="4" />
+      <path d="M 64,188 C 80,180 120,180 136,188 C 145,210 55,210 64,188 Z" class="tube-core" stroke-width="1.2" />
+
+      <!-- Harness Straps to Shoulders -->
+      <path d="M 52,235 L 72,196 M 148,235 L 128,196" class="tube-primary" stroke-width="3" />
+      <path d="M 52,235 L 72,196 M 148,235 L 128,196" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="costume:utility-vest" viewBox="0 0 200 240">
+      <!-- Dark Acrylic Panel Backplate -->
+      <path d="M 45,185 L 68,162 L 132,162 L 155,185 L 175,235 L 25,235 Z" class="neon-panel" />
+      
+      <!-- Wiring harness to base -->
+      <path d="M 72,198 L 72,235 M 128,198 L 128,235" class="neon-wire" />
+
+      <!-- Outer Collar Contour -->
+      <path d="M 48,188 L 68,165 L 132,165 L 152,188 L 170,235 L 30,235 Z" class="tube-primary" stroke-width="4" />
+      <path d="M 48,188 L 68,165 L 132,165 L 152,188 L 170,235 L 30,235 Z" class="tube-core" stroke-width="1.2" />
+
+      <!-- Inner V-Neck Neon Trim -->
+      <path d="M 78,165 L 100,198 L 122,165" class="tube-secondary" stroke-width="3" />
+      <path d="M 78,165 L 100,198 L 122,165" class="tube-core" stroke-width="1" />
+
+      <!-- Electrodes -->
+      <rect x="65" y="162" width="6" height="6" rx="1" class="neon-cap" />
+      <rect x="129" y="162" width="6" height="6" rx="1" class="neon-cap" />
+    </symbol>
+
+<!-- ═══ HAIR ═══ -->
+<symbol id="hair:bald-sides" viewBox="0 0 200 240">
+      <!-- Floating Halo Backplate -->
+      <ellipse cx="100" cy="22" rx="55" ry="14" class="neon-panel" />
+
+      <!-- Elliptical Glowing Ring Tube -->
+      <ellipse cx="100" cy="22" rx="52" ry="12" class="tube-accent" stroke-width="4" />
+      <ellipse cx="100" cy="22" rx="52" ry="12" class="tube-core" stroke-width="1.2" />
+
+      <!-- Support Stems / Mount Struts -->
+      <path d="M 60,30 L 68,52 M 140,30 L 132,52" class="tube-secondary" stroke-width="2.5" />
+      <path d="M 60,30 L 68,52 M 140,30 L 132,52" class="tube-core" stroke-width="0.8" />
+
+      <rect x="65" y="48" width="6" height="6" class="neon-cap" />
+      <rect x="129" y="48" width="6" height="6" class="neon-cap" />
+    </symbol>
+
+<symbol id="hair:buzz" viewBox="0 0 200 240">
+      <!-- Cap Crown & Brim Acrylic Panel -->
+      <path d="M 52,50 C 52,22 148,22 148,50 L 175,68 L 25,68 Z" class="neon-panel" />
+
+      <!-- Cap Brim Glowing Bar -->
+      <path d="M 22,68 L 178,68" class="tube-primary" stroke-width="4.5" />
+      <path d="M 22,68 L 178,68" class="tube-core" stroke-width="1.5" />
+
+      <!-- Crown Dome Arch Tube -->
+      <path d="M 55,52 C 55,26 145,26 145,52" class="tube-secondary" stroke-width="3.5" />
+      <path d="M 55,52 C 55,26 145,26 145,52" class="tube-core" stroke-width="1" />
+
+      <!-- Front Emblem Grid Lines -->
+      <path d="M 88,38 L 112,38 M 82,46 L 118,46" class="tube-accent" stroke-width="2.5" />
+      <path d="M 88,38 L 112,38 M 82,46 L 118,46" class="tube-core" stroke-width="0.8" />
+    </symbol>
+
+<symbol id="hair:mohawk" viewBox="0 0 200 240">
+      <path d="M 82,60 L 82,8 L 118,8 L 118,60 Z" class="neon-panel" />
+
+      <!-- Outer Rail Frame -->
+      <path d="M 85,60 L 85,12 L 115,12 L 115,60" class="tube-primary" stroke-width="4" />
+      <path d="M 85,60 L 85,12 L 115,12 L 115,60" class="tube-core" stroke-width="1.2" />
+
+      <!-- Internal Zig-Zag Plasma Fin -->
+      <path d="M 85,50 L 115,40 L 85,30 L 115,20 L 85,12" class="tube-accent" stroke-width="3" />
+      <path d="M 85,50 L 115,40 L 85,30 L 115,20 L 85,12" class="tube-core" stroke-width="0.8" />
+
+      <rect x="81" y="56" width="8" height="6" rx="1" class="neon-cap" />
+      <rect x="111" y="56" width="8" height="6" rx="1" class="neon-cap" />
+    </symbol>
+
+<symbol id="hair:shoulder-wavy" viewBox="0 0 200 240">
+      <path d="M 48,35 C 70,18 130,18 152,35 L 165,115 L 148,118 L 142,50 C 120,32 80,32 58,50 L 52,118 L 35,115 Z" class="neon-panel" />
+
+      <!-- Left Bob Wing (Secondary Magenta) -->
+      <path d="M 100,24 C 68,24 50,38 54,52 L 38,112 C 38,122 52,122 55,110 L 60,54" class="tube-secondary" stroke-width="4" />
+      <path d="M 100,24 C 68,24 50,38 54,52 L 38,112 C 38,122 52,122 55,110 L 60,54" class="tube-core" stroke-width="1.2" />
+
+      <!-- Right Bob Wing (Primary Cyan) -->
+      <path d="M 100,24 C 132,24 150,38 146,52 L 162,112 C 162,122 148,122 145,110 L 140,54" class="tube-primary" stroke-width="4" />
+      <path d="M 100,24 C 132,24 150,38 146,52 L 162,112 C 162,122 148,122 145,110 L 140,54" class="tube-core" stroke-width="1.2" />
+
+      <!-- Front Fringe Brow Line -->
+      <path d="M 62,54 C 85,62 115,62 138,54" class="tube-accent" stroke-width="3" />
+      <path d="M 62,54 C 85,62 115,62 138,54" class="tube-core" stroke-width="0.8" />
+    </symbol>
+
+<symbol id="hair:slicked" viewBox="0 0 200 240">
+      <path d="M 42,65 C 38,25 65,8 108,12 C 152,16 168,38 160,68 L 152,65 C 158,40 142,22 108,20 C 72,18 48,32 50,65 Z" class="neon-panel" />
+
+      <!-- Swept Wave Tube Contour -->
+      <path d="M 46,62 C 40,28 68,12 108,16 C 148,20 162,40 156,65 C 132,32 82,32 52,62" class="tube-primary" stroke-width="4" />
+      <path d="M 46,62 C 40,28 68,12 108,16 C 148,20 162,40 156,65 C 132,32 82,32 52,62" class="tube-core" stroke-width="1.2" />
+
+      <!-- Inner Wave Ridge Lines -->
+      <path d="M 65,42 C 85,28 125,28 145,45 M 80,55 C 98,42 122,42 135,55" class="tube-accent" stroke-width="3" />
+      <path d="M 65,42 C 85,28 125,28 145,45 M 80,55 C 98,42 122,42 135,55" class="tube-core" stroke-width="0.8" />
+
+      <rect x="42" y="60" width="6" height="6" rx="1" class="neon-cap" />
+      <rect x="152" y="62" width="6" height="6" rx="1" class="neon-cap" />
+    </symbol>
+
+<symbol id="hair:wild-einstein" viewBox="0 0 200 240">
+      <path d="M 45,62 L 30,32 L 62,38 L 78,10 L 100,32 L 122,10 L 138,38 L 170,32 L 155,62 Z" class="neon-panel" />
+
+      <!-- Outer Spikes Loop -->
+      <path d="M 48,60 L 32,30 L 64,36 L 80,12 L 100,30 L 120,12 L 136,36 L 168,30 L 152,60" class="tube-secondary" stroke-width="3.5" />
+      <path d="M 48,60 L 32,30 L 64,36 L 80,12 L 100,30 L 120,12 L 136,36 L 168,30 L 152,60" class="tube-core" stroke-width="1" />
+
+      <!-- Inner Radiating Fiber Tubes -->
+      <path d="M 64,36 L 82,52 M 100,30 L 100,55 M 136,36 L 118,52" class="tube-primary" stroke-width="2.5" />
+      <path d="M 64,36 L 82,52 M 100,30 L 100,55 M 136,36 L 118,52" class="tube-core" stroke-width="0.8" />
+
+      <circle cx="32" cy="30" r="3" class="tube-accent" />
+      <circle cx="80" cy="12" r="3" class="tube-accent" />
+      <circle cx="120" cy="12" r="3" class="tube-accent" />
+      <circle cx="168" cy="30" r="3" class="tube-accent" />
+    </symbol>
+
+<!-- ═══ HEAD ═══ -->
+<symbol id="head:angular" viewBox="0 0 200 240">
+      <!-- Dark Acrylic Mounting Backplate -->
+      <polygon points="100,20 158,45 152,125 130,175 125,205 75,205 70,175 48,125 42,45" class="neon-panel" />
+
+      <!-- Connecting Wires -->
+      <path d="M 100,20 L 100,8 M 75,205 L 75,225 M 125,205 L 125,225" class="neon-wire" />
+
+      <!-- Neon Tube Framework -->
+      <polygon points="100,25 152,48 146,122 126,170 120,198 80,198 74,170 54,122 48,48" class="tube-secondary" stroke-width="4.5" />
+      <polygon points="100,25 152,48 146,122 126,170 120,198 80,198 74,170 54,122 48,48" class="tube-core" stroke-width="1.5" />
+
+      <!-- Electrodes -->
+      <rect x="96" y="21" width="8" height="8" rx="1" class="neon-cap" />
+      <rect x="76" y="194" width="8" height="8" rx="1" class="neon-cap" />
+      <rect x="116" y="194" width="8" height="8" rx="1" class="neon-cap" />
+
+      <!-- Neck Tube Supports -->
+      <path d="M 80,198 L 80,220 M 120,198 L 120,220" class="tube-secondary" stroke-width="3.5" />
+      <path d="M 80,198 L 80,220 M 120,198 L 120,220" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="head:round" viewBox="0 0 200 240">
+      <!-- Dark Acrylic Backplate -->
+      <path d="M 100,20 C 148,20 162,55 162,105 C 162,150 142,175 130,202 L 70,202 C 58,175 38,150 38,105 C 38,55 52,20 100,20 Z" class="neon-panel" />
+
+      <!-- Neon Main Glass Contour -->
+      <path d="M 100,25 C 142,25 156,58 156,105 C 156,146 137,170 125,196 L 75,196 C 63,170 44,146 44,105 C 44,58 58,25 100,25 Z" class="tube-accent" stroke-width="4.5" />
+      <path d="M 100,25 C 142,25 156,58 156,105 C 156,146 137,170 125,196 L 75,196 C 63,170 44,146 44,105 C 44,58 58,25 100,25 Z" class="tube-core" stroke-width="1.5" />
+
+      <!-- Electrode Cap Center Top -->
+      <rect x="96" y="21" width="8" height="8" rx="2" class="neon-cap" />
+
+      <!-- Neck Support Pillars -->
+      <path d="M 75,196 L 75,220 M 125,196 L 125,220" class="tube-accent" stroke-width="3.5" />
+      <path d="M 75,196 L 75,220 M 125,196 L 125,220" class="tube-core" stroke-width="1" />
+    </symbol>
+
+<symbol id="head:standard" viewBox="0 0 200 240">
+      <!-- Dark Acrylic Mounting Backplate -->
+      <path d="M 50,45 C 50,20 150,20 150,45 C 160,85 162,145 138,175 L 132,205 L 68,205 L 62,175 C 38,145 40,85 50,45 Z" class="neon-panel" />
+      
+      <!-- Connecting Wires to Grid -->
+      <path d="M 65,205 L 65,225 M 135,205 L 135,225 M 100,25 L 100,10" class="neon-wire" />
+
+      <!-- Outer Neon Glass Contour Tube -->
+      <path d="M 55,50 C 55,28 145,28 145,50 C 154,88 155,140 133,168 L 128,198 L 72,198 L 67,168 C 45,140 46,88 55,50 Z" class="tube-primary" stroke-width="4.5" />
+      <path d="M 55,50 C 55,28 145,28 145,50 C 154,88 155,140 133,168 L 128,198 L 72,198 L 67,168 C 45,140 46,88 55,50 Z" class="tube-core" stroke-width="1.5" />
+
+      <!-- Glass Tube End Caps / Electrodes at Chin -->
+      <rect x="68" y="194" width="8" height="8" rx="2" class="neon-cap" />
+      <rect x="124" y="194" width="8" height="8" rx="2" class="neon-cap" />
+
+      <!-- Neck Tube Supports -->
+      <path d="M 72,198 L 72,220 M 128,198 L 128,220" class="tube-primary" stroke-width="3.5" />
+      <path d="M 72,198 L 72,220 M 128,198 L 128,220" class="tube-core" stroke-width="1" />
+    </symbol>
+
+</svg>
