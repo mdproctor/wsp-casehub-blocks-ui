@@ -1,0 +1,1484 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 240">
+<!-- Collection: scummbar — LucasArts adventure game pixel art
+     Style tag: pixel-art
+     Grid: 40×48 cells, 5×5 units each. All coords snap to multiples of 5.
+     Stroke: #111 outlines, 2px weight. No curves — rectilinear paths only.
+     Palette: var(--skin), var(--primary), var(--secondary), var(--accent), var(--hair-color)
+     Inspired by: Monkey Island, Day of the Tentacle, Sam & Max, Grim Fandango,
+                  Maniac Mansion, Full Throttle, Discworld, Beneath a Steel Sky,
+                  Broken Sword, Simon the Sorcerer -->
+<defs>
+
+<!-- ========================================== -->
+<!-- HEADS (13)                                 -->
+<!-- ========================================== -->
+
+<symbol id="head:fallback" viewBox="0 0 200 240">
+  <path d="M 75,50 h50 v5 h10 v5 h5 v5 h5 v50 h-5 v5 h-5 v5 h-10 v5 h-50 v-5 h-10 v-5 h-5 v-5 h-5 v-50 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="80" y="85" width="10" height="10" fill="#111"/>
+  <rect x="110" y="85" width="10" height="10" fill="#111"/>
+  <rect x="95" y="105" width="10" height="5" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="head:round" viewBox="0 0 200 240">
+  <path d="M 75,45 h50 v5 h10 v5 h5 v5 h5 v55 h-5 v5 h-5 v5 h-10 v5 h-50 v-5 h-10 v-5 h-5 v-5 h-5 v-55 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="75" y="85" width="10" height="10" fill="#111"/>
+  <rect x="115" y="85" width="10" height="10" fill="#111"/>
+  <rect x="95" y="105" width="10" height="5" fill="#111" opacity="0.3"/>
+  <rect x="85" y="115" width="30" height="5" fill="#111" opacity="0.4"/>
+</symbol>
+
+<symbol id="head:standard" viewBox="0 0 200 240">
+  <path d="M 65,50 h70 v5 h5 v5 h5 v60 h-5 v5 h-5 v5 h-10 v5 h-50 v-5 h-10 v-5 h-5 v-5 h-5 v-60 h5 v-5 h5 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="80" y="85" width="10" height="8" fill="#111"/>
+  <rect x="110" y="85" width="10" height="8" fill="#111"/>
+  <rect x="95" y="103" width="10" height="5" fill="#111" opacity="0.25"/>
+  <rect x="90" y="115" width="20" height="5" fill="#111" opacity="0.35"/>
+</symbol>
+
+<symbol id="head:soft-oval" viewBox="0 0 200 240">
+  <path d="M 75,45 h50 v5 h10 v5 h5 v5 h5 v60 h-5 v5 h-5 v10 h-10 v5 h-15 v5 h-20 v-5 h-15 v-5 h-10 v-10 h-5 v-5 h-5 v-60 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="78" y="88" width="10" height="8" fill="#111"/>
+  <rect x="112" y="88" width="10" height="8" fill="#111"/>
+  <rect x="95" y="108" width="10" height="5" fill="#111" opacity="0.25"/>
+</symbol>
+
+<symbol id="head:oval" viewBox="0 0 200 240">
+  <path d="M 80,40 h40 v5 h10 v5 h5 v5 h5 v70 h-5 v5 h-5 v5 h-10 v5 h-10 v5 h-20 v-5 h-10 v-5 h-10 v-5 h-5 v-5 h-5 v-70 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="82" y="88" width="8" height="10" fill="#111"/>
+  <rect x="112" y="88" width="8" height="10" fill="#111"/>
+  <rect x="97" y="108" width="6" height="8" fill="#111" opacity="0.25"/>
+  <rect x="90" y="122" width="20" height="5" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="head:square-jaw" viewBox="0 0 200 240">
+  <path d="M 55,50 h90 v80 h-5 v5 h-5 v5 h-15 v5 h-40 v-5 h-15 v-5 h-5 v-5 h-5 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="70" y="80" width="15" height="10" fill="#111"/>
+  <rect x="115" y="80" width="15" height="10" fill="#111"/>
+  <rect x="95" y="100" width="10" height="8" fill="#111" opacity="0.25"/>
+  <rect x="85" y="118" width="30" height="5" fill="#111" opacity="0.4"/>
+</symbol>
+
+<symbol id="head:diamond" viewBox="0 0 200 240">
+  <path d="M 85,45 h30 v5 h10 v5 h10 v5 h5 v40 h-5 v5 h-10 v5 h-10 v5 h-5 v5 h-10 v5 h-10 v-5 h-5 v-5 h-10 v-5 h-10 v-5 h-5 v-40 h5 v-5 h10 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="80" y="85" width="10" height="8" fill="#111"/>
+  <rect x="115" y="85" width="10" height="8" fill="#111"/>
+  <rect x="95" y="100" width="10" height="5" fill="#111" opacity="0.25"/>
+</symbol>
+
+<symbol id="head:heart" viewBox="0 0 200 240">
+  <path d="M 55,50 h90 v5 h5 v35 h-5 v10 h-5 v10 h-5 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v-5 h-10 v-5 h-10 v-5 h-5 v-5 h-5 v-10 h-5 v-10 h-5 v-35 h5 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="75" y="80" width="10" height="8" fill="#111"/>
+  <rect x="115" y="80" width="10" height="8" fill="#111"/>
+  <rect x="95" y="98" width="10" height="5" fill="#111" opacity="0.25"/>
+</symbol>
+
+<symbol id="head:angular" viewBox="0 0 200 240">
+  <path d="M 70,50 h60 v5 h10 v5 h10 v30 h-5 v15 h-5 v10 h-10 v5 h-10 v5 h-10 v5 h-10 v-5 h-10 v-5 h-10 v-5 h-10 v-10 h-5 v-15 h-5 v-30 h10 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="78" y="82" width="10" height="8" fill="#111"/>
+  <rect x="118" y="82" width="10" height="8" fill="#111"/>
+  <rect x="95" y="100" width="8" height="5" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="head:strong-sym" viewBox="0 0 200 240">
+  <path d="M 55,50 h90 v5 h5 v5 h5 v60 h-5 v5 h-5 v5 h-15 v5 h-60 v-5 h-15 v-5 h-5 v-5 h-5 v-60 h5 v-5 h5 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="72" y="82" width="12" height="10" fill="#111"/>
+  <rect x="115" y="82" width="12" height="10" fill="#111"/>
+  <rect x="95" y="102" width="10" height="8" fill="#111" opacity="0.2"/>
+  <rect x="85" y="118" width="30" height="5" fill="#111" opacity="0.35"/>
+</symbol>
+
+<symbol id="head:weathered" viewBox="0 0 200 240">
+  <path d="M 70,48 h60 v5 h10 v5 h5 v5 h5 v55 h-5 v5 h-5 v5 h-10 v5 h-10 v5 h-20 v-5 h-10 v-5 h-10 v-5 h-5 v-5 h-5 v-55 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="78" y="85" width="10" height="8" fill="#111"/>
+  <rect x="115" y="85" width="10" height="8" fill="#111"/>
+  <rect x="95" y="105" width="10" height="5" fill="#111" opacity="0.3"/>
+  <!-- weathering lines -->
+  <rect x="68" y="78" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="130" y="80" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="65" y="100" width="5" height="5" fill="#111" opacity="0.1"/>
+</symbol>
+
+<symbol id="head:round-wide" viewBox="0 0 200 240">
+  <path d="M 65,50 h70 v5 h10 v5 h5 v5 h5 v50 h-5 v5 h-5 v5 h-10 v5 h-10 v5 h-30 v-5 h-10 v-5 h-10 v-5 h-5 v-5 h-5 v-50 h5 v-5 h5 v-5 h10 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <rect x="72" y="85" width="12" height="12" fill="#111"/>
+  <rect x="118" y="85" width="12" height="12" fill="#111"/>
+  <rect x="95" y="108" width="10" height="5" fill="#111" opacity="0.3"/>
+  <rect x="80" y="118" width="40" height="5" fill="#111" opacity="0.4"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- HAIR (16)                                  -->
+<!-- ========================================== -->
+
+<symbol id="hair:bald-sides" viewBox="0 0 200 240">
+  <rect x="55" y="45" width="10" height="25" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="135" y="45" width="10" height="25" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="60" y="42" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="135" y="42" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+</symbol>
+
+<symbol id="hair:buzz" viewBox="0 0 200 240">
+  <path d="M 65,35 h70 v5 h10 v5 h5 v10 h-100 v-10 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- stubble texture -->
+  <rect x="70" y="40" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="85" y="38" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="100" y="40" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="115" y="38" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="125" y="40" width="5" height="5" fill="#111" opacity="0.1"/>
+</symbol>
+
+<symbol id="hair:afro-short" viewBox="0 0 200 240">
+  <path d="M 55,30 h90 v5 h5 v5 h5 v25 h-110 v-25 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- texture -->
+  <rect x="65" y="35" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="80" y="32" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="95" y="35" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="110" y="32" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="125" y="35" width="5" height="5" fill="#111" opacity="0.15"/>
+  <rect x="135" y="38" width="5" height="5" fill="#111" opacity="0.1"/>
+</symbol>
+
+<symbol id="hair:long-flowing" viewBox="0 0 200 240">
+  <path d="M 55,30 h90 v5 h5 v5 h5 v5 h5 v80 h-5 v10 h-5 v5 h-5 v-30 h-5 v-5 h-80 v5 h-5 v30 h-5 v-5 h-5 v-10 h-5 v-80 h5 v-5 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- strand highlights -->
+  <rect x="60" y="60" width="5" height="40" fill="#111" opacity="0.08"/>
+  <rect x="140" y="55" width="5" height="45" fill="#111" opacity="0.08"/>
+</symbol>
+
+<symbol id="hair:messy-bun" viewBox="0 0 200 240">
+  <!-- bun on top -->
+  <path d="M 80,15 h40 v5 h5 v15 h-5 v5 h-40 v-5 h-5 v-15 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- base hair -->
+  <path d="M 60,30 h80 v5 h5 v15 h-100 v-15 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- loose strands -->
+  <rect x="55" y="50" width="5" height="15" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="140" y="48" width="5" height="12" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:mohawk" viewBox="0 0 200 240">
+  <path d="M 90,10 h20 v5 h5 v5 h5 v25 h-40 v-25 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- spikes -->
+  <rect x="95" y="5" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="90" y="15" width="5" height="5" fill="var(--hair-color)"/>
+  <rect x="105" y="15" width="5" height="5" fill="var(--hair-color)"/>
+  <!-- shaved sides hint -->
+  <rect x="60" y="42" width="25" height="5" fill="var(--skin)" opacity="0.3"/>
+  <rect x="115" y="42" width="25" height="5" fill="var(--skin)" opacity="0.3"/>
+</symbol>
+
+<symbol id="hair:wild-einstein" viewBox="0 0 200 240">
+  <path d="M 45,25 h5 v-5 h10 v-5 h80 v5 h10 v5 h5 v5 h5 v30 h-5 v5 h-120 v-5 h-5 v-30 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- frizz tufts -->
+  <rect x="40" y="30" width="5" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="155" y="28" width="5" height="12" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="50" y="22" width="5" height="8" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="145" y="20" width="5" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <!-- texture -->
+  <rect x="65" y="28" width="5" height="5" fill="#111" opacity="0.12"/>
+  <rect x="95" y="25" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="125" y="28" width="5" height="5" fill="#111" opacity="0.12"/>
+</symbol>
+
+<symbol id="hair:slicked" viewBox="0 0 200 240">
+  <path d="M 60,33 h80 v5 h5 v5 h5 v10 h-100 v-10 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- gel lines -->
+  <rect x="70" y="36" width="60" height="2" fill="#111" opacity="0.2"/>
+  <rect x="72" y="40" width="56" height="2" fill="#111" opacity="0.15"/>
+  <rect x="75" y="44" width="50" height="2" fill="#111" opacity="0.1"/>
+</symbol>
+
+<symbol id="hair:braids" viewBox="0 0 200 240">
+  <path d="M 60,30 h80 v5 h5 v15 h-100 v-15 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- left braid -->
+  <rect x="55" y="50" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="50" y="60" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="55" y="70" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="50" y="80" width="10" height="8" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <!-- right braid -->
+  <rect x="135" y="50" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="140" y="60" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="135" y="70" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="140" y="80" width="10" height="8" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:shoulder-wavy" viewBox="0 0 200 240">
+  <path d="M 55,30 h90 v5 h5 v15 h5 v30 h-5 v5 h-5 v-10 h-5 v-5 h-80 v5 h-5 v10 h-5 v-5 h-5 v-30 h5 v-15 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- wave texture -->
+  <rect x="55" y="55" width="5" height="10" fill="#111" opacity="0.08"/>
+  <rect x="145" y="50" width="5" height="10" fill="#111" opacity="0.08"/>
+</symbol>
+
+<symbol id="hair:cropped-fringe" viewBox="0 0 200 240">
+  <path d="M 60,30 h80 v5 h5 v5 h5 v12 h-100 v-12 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- fringe hanging forward -->
+  <rect x="65" y="47" width="35" height="8" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="70" y="55" width="15" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:undercut" viewBox="0 0 200 240">
+  <!-- longer top -->
+  <path d="M 70,25 h60 v5 h10 v5 h5 v15 h-85 v-5 h-5 v-10 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- swept side -->
+  <rect x="60" y="38" width="15" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <!-- shaved sides (show skin) -->
+  <rect x="55" y="43" width="10" height="15" fill="var(--skin)" opacity="0.4"/>
+  <rect x="135" y="43" width="10" height="15" fill="var(--skin)" opacity="0.4"/>
+</symbol>
+
+<symbol id="hair:windswept" viewBox="0 0 200 240">
+  <path d="M 60,28 h80 v5 h10 v5 h5 v5 h-5 v5 h-100 v-10 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- swept right tufts -->
+  <rect x="150" y="30" width="10" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="155" y="35" width="8" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="148" y="25" width="5" height="8" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:pixie" viewBox="0 0 200 240">
+  <path d="M 60,30 h80 v5 h5 v5 h5 v10 h-5 v5 h-90 v-5 h-5 v-10 h5 v-5 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- textured top -->
+  <rect x="75" y="28" width="5" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="105" y="26" width="5" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:ponytail" viewBox="0 0 200 240">
+  <path d="M 60,30 h80 v5 h5 v15 h-100 v-15 h5 v-5 h10 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- ponytail behind -->
+  <rect x="140" y="40" width="10" height="10" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <rect x="145" y="50" width="10" height="15" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <rect x="148" y="65" width="8" height="15" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- band -->
+  <rect x="140" y="48" width="12" height="4" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hair:headwrap" viewBox="0 0 200 240">
+  <path d="M 55,30 h90 v5 h5 v5 h5 v15 h-110 v-15 h5 v-5 h5 z" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <!-- wrap folds -->
+  <rect x="60" y="35" width="80" height="3" fill="#111" opacity="0.15"/>
+  <rect x="62" y="42" width="76" height="3" fill="#111" opacity="0.1"/>
+  <!-- tail -->
+  <rect x="140" y="45" width="10" height="20" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- BEARDS (8)                                 -->
+<!-- ========================================== -->
+
+<symbol id="beard:stubble" viewBox="0 0 200 240">
+  <!-- scattered dots for stubble texture -->
+  <rect x="70" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.35"/>
+  <rect x="80" y="120" width="5" height="5" fill="var(--hair-color)" opacity="0.3"/>
+  <rect x="90" y="118" width="5" height="5" fill="var(--hair-color)" opacity="0.35"/>
+  <rect x="100" y="120" width="5" height="5" fill="var(--hair-color)" opacity="0.3"/>
+  <rect x="110" y="118" width="5" height="5" fill="var(--hair-color)" opacity="0.35"/>
+  <rect x="120" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.3"/>
+  <rect x="75" y="125" width="5" height="5" fill="var(--hair-color)" opacity="0.25"/>
+  <rect x="95" y="125" width="5" height="5" fill="var(--hair-color)" opacity="0.3"/>
+  <rect x="115" y="125" width="5" height="5" fill="var(--hair-color)" opacity="0.25"/>
+</symbol>
+
+<symbol id="beard:goatee" viewBox="0 0 200 240">
+  <path d="M 85,115 h30 v5 h5 v10 h-5 v5 h-5 v5 h-5 v5 h-10 v-5 h-5 v-5 h-5 v-5 h-5 v-10 h5 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- moustache connect -->
+  <rect x="88" y="110" width="25" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="beard:full-round" viewBox="0 0 200 240">
+  <path d="M 60,110 h80 v5 h5 v10 h-5 v5 h-5 v5 h-5 v5 h-10 v5 h-30 v-5 h-10 v-5 h-5 v-5 h-5 v-5 h-5 v-10 h-5 z" fill="var(--hair-color)" stroke="#111" stroke-width="2"/>
+  <!-- texture -->
+  <rect x="75" y="120" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="95" y="125" width="5" height="5" fill="#111" opacity="0.1"/>
+  <rect x="115" y="120" width="5" height="5" fill="#111" opacity="0.1"/>
+</symbol>
+
+<symbol id="beard:bushy-white" viewBox="0 0 200 240">
+  <path d="M 55,105 h90 v5 h5 v10 h5 v10 h-5 v5 h-5 v5 h-10 v5 h-10 v5 h-30 v-5 h-10 v-5 h-10 v-5 h-5 v-5 h-5 v-10 h-5 v-10 h5 z" fill="#e0ddd5" stroke="#111" stroke-width="2"/>
+  <!-- strand texture -->
+  <rect x="65" y="115" width="5" height="15" fill="#111" opacity="0.08"/>
+  <rect x="85" y="120" width="5" height="15" fill="#111" opacity="0.06"/>
+  <rect x="105" y="118" width="5" height="15" fill="#111" opacity="0.08"/>
+  <rect x="125" y="115" width="5" height="15" fill="#111" opacity="0.06"/>
+  <rect x="140" y="112" width="5" height="10" fill="#111" opacity="0.08"/>
+</symbol>
+
+<symbol id="beard:handlebar" viewBox="0 0 200 240">
+  <!-- wide moustache -->
+  <path d="M 75,110 h50 v5 h-50 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5"/>
+  <!-- curled ends -->
+  <rect x="60" y="108" width="15" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="55" y="103" width="10" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="125" y="108" width="15" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+  <rect x="135" y="103" width="10" height="5" fill="var(--hair-color)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="beard:rugged" viewBox="0 0 200 240">
+  <!-- heavier stubble dots -->
+  <rect x="65" y="112" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="75" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+  <rect x="85" y="118" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="95" y="120" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+  <rect x="105" y="118" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="115" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+  <rect x="125" y="112" width="5" height="5" fill="var(--hair-color)" opacity="0.5"/>
+  <rect x="70" y="122" width="5" height="5" fill="var(--hair-color)" opacity="0.4"/>
+  <rect x="80" y="125" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+  <rect x="90" y="128" width="5" height="5" fill="var(--hair-color)" opacity="0.4"/>
+  <rect x="100" y="125" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+  <rect x="110" y="128" width="5" height="5" fill="var(--hair-color)" opacity="0.4"/>
+  <rect x="120" y="122" width="5" height="5" fill="var(--hair-color)" opacity="0.45"/>
+</symbol>
+
+<symbol id="beard:heavy" viewBox="0 0 200 240">
+  <path d="M 65,112 h70 v5 h5 v10 h-5 v5 h-10 v5 h-40 v-5 h-10 v-5 h-5 v-10 h-5 z" fill="var(--hair-color)" stroke="#111" stroke-width="1.5" opacity="0.7"/>
+  <!-- dithered edges -->
+  <rect x="60" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.35"/>
+  <rect x="135" y="115" width="5" height="5" fill="var(--hair-color)" opacity="0.35"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- BROWS (8)                                  -->
+<!-- ========================================== -->
+
+<symbol id="brow:thin-arched" viewBox="0 0 200 240">
+  <path d="M 70,72 h20 v3 h-5 v2 h-15 z" fill="#111"/>
+  <path d="M 110,72 h20 v5 h-15 v-2 h-5 z" fill="#111"/>
+</symbol>
+
+<symbol id="brow:thick-straight" viewBox="0 0 200 240">
+  <rect x="68" y="72" width="25" height="5" fill="#111"/>
+  <rect x="108" y="72" width="25" height="5" fill="#111"/>
+</symbol>
+
+<symbol id="brow:angular" viewBox="0 0 200 240">
+  <path d="M 68,78 h10 v-5 h15 v5 h-25 z" fill="#111"/>
+  <path d="M 108,73 h15 v5 h10 v-5 h-25 v5 z" fill="#111"/>
+</symbol>
+
+<symbol id="brow:soft-rounded" viewBox="0 0 200 240">
+  <path d="M 70,75 h5 v-3 h15 v3 h5 v3 h-25 z" fill="#111"/>
+  <path d="M 105,75 h5 v-3 h15 v3 h5 v3 h-25 z" fill="#111"/>
+</symbol>
+
+<symbol id="brow:bushy-wild" viewBox="0 0 200 240">
+  <rect x="65" y="70" width="28" height="7" fill="#111"/>
+  <rect x="108" y="70" width="28" height="7" fill="#111"/>
+  <!-- tufts -->
+  <rect x="63" y="68" width="5" height="5" fill="#111" opacity="0.6"/>
+  <rect x="85" y="67" width="5" height="5" fill="#111" opacity="0.5"/>
+  <rect x="133" y="68" width="5" height="5" fill="#111" opacity="0.6"/>
+  <rect x="110" y="67" width="5" height="5" fill="#111" opacity="0.5"/>
+</symbol>
+
+<symbol id="brow:raised" viewBox="0 0 200 240">
+  <path d="M 72,68 h20 v3 h-5 v2 h-15 z" fill="#111"/>
+  <path d="M 108,68 h20 v5 h-15 v-2 h-5 z" fill="#111"/>
+</symbol>
+
+<symbol id="brow:asymmetric" viewBox="0 0 200 240">
+  <!-- left higher -->
+  <path d="M 70,68 h22 v4 h-22 z" fill="#111"/>
+  <!-- right normal -->
+  <path d="M 108,74 h22 v4 h-22 z" fill="#111"/>
+</symbol>
+
+<symbol id="brow:concerned" viewBox="0 0 200 240">
+  <!-- inner ends raised -->
+  <path d="M 68,76 h10 v-3 h12 v3 v3 h-22 z" fill="#111"/>
+  <path d="M 110,73 h12 v3 h10 v3 h-22 v-3 z" fill="#111"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- GLASSES (8)                                -->
+<!-- ========================================== -->
+
+<symbol id="glasses:round-wire" viewBox="0 0 200 240">
+  <path d="M 68,80 h22 v5 h5 v10 h-5 v5 h-22 v-5 h-5 v-10 h5 z" fill="none" stroke="#111" stroke-width="2"/>
+  <path d="M 108,80 h22 v5 h5 v10 h-5 v5 h-22 v-5 h-5 v-10 h5 z" fill="none" stroke="#111" stroke-width="2"/>
+  <rect x="90" y="85" width="18" height="2" fill="#111"/>
+  <rect x="58" y="85" width="10" height="2" fill="#111"/>
+  <rect x="135" y="85" width="10" height="2" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:thick-rect" viewBox="0 0 200 240">
+  <rect x="63" y="80" width="30" height="18" rx="0" fill="none" stroke="#111" stroke-width="3"/>
+  <rect x="107" y="80" width="30" height="18" rx="0" fill="none" stroke="#111" stroke-width="3"/>
+  <rect x="93" y="85" width="14" height="3" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:aviator" viewBox="0 0 200 240">
+  <path d="M 62,80 h30 v5 h5 v15 h-5 v5 h-10 v5 h-10 v-5 h-10 v-5 h-5 v-15 h5 z" fill="var(--secondary)" opacity="0.3" stroke="#111" stroke-width="2"/>
+  <path d="M 108,80 h30 v5 h5 v15 h-5 v5 h-10 v5 h-10 v-5 h-10 v-5 h-5 v-15 h5 z" fill="var(--secondary)" opacity="0.3" stroke="#111" stroke-width="2"/>
+  <rect x="92" y="82" width="16" height="2" fill="#111"/>
+  <rect x="55" y="82" width="7" height="2" fill="#111"/>
+  <rect x="143" y="82" width="7" height="2" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:cat-eye" viewBox="0 0 200 240">
+  <path d="M 65,82 h28 v-5 h5 v5 v12 h-5 v3 h-23 v-3 h-5 v-12 z" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+  <path d="M 105,82 h28 v-5 h5 v5 v12 h-5 v3 h-23 v-3 h-5 v-12 z" fill="none" stroke="var(--primary)" stroke-width="2.5"/>
+  <rect x="93" y="86" width="12" height="2" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:half-rim" viewBox="0 0 200 240">
+  <rect x="65" y="80" width="28" height="3" fill="#111"/>
+  <rect x="65" y="83" width="2" height="12" fill="#111"/>
+  <rect x="91" y="83" width="2" height="12" fill="#111"/>
+  <rect x="108" y="80" width="28" height="3" fill="#111"/>
+  <rect x="108" y="83" width="2" height="12" fill="#111"/>
+  <rect x="134" y="83" width="2" height="12" fill="#111"/>
+  <rect x="93" y="82" width="15" height="2" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:monocle" viewBox="0 0 200 240">
+  <path d="M 108,78 h22 v5 h5 v15 h-5 v5 h-22 v-5 h-5 v-15 h5 z" fill="none" stroke="#111" stroke-width="2.5"/>
+  <!-- chain -->
+  <rect x="130" y="98" width="3" height="5" fill="#111" opacity="0.5"/>
+  <rect x="132" y="103" width="3" height="5" fill="#111" opacity="0.5"/>
+  <rect x="134" y="108" width="3" height="8" fill="#111" opacity="0.4"/>
+</symbol>
+
+<symbol id="glasses:pince-nez" viewBox="0 0 200 240">
+  <path d="M 72,82 h18 v12 h-18 v-12 z" fill="none" stroke="#111" stroke-width="2"/>
+  <path d="M 110,82 h18 v12 h-18 v-12 z" fill="none" stroke="#111" stroke-width="2"/>
+  <!-- nose bridge pinch -->
+  <path d="M 90,86 h5 v4 h-5 z" fill="#111"/>
+  <path d="M 105,86 h5 v4 h-5 z" fill="#111"/>
+</symbol>
+
+<symbol id="glasses:goggles" viewBox="0 0 200 240">
+  <path d="M 55,78 h90 v5 h5 v15 h-5 v5 h-90 v-5 h-5 v-15 h5 z" fill="var(--secondary)" opacity="0.25" stroke="#111" stroke-width="2.5"/>
+  <!-- lens divider -->
+  <rect x="97" y="78" width="6" height="25" fill="#111" opacity="0.3"/>
+  <!-- strap hints -->
+  <rect x="45" y="82" width="10" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+  <rect x="150" y="82" width="10" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- EXPRESSIONS (15)                           -->
+<!-- ========================================== -->
+
+<symbol id="expression:rosy-cheeks" viewBox="0 0 200 240">
+  <rect x="65" y="98" width="10" height="8" fill="#ff7777" opacity="0.4"/>
+  <rect x="125" y="98" width="10" height="8" fill="#ff7777" opacity="0.4"/>
+</symbol>
+
+<symbol id="expression:furrowed-brows" viewBox="0 0 200 240">
+  <!-- tension lines between brows -->
+  <rect x="95" y="72" width="3" height="8" fill="#111" opacity="0.3"/>
+  <rect x="100" y="74" width="3" height="6" fill="#111" opacity="0.25"/>
+</symbol>
+
+<symbol id="expression:sweat-drop" viewBox="0 0 200 240">
+  <rect x="140" y="68" width="5" height="5" fill="#5599dd" opacity="0.7"/>
+  <rect x="140" y="73" width="5" height="5" fill="#5599dd" opacity="0.5"/>
+  <rect x="142" y="78" width="3" height="3" fill="#5599dd" opacity="0.3"/>
+</symbol>
+
+<symbol id="expression:raised-brow" viewBox="0 0 200 240">
+  <!-- extra lift mark above right brow -->
+  <rect x="112" y="62" width="15" height="3" fill="#111" opacity="0.2"/>
+  <rect x="115" y="59" width="5" height="3" fill="#111" opacity="0.15"/>
+</symbol>
+
+<symbol id="expression:squint-joy" viewBox="0 0 200 240">
+  <!-- squint lines replacing eyes -->
+  <rect x="75" y="88" width="12" height="3" fill="#111"/>
+  <rect x="113" y="88" width="12" height="3" fill="#111"/>
+  <!-- smile pixels -->
+  <rect x="85" y="118" width="30" height="3" fill="#111" opacity="0.5"/>
+  <rect x="80" y="115" width="5" height="3" fill="#111" opacity="0.3"/>
+  <rect x="115" y="115" width="5" height="3" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="expression:flat-brows" viewBox="0 0 200 240">
+  <!-- flat line overlay at brow -->
+  <rect x="68" y="76" width="25" height="3" fill="#111" opacity="0.4"/>
+  <rect x="108" y="76" width="25" height="3" fill="#111" opacity="0.4"/>
+</symbol>
+
+<symbol id="expression:sparkle-eyes" viewBox="0 0 200 240">
+  <!-- highlight pixels in eyes -->
+  <rect x="78" y="83" width="3" height="3" fill="#fff" opacity="0.8"/>
+  <rect x="118" y="83" width="3" height="3" fill="#fff" opacity="0.8"/>
+  <!-- small sparkle marks -->
+  <rect x="83" y="80" width="3" height="3" fill="var(--accent)" opacity="0.5"/>
+  <rect x="123" y="80" width="3" height="3" fill="var(--accent)" opacity="0.5"/>
+</symbol>
+
+<symbol id="expression:idea-spark" viewBox="0 0 200 240">
+  <!-- lightbulb spark above head -->
+  <rect x="95" y="20" width="10" height="10" fill="var(--accent)" opacity="0.7" stroke="#111" stroke-width="1"/>
+  <rect x="98" y="30" width="5" height="5" fill="var(--accent)" opacity="0.5"/>
+  <!-- rays -->
+  <rect x="90" y="22" width="5" height="3" fill="var(--accent)" opacity="0.4"/>
+  <rect x="105" y="22" width="5" height="3" fill="var(--accent)" opacity="0.4"/>
+  <rect x="98" y="15" width="5" height="5" fill="var(--accent)" opacity="0.3"/>
+</symbol>
+
+<symbol id="expression:starry-eyes" viewBox="0 0 200 240">
+  <!-- star shapes in eyes (pixel cross pattern) -->
+  <rect x="78" y="85" width="3" height="8" fill="var(--accent)" opacity="0.7"/>
+  <rect x="75" y="88" width="9" height="3" fill="var(--accent)" opacity="0.7"/>
+  <rect x="118" y="85" width="3" height="8" fill="var(--accent)" opacity="0.7"/>
+  <rect x="115" y="88" width="9" height="3" fill="var(--accent)" opacity="0.7"/>
+</symbol>
+
+<symbol id="expression:heart-eyes" viewBox="0 0 200 240">
+  <!-- pixel hearts over eyes -->
+  <rect x="73" y="83" width="5" height="5" fill="#ff4466"/>
+  <rect x="83" y="83" width="5" height="5" fill="#ff4466"/>
+  <rect x="75" y="88" width="12" height="5" fill="#ff4466"/>
+  <rect x="78" y="93" width="6" height="3" fill="#ff4466"/>
+  <rect x="113" y="83" width="5" height="5" fill="#ff4466"/>
+  <rect x="123" y="83" width="5" height="5" fill="#ff4466"/>
+  <rect x="115" y="88" width="12" height="5" fill="#ff4466"/>
+  <rect x="118" y="93" width="6" height="3" fill="#ff4466"/>
+</symbol>
+
+<symbol id="expression:wink" viewBox="0 0 200 240">
+  <!-- right eye closed (horizontal line) -->
+  <rect x="112" y="88" width="14" height="3" fill="#111"/>
+  <!-- left eye stays open (inherited from head) -->
+</symbol>
+
+<symbol id="expression:angry-vein" viewBox="0 0 200 240">
+  <!-- vein mark on forehead -->
+  <rect x="125" y="55" width="5" height="3" fill="#cc3333" opacity="0.6"/>
+  <rect x="130" y="52" width="3" height="8" fill="#cc3333" opacity="0.6"/>
+  <rect x="123" y="58" width="3" height="5" fill="#cc3333" opacity="0.4"/>
+</symbol>
+
+<symbol id="expression:dazed-spirals" viewBox="0 0 200 240">
+  <!-- spiral eyes (pixelated @-like pattern) -->
+  <rect x="73" y="83" width="15" height="3" fill="#111"/>
+  <rect x="85" y="86" width="3" height="5" fill="#111"/>
+  <rect x="73" y="91" width="12" height="3" fill="#111"/>
+  <rect x="73" y="86" width="3" height="5" fill="#111"/>
+  <rect x="78" y="88" width="5" height="3" fill="#111"/>
+  <rect x="113" y="83" width="15" height="3" fill="#111"/>
+  <rect x="113" y="86" width="3" height="5" fill="#111"/>
+  <rect x="116" y="91" width="12" height="3" fill="#111"/>
+  <rect x="125" y="86" width="3" height="5" fill="#111"/>
+  <rect x="118" y="88" width="5" height="3" fill="#111"/>
+</symbol>
+
+<symbol id="expression:tear-drop" viewBox="0 0 200 240">
+  <rect x="85" y="98" width="3" height="5" fill="#5599dd" opacity="0.6"/>
+  <rect x="85" y="103" width="3" height="3" fill="#5599dd" opacity="0.4"/>
+</symbol>
+
+<symbol id="expression:sleepy-zzz" viewBox="0 0 200 240">
+  <rect x="135" y="55" width="15" height="3" fill="#111" opacity="0.4"/>
+  <rect x="140" y="58" width="5" height="3" fill="#111" opacity="0.3"/>
+  <rect x="145" y="45" width="10" height="3" fill="#111" opacity="0.3"/>
+  <rect x="148" y="48" width="5" height="3" fill="#111" opacity="0.25"/>
+  <rect x="152" y="35" width="8" height="3" fill="#111" opacity="0.25"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- HATS (15)                                  -->
+<!-- ========================================== -->
+
+<symbol id="hat:baseball-cap" viewBox="0 0 200 240">
+  <path d="M 55,35 h90 v5 h5 v10 h-105 v-10 h5 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- brim -->
+  <path d="M 50,50 h55 v8 h-5 v5 h-40 v-5 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- button -->
+  <rect x="95" y="32" width="10" height="5" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="hat:beret" viewBox="0 0 200 240">
+  <path d="M 55,38 h95 v5 h-5 v-5 h-85 v8 h-10 v-3 h-5 v-3 h10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- puffed top -->
+  <path d="M 65,28 h75 v5 h5 v5 h-90 v-5 h5 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- nub -->
+  <rect x="98" y="23" width="8" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hat:flower-crown" viewBox="0 0 200 240">
+  <!-- vine band -->
+  <rect x="55" y="38" width="90" height="8" fill="#4a8c3f" stroke="#111" stroke-width="1.5"/>
+  <!-- flowers -->
+  <rect x="60" y="33" width="8" height="8" fill="#ff6699" stroke="#111" stroke-width="1"/>
+  <rect x="80" y="30" width="8" height="8" fill="#ffcc44" stroke="#111" stroke-width="1"/>
+  <rect x="100" y="32" width="8" height="8" fill="#ff6699" stroke="#111" stroke-width="1"/>
+  <rect x="120" y="30" width="8" height="8" fill="#ffcc44" stroke="#111" stroke-width="1"/>
+  <rect x="135" y="34" width="8" height="8" fill="#ff6699" stroke="#111" stroke-width="1"/>
+  <!-- flower centers -->
+  <rect x="63" y="35" width="3" height="3" fill="#ffcc44"/>
+  <rect x="83" y="33" width="3" height="3" fill="#ff6699"/>
+  <rect x="103" y="35" width="3" height="3" fill="#ffcc44"/>
+  <rect x="123" y="33" width="3" height="3" fill="#ff6699"/>
+</symbol>
+
+<symbol id="hat:explorer" viewBox="0 0 200 240">
+  <!-- wide brim -->
+  <path d="M 35,48 h130 v5 h-5 v3 h-120 v-3 h-5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- crown -->
+  <path d="M 60,30 h80 v5 h5 v13 h-90 v-13 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- band -->
+  <rect x="60" y="40" width="80" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- dent -->
+  <rect x="75" y="28" width="50" height="3" fill="#111" opacity="0.15"/>
+</symbol>
+
+<symbol id="hat:jester" viewBox="0 0 200 240">
+  <!-- base band -->
+  <rect x="55" y="38" width="90" height="10" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- left horn -->
+  <path d="M 55,38 h15 v-10 h-5 v-10 h-5 v-5 h-5 v15 h-5 v10 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- right horn -->
+  <path d="M 130,38 h15 v-10 h5 v-15 h-5 v-5 h-5 v10 h-5 v10 h-5 z" fill="var(--secondary)" stroke="#111" stroke-width="1.5"/>
+  <!-- bells -->
+  <rect x="48" y="10" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="142" y="6" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hat:crown" viewBox="0 0 200 240">
+  <path d="M 60,35 h80 v15 h-80 z" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <!-- points -->
+  <rect x="65" y="25" width="10" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="85" y="20" width="10" height="15" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="105" y="20" width="10" height="15" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="125" y="25" width="10" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- jewels -->
+  <rect x="73" y="40" width="5" height="5" fill="#cc0000" stroke="#111" stroke-width="1"/>
+  <rect x="98" y="38" width="5" height="5" fill="#0066cc" stroke="#111" stroke-width="1"/>
+  <rect x="123" y="40" width="5" height="5" fill="#00aa44" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hat:fedora" viewBox="0 0 200 240">
+  <!-- brim -->
+  <path d="M 40,48 h120 v5 h-5 v3 h-110 v-3 h-5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- crown -->
+  <path d="M 60,28 h80 v5 h5 v15 h-90 v-15 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- band -->
+  <rect x="60" y="38" width="80" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- crease -->
+  <rect x="80" y="28" width="40" height="3" fill="#111" opacity="0.2"/>
+</symbol>
+
+<symbol id="hat:cowboy-hat" viewBox="0 0 200 240">
+  <!-- wide upturned brim -->
+  <path d="M 25,52 h20 v-5 h110 v5 h20 v5 h-150 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- crown -->
+  <path d="M 55,25 h90 v5 h5 v22 h-100 v-22 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- band -->
+  <rect x="55" y="42" width="90" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hat:top-hat" viewBox="0 0 200 240">
+  <!-- brim -->
+  <path d="M 45,48 h110 v5 h-5 v3 h-100 v-3 h-5 z" fill="#111" stroke="#111" stroke-width="2"/>
+  <!-- tall crown -->
+  <path d="M 65,10 h70 v38 h-70 z" fill="#111" stroke="#222" stroke-width="2"/>
+  <!-- band -->
+  <rect x="65" y="38" width="70" height="5" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="hat:hard-hat" viewBox="0 0 200 240">
+  <path d="M 55,35 h90 v5 h5 v10 h-105 v-10 h5 v-5 h5 z" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <!-- dome -->
+  <path d="M 60,25 h80 v5 h5 v5 h-90 v-5 h5 z" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- ridge -->
+  <rect x="60" y="22" width="80" height="3" fill="#111" opacity="0.2"/>
+</symbol>
+
+<symbol id="hat:beanie" viewBox="0 0 200 240">
+  <path d="M 55,35 h90 v5 h5 v8 h-105 v-8 h5 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- knit cap -->
+  <path d="M 60,25 h80 v5 h5 v5 h-90 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- fold line -->
+  <rect x="55" y="38" width="90" height="3" fill="#111" opacity="0.2"/>
+  <!-- pom -->
+  <rect x="93" y="18" width="14" height="10" fill="var(--secondary)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="hat:knight-helmet" viewBox="0 0 200 240">
+  <path d="M 50,30 h100 v5 h5 v40 h-5 v5 h-10 v5 h-80 v-5 h-10 v-5 h-5 v-40 h5 z" fill="#aaa" stroke="#111" stroke-width="2"/>
+  <!-- visor slit -->
+  <rect x="60" y="65" width="80" height="5" fill="#111"/>
+  <!-- nose guard -->
+  <rect x="95" y="55" width="10" height="20" fill="#999" stroke="#111" stroke-width="1.5"/>
+  <!-- crest -->
+  <rect x="90" y="20" width="20" height="10" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="hat:witch-hat" viewBox="0 0 200 240">
+  <!-- brim -->
+  <path d="M 35,50 h130 v5 h-130 z" fill="#222" stroke="#111" stroke-width="2"/>
+  <!-- cone -->
+  <path d="M 65,50 h70 v-10 h-10 v-10 h-10 v-10 h-10 v-10 h-10 v-5 h-5 v-5 h-5 v10 h-5 v10 h-5 v10 h-5 v10 h-5 z" fill="#222" stroke="#111" stroke-width="2"/>
+  <!-- band -->
+  <rect x="65" y="42" width="70" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- buckle -->
+  <rect x="93" y="40" width="14" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="hat:tricorn" viewBox="0 0 200 240">
+  <!-- folded brim -->
+  <path d="M 40,50 h120 v-5 h-10 v-5 h-5 v-5 h-90 v5 h-5 v5 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- crown -->
+  <path d="M 60,35 h80 v10 h-80 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- skull badge (pirate) -->
+  <rect x="93" y="38" width="14" height="8" fill="#eee" stroke="#111" stroke-width="1"/>
+  <rect x="95" y="40" width="3" height="3" fill="#111"/>
+  <rect x="102" y="40" width="3" height="3" fill="#111"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- COSTUMES (20)                              -->
+<!-- ========================================== -->
+
+<symbol id="costume:blazer-tie" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- lapels -->
+  <path d="M 50,155 h15 v-5 h-5 v-10 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <path d="M 150,155 h-15 v-5 h5 v-10 h10 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- shirt -->
+  <rect x="85" y="155" width="30" height="40" fill="#eee" stroke="#111" stroke-width="1"/>
+  <!-- tie -->
+  <rect x="95" y="155" width="10" height="35" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="93" y="190" width="14" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="costume:tweed-patches" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- elbow patches -->
+  <rect x="50" y="190" width="15" height="15" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="135" y="190" width="15" height="15" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- shirt collar -->
+  <rect x="80" y="155" width="40" height="10" fill="#ddd" stroke="#111" stroke-width="1"/>
+  <!-- tweed texture (dithered) -->
+  <rect x="60" y="165" width="5" height="5" fill="#111" opacity="0.08"/>
+  <rect x="75" y="175" width="5" height="5" fill="#111" opacity="0.08"/>
+  <rect x="120" y="170" width="5" height="5" fill="#111" opacity="0.08"/>
+  <rect x="130" y="180" width="5" height="5" fill="#111" opacity="0.08"/>
+</symbol>
+
+<symbol id="costume:robes" viewBox="0 0 200 240">
+  <path d="M 40,155 h120 v80 h-10 v5 h-100 v-5 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- trim -->
+  <rect x="40" y="155" width="120" height="5" fill="var(--accent)"/>
+  <rect x="40" y="230" width="120" height="5" fill="var(--accent)"/>
+  <!-- fold lines -->
+  <rect x="95" y="160" width="3" height="70" fill="#111" opacity="0.1"/>
+  <rect x="70" y="165" width="3" height="60" fill="#111" opacity="0.06"/>
+  <rect x="125" y="165" width="3" height="60" fill="#111" opacity="0.06"/>
+</symbol>
+
+<symbol id="costume:lab-coat" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="#eee" stroke="#111" stroke-width="2"/>
+  <!-- collar -->
+  <rect x="75" y="155" width="50" height="8" fill="#eee" stroke="#111" stroke-width="1.5"/>
+  <!-- buttons -->
+  <rect x="98" y="175" width="5" height="5" fill="#111" opacity="0.3"/>
+  <rect x="98" y="190" width="5" height="5" fill="#111" opacity="0.3"/>
+  <rect x="98" y="205" width="5" height="5" fill="#111" opacity="0.3"/>
+  <!-- pocket -->
+  <rect x="110" y="180" width="20" height="15" fill="none" stroke="#111" stroke-width="1"/>
+  <!-- pens in pocket -->
+  <rect x="115" y="178" width="3" height="8" fill="var(--accent)"/>
+  <rect x="120" y="176" width="3" height="10" fill="var(--primary)"/>
+</symbol>
+
+<symbol id="costume:armour" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v70 h-110 z" fill="#999" stroke="#111" stroke-width="2"/>
+  <!-- chest plate -->
+  <path d="M 55,155 h90 v5 h5 v40 h-100 v-40 h5 z" fill="#aaa" stroke="#111" stroke-width="1.5"/>
+  <!-- pauldrons -->
+  <rect x="35" y="148" width="25" height="15" fill="#888" stroke="#111" stroke-width="2"/>
+  <rect x="140" y="148" width="25" height="15" fill="#888" stroke="#111" stroke-width="2"/>
+  <!-- center emblem -->
+  <rect x="90" y="175" width="20" height="15" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="costume:utility-vest" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v75 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- pockets grid -->
+  <rect x="55" y="165" width="18" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="55" y="182" width="18" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="55" y="199" width="18" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="127" y="165" width="18" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="127" y="182" width="18" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- zipper -->
+  <rect x="98" y="155" width="4" height="75" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="costume:leather-jacket" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="#222" stroke="#111" stroke-width="2"/>
+  <!-- collar (popped) -->
+  <path d="M 55,148 h30 v12 h-30 z" fill="#222" stroke="#111" stroke-width="1.5"/>
+  <path d="M 115,148 h30 v12 h-30 z" fill="#222" stroke="#111" stroke-width="1.5"/>
+  <!-- zipper (diagonal) -->
+  <rect x="80" y="155" width="3" height="80" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- zipper pull -->
+  <rect x="78" y="175" width="8" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="costume:smock" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- paint splatters (pixel art) -->
+  <rect x="60" y="175" width="8" height="8" fill="var(--accent)" opacity="0.7"/>
+  <rect x="130" y="185" width="10" height="6" fill="var(--secondary)" opacity="0.6"/>
+  <rect x="75" y="200" width="6" height="10" fill="#3366ff" opacity="0.5"/>
+  <rect x="115" y="170" width="8" height="5" fill="#ff3366" opacity="0.5"/>
+  <rect x="90" y="210" width="5" height="8" fill="#33cc66" opacity="0.5"/>
+</symbol>
+
+<symbol id="costume:formal-sash" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- epaulettes -->
+  <rect x="40" y="150" width="20" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="140" y="150" width="20" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- diagonal sash -->
+  <path d="M 135,155 h10 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v5 h-10 v-5 h10 v-5 h10 v-5 h10 v-5 h10 v-5 h10 v-5 h10 v-5 h10 z" fill="var(--accent)" opacity="0.7" stroke="#111" stroke-width="1"/>
+  <!-- medals -->
+  <rect x="60" y="175" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="72" y="175" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="costume:diplomatic" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- collar -->
+  <rect x="80" y="155" width="40" height="8" fill="#eee" stroke="#111" stroke-width="1"/>
+  <!-- pocket square -->
+  <rect x="115" y="168" width="12" height="8" fill="var(--accent)"/>
+  <path d="M 115,168 h6 v-5 h6 v5 z" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <!-- buttons -->
+  <rect x="98" y="178" width="5" height="5" fill="#111" opacity="0.3"/>
+  <rect x="98" y="193" width="5" height="5" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="costume:vest-cross" viewBox="0 0 200 240">
+  <path d="M 55,155 h90 v75 h-90 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- cross emblem -->
+  <rect x="90" y="170" width="20" height="5" fill="#cc0000" stroke="#111" stroke-width="1"/>
+  <rect x="95" y="165" width="10" height="15" fill="#cc0000" stroke="#111" stroke-width="1"/>
+  <!-- arms (rolled sleeves) -->
+  <rect x="40" y="165" width="15" height="30" fill="var(--skin)" stroke="#111" stroke-width="1.5"/>
+  <rect x="145" y="165" width="15" height="30" fill="var(--skin)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="costume:soft-wrap" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- wrap fold lines -->
+  <path d="M 65,155 v80" fill="none" stroke="#111" stroke-width="1" opacity="0.15"/>
+  <path d="M 130,155 v80" fill="none" stroke="#111" stroke-width="1" opacity="0.15"/>
+  <!-- V-neck drape -->
+  <path d="M 75,155 h50 v5 h-5 v5 h-5 v5 h-5 v5 h-5 v5 h-10 v-5 h-5 v-5 h-5 v-5 h-5 v-5 h-5 z" fill="var(--secondary)" opacity="0.3"/>
+</symbol>
+
+<symbol id="costume:plain-shirt" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v75 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- collar -->
+  <rect x="82" y="155" width="36" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+  <!-- buttons -->
+  <rect x="98" y="170" width="4" height="4" fill="#111" opacity="0.2"/>
+  <rect x="98" y="185" width="4" height="4" fill="#111" opacity="0.2"/>
+  <rect x="98" y="200" width="4" height="4" fill="#111" opacity="0.2"/>
+</symbol>
+
+<symbol id="costume:polo" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v75 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- polo collar -->
+  <path d="M 75,155 h50 v8 h-10 v-3 h-30 v3 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- 2 buttons -->
+  <rect x="98" y="163" width="4" height="4" fill="#111" opacity="0.3"/>
+  <rect x="98" y="172" width="4" height="4" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="costume:simple-dress" viewBox="0 0 200 240">
+  <path d="M 60,155 h80 v5 h5 v5 h5 v5 h5 v60 h-110 v-60 h5 v-5 h5 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- neckline -->
+  <path d="M 80,155 h40 v5 h-5 v3 h-30 v-3 h-5 z" fill="var(--skin)" opacity="0.3"/>
+</symbol>
+
+<symbol id="costume:performer" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- sequin pattern (dithered sparkle) -->
+  <rect x="55" y="165" width="5" height="5" fill="var(--accent)" opacity="0.5"/>
+  <rect x="70" y="170" width="5" height="5" fill="var(--accent)" opacity="0.4"/>
+  <rect x="85" y="165" width="5" height="5" fill="var(--accent)" opacity="0.5"/>
+  <rect x="100" y="172" width="5" height="5" fill="var(--accent)" opacity="0.4"/>
+  <rect x="115" y="165" width="5" height="5" fill="var(--accent)" opacity="0.5"/>
+  <rect x="130" y="170" width="5" height="5" fill="var(--accent)" opacity="0.4"/>
+  <rect x="60" y="185" width="5" height="5" fill="var(--accent)" opacity="0.4"/>
+  <rect x="90" y="188" width="5" height="5" fill="var(--accent)" opacity="0.5"/>
+  <rect x="120" y="185" width="5" height="5" fill="var(--accent)" opacity="0.4"/>
+  <!-- collar -->
+  <rect x="80" y="155" width="40" height="5" fill="var(--secondary)"/>
+</symbol>
+
+<symbol id="costume:hoodie" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- hood -->
+  <path d="M 55,150 h90 v5 h5 v8 h-100 v-8 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- kangaroo pocket -->
+  <rect x="65" y="195" width="70" height="25" fill="var(--secondary)" opacity="0.3" stroke="#111" stroke-width="1"/>
+  <!-- drawstrings -->
+  <rect x="88" y="160" width="3" height="18" fill="#111" opacity="0.2"/>
+  <rect x="110" y="160" width="3" height="18" fill="#111" opacity="0.2"/>
+</symbol>
+
+<symbol id="costume:romantic" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- flowing neckline -->
+  <path d="M 70,155 h60 v8 h-10 v5 h-10 v5 h-20 v-5 h-10 v-5 h-10 z" fill="var(--secondary)" opacity="0.4"/>
+  <!-- soft fold lines -->
+  <rect x="65" y="175" width="3" height="50" fill="#111" opacity="0.06"/>
+  <rect x="130" y="180" width="3" height="45" fill="#111" opacity="0.06"/>
+</symbol>
+
+<symbol id="costume:business" viewBox="0 0 200 240">
+  <path d="M 50,155 h100 v80 h-100 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- crisp collar -->
+  <rect x="80" y="155" width="40" height="8" fill="#eee" stroke="#111" stroke-width="1"/>
+  <!-- center seam -->
+  <rect x="99" y="163" width="2" height="72" fill="#111" opacity="0.15"/>
+  <!-- buttons -->
+  <rect x="97" y="175" width="6" height="4" fill="#111" opacity="0.25"/>
+  <rect x="97" y="192" width="6" height="4" fill="#111" opacity="0.25"/>
+</symbol>
+
+<symbol id="costume:explorer-jacket" viewBox="0 0 200 240">
+  <path d="M 45,155 h110 v80 h-110 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- rolled sleeves showing arms -->
+  <rect x="45" y="195" width="15" height="5" fill="var(--skin)" stroke="#111" stroke-width="1"/>
+  <rect x="140" y="195" width="15" height="5" fill="var(--skin)" stroke="#111" stroke-width="1"/>
+  <!-- chest pockets -->
+  <rect x="55" y="168" width="20" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <rect x="125" y="168" width="20" height="12" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+  <!-- pocket flaps -->
+  <rect x="55" y="165" width="20" height="3" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+  <rect x="125" y="165" width="20" height="3" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- PROPS (48)                                 -->
+<!-- ========================================== -->
+
+<symbol id="prop:magnifying-glass" viewBox="0 0 200 240">
+  <path d="M 150,165 h15 v5 h5 v15 h-5 v5 h-15 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <path d="M 155,160 h5 v-5 h10 v-5 h10 v5 h5 v10 h-5 v5 h-5 v5 h-10 v-5 h-10 z" fill="none" stroke="#111" stroke-width="2.5"/>
+  <rect x="165" y="152" width="10" height="8" fill="#aaddff" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:book-open" viewBox="0 0 200 240">
+  <rect x="145" y="175" width="30" height="25" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <rect x="160" y="175" width="15" height="25" fill="var(--secondary)" opacity="0.3"/>
+  <rect x="149" y="182" width="10" height="2" fill="#111" opacity="0.3"/>
+  <rect x="149" y="187" width="10" height="2" fill="#111" opacity="0.3"/>
+  <rect x="149" y="192" width="8" height="2" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:crystal-ball" viewBox="0 0 200 240">
+  <path d="M 155,175 h15 v5 h5 v10 h-5 v5 h-15 v-5 h-5 v-10 h5 z" fill="#9966cc" opacity="0.5" stroke="#111" stroke-width="2"/>
+  <rect x="158" y="178" width="5" height="5" fill="#fff" opacity="0.4"/>
+  <rect x="150" y="190" width="25" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:scroll" viewBox="0 0 200 240">
+  <rect x="155" y="170" width="25" height="30" fill="#f0e6c8" stroke="#111" stroke-width="2"/>
+  <rect x="155" y="168" width="25" height="5" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="155" y="198" width="25" height="5" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="160" y="178" width="15" height="2" fill="#111" opacity="0.2"/>
+  <rect x="160" y="183" width="12" height="2" fill="#111" opacity="0.2"/>
+  <rect x="160" y="188" width="15" height="2" fill="#111" opacity="0.2"/>
+</symbol>
+
+<symbol id="prop:shield" viewBox="0 0 200 240">
+  <path d="M 155,165 h25 v20 h-5 v5 h-5 v5 h-5 v-5 h-5 v-5 h-5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <rect x="163" y="172" width="10" height="10" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:medal" viewBox="0 0 200 240">
+  <rect x="158" y="170" width="15" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <path d="M 160,175 h10 v5 h5 v5 h-5 v5 h-10 v-5 h-5 v-5 h5 z" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:torch" viewBox="0 0 200 240">
+  <rect x="162" y="180" width="8" height="25" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- flame (pixel) -->
+  <rect x="160" y="170" width="12" height="10" fill="#ff6600" stroke="#111" stroke-width="1"/>
+  <rect x="163" y="165" width="6" height="5" fill="#ffaa00"/>
+  <rect x="165" y="162" width="3" height="3" fill="#ffcc00"/>
+</symbol>
+
+<symbol id="prop:first-aid" viewBox="0 0 200 240">
+  <rect x="150" y="178" width="25" height="20" fill="#fff" stroke="#111" stroke-width="2"/>
+  <rect x="157" y="183" width="10" height="3" fill="#cc0000"/>
+  <rect x="160" y="180" width="4" height="10" fill="#cc0000"/>
+</symbol>
+
+<symbol id="prop:glowing-orb" viewBox="0 0 200 240">
+  <path d="M 155,175 h15 v5 h5 v10 h-5 v5 h-15 v-5 h-5 v-10 h5 z" fill="var(--accent)" opacity="0.6" stroke="#111" stroke-width="2"/>
+  <!-- glow pixels -->
+  <rect x="148" y="178" width="5" height="5" fill="var(--accent)" opacity="0.2"/>
+  <rect x="172" y="182" width="5" height="5" fill="var(--accent)" opacity="0.2"/>
+  <rect x="160" y="172" width="5" height="3" fill="var(--accent)" opacity="0.2"/>
+</symbol>
+
+<symbol id="prop:wrench-gear" viewBox="0 0 200 240">
+  <!-- wrench -->
+  <rect x="155" y="170" width="5" height="30" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <rect x="150" y="168" width="15" height="8" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- gear -->
+  <path d="M 168,185 h10 v5 h5 v5 h-5 v5 h-10 v-5 h-5 v-5 h5 z" fill="#777" stroke="#111" stroke-width="1.5"/>
+  <rect x="172" y="189" width="3" height="3" fill="#111"/>
+</symbol>
+
+<symbol id="prop:lightbulb" viewBox="0 0 200 240">
+  <path d="M 160,175 h10 v5 h5 v10 h-5 v5 h-10 v-5 h-5 v-10 h5 z" fill="var(--accent)" opacity="0.7" stroke="#111" stroke-width="2"/>
+  <!-- base -->
+  <rect x="162" y="195" width="8" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="162" y="200" width="8" height="3" fill="#777" stroke="#111" stroke-width="1"/>
+  <!-- filament -->
+  <rect x="165" y="180" width="3" height="8" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:flask" viewBox="0 0 200 240">
+  <rect x="163" y="170" width="8" height="8" fill="#ddd" stroke="#111" stroke-width="1.5"/>
+  <path d="M 158,178 h18 v5 h5 v10 h-5 v5 h-18 v-5 h-5 v-10 h5 z" fill="#ddd" stroke="#111" stroke-width="1.5"/>
+  <!-- liquid -->
+  <rect x="158" y="188" width="18" height="5" fill="#33cc66" opacity="0.5"/>
+  <rect x="153" y="193" width="28" height="5" fill="#33cc66" opacity="0.6"/>
+</symbol>
+
+<symbol id="prop:megaphone" viewBox="0 0 200 240">
+  <path d="M 150,178 h10 v-5 h10 v-5 h10 v25 h-10 v-5 h-10 v-5 h-10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <rect x="148" y="180" width="5" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:dice" viewBox="0 0 200 240">
+  <rect x="155" y="178" width="20" height="20" fill="#eee" stroke="#111" stroke-width="2"/>
+  <rect x="160" y="182" width="3" height="3" fill="#111"/>
+  <rect x="168" y="190" width="3" height="3" fill="#111"/>
+  <rect x="160" y="190" width="3" height="3" fill="#111"/>
+  <rect x="168" y="182" width="3" height="3" fill="#111"/>
+  <rect x="164" y="186" width="3" height="3" fill="#111"/>
+</symbol>
+
+<symbol id="prop:wrench" viewBox="0 0 200 240">
+  <rect x="162" y="168" width="5" height="35" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <rect x="155" y="165" width="20" height="8" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <rect x="160" y="168" width="3" height="5" fill="var(--skin)"/>
+</symbol>
+
+<symbol id="prop:hammer" viewBox="0 0 200 240">
+  <rect x="163" y="175" width="5" height="28" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="155" y="168" width="22" height="10" fill="#888" stroke="#111" stroke-width="2"/>
+</symbol>
+
+<symbol id="prop:compass" viewBox="0 0 200 240">
+  <path d="M 158,175 h15 v5 h5 v10 h-5 v5 h-15 v-5 h-5 v-10 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- needle -->
+  <rect x="164" y="178" width="3" height="5" fill="#cc0000"/>
+  <rect x="164" y="183" width="3" height="5" fill="#eee"/>
+  <rect x="165" y="180" width="1" height="8" fill="#111"/>
+</symbol>
+
+<symbol id="prop:swiss-army" viewBox="0 0 200 240">
+  <rect x="155" y="175" width="20" height="15" fill="#cc0000" stroke="#111" stroke-width="2"/>
+  <!-- blade out -->
+  <rect x="155" y="165" width="5" height="10" fill="#ccc" stroke="#111" stroke-width="1"/>
+  <!-- cross -->
+  <rect x="161" y="180" width="8" height="2" fill="#fff"/>
+  <rect x="163" y="178" width="4" height="6" fill="#fff"/>
+</symbol>
+
+<symbol id="prop:flag" viewBox="0 0 200 240">
+  <rect x="160" y="165" width="3" height="40" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+  <rect x="163" y="165" width="20" height="15" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:lantern" viewBox="0 0 200 240">
+  <rect x="158" y="170" width="15" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="155" y="175" width="20" height="15" fill="var(--accent)" opacity="0.5" stroke="#111" stroke-width="2"/>
+  <rect x="158" y="190" width="15" height="3" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- glow -->
+  <rect x="160" y="178" width="5" height="5" fill="#ffcc00" opacity="0.6"/>
+  <!-- handle -->
+  <rect x="163" y="165" width="5" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:paintbrush" viewBox="0 0 200 240">
+  <rect x="162" y="180" width="5" height="20" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- ferrule -->
+  <rect x="160" y="175" width="8" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- bristles -->
+  <rect x="159" y="170" width="10" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:quill" viewBox="0 0 200 240">
+  <path d="M 170,165 h5 v5 h5 v10 h-5 v10 h-5 v5 h-5 v-25 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- nib -->
+  <rect x="160" y="195" width="5" height="8" fill="#888" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:telescope" viewBox="0 0 200 240">
+  <rect x="148" y="178" width="35" height="8" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- lens -->
+  <rect x="145" y="175" width="8" height="14" fill="#aaddff" opacity="0.3" stroke="#111" stroke-width="1.5"/>
+  <!-- eyepiece -->
+  <rect x="180" y="180" width="5" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:dove" viewBox="0 0 200 240">
+  <path d="M 155,178 h15 v-5 h5 v5 v10 h-5 v5 h-10 v-5 h-5 z" fill="#eee" stroke="#111" stroke-width="1.5"/>
+  <!-- wing -->
+  <rect x="152" y="175" width="5" height="10" fill="#ddd" stroke="#111" stroke-width="1"/>
+  <!-- eye -->
+  <rect x="170" y="178" width="3" height="3" fill="#111"/>
+  <!-- beak -->
+  <rect x="175" y="180" width="5" height="3" fill="#ffaa00" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:cloud" viewBox="0 0 200 240">
+  <path d="M 148,178 h20 v-5 h10 v5 h5 v10 h-5 v5 h-30 v-5 h-5 v-5 h5 z" fill="#ddeeff" opacity="0.7" stroke="#111" stroke-width="1.5"/>
+  <!-- sparkle inside -->
+  <rect x="155" y="182" width="3" height="3" fill="var(--accent)" opacity="0.4"/>
+  <rect x="165" y="180" width="3" height="3" fill="var(--accent)" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:candle" viewBox="0 0 200 240">
+  <rect x="163" y="178" width="8" height="22" fill="#f0e6c8" stroke="#111" stroke-width="1.5"/>
+  <!-- flame -->
+  <rect x="164" y="172" width="6" height="6" fill="#ff8800" stroke="#111" stroke-width="1"/>
+  <rect x="166" y="168" width="3" height="4" fill="#ffcc00"/>
+  <!-- holder -->
+  <rect x="158" y="200" width="18" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:spark" viewBox="0 0 200 240">
+  <!-- pixelated 4-point star -->
+  <rect x="165" y="170" width="5" height="5" fill="var(--accent)" opacity="0.8"/>
+  <rect x="160" y="175" width="15" height="5" fill="var(--accent)" opacity="0.9"/>
+  <rect x="165" y="180" width="5" height="5" fill="var(--accent)" opacity="0.8"/>
+  <!-- rays -->
+  <rect x="155" y="177" width="5" height="2" fill="var(--accent)" opacity="0.4"/>
+  <rect x="175" y="177" width="5" height="2" fill="var(--accent)" opacity="0.4"/>
+  <rect x="166" y="165" width="3" height="5" fill="var(--accent)" opacity="0.4"/>
+  <rect x="166" y="185" width="3" height="5" fill="var(--accent)" opacity="0.4"/>
+</symbol>
+
+<symbol id="prop:juggling-balls" viewBox="0 0 200 240">
+  <rect x="148" y="168" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="162" y="162" width="8" height="8" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="175" y="168" width="8" height="8" fill="var(--secondary)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:microphone" viewBox="0 0 200 240">
+  <path d="M 160,172 h10 v5 h5 v8 h-5 v5 h-10 v-5 h-5 v-8 h5 z" fill="#888" stroke="#111" stroke-width="2"/>
+  <!-- handle -->
+  <rect x="163" y="190" width="5" height="15" fill="#555" stroke="#111" stroke-width="1.5"/>
+  <!-- grill -->
+  <rect x="163" y="175" width="5" height="2" fill="#111" opacity="0.3"/>
+  <rect x="163" y="180" width="5" height="2" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:mirror-mask" viewBox="0 0 200 240">
+  <!-- mask half -->
+  <path d="M 155,172 h15 v5 h5 v15 h-5 v5 h-15 z" fill="#eee" stroke="#111" stroke-width="2"/>
+  <!-- eye hole -->
+  <rect x="162" y="178" width="5" height="5" fill="#111"/>
+  <!-- dark half hint -->
+  <rect x="160" y="172" width="10" height="25" fill="#111" opacity="0.15"/>
+</symbol>
+
+<symbol id="prop:playing-cards" viewBox="0 0 200 240">
+  <!-- back card -->
+  <rect x="155" y="172" width="15" height="22" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- front card -->
+  <rect x="160" y="168" width="15" height="22" fill="#eee" stroke="#111" stroke-width="1.5"/>
+  <!-- suit symbol -->
+  <rect x="163" y="172" width="5" height="5" fill="#cc0000"/>
+  <rect x="168" y="182" width="5" height="5" fill="#111"/>
+</symbol>
+
+<symbol id="prop:flower" viewBox="0 0 200 240">
+  <!-- stem -->
+  <rect x="165" y="185" width="3" height="15" fill="#339933" stroke="#111" stroke-width="1"/>
+  <!-- petals (pixel cross) -->
+  <rect x="160" y="178" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="170" y="178" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="165" y="173" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="165" y="183" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <!-- center -->
+  <rect x="165" y="178" width="5" height="5" fill="#ffcc00" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:gift-box" viewBox="0 0 200 240">
+  <rect x="152" y="178" width="25" height="18" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- ribbon cross -->
+  <rect x="162" y="178" width="5" height="18" fill="var(--accent)"/>
+  <rect x="152" y="185" width="25" height="4" fill="var(--accent)"/>
+  <!-- bow -->
+  <rect x="158" y="173" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="167" y="173" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:wine-glass" viewBox="0 0 200 240">
+  <path d="M 158,175 h15 v8 h-5 v3 h-5 v-3 h-5 z" fill="#cc3366" opacity="0.5" stroke="#111" stroke-width="1.5"/>
+  <!-- stem -->
+  <rect x="163" y="186" width="5" height="8" fill="#ddd" stroke="#111" stroke-width="1"/>
+  <!-- base -->
+  <rect x="158" y="194" width="15" height="3" fill="#ddd" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:ribbon" viewBox="0 0 200 240">
+  <path d="M 155,175 h5 v5 h5 v5 h5 v5 h-5 v5 h-5 v5 h-5 v-5 h-5 v-5 h-5 v-5 h5 v-5 h5 z" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:stethoscope" viewBox="0 0 200 240">
+  <rect x="158" y="168" width="5" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="168" y="168" width="5" height="5" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="158" y="173" width="5" height="15" fill="none" stroke="#111" stroke-width="2"/>
+  <rect x="168" y="173" width="5" height="15" fill="none" stroke="#111" stroke-width="2"/>
+  <path d="M 158,188 h15 v5 h-5 v3 h-5 v-3 h-5 z" fill="none" stroke="#111" stroke-width="2"/>
+  <rect x="163" y="193" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:umbrella" viewBox="0 0 200 240">
+  <!-- canopy -->
+  <path d="M 145,172 h40 v5 h-5 v3 h-5 v2 h-20 v-2 h-5 v-3 h-5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <!-- shaft -->
+  <rect x="163" y="182" width="3" height="18" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- hook handle -->
+  <rect x="158" y="198" width="8" height="3" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="158" y="195" width="3" height="3" fill="#888"/>
+</symbol>
+
+<symbol id="prop:halo" viewBox="0 0 200 240">
+  <path d="M 155,168 h20 v3 h5 v5 h-5 v3 h-20 v-3 h-5 v-5 h5 z" fill="var(--accent)" opacity="0.6" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:bandage" viewBox="0 0 200 240">
+  <rect x="155" y="175" width="20" height="8" fill="#f0e6c8" stroke="#111" stroke-width="1.5"/>
+  <rect x="158" y="183" width="14" height="8" fill="#f0e6c8" stroke="#111" stroke-width="1"/>
+  <rect x="160" y="191" width="10" height="8" fill="#f0e6c8" stroke="#111" stroke-width="1"/>
+  <!-- cross marks -->
+  <rect x="163" y="178" width="4" height="2" fill="#cc0000" opacity="0.4"/>
+</symbol>
+
+<symbol id="prop:crown" viewBox="0 0 200 240">
+  <rect x="155" y="178" width="20" height="12" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="155" y="173" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="163" y="170" width="5" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="170" y="173" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <!-- jewel -->
+  <rect x="163" y="180" width="5" height="5" fill="#cc0000" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:gavel" viewBox="0 0 200 240">
+  <rect x="163" y="178" width="5" height="22" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="155" y="172" width="22" height="8" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+</symbol>
+
+<symbol id="prop:scepter" viewBox="0 0 200 240">
+  <rect x="163" y="170" width="5" height="30" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- finial -->
+  <rect x="158" y="165" width="15" height="8" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <rect x="163" y="162" width="5" height="3" fill="#cc0000" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:olive-branch" viewBox="0 0 200 240">
+  <rect x="160" y="175" width="3" height="25" fill="#339933" stroke="#111" stroke-width="1"/>
+  <!-- leaves (pixel pairs) -->
+  <rect x="155" y="178" width="5" height="3" fill="#339933" stroke="#111" stroke-width="1"/>
+  <rect x="163" y="182" width="5" height="3" fill="#339933" stroke="#111" stroke-width="1"/>
+  <rect x="155" y="186" width="5" height="3" fill="#339933" stroke="#111" stroke-width="1"/>
+  <rect x="163" y="190" width="5" height="3" fill="#339933" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:clipboard" viewBox="0 0 200 240">
+  <rect x="152" y="170" width="22" height="30" fill="#c9a06c" stroke="#111" stroke-width="2"/>
+  <!-- paper -->
+  <rect x="155" y="175" width="16" height="22" fill="#eee"/>
+  <!-- clip -->
+  <rect x="158" y="168" width="10" height="5" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <!-- text lines -->
+  <rect x="157" y="180" width="10" height="2" fill="#111" opacity="0.3"/>
+  <rect x="157" y="185" width="12" height="2" fill="#111" opacity="0.3"/>
+  <rect x="157" y="190" width="8" height="2" fill="#111" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:broom" viewBox="0 0 200 240">
+  <rect x="163" y="165" width="4" height="35" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <!-- bristles -->
+  <rect x="155" y="195" width="20" height="10" fill="#c9a06c" stroke="#111" stroke-width="1.5"/>
+  <rect x="158" y="198" width="3" height="7" fill="#111" opacity="0.15"/>
+  <rect x="163" y="198" width="3" height="7" fill="#111" opacity="0.1"/>
+  <rect x="168" y="198" width="3" height="7" fill="#111" opacity="0.15"/>
+</symbol>
+
+<symbol id="prop:megaphone-small" viewBox="0 0 200 240">
+  <path d="M 155,180 h8 v-3 h8 v-3 h5 v18 h-5 v-3 h-8 v-3 h-8 z" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="prop:blueprint" viewBox="0 0 200 240">
+  <rect x="150" y="172" width="28" height="22" fill="#3366aa" stroke="#111" stroke-width="2"/>
+  <!-- grid lines -->
+  <rect x="155" y="178" width="18" height="1" fill="#fff" opacity="0.3"/>
+  <rect x="155" y="183" width="18" height="1" fill="#fff" opacity="0.3"/>
+  <rect x="160" y="175" width="1" height="15" fill="#fff" opacity="0.3"/>
+  <rect x="168" y="175" width="1" height="15" fill="#fff" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:poker-chip" viewBox="0 0 200 240">
+  <path d="M 158,178 h12 v3 h3 v8 h-3 v3 h-12 v-3 h-3 v-8 h3 z" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <!-- center -->
+  <rect x="162" y="183" width="5" height="5" fill="#eee"/>
+</symbol>
+
+<symbol id="prop:motorcycle-key" viewBox="0 0 200 240">
+  <!-- key shaft -->
+  <rect x="155" y="182" width="20" height="5" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <!-- key head ring -->
+  <path d="M 148,180 h10 v3 h3 v5 h-3 v3 h-10 v-3 h-3 v-5 h3 z" fill="none" stroke="#111" stroke-width="2"/>
+  <!-- teeth -->
+  <rect x="172" y="182" width="3" height="8" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="177" y="182" width="3" height="6" fill="#888" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="prop:blueprint-torn" viewBox="0 0 200 240">
+  <rect x="150" y="172" width="28" height="22" fill="#3366aa" stroke="#111" stroke-width="2"/>
+  <!-- torn edge -->
+  <rect x="175" y="172" width="3" height="5" fill="#3366aa"/>
+  <rect x="172" y="180" width="3" height="5" fill="#3366aa"/>
+  <!-- grid lines -->
+  <rect x="155" y="178" width="15" height="1" fill="#fff" opacity="0.3"/>
+  <rect x="155" y="183" width="18" height="1" fill="#fff" opacity="0.3"/>
+</symbol>
+
+<symbol id="prop:raised-fist" viewBox="0 0 200 240">
+  <path d="M 155,172 h15 v5 h5 v15 h-5 v5 h-15 v-5 h-5 v-15 h5 z" fill="var(--skin)" stroke="#111" stroke-width="2"/>
+  <!-- knuckle lines -->
+  <rect x="158" y="178" width="12" height="2" fill="#111" opacity="0.2"/>
+  <rect x="158" y="183" width="12" height="2" fill="#111" opacity="0.15"/>
+</symbol>
+
+<symbol id="prop:red-nose" viewBox="0 0 200 240">
+  <path d="M 93,100 h14 v5 h5 v8 h-5 v5 h-14 v-5 h-5 v-8 h5 z" fill="#cc0000" stroke="#111" stroke-width="2"/>
+  <!-- highlight -->
+  <rect x="98" y="103" width="3" height="3" fill="#ff3333" opacity="0.6"/>
+</symbol>
+
+<symbol id="prop:broken-chain" viewBox="0 0 200 240">
+  <!-- chain links -->
+  <rect x="150" y="180" width="8" height="5" fill="none" stroke="#888" stroke-width="2"/>
+  <rect x="158" y="178" width="8" height="5" fill="none" stroke="#888" stroke-width="2"/>
+  <!-- gap (broken) -->
+  <rect x="166" y="180" width="5" height="3" fill="none"/>
+  <!-- dangling link -->
+  <rect x="172" y="182" width="8" height="5" fill="none" stroke="#888" stroke-width="2"/>
+</symbol>
+
+<symbol id="prop:scales" viewBox="0 0 200 240">
+  <!-- beam -->
+  <rect x="150" y="178" width="30" height="3" fill="#888" stroke="#111" stroke-width="1.5"/>
+  <!-- fulcrum -->
+  <rect x="163" y="181" width="5" height="10" fill="#888" stroke="#111" stroke-width="1"/>
+  <rect x="158" y="191" width="15" height="3" fill="#888" stroke="#111" stroke-width="1"/>
+  <!-- pans -->
+  <rect x="148" y="181" width="10" height="3" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="172" y="181" width="10" height="3" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<!-- ========================================== -->
+<!-- ACCESSORIES (12)                           -->
+<!-- ========================================== -->
+
+<symbol id="acc:ear-piercings" viewBox="0 0 200 240">
+  <rect x="55" y="90" width="4" height="4" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="55" y="97" width="4" height="4" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="142" y="90" width="4" height="4" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="acc:pendant-amulet" viewBox="0 0 200 240">
+  <rect x="95" y="148" width="10" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- chain -->
+  <rect x="85" y="145" width="30" height="3" fill="#888" opacity="0.5"/>
+  <!-- glow center -->
+  <rect x="98" y="151" width="4" height="4" fill="#fff" opacity="0.5"/>
+</symbol>
+
+<symbol id="acc:headband" viewBox="0 0 200 240">
+  <rect x="55" y="45" width="90" height="5" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+</symbol>
+
+<symbol id="acc:scarf-bandana" viewBox="0 0 200 240">
+  <rect x="70" y="145" width="60" height="10" fill="var(--accent)" stroke="#111" stroke-width="1.5"/>
+  <!-- knot -->
+  <rect x="95" y="148" width="10" height="10" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <!-- trailing ends -->
+  <rect x="88" y="155" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="105" y="155" width="8" height="8" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="acc:flower-crown" viewBox="0 0 200 240">
+  <rect x="55" y="38" width="90" height="5" fill="#4a8c3f" stroke="#111" stroke-width="1"/>
+  <rect x="65" y="34" width="6" height="6" fill="#ff6699" stroke="#111" stroke-width="1"/>
+  <rect x="85" y="32" width="6" height="6" fill="#ffcc44" stroke="#111" stroke-width="1"/>
+  <rect x="105" y="34" width="6" height="6" fill="#ff6699" stroke="#111" stroke-width="1"/>
+  <rect x="125" y="32" width="6" height="6" fill="#ffcc44" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="acc:epaulettes" viewBox="0 0 200 240">
+  <rect x="35" y="148" width="20" height="10" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <rect x="145" y="148" width="20" height="10" fill="var(--accent)" stroke="#111" stroke-width="2"/>
+  <!-- fringe -->
+  <rect x="37" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+  <rect x="42" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+  <rect x="47" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+  <rect x="147" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+  <rect x="152" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+  <rect x="157" y="158" width="3" height="5" fill="var(--accent)" opacity="0.6"/>
+</symbol>
+
+<symbol id="acc:scar" viewBox="0 0 200 240">
+  <!-- pixel scar across cheek -->
+  <rect x="118" y="95" width="5" height="3" fill="#cc8866" opacity="0.5"/>
+  <rect x="123" y="98" width="5" height="3" fill="#cc8866" opacity="0.5"/>
+  <rect x="128" y="101" width="5" height="3" fill="#cc8866" opacity="0.5"/>
+</symbol>
+
+<symbol id="acc:freckles" viewBox="0 0 200 240">
+  <rect x="72" y="98" width="3" height="3" fill="#aa7755" opacity="0.4"/>
+  <rect x="78" y="102" width="3" height="3" fill="#aa7755" opacity="0.35"/>
+  <rect x="68" y="103" width="3" height="3" fill="#aa7755" opacity="0.3"/>
+  <rect x="120" y="98" width="3" height="3" fill="#aa7755" opacity="0.4"/>
+  <rect x="126" y="102" width="3" height="3" fill="#aa7755" opacity="0.35"/>
+  <rect x="130" y="100" width="3" height="3" fill="#aa7755" opacity="0.3"/>
+</symbol>
+
+<symbol id="acc:tattoo" viewBox="0 0 200 240">
+  <!-- pixel tattoo on neck/arm area -->
+  <rect x="45" y="160" width="5" height="5" fill="#336" opacity="0.5"/>
+  <rect x="40" y="165" width="5" height="5" fill="#336" opacity="0.45"/>
+  <rect x="50" y="165" width="5" height="5" fill="#336" opacity="0.5"/>
+  <rect x="45" y="170" width="5" height="5" fill="#336" opacity="0.4"/>
+</symbol>
+
+<symbol id="acc:nose-ring" viewBox="0 0 200 240">
+  <rect x="95" y="108" width="5" height="5" fill="var(--accent)" stroke="#111" stroke-width="1"/>
+  <rect x="93" y="110" width="3" height="3" fill="var(--accent)"/>
+</symbol>
+
+<symbol id="acc:hat-explorer" viewBox="0 0 200 240">
+  <!-- same as hat:explorer for compatibility -->
+  <path d="M 35,48 h130 v5 h-5 v3 h-120 v-3 h-5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <path d="M 60,30 h80 v5 h5 v13 h-90 v-13 h5 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <rect x="60" y="40" width="80" height="5" fill="var(--secondary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+<symbol id="acc:beret" viewBox="0 0 200 240">
+  <!-- same as hat:beret for compatibility -->
+  <path d="M 55,38 h95 v5 h-5 v-5 h-85 v8 h-10 v-3 h-5 v-3 h10 z" fill="var(--primary)" stroke="#111" stroke-width="2"/>
+  <path d="M 65,28 h75 v5 h5 v5 h-90 v-5 h5 v-5 h5 z" fill="var(--primary)" stroke="#111" stroke-width="1.5"/>
+  <rect x="98" y="23" width="8" height="5" fill="var(--primary)" stroke="#111" stroke-width="1"/>
+</symbol>
+
+</defs>
+</svg>
