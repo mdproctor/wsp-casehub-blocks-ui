@@ -60,7 +60,9 @@ type ArchetypeFamily =
 interface PartAssignment {
   head: string;
   hair: string;
+  hat: string | null;
   facialHair: string;
+  expression: string | null;
   costume: string;
   props: string[];
   glasses: string | null;
@@ -241,24 +243,39 @@ function buildAvatar(
     return registry.parts.get(key)!(palette, partMods);
   };
 
+  // Layer 1-3: always rendered (all sizes)
   layers.push(render(`costume:${config.costume}`));
   layers.push(render(`head:${config.head}`));
   layers.push(render(`hair:${config.hair}`));
 
+  // Layer 4: hat replaces top of hair silhouette (sm+)
+  if (detail >= DetailLevel.SM && config.hat) {
+    layers.push(render(`hat:${config.hat}`));
+  }
+
   if (detail >= DetailLevel.MD) {
+    // Layer 5: facial hair
     if (config.facialHair !== 'none') {
       layers.push(render(`beard:${config.facialHair}`));
     }
+    // Layer 6: expression overlay (mouth + eye mood)
+    if (config.expression) {
+      layers.push(render(`expression:${config.expression}`));
+    }
+    // Layer 7: eyebrows
     layers.push(render(`brow:${config.eyebrows}`));
+    // Layer 8: glasses
     if (config.glasses) {
       layers.push(render(`glasses:${config.glasses}`));
     }
+    // Layer 9: props
     for (const prop of config.props) {
       layers.push(render(`prop:${prop}`));
     }
   }
 
   if (detail >= DetailLevel.LG) {
+    // Layer 10: accessories
     for (const acc of config.accessories) {
       layers.push(render(`acc:${acc}`));
     }
@@ -320,7 +337,7 @@ Part IDs are abstract. A **collection** provides concrete SVG renderers for ever
 
 | File | Purpose | Contents |
 |------|---------|----------|
-| `mythic.parts.svg` | Construction — all parts for mechanical composition | ~140 `<symbol>` elements (heads, hairs, costumes, props, etc.) |
+| `mythic.parts.svg` | Construction — all parts for mechanical composition | ~250+ `<symbol>` elements (heads, hairs, hats, expressions, costumes, props, etc.) |
 | `mythic.preview.svg` | Browsing — pre-rendered family roots for theme selection | 12 `<symbol>` elements, one per family, fully composed |
 
 Drop two files in = new collection. No TypeScript, no config, no registration code.
@@ -485,8 +502,20 @@ Visual language:
 - Distinct head shapes per family (round, square jaw, diamond, heart, oval, angular, etc.)
 - Family colour palettes (cool blues for Sage, deep purples for Magician, bold primaries for Hero)
 - Archetype-specific props (magnifying glass, orb, paintbrush, shield, crown, compass, etc.)
-- Character variety (16 hair styles, 8 facial hair, 8 glasses, 8 eyebrow types)
+- Character variety: 55 hair styles, 40 hats, 35 expressions, 27 facial hair, 43 glasses, 32 accessories, 8 eyebrow types
 - Size-responsive detail tiers (xs silhouette → lg full detail)
+
+Layer z-order (bottom to top):
+1. `costume:` — torso, y=130-240
+2. `head:` — face shape, centred y=90
+3. `hair:` — hair on/around head
+4. `hat:` — on top of hair (sm+)
+5. `beard:` — facial hair overlay (md+)
+6. `expression:` — mouth/eye mood overlay (md+)
+7. `brow:` — eyebrows (md+)
+8. `glasses:` — eyewear (md+)
+9. `prop:` — held/adjacent objects (md+)
+10. `acc:` — piercings, scarves, etc. (lg)
 
 Full visual reference: `avatar-preview.html`
 Part assignments: `part-catalogue.md`
@@ -510,12 +539,12 @@ mythic:P1B
 mythic:Co/grLNBF
 ```
 - `C` — custom marker
-- 8 base64 chars encoding 48 bits of part selections:
-  - version (2b) + head (4b) + hair (5b) + facialHair (4b) + costume (5b)
-  - glasses (4b) + eyebrows (4b) + accessory (4b) + palette (4b)
-  - prop1 (6b) + prop2 (6b)
+- 10 base64 chars encoding 60 bits of part selections:
+  - version (2b) + head (4b) + hair (6b) + hat (6b) + facialHair (5b)
+  - expression (6b) + costume (5b) + glasses (4b) + eyebrows (4b)
+  - accessory (5b) + palette (4b) + prop1 (6b) + prop2 (6b) + spare (1b)
 
-Version 0 is the initial encoding. Future encodings (up to 3 more) can redistribute bits if the part registry evolves significantly. 48 bits = 8 base64 chars — no length change from the original 44-bit allocation (which left 4 unused bits in the same 8-char encoding).
+60 bits = 10 base64 chars. The expanded part registry (55 hairs, 40 hats, 35 expressions, 43 glasses, 27 beards, 32 accessories) requires wider bit fields than the original 48-bit encoding. Version 0 is the initial encoding.
 
 ### Scope of Compact Codes
 
@@ -629,7 +658,7 @@ When archetype data is missing (no `archetype` property, no `code`), render the 
 | Layer | Test Approach |
 |-------|--------------|
 | Part renderers | Each renderer returns valid SVG (well-formed XML, non-empty) for all 12 palettes |
-| Config table | 48 entries, every archetype mapped, uniqueness audit (≥2 parts different within family) |
+| Config table | 48 entries, every archetype mapped, uniqueness audit (≥2 parts different within family). Expression and hat fields populated for all entries. |
 | Builder | Layer ordering, size-tier filtering (xs omits props, sm omits facial detail) |
 | Code encode/decode | Roundtrip: config → code → config is identity. Preset detection. |
 | Component | ARIA attributes (role=img, aria-label), both input modes (payload vs code), fallback |
