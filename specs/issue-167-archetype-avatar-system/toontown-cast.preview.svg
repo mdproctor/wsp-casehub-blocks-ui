@@ -1,0 +1,276 @@
+<svg viewBox="0 0 200 240" id="springfield-previews">
+  
+
+  <defs>
+    <!-- ========================================== -->
+    <!-- 1. CAREGIVER — The Jolly Doctor            -->
+    <!-- ========================================== -->
+    <symbol id="preview:Caregiver" viewBox="0 0 200 240">
+      <!-- Body / Green Vest & Shirt -->
+      <path d="M 45,210 L 60,182 L 140,182 L 155,210 Z" fill="#2E7D32" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 85,182 L 100,200 L 115,182" fill="#FFF" stroke="#111" stroke-width="2.5" />
+      <polygon points="100,195 106,210 94,210" fill="#E53E3E" stroke="#111" stroke-width="2" />
+      <!-- Head (Dark Skin) -->
+      <path d="M 64,160 L 64,185 L 136,185 L 136,160 C 155,140 152,95 140,70 C 128,40 115,35 100,35 C 85,35 72,40 60,70 C 48,95 45,140 64,160 Z" class="skd" />
+      <circle cx="56" cy="110" r="9" class="skd" />
+      <circle cx="144" cy="110" r="9" class="skd" />
+      <!-- Hair (Short Grey Side Tufts) -->
+      <path d="M 52,100 C 48,80 58,70 64,75" class="ln" />
+      <path d="M 148,100 C 152,80 142,70 136,75" class="ln" />
+      <!-- Eyes & Warm Brows -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 72,68 Q 85,62 98,68" class="ln" />
+      <path d="M 102,68 Q 115,62 128,68" class="ln" />
+      <!-- Bulbous Nose -->
+      <path d="M 96,90 C 94,98 90,108 100,110 C 110,110 110,98 100,98 Z" class="skd" />
+      <!-- Moustache & Warm Smile -->
+      <path d="M 75,122 C 70,118 80,112 100,114 C 120,112 130,118 125,122 C 115,128 85,128 75,122 Z" fill="#4A4A4A" stroke="#111" stroke-width="2.5" />
+      <path d="M 80,132 Q 100,146 120,132" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 2. EVERYMAN — The Nuclear Plant Worker     -->
+    <!-- ========================================== -->
+    <symbol id="preview:Everyman" viewBox="0 0 200 240">
+      <!-- Grey Shirt Body -->
+      <path d="M 50,182 L 150,182 L 160,220 L 40,220 Z" fill="#718096" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 75,182 L 100,200 L 125,182" fill="#FFF" stroke="#111" stroke-width="2.5" />
+      <!-- Classic Oval Head -->
+      <path d="M 68,160 L 68,185 L 132,185 L 132,160 C 146,145 148,120 144,90 C 140,45 125,35 100,35 C 75,35 60,45 56,90 C 52,120 54,145 68,160 Z" class="sk" />
+      <circle cx="56" cy="110" r="9" class="sk" />
+      <circle cx="144" cy="110" r="9" class="sk" />
+      <!-- Side Hair Lines & Zigzag Back -->
+      <path d="M 54,105 C 50,95 52,85 60,82 M 146,105 C 150,95 148,85 140,82" class="lnt" />
+      <path d="M 56,90 L 48,92 L 54,96 L 48,100" class="lnt" />
+      <!-- Eyes & Simple Brows -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 72,70 Q 85,65 96,72" class="lnt" />
+      <path d="M 104,72 Q 115,65 128,70" class="lnt" />
+      <!-- Overbite Muzzle & Nose -->
+      <path d="M 96,92 C 92,102 92,106 102,105 C 108,105 108,100 102,98" class="sk" />
+      <path d="M 76,120 C 76,110 88,110 100,110 C 112,110 124,110 124,120 C 124,136 112,142 100,142 C 88,142 76,136 76,120 Z" fill="#D2B48C" stroke="#111" stroke-width="3" />
+      <path d="M 78,124 Q 100,138 122,124" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 3. CREATOR — The Nerdy Professor           -->
+    <!-- ========================================== -->
+    <symbol id="preview:Creator" viewBox="0 0 200 240">
+      <!-- Red Smock Body & Bowtie -->
+      <path d="M 50,180 L 150,180 L 158,220 L 42,220 Z" fill="#E53E3E" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <polygon points="100,188 88,180 88,196" fill="#111" /><polygon points="100,188 112,180 112,196" fill="#111" />
+      <!-- Head & Wild Hair Tuft -->
+      <path d="M 68,160 L 68,185 L 132,185 L 132,160 C 146,145 148,120 144,90 C 140,45 125,35 100,35 C 75,35 60,45 56,90 C 52,120 54,145 68,160 Z" class="sk" />
+      <path d="M 85,38 C 75,15 95,10 100,20 C 108,8 125,18 115,38 Z" fill="#718096" stroke="#111" stroke-width="3" />
+      <!-- Eyes & Huge Glasses -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <circle cx="83" cy="92" r="22" fill="none" stroke="#111" stroke-width="3.5" />
+      <circle cx="117" cy="92" r="22" fill="none" stroke="#111" stroke-width="3.5" />
+      <line x1="105" y1="92" x2="95" y2="92" stroke="#111" stroke-width="3.5" />
+      <!-- Buck Teeth Mouth -->
+      <path d="M 96,92 C 92,102 92,106 102,105 C 108,105 108,100 102,98" class="sk" />
+      <path d="M 82,124 Q 100,132 118,124" class="ln" />
+      <rect x="94" y="127" width="6" height="8" fill="#FFF" stroke="#111" stroke-width="1.5" />
+      <rect x="100" y="127" width="6" height="8" fill="#FFF" stroke="#111" stroke-width="1.5" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 4. INNOCENT — The Paste-Eating Kid         -->
+    <!-- ========================================== -->
+    <symbol id="preview:Innocent" viewBox="0 0 200 240">
+      <!-- Cream Dress Body (Merged collar, no neck) -->
+      <path d="M 55,160 L 145,160 L 160,220 L 40,220 Z" fill="#FEEBC8" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Round Kid Head -->
+      <path d="M 64,160 L 64,175 L 136,175 L 136,160 C 155,140 152,95 140,70 C 128,40 115,35 100,35 C 85,35 72,40 60,70 C 48,95 45,140 64,160 Z" class="sk" />
+      <circle cx="56" cy="110" r="8" class="sk" /><circle cx="144" cy="110" r="8" class="sk" />
+      <!-- Fine Hair Lines -->
+      <path d="M 85,36 Q 100,45 115,36" class="lnt" />
+      <!-- Vacant Stare Eyes -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="83" cy="92" r="3" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="117" cy="92" r="3" class="pup" />
+      <!-- Tiny Button Nose & Simple Smile -->
+      <path d="M 98,96 Q 103,96 101,100 Q 98,102 96,98" class="sk" />
+      <path d="M 88,128 Q 100,134 112,128" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 5. EXPLORER — The Angry Groundskeeper      -->
+    <!-- ========================================== -->
+    <symbol id="preview:Explorer" viewBox="0 0 200 240">
+      <!-- Massive Forearms & Utility Vest -->
+      <path d="M 46,160 C 22,165 12,190 28,215 C 38,225 52,220 54,200 Z" class="sk" />
+      <path d="M 154,160 C 178,165 188,190 172,215 C 162,225 148,220 146,200 Z" class="sk" />
+      <path d="M 52,180 L 148,180 L 155,220 L 45,220 Z" fill="#7B341E" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 70,180 L 70,220 M 130,180 L 130,220" class="ln" />
+      <!-- Weathered Head & Wild Red Hair/Beard -->
+      <path d="M 68,160 L 68,185 L 132,185 L 132,160 C 146,145 148,120 144,90 C 140,45 125,35 100,35 C 75,35 60,45 56,90 C 52,120 54,145 68,160 Z" class="sk" />
+      <path d="M 58,70 C 50,40 75,25 100,25 C 125,25 150,40 142,70 Z" fill="#C53030" stroke="#111" stroke-width="3.5" />
+      <path d="M 60,115 C 55,145 70,170 100,170 C 130,170 145,145 140,115 C 125,125 75,125 60,115 Z" fill="#C53030" stroke="#111" stroke-width="3.5" />
+      <!-- Squint Eyes & Crooked Nose -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 65,85 Q 83,80 101,87 L 65,87 Z" class="sk" />
+      <path d="M 99,87 Q 117,80 135,85 L 99,85 Z" class="sk" />
+      <path d="M 97,90 L 103,96 L 98,100 C 95,104 102,106 104,103" class="sk" />
+      <path d="M 80,132 Q 100,122 120,132" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 6. HERO — The Action Movie Star            -->
+    <!-- ========================================== -->
+    <symbol id="preview:Hero" viewBox="0 0 200 240">
+      <!-- Massive Shoulders & Armour -->
+      <path d="M 30,175 L 70,165 L 100,180 L 130,165 L 170,175 L 180,220 L 20,220 Z" fill="#4A5568" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <!-- Heavy Square Jaw Head -->
+      <path d="M 55,165 L 55,188 L 145,188 L 145,165 C 162,155 165,120 155,85 C 148,40 130,30 100,30 C 70,30 52,40 45,85 C 35,120 38,155 55,165 Z" class="sk" />
+      <!-- Flat Buzz Cut -->
+      <path d="M 48,70 L 152,70 L 145,45 C 130,32 70,32 55,45 Z" fill="#4A2E10" stroke="#111" stroke-width="3.5" />
+      <!-- Tiny Intense Eyes & Heavy Brow -->
+      <circle cx="83" cy="92" r="12" class="eye" /><circle cx="84" cy="92" r="2.5" class="pup" />
+      <circle cx="117" cy="92" r="12" class="eye" /><circle cx="116" cy="92" r="2.5" class="pup" />
+      <rect x="65" y="74" width="32" height="8" rx="2" fill="#111" />
+      <rect x="103" y="74" width="32" height="8" rx="2" fill="#111" />
+      <!-- Block Nose & Stern Lip -->
+      <path d="M 96,92 L 104,92 L 104,105 L 96,105 Z" class="sk" />
+      <line x1="82" y1="135" x2="118" y2="135" class="ln" />
+      <path d="M 80,155 Q 100,165 120,155" class="lnf" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 7. JESTER — The TV Clown                   -->
+    <!-- ========================================== -->
+    <symbol id="preview:Jester" viewBox="0 0 200 240">
+      <!-- Performer Outfit (Purple/Teal) -->
+      <path d="M 45,182 L 155,182 L 165,220 L 35,220 Z" fill="#805AD5" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 70,182 L 100,210 L 130,182" fill="#319795" stroke="#111" stroke-width="3" />
+      <circle cx="100" cy="200" r="6" fill="#E53E3E" stroke="#111" stroke-width="2" />
+      <!-- Round-Wide Head & White Face Paint -->
+      <path d="M 64,160 L 64,185 L 136,185 L 136,160 C 155,140 152,95 140,70 C 128,40 115,35 100,35 C 85,35 72,40 60,70 C 48,95 45,140 64,160 Z" class="sk" />
+      <path d="M 60,90 C 56,125 60,158 78,166 C 92,172 108,172 122,166 C 140,158 144,125 140,90 C 132,74 122,70 100,70 C 78,70 68,74 60,90 Z" fill="#FFF" stroke="#111" stroke-width="3.5" />
+      <!-- Cyan Side Hair Tufts -->
+      <path d="M 58,75 C 45,70 30,78 22,62 C 15,48 28,42 20,28 C 32,25 40,38 48,30 C 52,22 60,32 64,48 Z" fill="#319795" stroke="#111" stroke-width="3.5" />
+      <path d="M 142,75 C 155,70 170,78 178,62 C 185,48 172,42 180,28 C 168,25 160,38 152,30 C 148,22 140,32 136,48 Z" fill="#319795" stroke="#111" stroke-width="3.5" />
+      <!-- Eyes & Heavy Lids -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 65,92 C 65,82 83,74 101,84 L 65,84 Z" class="sk" />
+      <path d="M 99,84 C 117,74 135,82 135,92 L 99,84 Z" class="sk" />
+      <!-- Red Nose & Wide Laugh -->
+      <circle cx="100" cy="102" r="10" fill="#E53E3E" stroke="#111" stroke-width="3" />
+      <path d="M 76,125 C 76,150 124,150 124,125 Z" fill="#718096" stroke="#111" stroke-width="3" />
+      <path d="M 82,125 Q 100,135 118,125" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 8. LOVER — The Patient Wife                -->
+    <!-- ========================================== -->
+    <symbol id="preview:Lover" viewBox="0 0 200 240">
+      <!-- Tall Blue Hair Tower (Rises above base) -->
+      <path d="M 68,52 C 60,50 62,35 64,-30 C 65,-65 66,-100 100,-100 C 134,-100 135,-65 136,-30 C 138,35 140,50 132,52 Z" fill="#2B6CB0" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 72,-80 Q 100,-72 128,-80 M 70,-40 Q 100,-30 130,-40 M 68,0 Q 100,10 132,0" fill="none" stroke="#111" stroke-width="2.5" />
+      <!-- Green Romantic Blouse & Pearls -->
+      <path d="M 50,182 L 150,182 L 160,220 L 40,220 Z" fill="#38A169" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <circle cx="76" cy="177" r="4.5" fill="#FFF" stroke="#111" stroke-width="2" />
+      <circle cx="88" cy="184" r="4.5" fill="#FFF" stroke="#111" stroke-width="2" />
+      <circle cx="100" cy="186" r="4.5" fill="#FFF" stroke="#111" stroke-width="2" />
+      <circle cx="112" cy="184" r="4.5" fill="#FFF" stroke="#111" stroke-width="2" />
+      <circle cx="124" cy="177" r="4.5" fill="#FFF" stroke="#111" stroke-width="2" />
+      <!-- Head & Warm Eyes -->
+      <path d="M 70,160 L 70,185 L 130,185 L 130,160 C 142,145 142,90 138,50 C 135,20 120,15 100,15 C 80,15 65,20 62,50 C 58,90 58,145 70,160 Z" class="sk" />
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <!-- Eyelashes & Soft Smile -->
+      <path d="M 66,82 L 60,78 M 68,78 L 64,72 M 134,82 L 140,78 M 132,78 L 136,72" stroke="#111" stroke-width="2.5" />
+      <path d="M 96,92 C 92,102 92,106 102,105 C 108,105 108,100 102,98" class="sk" />
+      <path d="M 84,128 Q 100,136 116,128" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 9. MAGICIAN — The Ancient Billionaire      -->
+    <!-- ========================================== -->
+    <symbol id="preview:Magician" viewBox="0 0 200 240">
+      <!-- Blue Robe / Hunched Body -->
+      <path d="M 45,210 C 42,185 62,175 75,172 L 78,190 L 122,190 L 125,172 C 138,175 158,185 155,210 Z" fill="#2B6CB0" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 78,178 Q 90,188 96,182 M 122,178 Q 110,188 104,182" class="lnt" />
+      <!-- Angular Receding Skull -->
+      <path d="M 68,160 L 68,185 L 132,185 L 132,160 C 140,140 135,115 130,85 C 122,35 110,30 92,30 C 70,30 62,45 58,85 C 55,115 58,135 68,160 Z" class="sk" />
+      <!-- Wispy Combover -->
+      <path d="M 56,80 C 50,45 80,32 100,32" stroke="#718096" stroke-width="3" fill="none" />
+      <path d="M 54,88 C 46,40 85,26 108,26" stroke="#718096" stroke-width="3" fill="none" />
+      <path d="M 58,95 C 48,50 92,20 118,20" stroke="#718096" stroke-width="3" fill="none" />
+      <!-- Pinpoint Pupils & Sharp Beak Nose -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="83" cy="92" r="1.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="117" cy="92" r="1.5" class="pup" />
+      <path d="M 98,92 L 108,102 C 110,108 100,108 96,105" class="sk" />
+      <!-- Cynical Sharp Mouth -->
+      <path d="M 85,130 L 115,122 L 110,135 Z" fill="#111" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 10. REBEL — The Career Criminal           -->
+    <!-- ========================================== -->
+    <symbol id="preview:Rebel" viewBox="0 0 200 240">
+      <!-- Leather Jacket Body -->
+      <path d="M 45,182 L 155,182 L 165,220 L 35,220 Z" fill="#2D3748" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 45,182 L 85,220 M 155,182 L 115,220" class="ln" />
+      <!-- Angular Head & Mullet Hair -->
+      <path d="M 68,160 L 68,185 L 132,185 L 132,160 C 140,140 135,115 130,85 C 122,35 110,30 92,30 C 70,30 62,45 58,85 C 55,115 58,135 68,160 Z" class="sk" />
+      <path d="M 58,65 C 50,35 80,25 100,25 C 120,25 150,35 142,65 C 135,45 65,45 58,65 Z" fill="#4A2E10" stroke="#111" stroke-width="3.5" />
+      <path d="M 52,85 C 40,100 42,135 48,150 M 148,85 C 160,100 158,135 152,150" fill="#4A2E10" stroke="#111" stroke-width="3.5" />
+      <!-- Half-Lidded Eyes & Cocky Smirk -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 65,92 C 65,82 83,74 101,84 L 65,84 Z" class="sk" />
+      <path d="M 99,84 C 117,74 135,82 135,92 L 99,84 Z" class="sk" />
+      <path d="M 97,90 L 103,96 L 98,100 C 95,104 102,106 104,103" class="sk" />
+      <path d="M 85,128 Q 110,138 122,120" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 11. SAGE — The Strict Principal            -->
+    <!-- ========================================== -->
+    <symbol id="preview:Sage" viewBox="0 0 200 240">
+      <!-- Blazer & Tie Body -->
+      <path d="M 48,182 L 152,182 L 160,220 L 40,220 Z" fill="#2B6CB0" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 80,182 L 100,205 L 120,182" fill="#FFF" stroke="#111" stroke-width="2" />
+      <polygon points="96,192 104,192 106,220 94,220" fill="#C53030" stroke="#111" stroke-width="2" />
+      <!-- Elongated Thin Head -->
+      <path d="M 70,160 L 70,185 L 130,185 L 130,160 C 142,145 142,90 138,50 C 135,20 120,15 100,15 C 80,15 65,20 62,50 C 58,90 58,145 70,160 Z" class="sk" />
+      <path d="M 62,50 Q 100,35 138,50 L 136,38 Q 100,20 64,38 Z" fill="#718096" stroke="#111" stroke-width="3" />
+      <!-- Eyes, Nasolabial Folds & Stern Lips -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 88,106 C 80,115 78,130 82,142" class="lnf" />
+      <path d="M 112,106 C 120,115 122,130 118,142" class="lnf" />
+      <path d="M 96,92 C 92,102 92,106 102,105 C 108,105 108,100 102,98" class="sk" />
+      <line x1="84" y1="132" x2="116" y2="132" class="ln" />
+    </symbol>
+
+    <!-- ========================================== -->
+    <!-- 12. SOVEREIGN — The Corrupt Mayor          -->
+    <!-- ========================================== -->
+    <symbol id="preview:Sovereign" viewBox="0 0 200 240">
+      <!-- Suit, Tie & Mayor Sash -->
+      <path d="M 45,182 L 155,182 L 165,220 L 35,220 Z" fill="#1A202C" stroke="#111" stroke-width="3.5" stroke-linejoin="round" />
+      <path d="M 80,182 L 100,205 L 120,182" fill="#FFF" stroke="#111" stroke-width="2" />
+      <polygon points="97,192 103,192 107,220 93,220" fill="#C53030" stroke="#111" stroke-width="2" />
+      <path d="M 50,220 L 135,182 L 150,182 L 65,220 Z" fill="#ECC94B" stroke="#111" stroke-width="2" />
+      <!-- Heavy Square Jaw Head -->
+      <path d="M 55,165 L 55,188 L 145,188 L 145,165 C 162,155 165,120 155,85 C 148,40 130,30 100,30 C 70,30 52,40 45,85 C 35,120 38,155 55,165 Z" class="sk" />
+      <path d="M 52,70 C 48,40 75,28 100,28 C 125,28 152,40 148,70 C 130,48 70,48 52,70 Z" fill="#1A202C" stroke="#111" stroke-width="3.5" />
+      <!-- Eyes & Heavy Lids -->
+      <circle cx="83" cy="92" r="18" class="eye" /><circle cx="85" cy="92" r="3.5" class="pup" />
+      <circle cx="117" cy="92" r="18" class="eye" /><circle cx="115" cy="92" r="3.5" class="pup" />
+      <path d="M 65,92 C 65,82 83,74 101,84 L 65,84 Z" class="sk" />
+      <path d="M 99,84 C 117,74 135,82 135,92 L 99,84 Z" class="sk" />
+      <!-- Pig Snout / Nose & Gummy Smirk -->
+      <path d="M 88,92 C 86,108 114,108 112,92 C 112,88 88,88 88,92 Z" class="sk" />
+      <ellipse cx="94" cy="98" rx="3.5" ry="4" class="pup" />
+      <ellipse cx="106" cy="98" rx="3.5" ry="4" class="pup" />
+      <path d="M 80,128 Q 105,148 122,126" class="ln" />
+    </symbol>
+  </defs>
+</svg>
