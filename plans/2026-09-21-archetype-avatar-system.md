@@ -173,7 +173,7 @@ describe('ARCHETYPE_CONFIGS', () => {
     expect(Object.keys(ARCHETYPE_CONFIGS)).toHaveLength(48);
   });
 
-  it('every entry has all required fields', () => {
+  it('every entry has all required fields including hat and expression', () => {
     for (const [key, config] of Object.entries(ARCHETYPE_CONFIGS)) {
       expect(config.head, `${key}.head`).toBeTruthy();
       expect(config.hair, `${key}.hair`).toBeTruthy();
@@ -181,6 +181,9 @@ describe('ARCHETYPE_CONFIGS', () => {
       expect(config.eyebrows, `${key}.eyebrows`).toBeTruthy();
       expect(config.props, `${key}.props`).toBeInstanceOf(Array);
       expect(config.props.length, `${key}.props`).toBeGreaterThanOrEqual(1);
+      // hat and expression are nullable — verify field exists (even if null)
+      expect('hat' in config, `${key} missing hat field`).toBe(true);
+      expect('expression' in config, `${key} missing expression field`).toBe(true);
     }
   });
 
@@ -261,6 +264,11 @@ describe('encodePreset', () => {
     expect(code).toMatch(/^mythic:P[0-9a-z]+$/i);
   });
 
+  it('preset code length is compact', () => {
+    const code = encodePreset('Sage/Detective');
+    expect(code.length).toBeLessThanOrEqual(12);
+  });
+
   it('accepts custom collection', () => {
     const code = encodePreset('Sage/Detective', 'pixel');
     expect(code).toStartWith('pixel:P');
@@ -268,10 +276,10 @@ describe('encodePreset', () => {
 });
 
 describe('encodeCustom', () => {
-  it('produces a C-prefixed code with 8 base64 chars', () => {
+  it('produces a C-prefixed code with 10 base64 chars (60-bit encoding)', () => {
     const assignment = ARCHETYPE_CONFIGS['Sage/Detective']!;
     const code = encodeCustom({ ...assignment, hair: 'afro-short' });
-    expect(code).toMatch(/^mythic:C.{8}$/);
+    expect(code).toMatch(/^mythic:C.{10}$/);
   });
 });
 
@@ -308,7 +316,7 @@ describe('decodeCode', () => {
 
 - [ ] **Step 3: Implement code.ts**
 
-Part index registries (ordered arrays for each category — head shapes, hairs, etc.) for bit-packing. `encodePreset` produces `{collection}:P{base36(index)}`. `encodeCustom` packs 48 bits into 8 base64 chars with 2-bit version prefix. `decodeCode` reverses both.
+Part index registries (ordered arrays for each category — head shapes, hairs, hats, expressions, etc.) for bit-packing. `encodePreset` produces `{collection}:P{base36(index)}`. `encodeCustom` packs 60 bits into 10 base64 chars with 2-bit version prefix (expanded from original 48-bit to accommodate hat and expression fields). `decodeCode` reverses both.
 
 - [ ] **Step 4: Run tests to verify they pass**
 
@@ -402,7 +410,7 @@ describe('buildAvatar', () => {
     expect(svg).toContain('magnifying');
   });
 
-  it('layers are in correct z-order (costume before head before hair)', () => {
+  it('layers are in correct z-order: costume → head → hair → hat → beard → expression → brow → glasses → props → acc', () => {
     const config = ARCHETYPE_CONFIGS['Sage/Detective']!;
     const palette = FAMILY_PALETTES['Sage']!;
     const registry = getCollection('stub')!;
@@ -509,7 +517,7 @@ describe('mythic collection', () => {
     expect(mythicCollection.id).toBe('mythic');
   });
 
-  it('provides parts for all config-referenced part IDs', () => {
+  it('provides parts for all config-referenced part IDs including hat and expression', () => {
     const neededIds = new Set<string>();
     for (const config of Object.values(ARCHETYPE_CONFIGS)) {
       neededIds.add(`head:${config.head}`);
@@ -518,6 +526,8 @@ describe('mythic collection', () => {
       neededIds.add(`brow:${config.eyebrows}`);
       if (config.facialHair !== 'none') neededIds.add(`beard:${config.facialHair}`);
       if (config.glasses) neededIds.add(`glasses:${config.glasses}`);
+      if (config.hat) neededIds.add(`hat:${config.hat}`);
+      if (config.expression) neededIds.add(`expression:${config.expression}`);
       for (const p of config.props) neededIds.add(`prop:${p}`);
       for (const a of config.accessories) neededIds.add(`acc:${a}`);
     }

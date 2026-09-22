@@ -53,43 +53,40 @@
 | `specs/issue-167-archetype-avatar-system/donut-creek-extras.parts.svg` | Donut Creek character modifiers (27) |
 | `specs/issue-167-archetype-avatar-system/donut-creek-cast.preview.svg` | Cast preview (12 Springfield residents) |
 | `specs/issue-167-archetype-avatar-system/neon.parts.svg` | Neon collection (354 symbols) |
-| `specs/issue-167-archetype-avatar-system/shared-expanded-parts.svg` | Blueprint style expanded vocab (123) |
+| `specs/issue-167-archetype-avatar-system/shared-expanded-parts.svg` | Blueprint style expanded vocab (123, IDs remapped to canonical) |
 | `specs/issue-167-archetype-avatar-system/shared-expressions-hats.svg` | Blueprint style expressions + hats (66) |
+| `specs/issue-167-archetype-avatar-system/scummbar.parts.svg` | Scummbar pixel art collection (166 symbols, structural draft) |
+| `specs/issue-167-archetype-avatar-system/scummbar-cast.md` | Game character × archetype reference (96 characters, 15 palettes) |
 | `specs/issue-167-archetype-avatar-system/hands-exploration.html` | Hands prototype (reference for #168) |
 | `specs/issue-167-archetype-avatar-system/hands-reference-issue-168.svg` | Hand gesture SVGs (20) |
 | `specs/issue-167-archetype-avatar-system/grok-geometric.parts.svg` | Grok's bauhaus alternative (reference) |
 | `specs/issue-167-archetype-avatar-system/expanded-vocab-preview.html` | Visual catalogue of all expanded parts |
-| `plans/2026-09-21-archetype-avatar-system.md` | Implementation plan (5 batches, 8 tasks) |
+| `plans/2026-09-21-archetype-avatar-system.md` | Implementation plan (5 batches, 8 tasks, updated for expression/hat) |
 
 ### What's Left To Do
 
-**Before implementation (design completion):**
+**Done this session (2026-09-22):**
 
-1. **Remap expanded vocab IDs** — `shared-expanded-parts.svg` and `shared-expressions-hats.svg` use non-standard IDs (`facial-hair:` → `beard:`, `accessory:` → `acc:`, creative names → canonical). Build a mapping table and remap.
+- [x] ~~Remap expanded vocab IDs~~ — `accessory:` → `acc:`, `facial-hair:` → `beard:` in shared-expanded-parts.svg
+- [x] ~~Update part catalogue~~ — expression and hat columns added to all 48 rows, hat-like accessories promoted
+- [x] ~~Update implementation plan~~ — config-table tests, 60-bit encoding, builder z-order, mythic test all updated
+- [x] ~~Scummbar collection~~ — 166 pixel art symbols (structural draft), cast reference with 96 game characters mapped to 48 archetypes
 
-2. **Update part catalogue** — add `expression` and `hat` columns to all 48 archetype assignment rows. Decide which expression and hat each sub-archetype gets.
+**Collection gaps (still needed):**
 
-3. **Update implementation plan** — plan was written before expressions/hats were added. Needs new tasks for the expanded categories and updated config table structure.
+1. **bauhaus** — needs expression and hat symbols in polygon style (currently has neither). 177 → ~250+.
 
-4. **Update compact code encoding** — plan references 48-bit encoding, spec now says 60-bit (10 base64 chars). Plan's Task 3 (code.ts) needs updating.
+2. **donut-creek** — needs expression and hat symbols in overbite style. Has face extras already but they need formalising as expressions.
 
-**Collection gaps:**
+3. **mythic** — needs full parts.svg built from the avatar-preview.html roots + catalogue. Currently only has 12 roots as HTML, not a proper SVG parts file.
 
-5. **bauhaus** — needs expression and hat symbols in polygon style (currently has neither). 177 → ~250+.
+4. **neon** — already has expressions, faces, and hats from the expanded merge. Complete.
 
-6. **donut-creek** — needs expression and hat symbols in overbite style. Has face extras already but they need formalising as expressions.
-
-7. **mythic** — needs full parts.svg built from the avatar-preview.html roots + catalogue. Currently only has 12 roots as HTML, not a proper SVG parts file.
-
-8. **neon** — already has expressions, faces, and hats from the expanded merge. May need ID remapping for consistency.
-
-**Future collections:**
-
-9. **scummbar** — LucasArts adventure game pixel art style. Inspired by: Monkey Island, Day of the Tentacle, Maniac Mansion, Discworld, Sam & Max, Full Throttle, Grim Fandango, Beneath a Steel Sky, Broken Sword. Higher res than original (32×48 grid upscaled to 200×240). Hard pixel edges, limited palette per family (8-12 colours), dithering for gradients. The finale collection.
+5. **scummbar** — structural draft done (166 symbols). Needs Gemini version for comparison, then refinement pass informed by cast reference. Ask Gemini to produce its own version using scummbar-cast.md as the design brief.
 
 **Implementation (when design is complete):**
 
-10. **Execute implementation plan** — Batch 1: types + config + encoding. Batch 2: builder + collection registry. Batch 3: mythic SVG parts + extract script. Batch 4: component + DiceBear removal. Batch 5: FullAgentDescriptor wiring.
+6. **Execute implementation plan** — Batch 1: types + config + encoding. Batch 2: builder + collection registry. Batch 3: mythic SVG parts + extract script. Batch 4: component + DiceBear removal. Batch 5: FullAgentDescriptor wiring.
 
 ### Compact Code System (for reference)
 
