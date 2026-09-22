@@ -456,17 +456,45 @@ At a glance, you see every collection's interpretation of all 12 families. Pick 
 
 **Note on rendering:** The `<use href>` examples above are illustrative of the ID convention. In practice, preview SVG content is inlined into the DOM rather than referenced via external `<use href>` — cross-origin `<use>` with external SVG files is unreliable across browsers (CORS restrictions, shadow DOM limitations). The theme browser loads the preview file via fetch, extracts symbols, and renders them inline — the same approach as the parts file.
 
+### Collection Metadata
+
+Each collection declares a `style` tag. **Parts with the same style tag compose naturally — they share stroke weight, fill mode, shape language, and proportions.** Parts across styles do not compose and the builder warns if mixed.
+
+```typescript
+interface CollectionManifest {
+  id: string;                    // e.g., 'donut-creek'
+  name: string;                  // e.g., 'Donut Creek'
+  style: string;                 // composability tag — e.g., 'overbite'
+  styleProperties: {
+    strokeWeight: number;        // outline thickness (px)
+    fillMode: 'solid' | 'none' | 'mixed';
+    outline: boolean;            // has visible outlines
+    glow: boolean;               // has bloom/glow effects
+  };
+  files: {
+    parts: string;               // URL to {collection}.parts.svg
+    extras?: string;             // URL to optional extras file (same style, composes freely)
+    preview: string;             // URL to {collection}.preview.svg
+  };
+}
+```
+
+| Style Tag | Description | Stroke | Fill | Collections |
+|---|---|---|---|---|
+| `overbite` | Bold outlines, flat fills, TV animation | 3.5px | solid | donut-creek, donut-creek-homer |
+| `geometric-polygon` | Hard angles, polygon shapes, Bauhaus | 4px | solid | bauhaus |
+| `wireframe-glow` | Neon strokes, bloom effects, dark bg | 2px | none | neon |
+| `wireframe-clean` | Clean thin strokes, minimal fills | 1.5px | mixed | blueprint |
+| `flat-illustration` | Organic curves, naturalistic | 2px | solid | mythic |
+
+**Composability rule:** A collection's parts file and its extras file MUST share the same style. When composing an avatar, ALL layers must come from files with the same `style` tag. The builder validates this — a `wireframe-clean` hat on a `overbite` avatar produces a warning and falls back to the collection's own hat (if available) or omits the layer.
+
+**Multi-file collections:** Collections with the same `style` tag can share parts freely. donut-creek and donut-creek-homer both use `overbite` — parts from either file compose without visual tension. This enables base + extras split (donut-creek.parts.svg + donut-creek-extras.parts.svg) where both files are authored in the same style.
+
 ### Collection Loading
 
 ```typescript
-interface AvatarCollection {
-  id: string;
-  partsUrl: string;       // URL to {collection}.parts.svg
-  previewUrl: string;     // URL to {collection}.preview.svg
-  parts: Map<string, string>;  // populated after load: symbol ID → SVG content
-}
-
-async function loadCollection(id: string, partsUrl: string, previewUrl: string): Promise<AvatarCollection>;
+async function loadCollection(manifest: CollectionManifest): Promise<AvatarCollection>;
 function registerCollection(collection: AvatarCollection): void;
 ```
 
