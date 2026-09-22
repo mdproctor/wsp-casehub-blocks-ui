@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html><head><meta charset="UTF-8">
+<title>Hands Preview — Donut Creek Style</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:system-ui,sans-serif;background:#1a1a2e;color:#e0e0e0;padding:32px;max-width:1200px;margin:0 auto}
+h1{font-size:22px;margin-bottom:4px}
+.sub{font-size:13px;color:#888;margin-bottom:24px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:#252540;border-radius:12px;padding:12px;text-align:center}
+.name{font-size:12px;color:#888;margin-top:6px}
+.hand-type{font-size:10px;color:#555;margin-top:2px}
+h2{font-size:16px;margin:32px 0 12px}
+.row{display:flex;gap:16px;flex-wrap:wrap;margin-bottom:24px}
+.part-card{background:#252540;border-radius:8px;padding:8px;text-align:center;width:100px}
+.part-label{font-size:9px;color:#888;margin-top:4px}
+</style>
+</head><body>
+<h1>Hands Preview — Donut Creek Style</h1>
+<p class="sub">Composable hand layer — sits between costume and props in the z-order</p>
+
+<h2>Hand Types (isolated)</h2>
+<div class="row">
+
+  <!-- Open palm — Caregiver -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="30 150 140 100" width="120" height="86">
+      <!-- Left arm -->
+      <path d="M42,240 L42,210 Q42,200 50,195" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M42,240 L42,210 Q42,200 50,195" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Left open hand — palm + 4 fingers spread -->
+      <ellipse cx="58" cy="192" rx="14" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <path d="M48,188 L42,172" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M48,188 L42,172" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M53,185 L50,168" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M53,185 L50,168" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M60,184 L60,166" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M60,184 L60,166" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M67,185 L70,170" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M67,185 L70,170" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <!-- Thumb -->
+      <path d="M48,196 L38,192" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M48,196 L38,192" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <!-- Right arm (mirrored) -->
+      <path d="M158,240 L158,210 Q158,200 150,195" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M158,240 L158,210 Q158,200 150,195" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="142" cy="192" rx="14" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <path d="M152,188 L158,172" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M152,188 L158,172" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M147,185 L150,168" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M147,185 L150,168" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M140,184 L140,166" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M140,184 L140,166" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M133,185 L130,170" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M133,185 L130,170" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M152,196 L162,192" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M152,196 L162,192" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="part-label">Open palm<br>Caregiver</div>
+  </div>
+
+  <!-- Tented fingers — Magician/Burns -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="30 155 140 95" width="120" height="82">
+      <!-- Left arm -->
+      <path d="M48,240 L48,205 Q48,195 58,190" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M48,240 L48,205 Q48,195 58,190" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Left fingers reaching to centre -->
+      <path d="M58,190 L76,178 L84,174 L92,170 L97,167" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M58,190 L76,178 L84,174 L92,170 L97,167" fill="none" stroke="#FFD900" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right arm -->
+      <path d="M152,240 L152,205 Q152,195 142,190" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M152,240 L152,205 Q152,195 142,190" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Right fingers reaching to centre -->
+      <path d="M142,190 L124,178 L116,174 L108,170 L103,167" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M142,190 L124,178 L116,174 L108,170 L103,167" fill="none" stroke="#FFD900" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Fingertips touching -->
+      <circle cx="97" cy="167" r="3.5" fill="#FFD900" stroke="#111" stroke-width="2"/>
+      <circle cx="100" cy="165" r="3.5" fill="#FFD900" stroke="#111" stroke-width="2"/>
+      <circle cx="103" cy="167" r="3.5" fill="#FFD900" stroke="#111" stroke-width="2"/>
+    </svg>
+    <div class="part-label">Tented fingers<br>Magician</div>
+  </div>
+
+  <!-- Fists — Hero -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="15 170 170 80" width="120" height="56">
+      <!-- Left arm -->
+      <path d="M38,240 L38,210" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M38,240 L38,210" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Left fist -->
+      <rect x="22" y="185" width="32" height="26" rx="7" fill="#FFD900" stroke="#111" stroke-width="3"/>
+      <line x1="31" y1="189" x2="31" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="38" y1="189" x2="38" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="45" y1="189" x2="45" y2="208" stroke="#111" stroke-width="2"/>
+      <ellipse cx="22" cy="200" rx="6" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <!-- Right arm -->
+      <path d="M162,240 L162,210" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M162,240 L162,210" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Right fist -->
+      <rect x="146" y="185" width="32" height="26" rx="7" fill="#FFD900" stroke="#111" stroke-width="3"/>
+      <line x1="155" y1="189" x2="155" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="162" y1="189" x2="162" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="169" y1="189" x2="169" y2="208" stroke="#111" stroke-width="2"/>
+      <ellipse cx="178" cy="200" rx="6" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+    </svg>
+    <div class="part-label">Fists<br>Hero</div>
+  </div>
+
+  <!-- Crossed arms — Rebel -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="25 165 150 85" width="120" height="68">
+      <!-- Back arm (right to left) -->
+      <path d="M155,220 L110,180 L60,190 L35,210" fill="none" stroke="#111" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M155,220 L110,180 L60,190 L35,210" fill="none" stroke="#FFD900" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Front arm (left to right) -->
+      <path d="M35,220 L90,180 L140,190 L165,210" fill="none" stroke="#111" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M35,220 L90,180 L140,190 L165,210" fill="none" stroke="#FFD900" stroke-width="8" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Hands visible at edges -->
+      <ellipse cx="35" cy="215" rx="12" ry="9" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <ellipse cx="165" cy="215" rx="12" ry="9" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+    </svg>
+    <div class="part-label">Crossed arms<br>Rebel</div>
+  </div>
+
+  <!-- Clasped/prayer — Innocent -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="55 160 90 90" width="120" height="120">
+      <!-- Arms coming from sides to centre -->
+      <path d="M60,240 L75,210 Q85,195 92,190" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M60,240 L75,210 Q85,195 92,190" fill="none" stroke="#FFD900" stroke-width="5" stroke-linecap="round"/>
+      <path d="M140,240 L125,210 Q115,195 108,190" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M140,240 L125,210 Q115,195 108,190" fill="none" stroke="#FFD900" stroke-width="5" stroke-linecap="round"/>
+      <!-- Hands pressed together -->
+      <path d="M88,200 L88,175 Q88,165 100,165 Q112,165 112,175 L112,200Z" fill="#FFD900" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <!-- Finger lines -->
+      <line x1="94" y1="170" x2="94" y2="196" stroke="#111" stroke-width="2"/>
+      <line x1="100" y1="167" x2="100" y2="196" stroke="#111" stroke-width="2"/>
+      <line x1="106" y1="170" x2="106" y2="196" stroke="#111" stroke-width="2"/>
+      <!-- Thumbs -->
+      <path d="M88,192 Q82,186 86,180" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+      <path d="M112,192 Q118,186 114,180" fill="none" stroke="#111" stroke-width="3" stroke-linecap="round"/>
+    </svg>
+    <div class="part-label">Clasped hands<br>Innocent</div>
+  </div>
+
+  <!-- Pointing finger — Sovereign -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="25 165 165 85" width="120" height="62">
+      <!-- Left arm at side -->
+      <path d="M40,240 L40,210" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M40,240 L40,210" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <ellipse cx="40" cy="210" rx="11" ry="8" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <!-- Right arm raised to point -->
+      <path d="M160,240 L160,205 Q160,195 155,190" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M160,240 L160,205 Q160,195 155,190" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Right fist (closed, pointing) -->
+      <rect x="142" y="183" width="26" height="20" rx="6" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <line x1="150" y1="186" x2="150" y2="200" stroke="#111" stroke-width="1.5"/>
+      <line x1="156" y1="186" x2="156" y2="200" stroke="#111" stroke-width="1.5"/>
+      <line x1="162" y1="186" x2="162" y2="200" stroke="#111" stroke-width="1.5"/>
+      <!-- Extended index finger — big and clear -->
+      <path d="M168,190 L188,172 L192,176 L174,194Z" fill="#FFD900" stroke="#111" stroke-width="2.5" stroke-linejoin="round"/>
+      <!-- Thumb -->
+      <ellipse cx="142" cy="196" rx="5" ry="8" fill="#FFD900" stroke="#111" stroke-width="2"/>
+    </svg>
+    <div class="part-label">Pointing<br>Sovereign</div>
+  </div>
+
+  <!-- Waving — Jester -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="100 120 100 130" width="120" height="156">
+      <!-- Arm going up -->
+      <path d="M150,240 L155,200 Q158,180 160,170" fill="none" stroke="#111" stroke-width="9" stroke-linecap="round"/>
+      <path d="M150,240 L155,200 Q158,180 160,170" fill="none" stroke="#FFD900" stroke-width="6" stroke-linecap="round"/>
+      <!-- Open hand — fingers spread, waving -->
+      <ellipse cx="162" cy="168" rx="12" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <path d="M155,162 L148,142" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M155,162 L148,142" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M160,158 L158,136" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M160,158 L158,136" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M166,157 L168,135" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M166,157 L168,135" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <path d="M172,160 L178,140" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M172,160 L178,140" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <!-- Thumb out to side -->
+      <path d="M155,172 L142,168" stroke="#111" stroke-width="5" stroke-linecap="round"/>
+      <path d="M155,172 L142,168" stroke="#FFD900" stroke-width="3" stroke-linecap="round"/>
+      <!-- Motion lines -->
+      <path d="M185,128 L192,122" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M188,140 L196,136" stroke="#555" stroke-width="2.5" stroke-linecap="round"/>
+      <path d="M190,152 L196,150" stroke="#555" stroke-width="2" stroke-linecap="round"/>
+    </svg>
+    <div class="part-label">Waving<br>Jester</div>
+  </div>
+
+  <!-- Cupping/holding — Sage -->
+  <div class="part-card" style="width:120px">
+    <svg viewBox="40 165 120 85" width="120" height="85">
+      <!-- Arms from sides -->
+      <path d="M48,240 L52,210 Q56,200 65,196" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M48,240 L52,210 Q56,200 65,196" fill="none" stroke="#FFD900" stroke-width="5" stroke-linecap="round"/>
+      <path d="M152,240 L148,210 Q144,200 135,196" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M152,240 L148,210 Q144,200 135,196" fill="none" stroke="#FFD900" stroke-width="5" stroke-linecap="round"/>
+      <!-- Cupped hands — big bowl shape -->
+      <path d="M62,210 Q62,190 75,185 L90,182 Q100,180 110,182 L125,185 Q138,190 138,210Z" fill="#FFD900" stroke="#111" stroke-width="3" stroke-linejoin="round"/>
+      <!-- Finger separation lines -->
+      <line x1="75" y1="188" x2="72" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="85" y1="185" x2="82" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="115" y1="185" x2="118" y2="208" stroke="#111" stroke-width="2"/>
+      <line x1="125" y1="188" x2="128" y2="208" stroke="#111" stroke-width="2"/>
+      <!-- Thumbs on outside -->
+      <ellipse cx="62" cy="198" rx="6" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+      <ellipse cx="138" cy="198" rx="6" ry="10" fill="#FFD900" stroke="#111" stroke-width="2.5"/>
+    </svg>
+    <div class="part-label">Cupping/holding<br>Sage</div>
+  </div>
+
+</div>
+
+<h2>Composed Examples — With Hands</h2>
+<p class="sub">Hands layer between costume and props</p>
+<div class="grid">
+
+  <!-- Magician with tented fingers -->
+  <div class="card">
+    <svg viewBox="0 0 200 240" width="128" height="154">
+      <!-- Costume: robes -->
+      <path d="M30,240 L45,145 L155,145 L170,240Z" fill="#2d1b4e" stroke="#111" stroke-width="3.5"/>
+      <path d="M85,145 L100,240 L115,145" fill="#5b3a8c"/>
+      <!-- Tented fingers — arms from sides, fingers meeting at centre -->
+      <!-- Left arm + hand -->
+      <path d="M48,220 L48,200 Q48,192 56,188" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M48,220 L48,200 Q48,192 56,188" fill="none" stroke="#c8a07a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M56,188 L72,178 L80,174 L88,171 L94,169" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M56,188 L72,178 L80,174 L88,171 L94,169" fill="none" stroke="#c8a07a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Right arm + hand -->
+      <path d="M152,220 L152,200 Q152,192 144,188" fill="none" stroke="#111" stroke-width="8" stroke-linecap="round"/>
+      <path d="M152,220 L152,200 Q152,192 144,188" fill="none" stroke="#c8a07a" stroke-width="5" stroke-linecap="round"/>
+      <path d="M144,188 L128,178 L120,174 L112,171 L106,169" fill="none" stroke="#111" stroke-width="6" stroke-linecap="round" stroke-linejoin="round"/>
+      <path d="M144,188 L128,178 L120,174 L112,171 L106,169" fill="none" stroke="#c8a07a" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round"/>
+      <!-- Fingertips touching -->
+      <circle cx="94" cy="169" r="3" fill="#c8a07a" stroke="#111" stroke-width="2"/>
+      <circle cx="100" cy="167" r="3" fill="#c8a07a" stroke="#111" stroke-width="2"/>
+      <circle cx="106" cy="169" r="3" fill="#c8a07a" stroke="#111" stroke-width="2"/>
+      <!-- Head: diamond -->
+      <polygon points="100,45 145,85 155,115 100,168 45,115 55,85" fill="#c8a07a" stroke="#111" stroke-width="3"/>
+      <!-- Eyes -->
+      <circle cx="83" cy="92" r="14" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="117" cy="92" r="14" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="85" cy="92" r="3" fill="#111"/>
+      <circle cx="115" cy="92" r="3" fill="#111"/>
+      <!-- Nose -->
+      <path d="M94,92 C86,92 84,106 96,106 C108,106 110,92 102,92Z" fill="#c8a07a" stroke="#111" stroke-width="2.5"/>
+      <!-- Muzzle + mouth -->
+      <path d="M72,112 C72,98 128,98 128,112 C132,136 116,146 100,146 C80,146 68,132 72,112Z" fill="#b89060" stroke="#111" stroke-width="2.5"/>
+      <path d="M82,128 Q100,122 118,128" fill="none" stroke="#111" stroke-width="2.5"/>
+      <!-- Hair: long flowing dark -->
+      <path d="M65,68 Q58,48 100,38 Q142,48 135,68" fill="#1a1a2e" stroke="#111" stroke-width="2.5"/>
+      <path d="M65,68 Q55,95 48,150" stroke="#1a1a2e" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <path d="M135,68 Q145,95 152,150" stroke="#1a1a2e" stroke-width="8" fill="none" stroke-linecap="round"/>
+      <!-- Goatee -->
+      <path d="M93,140 Q100,155 107,140" fill="#1a1a2e" stroke="#111" stroke-width="2"/>
+      <!-- Pendant -->
+      <circle cx="100" cy="165" r="6" fill="#9b59b6" stroke="#111" stroke-width="2"/>
+      <circle cx="100" cy="165" r="3" fill="#d4a0ff"/>
+    </svg>
+    <div class="name">Magician — "Excellent..."</div>
+    <div class="hand-type">Tented fingers</div>
+  </div>
+
+  <!-- Hero with fists -->
+  <div class="card">
+    <svg viewBox="0 0 200 240" width="128" height="154">
+      <!-- Costume: armour -->
+      <path d="M30,240 L45,150 L155,150 L170,240Z" fill="#8b1a1a" stroke="#111" stroke-width="3.5"/>
+      <polygon points="80,165 120,165 110,210 90,210" fill="#c0c0c0" stroke="#111" stroke-width="2"/>
+      <ellipse cx="50" cy="158" rx="18" ry="12" fill="#c0c0c0" stroke="#111" stroke-width="2"/>
+      <ellipse cx="150" cy="158" rx="18" ry="12" fill="#c0c0c0" stroke="#111" stroke-width="2"/>
+      <!-- Fists -->
+      <rect x="28" y="190" width="28" height="22" rx="6" fill="#c8956a" stroke="#111" stroke-width="2.5"/>
+      <line x1="36" y1="193" x2="36" y2="209" stroke="#111" stroke-width="1.5"/>
+      <line x1="42" y1="193" x2="42" y2="209" stroke="#111" stroke-width="1.5"/>
+      <line x1="48" y1="193" x2="48" y2="209" stroke="#111" stroke-width="1.5"/>
+      <ellipse cx="28" cy="202" rx="5" ry="8" fill="#c8956a" stroke="#111" stroke-width="2"/>
+      <rect x="144" y="190" width="28" height="22" rx="6" fill="#c8956a" stroke="#111" stroke-width="2.5"/>
+      <line x1="150" y1="193" x2="150" y2="209" stroke="#111" stroke-width="1.5"/>
+      <line x1="156" y1="193" x2="156" y2="209" stroke="#111" stroke-width="1.5"/>
+      <line x1="162" y1="193" x2="162" y2="209" stroke="#111" stroke-width="1.5"/>
+      <ellipse cx="172" cy="202" rx="5" ry="8" fill="#c8956a" stroke="#111" stroke-width="2"/>
+      <!-- Head: square jaw -->
+      <polygon points="50,55 150,55 150,135 135,160 65,160 50,135" fill="#c8956a" stroke="#111" stroke-width="3"/>
+      <!-- Eyes -->
+      <circle cx="80" cy="90" r="14" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="120" cy="90" r="14" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="82" cy="90" r="3" fill="#111"/>
+      <circle cx="118" cy="90" r="3" fill="#111"/>
+      <!-- Brow: angular -->
+      <path d="M66,78 L82,70 L96,76" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"/>
+      <path d="M134,78 L118,70 L104,76" fill="none" stroke="#111" stroke-width="3.5" stroke-linecap="round"/>
+      <!-- Muzzle -->
+      <path d="M72,105 C72,92 128,92 128,105 C132,130 116,140 100,140 C80,140 68,130 72,105Z" fill="#d4a060" stroke="#111" stroke-width="2.5"/>
+      <path d="M82,120 L100,126 L118,120" fill="none" stroke="#111" stroke-width="2.5"/>
+      <!-- Buzz cut -->
+      <path d="M50,62 Q50,42 100,36 Q150,42 150,62" fill="#3a2a1a" stroke="#111" stroke-width="2" opacity="0.5"/>
+      <!-- Scar -->
+      <line x1="125" y1="80" x2="130" y2="100" stroke="#aa7a5a" stroke-width="2"/>
+    </svg>
+    <div class="name">Hero — Ready to fight</div>
+    <div class="hand-type">Fists</div>
+  </div>
+
+  <!-- Sovereign with pointing -->
+  <div class="card">
+    <svg viewBox="0 0 200 240" width="128" height="154">
+      <!-- Costume: formal sash -->
+      <path d="M35,240 L50,150 L150,150 L165,240Z" fill="#1a2744" stroke="#111" stroke-width="3.5"/>
+      <path d="M140,150 L60,240" stroke="#8b0000" stroke-width="6" opacity="0.8"/>
+      <rect x="38" y="150" width="20" height="8" fill="#c9a227"/>
+      <rect x="142" y="150" width="20" height="8" fill="#c9a227"/>
+      <!-- Pointing hand (right) -->
+      <rect x="148" y="195" width="20" height="16" rx="4" fill="#c8956a" stroke="#111" stroke-width="2"/>
+      <line x1="154" y1="198" x2="154" y2="208" stroke="#111" stroke-width="1.5"/>
+      <line x1="160" y1="198" x2="160" y2="208" stroke="#111" stroke-width="1.5"/>
+      <path d="M168,200 L185,184 L187,188 L172,204Z" fill="#c8956a" stroke="#111" stroke-width="2" stroke-linejoin="round"/>
+      <ellipse cx="148" cy="204" rx="4" ry="6" fill="#c8956a" stroke="#111" stroke-width="1.5"/>
+      <!-- Left hand at side -->
+      <ellipse cx="40" cy="210" rx="10" ry="7" fill="#c8956a" stroke="#111" stroke-width="2"/>
+      <!-- Head -->
+      <polygon points="55,50 145,50 150,110 130,158 70,158 50,110" fill="#c8956a" stroke="#111" stroke-width="3"/>
+      <!-- Eyes -->
+      <circle cx="82" cy="88" r="13" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="118" cy="88" r="13" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="84" cy="88" r="3" fill="#111"/>
+      <circle cx="116" cy="88" r="3" fill="#111"/>
+      <!-- Slicked hair -->
+      <path d="M55,58 Q55,35 100,30 Q145,35 145,58" fill="#2a2a3a" stroke="#111" stroke-width="2.5"/>
+      <!-- Grey temples -->
+      <path d="M55,58 Q53,50 55,44" fill="#888" opacity="0.6"/>
+      <path d="M145,58 Q147,50 145,44" fill="#888" opacity="0.6"/>
+      <!-- Handlebar moustache -->
+      <path d="M82,110 Q90,115 100,113 Q110,115 118,110" fill="#2a2a3a" stroke="#111" stroke-width="2"/>
+      <path d="M78,111 Q74,108 72,104" stroke="#2a2a3a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <path d="M122,111 Q126,108 128,104" stroke="#2a2a3a" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+      <!-- Muzzle -->
+      <path d="M72,100 C72,90 128,90 128,100 C132,125 116,135 100,135 C80,135 68,125 72,100Z" fill="#d4a060" stroke="#111" stroke-width="2.5"/>
+      <path d="M85,120 Q100,128 115,120" fill="none" stroke="#111" stroke-width="2"/>
+      <!-- Crown -->
+      <polygon points="65,35 65,18 78,28 88,12 100,24 112,12 122,28 135,18 135,35" fill="#c9a227" stroke="#111" stroke-width="2"/>
+      <circle cx="100" cy="28" r="3" fill="#e74c3c"/>
+    </svg>
+    <div class="name">Sovereign — "Vote Quimby!"</div>
+    <div class="hand-type">Pointing finger</div>
+  </div>
+
+  <!-- Caregiver with open palms -->
+  <div class="card">
+    <svg viewBox="0 0 200 240" width="128" height="154">
+      <!-- Costume: vest + cross -->
+      <path d="M35,240 L50,150 L150,150 L165,240Z" fill="#2e5940" stroke="#111" stroke-width="3.5"/>
+      <rect x="90" y="165" width="20" height="30" rx="2" fill="#e8e4dc"/>
+      <rect x="85" y="175" width="30" height="10" rx="2" fill="#e8e4dc"/>
+      <!-- Open hands -->
+      <g>
+        <ellipse cx="38" cy="200" rx="12" ry="9" fill="#8b6f5e" stroke="#111" stroke-width="2.5"/>
+        <path d="M32,192 L28,180 L32,179 L35,190Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M36,190 L34,178 L37,177 L38,189Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M40,190 L40,177 L43,177 L42,189Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M44,192 L46,180 L49,181 L46,193Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+      </g>
+      <g transform="scale(-1,1) translate(-200,0)">
+        <ellipse cx="38" cy="200" rx="12" ry="9" fill="#8b6f5e" stroke="#111" stroke-width="2.5"/>
+        <path d="M32,192 L28,180 L32,179 L35,190Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M36,190 L34,178 L37,177 L38,189Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M40,190 L40,177 L43,177 L42,189Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+        <path d="M44,192 L46,180 L49,181 L46,193Z" fill="#8b6f5e" stroke="#111" stroke-width="1.5"/>
+      </g>
+      <!-- Head: round, dark skin -->
+      <circle cx="100" cy="90" r="42" fill="#8b6f5e" stroke="#111" stroke-width="3"/>
+      <!-- Ears -->
+      <circle cx="56" cy="95" r="9" fill="#8b6f5e" stroke="#111" stroke-width="2"/>
+      <circle cx="144" cy="95" r="9" fill="#8b6f5e" stroke="#111" stroke-width="2"/>
+      <!-- Eyes -->
+      <circle cx="82" cy="88" r="15" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="118" cy="88" r="15" fill="#FFF" stroke="#111" stroke-width="2.5"/>
+      <circle cx="84" cy="88" r="3.5" fill="#111"/>
+      <circle cx="116" cy="88" r="3.5" fill="#111"/>
+      <!-- Warm brows -->
+      <path d="M68,72 Q82,66 96,72" fill="none" stroke="#111" stroke-width="2.5"/>
+      <path d="M104,72 Q118,66 132,72" fill="none" stroke="#111" stroke-width="2.5"/>
+      <!-- Bulbous nose -->
+      <path d="M96,90 C94,98 90,108 100,110 C110,110 110,98 100,98Z" fill="#8b6f5e" stroke="#111" stroke-width="2.5"/>
+      <!-- Moustache -->
+      <path d="M78,118 C74,114 84,108 100,110 C116,108 126,114 122,118 C114,124 86,124 78,118Z" fill="#333" stroke="#111" stroke-width="2"/>
+      <!-- Smile -->
+      <path d="M82,128 Q100,142 118,128" fill="none" stroke="#111" stroke-width="2.5"/>
+      <!-- Afro -->
+      <path d="M56,80 Q48,45 100,35 Q152,45 144,80 Q140,55 100,45 Q60,55 56,80Z" fill="#1a1a1a" stroke="#111" stroke-width="2"/>
+      <path d="M56,80 Q48,70 50,55" fill="#1a1a1a"/>
+      <path d="M144,80 Q152,70 150,55" fill="#1a1a1a"/>
+    </svg>
+    <div class="name">Caregiver — Welcoming</div>
+    <div class="hand-type">Open palms</div>
+  </div>
+
+</div>
+
+</body></html>
