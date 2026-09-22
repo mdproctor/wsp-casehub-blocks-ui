@@ -190,111 +190,111 @@ The definitive mapping — each row is a complete visual identity.
 
 ### Caregiver (head: round, palette: forest green)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Angel | `shoulder-wavy` | none | `soft-wrap` | halo + dove | — | `soft-rounded` | `flower-crown` | Radiant glow behind head, flowing light fabric |
-| Guardian | `afro-short` | `full-round` | `vest-cross` | umbrella + shield-small | — | `thick-straight` | — | Broad stance, protective posture, big beard |
-| Healer | `long-flowing` | none | `soft-wrap` | stethoscope + herb-bundle | — | `concerned` | — | Gentle expression, green herbs, caring hands |
-| Samaritan | `cropped-fringe` | `stubble` | `vest-cross` | bandage + toolkit | — | `soft-rounded` | `headband` | Practical, sleeves-rolled, ready to help |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Angel | `shoulder-wavy` | `flower-crown` | none | `soft-wrap` | halo + dove | — | `soft-rounded` | `rosy-cheeks` | — | Radiant glow behind head, flowing light fabric |
+| Guardian | `afro-short` | — | `full-round` | `vest-cross` | umbrella + shield-small | — | `thick-straight` | `furrowed-brows` | — | Broad stance, protective posture, big beard |
+| Healer | `long-flowing` | — | none | `soft-wrap` | stethoscope + herb-bundle | — | `concerned` | `rosy-cheeks` | — | Gentle expression, green herbs, caring hands |
+| Samaritan | `cropped-fringe` | — | `stubble` | `vest-cross` | bandage + toolkit | — | `soft-rounded` | `sweat-drop` | `headband` | Practical, sleeves-rolled, ready to help |
 
 ### Everyman (head: standard, palette: neutral grey)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Advocate | `cropped-fringe` | none | `polo` | megaphone-small + leaflet | `half-rim` | `raised` | — | Leaning forward, passionate speaker pose |
-| Networker | `slicked` | none | `polo` | phone + business-cards | — | `soft-rounded` | — | Open-handed gesture, warm smile |
-| Servant | `buzz` | none | `plain-shirt` | broom + cloth | — | `concerned` | — | Humble posture, rolled sleeves, simple |
-| Citizen | `afro-short` | `stubble` | `plain-shirt` | clipboard + pen | — | `soft-rounded` | `freckles` | Unremarkable — the most generic avatar |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Advocate | `cropped-fringe` | — | none | `polo` | megaphone-small + leaflet | `half-rim` | `raised` | `raised-brow` | — | Leaning forward, passionate speaker pose |
+| Networker | `slicked` | — | none | `polo` | phone + business-cards | — | `soft-rounded` | `squint-joy` | — | Open-handed gesture, warm smile |
+| Servant | `buzz` | — | none | `plain-shirt` | broom + cloth | — | `concerned` | `flat-brows` | — | Humble posture, rolled sleeves, simple |
+| Citizen | `afro-short` | `baseball-cap` | `stubble` | `plain-shirt` | clipboard + pen | — | `soft-rounded` | — | `freckles` | Unremarkable — the most generic avatar |
 
 ### Creator (head: soft-oval, palette: bold red)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Artist | `messy-bun` | none | `smock` | paintbrush + palette | `cat-eye` | `raised` | `beret`, paint splatters | Colourful chaos, pencil in bun |
-| Entrepreneur | `pixie` | none | `business` | blueprint + laptop | `thick-rect` | `thick-straight` | — | Crisp, driven, pitch-ready |
-| Storyteller | `shoulder-wavy` | `goatee` | `smock` | quill + open-book | — | `raised` | `scarf-bandana` | Narrative gesture, dramatic expression |
-| Visionary | `wild-einstein` | none | `business` | telescope + star-chart | `thick-rect` | `raised` | — | Eyes up, seeing beyond the horizon |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Artist | `messy-bun` | `beret` | none | `smock` | paintbrush + palette | `cat-eye` | `raised` | `sparkle-eyes` | paint splatters | Colourful chaos, pencil in bun |
+| Entrepreneur | `pixie` | — | none | `business` | blueprint + laptop | `thick-rect` | `thick-straight` | `idea-spark` | — | Crisp, driven, pitch-ready |
+| Storyteller | `shoulder-wavy` | — | `goatee` | `smock` | quill + open-book | — | `raised` | `raised-brow` | `scarf-bandana` | Narrative gesture, dramatic expression |
+| Visionary | `wild-einstein` | — | none | `business` | telescope + star-chart | `thick-rect` | `raised` | `starry-eyes` | — | Eyes up, seeing beyond the horizon |
 
 ### Innocent (head: round, palette: cream white)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Child | `cropped-fringe` | none | `simple-dress` | butterfly + dandelion | — | `raised` | `freckles` | Wide eyes, wonder-struck, rosy cheeks |
-| Dreamer | `long-flowing` | none | `simple-dress` | cloud + stars | — | `soft-rounded` | — | Upward gaze, floating sparkles |
-| Idealist | `shoulder-wavy` | none | `simple-dress` | candle + banner | — | `raised` | — | Steady flame, hopeful expression |
-| Muse | `messy-bun` | none | `simple-dress` | spark + music-notes | — | `thin-arched` | `flower-crown` | Luminous aura, ethereal quality |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Child | `cropped-fringe` | — | none | `simple-dress` | butterfly + dandelion | — | `raised` | `rosy-cheeks` | `freckles` | Wide eyes, wonder-struck, rosy cheeks |
+| Dreamer | `long-flowing` | — | none | `simple-dress` | cloud + stars | — | `soft-rounded` | `starry-eyes` | — | Upward gaze, floating sparkles |
+| Idealist | `shoulder-wavy` | — | none | `simple-dress` | candle + banner | — | `raised` | `sparkle-eyes` | — | Steady flame, hopeful expression |
+| Muse | `messy-bun` | `flower-crown` | none | `simple-dress` | spark + music-notes | — | `thin-arched` | `sparkle-eyes` | — | Luminous aura, ethereal quality |
 
 ### Explorer (head: weathered, palette: earth brown)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Adventurer | `windswept` | `rugged` | `utility-vest` | compass + rope | `goggles` | `thick-straight` | `hat-explorer` | Windblown, squinting, rugged gear |
-| Generalist | `shoulder-wavy` | `stubble` | `explorer-jacket` | swiss-army + backpack | — | `soft-rounded` | `scarf-bandana` | Casual competence, many pockets |
-| Pioneer | `braids` | `rugged` | `utility-vest` | flag + machete | `aviator` | `thick-straight` | `headband` | Forward-leaning, trailblazer stance |
-| Seeker | `ponytail` | none | `explorer-jacket` | lantern + journal | — | `concerned` | — | Introspective gaze, walking inward |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Adventurer | `windswept` | `explorer` | `rugged` | `utility-vest` | compass + rope | `goggles` | `thick-straight` | `squint-joy` | — | Windblown, squinting, rugged gear |
+| Generalist | `shoulder-wavy` | — | `stubble` | `explorer-jacket` | swiss-army + backpack | — | `soft-rounded` | — | `scarf-bandana` | Casual competence, many pockets |
+| Pioneer | `braids` | — | `rugged` | `utility-vest` | flag + machete | `aviator` | `thick-straight` | `furrowed-brows` | `headband` | Forward-leaning, trailblazer stance |
+| Seeker | `ponytail` | — | none | `explorer-jacket` | lantern + journal | — | `concerned` | — | — | Introspective gaze, walking inward |
 
 ### Hero (head: square-jaw, palette: crimson)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Athlete | `buzz` | none | `armour` | medal + wristbands | — | `thick-straight` | `headband` | Lean, disciplined, athletic tape on hands |
-| Liberator | `ponytail` | `heavy` | `business` | torch + broken-chain | `aviator` | `angular` | — | Raised torch, fierce determined gaze |
-| Rescuer | `buzz` | `rugged` | `armour` | first-aid + rope | — | `angular` | `scar` | Alert stance, ready-to-move tension |
-| Warrior | `buzz` | none | `armour` | shield + sword-hilt | — | `angular` | `scar` | Broadest shoulders, most imposing silhouette |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Athlete | `buzz` | — | none | `armour` | medal + wristbands | — | `thick-straight` | `furrowed-brows` | `headband` | Lean, disciplined, athletic tape on hands |
+| Liberator | `ponytail` | — | `heavy` | `business` | torch + broken-chain | `aviator` | `angular` | `angry-vein` | — | Raised torch, fierce determined gaze |
+| Rescuer | `buzz` | — | `rugged` | `armour` | first-aid + rope | — | `angular` | `sweat-drop` | `scar` | Alert stance, ready-to-move tension |
+| Warrior | `buzz` | — | none | `armour` | shield + sword-hilt | — | `angular` | `furrowed-brows` | `scar` | Broadest shoulders, most imposing silhouette |
 
 ### Jester (head: round-wide, palette: orange/purple)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Clown | `wild-einstein` | none | `performer` | juggling-balls + red-nose | — | `raised` | — | Big red nose is the instant read |
-| Entertainer | `cropped-fringe` | none | `performer` | microphone + spotlight | — | `raised` | — | Stage presence, dazzling sequins |
-| Provocateur | `mohawk` | `stubble` | `hoodie` | mirror-mask + speech-bubble | — | `asymmetric` | `nose-ring` | Half-mask, subversive smirk |
-| Shapeshifter | `long-flowing` | none | `performer` | playing-cards + shadow-self | `cat-eye` | `thin-arched` | — | Faded duplicate silhouette behind |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Clown | `wild-einstein` | `jester` | none | `performer` | juggling-balls + red-nose | — | `raised` | `squint-joy` | — | Big red nose is the instant read |
+| Entertainer | `cropped-fringe` | — | none | `performer` | microphone + spotlight | — | `raised` | `wink` | — | Stage presence, dazzling sequins |
+| Provocateur | `mohawk` | — | `stubble` | `hoodie` | mirror-mask + speech-bubble | — | `asymmetric` | `raised-brow` | `nose-ring` | Half-mask, subversive smirk |
+| Shapeshifter | `long-flowing` | — | none | `performer` | playing-cards + shadow-self | `cat-eye` | `thin-arched` | `dazed-spirals` | — | Faded duplicate silhouette behind |
 
 ### Lover (head: heart, palette: deep rose)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Companion | `shoulder-wavy` | none | `romantic` | gift-box + scarf-shared | — | `soft-rounded` | — | Warm smile, comfortable steady presence |
-| Hedonist | `slicked` | `stubble` | `romantic` | wine-glass + grapes | — | `thin-arched` | — | Luxurious, sensual, rich textures |
-| Matchmaker | `messy-bun` | none | `romantic` | ribbon + address-book | — | `raised` | — | Connecting gesture, knowing smile |
-| Romantic | `long-flowing` | none | `romantic` | rose + poetry-book | — | `soft-rounded` | `flower-crown` | Most flowing hair, dreamiest expression |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Companion | `shoulder-wavy` | — | none | `romantic` | gift-box + scarf-shared | — | `soft-rounded` | `rosy-cheeks` | — | Warm smile, comfortable steady presence |
+| Hedonist | `slicked` | — | `stubble` | `romantic` | wine-glass + grapes | — | `thin-arched` | `wink` | — | Luxurious, sensual, rich textures |
+| Matchmaker | `messy-bun` | — | none | `romantic` | ribbon + address-book | — | `raised` | `squint-joy` | — | Connecting gesture, knowing smile |
+| Romantic | `long-flowing` | `flower-crown` | none | `romantic` | rose + poetry-book | — | `soft-rounded` | `heart-eyes` | — | Most flowing hair, dreamiest expression |
 
 ### Magician (head: diamond, palette: deep purple)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Alchemist | `long-flowing` | `goatee` | `robes` | glowing-orb + smoke-wisps | — | `thin-arched` | `pendant-amulet` | Mysterious, orb light illuminates face |
-| Engineer | `buzz` | `stubble` | `lab-coat` | wrench-gear + schematic | `goggles` | `thick-straight` | — | Goggles on forehead, systematic precision |
-| Innovator | `pixie` | none | `business` | lightbulb + circuit-traces | — | `raised` | — | Eyes lit up, eureka energy |
-| Scientist | `bald-sides` | `goatee` | `lab-coat` | flask + periodic-table | `pince-nez` | `thick-straight` | — | Peering at flask, empirical focus |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Alchemist | `long-flowing` | — | `goatee` | `robes` | glowing-orb + smoke-wisps | — | `thin-arched` | `sparkle-eyes` | `pendant-amulet` | Mysterious, orb light illuminates face |
+| Engineer | `buzz` | — | `stubble` | `lab-coat` | wrench-gear + schematic | `goggles` | `thick-straight` | — | — | Goggles on forehead, systematic precision |
+| Innovator | `pixie` | — | none | `business` | lightbulb + circuit-traces | — | `raised` | `idea-spark` | — | Eyes lit up, eureka energy |
+| Scientist | `bald-sides` | — | `goatee` | `lab-coat` | flask + periodic-table | `pince-nez` | `thick-straight` | `raised-brow` | — | Peering at flask, empirical focus |
 
 ### Rebel (head: angular, palette: black)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Activist | `braids` | none | `hoodie` | megaphone + raised-fist | — | `angular` | `tattoo` | Fist up, mouth open, rallying cry |
-| Gambler | `slicked` | `stubble` | `leather-jacket` | dice + poker-chip | — | `asymmetric` | `ear-piercings` | Cocky smirk, dice in mid-toss |
-| Maverick | `mohawk` | `heavy` | `leather-jacket` | wrench + motorcycle-key | — | `asymmetric` | `ear-piercings` | Tallest mohawk, most piercings, defiant |
-| Reformer | `undercut` | `heavy` | `hoodie` | hammer + blueprint-torn | — | `angular` | `scar` | Tearing down to rebuild, constructive fury |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Activist | `braids` | — | none | `hoodie` | megaphone + raised-fist | — | `angular` | `angry-vein` | `tattoo` | Fist up, mouth open, rallying cry |
+| Gambler | `slicked` | — | `stubble` | `leather-jacket` | dice + poker-chip | — | `asymmetric` | `wink` | `ear-piercings` | Cocky smirk, dice in mid-toss |
+| Maverick | `mohawk` | — | `heavy` | `leather-jacket` | wrench + motorcycle-key | — | `asymmetric` | `raised-brow` | `ear-piercings` | Tallest mohawk, most piercings, defiant |
+| Reformer | `undercut` | — | `heavy` | `hoodie` | hammer + blueprint-torn | — | `angular` | `furrowed-brows` | `scar` | Tearing down to rebuild, constructive fury |
 
 ### Sage (head: oval, palette: cool blue)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Detective | `bald-sides` | none | `blazer-tie` | magnifying-glass + notebook | `round-wire` | `thin-arched` | — | Scrutinising squint, glass raised |
-| Mentor | `wild-einstein` | `bushy-white` | `tweed-patches` | book-open + chalk | `half-rim` | `bushy-wild` | — | Most hair+beard volume of any archetype |
-| Shaman | `long-flowing` | none | `robes` | crystal-ball + feathers | `pince-nez` | `thin-arched` | `pendant-amulet` | Otherworldly gaze, liminal quality |
-| Translator | `cropped-fringe` | none | `blazer-tie` | scroll + rosetta-stone | `round-wire` | `soft-rounded` | — | Bridging gesture, accessible expression |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Detective | `bald-sides` | — | none | `blazer-tie` | magnifying-glass + notebook | `round-wire` | `thin-arched` | `squint-joy` | — | Scrutinising squint, glass raised |
+| Mentor | `wild-einstein` | — | `bushy-white` | `tweed-patches` | book-open + chalk | `half-rim` | `bushy-wild` | — | — | Most hair+beard volume of any archetype |
+| Shaman | `long-flowing` | — | none | `robes` | crystal-ball + feathers | `pince-nez` | `thin-arched` | `dazed-spirals` | `pendant-amulet` | Otherworldly gaze, liminal quality |
+| Translator | `cropped-fringe` | — | none | `blazer-tie` | scroll + rosetta-stone | `round-wire` | `soft-rounded` | — | — | Bridging gesture, accessible expression |
 
 ### Sovereign (head: strong-sym, palette: navy/gold)
 
-| Sub-Archetype | Hair | Facial Hair | Costume | Props | Glasses | Eyebrows | Accessories | Visual Hook |
-|---------------|------|-------------|---------|-------|---------|----------|-------------|-------------|
-| Ambassador | `slicked` | none | `diplomatic` | olive-branch + treaty | — | `soft-rounded` | — | Open palm gesture, diplomatic smile |
-| Judge | `slicked` | none | `diplomatic` | gavel + scales | `thick-rect` | `thick-straight` | — | Stern, measuring, scales in balance |
-| Patriarch | `slicked` | `handlebar` | `formal-sash` | scepter + family-crest | — | `thick-straight` | `epaulettes` | Most imposing Sovereign, legacy weight |
-| Ruler | `slicked` | `handlebar` | `formal-sash` | crown + orb-of-state | `monocle` | `angular` | `epaulettes` | Crown is the instant read, most gold |
+| Sub-Archetype | Hair | Hat | Facial Hair | Costume | Props | Glasses | Eyebrows | Expression | Accessories | Visual Hook |
+|---------------|------|-----|-------------|---------|-------|---------|----------|------------|-------------|-------------|
+| Ambassador | `slicked` | — | none | `diplomatic` | olive-branch + treaty | — | `soft-rounded` | — | — | Open palm gesture, diplomatic smile |
+| Judge | `slicked` | — | none | `diplomatic` | gavel + scales | `thick-rect` | `thick-straight` | `furrowed-brows` | — | Stern, measuring, scales in balance |
+| Patriarch | `slicked` | — | `handlebar` | `formal-sash` | scepter + family-crest | — | `thick-straight` | `furrowed-brows` | `epaulettes` | Most imposing Sovereign, legacy weight |
+| Ruler | `slicked` | `crown` | `handlebar` | `formal-sash` | crown + orb-of-state | `monocle` | `angular` | — | `epaulettes` | Crown is the instant read, most gold |
 
 ## Family Colour Palettes
 
