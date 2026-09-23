@@ -1,3 +1,6 @@
 - branch: issue-166-agent-setup-wizard
   issue: 166
   paused: 2026-09-21T03:23:48Z
+- branch: issue-158-lsp-schema-refinements
+  issue: 158
+  paused: 2026-09-23T17:50:05Z
