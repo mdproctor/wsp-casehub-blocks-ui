@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-158-lsp-schema-refinements
-state: active
+state: paused
 project-sha: a02d762a4b317743512e0ed996fb2f61f6df954b
 date: 2026-09-16
 issue-repo: casehubio/blocks-ui
