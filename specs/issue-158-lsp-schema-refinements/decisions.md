@@ -86,3 +86,27 @@
 **Sources:** build-bundle.js (existing esbuild pattern), JBCefBrowser API, CefMessageRouter (JS ↔ Kotlin bridge)
 **Exploration:** quick
 **Status:** captured
+
+## D8: Task type categorisation — containers vs leaves
+
+**Choice:** Two categories: container types (Do, Fork) follow the For/Try pattern (header render + children inside, entry in `containerTypes` set), leaf types (Emit, Listen, Run, Wait) follow the Call/Set/Raise pattern (simple card render). All 6 new types are normal-flow tasks (support `then`, not terminal) per OWS 1.0 spec.
+**Alternatives:**
+- Treat Do/Fork as leaf nodes (collapse children) — simpler but hides workflow structure; defeats purpose of visual diagram
+- Treat all 6 as containers (even leaf types) — unnecessary complexity for types that have no children
+**Rationale:** The OWS 1.0 spec clearly distinguishes container types (Do, Fork, For, Try have inline `do:` or `branches:` sub-task lists) from atomic types (Emit, Listen, Run, Wait are single-step operations). The SDK `buildFlatGraph` produces child nodes with `parentId` for containers, confirming the distinction.
+**Trade-offs:** Container stencils require layout integration (containerTypes set, edge visibility rules, container styling). Straightforward since the infrastructure exists.
+**Sources:** OWS 1.0 DSL reference (dsl-reference.md), SDK GraphNodeType enum, swf-diagram.ts:228 containerTypes set, swf-stack-layout.ts container handling
+**Exploration:** quick
+**Status:** captured
+
+## D9: Fork layout — side-by-side parallel columns
+
+**Choice:** Render fork branches as parallel side-by-side columns within the container, reusing the existing column tree layout from the stack-column algorithm. Each branch gets its own column. Show `compete` flag as a badge on the container header.
+**Alternatives:**
+- Stacked rows — simpler but doesn't visually convey parallelism; would look like a sequential `do` block
+- Defer fork layout — add stencil/grammar now but skip container rendering; tackle in #170 when layout infrastructure is improved
+**Rationale:** The stack-column layout already handles switch fan-out via parallel columns. Fork branches have the same visual semantics (concurrent independent paths). Reusing existing layout logic minimises new code. The `compete` badge distinguishes fork-as-race from fork-as-join.
+**Trade-offs:** Fork branches in the SDK are single tasks (not sequences like switch-case branches), so the columns may be narrower. The layout handles variable-width columns correctly (proven in switch tests).
+**Sources:** swf-stack-layout.ts (column tree algorithm), OWS 1.0 spec fork.branches definition
+**Exploration:** quick
+**Status:** captured
