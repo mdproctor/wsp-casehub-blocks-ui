@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-158-lsp-schema-refinements
-state: paused
+state: active
 project-sha: a02d762a4b317743512e0ed996fb2f61f6df954b
 date: 2026-09-16
 issue-repo: casehubio/blocks-ui
@@ -24,3 +24,7 @@ flyway-next-v: none
     - [x] Task 4: Split editor provider + Gradle wiring
   - [x] Batch 3: CI pipeline
     - [x] Task 5: GitHub Actions workflow
+- [ ] casehubio/blocks-ui#172 — SWF 1.0 complete task type stencils and picker filtering
+- [ ] casehubio/blocks-ui#173 — SWF edge click picker and palette drag-to-canvas
+- [ ] casehubio/blocks-ui#170 — Stack-column escape edge optimisation and pages migration
+- [ ] casehubio/blocks-ui#171 — Case diagram deterministic layout for Plans and PlanItems
