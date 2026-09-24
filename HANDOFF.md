@@ -2,68 +2,68 @@
 
 ## Last Session
 
-Extended the IIFE diagram bundle from a read-only viewer into a fully
-interactive editor. 22 commits on blocks-ui, 2 on pages. 17 Playwright
-tests covering all features.
+Diagram stabilisation and pages alignment. Fixed hold-to-drag, splice
+indicators, palette placement. Started custom SWF stack layout to
+replace ELK — needs TDD completion.
 
-### IIFE Bundle Foundation
-- `ignoreAnnotations: true` preserves all web component registrations
-- External stencil rendering (stale dist rebuild)
-- SWF stencils + thumbnail renderer registered
-- Selection outline matches content (`height: auto` on wrapper)
-- `nodesselection-rect` hidden in JCEF shell
+### Pages Alignment
+- Rebuilt pages SNAPSHOT on `issue-433-structural-editing` branch
+- org-diagram: removed 49 lines of duplicate picker code, delegates to DiagramBaseMixin
+- SWF edit policy: `getAddPlacement` returns `splitEdge` for tail insertion
+- `_handlePaletteSelect` override checks `getAddPlacement` before mutation
 
-### Diagram Workbench + Drill-down
-- Case format uses `blocks-diagram-workbench` for drill-down navigation
-- Drilled-down SWF diagrams are editable (removed `readonly`)
-- Drill-down button clickable (buttons at z-index 3 above source-full handle)
+### Hold-to-Drag (pages fixes on `issue-464-orchestration-showcase`)
+- Gesture coordinator blocks `mousedown` alongside `pointerdown` (d3-zoom saw unblocked mousedown)
+- `elementsFromPoint` uses `containerEl.getRootNode()` for shadow DOM compatibility
+- Cursor: `grabbing` on all elements during `node-move-active`
+- Splice indicator: edge identity check prevents clear+reapply flicker
 
-### Node Picker (DiagramBaseMixin — shared)
-- Canvas click and connect-end-on-empty show `PagesNodeChooser`
-- Grammar-derived filtering (outbound allowedTo + inbound allowedFrom)
-- Dynamic filtering (hides types when source at max connections, excludes auto-generated edges)
-- 800ms mouse-leave auto-dismiss
-- `composedPath()` fix for shadow DOM click-outside
+### SWF Stack Layout (IN PROGRESS — needs TDD)
+- `computeSwfStackLayout` in `graph-stencil-swf/src/layout/`
+- Replaces ELK for SWF — instant, no async WASM
+- 12 tests passing: linear pipeline, switch branching, bottom-aligned unequal branches, try/catch containers
+- **BROKEN: column model not correct.** The layout assigns rows and detects forks but does not properly track columns through the full graph. Pre-fork nodes should center across the child columns. Each branch maintains its own column until convergence. The user described the model as "nested stacks" — everything is containers within containers, bottom-aligned at each level.
+- Filed as #169
 
-### Connect-End Auto-Wiring (casehub-diagram)
-- binding→worker: shared capability
-- worker→binding: shared capability (reverse)
-- binding→milestone: condition expression
-- binding→goal / milestone→goal: expression.all
-- New bindings get capability set via `parseDocument`
+### Key Design Insight (from user)
+The SWF layout is nested stacks:
+- `do` array = vertical stack
+- `switch` = horizontal fan-out into columns
+- Each column is its own vertical stack
+- `try/catch` = container with inner stacks
+- Single-column nodes center across the child columns
+- Bottom-aligned: shorter branches align to the bottom of the longest
+- After splice (add/remove), recalculate from the mutation point downward
 
-### Pages Fixes (on pages `main` + `issue-433-structural-editing`)
-- `getNodeTypes()` memoized (stable React Flow handles)
-- Default handle positions for new nodes
-- `isEligible` allows root-children for hold-to-drag
-- Wrapper z-index removed so buttons punch through source-full
-- `PagesNodeChooser` mouse-leave timeout
-
-## Open Issues
-
-Three issues filed for next session:
-
-| # | Title | Priority |
-|---|-------|----------|
-| #163 | SWF palette adds connected instead of standalone | Start here |
-| #164 | Canvas pans during hold-to-drag | After #165 |
-| #165 | Showcase gallery SWF diagram not rendering | Blocks #163/#164 |
+### Issues Addressed
+| # | Title | Status |
+|---|-------|--------|
+| #165 | Showcase gallery SWF diagram not rendering | Fixed — stale `.casehub-packages` |
+| #163 | SWF palette adds connected instead of standalone | Fixed — `getAddPlacement` |
+| #164 | Canvas pans during hold-to-drag | Fixed — mousedown blocking in pages |
+| #169 | ELK compound node spacing / custom layout | In progress — stack layout started |
 
 ## Immediate Next Step
 
-Start with **#165** — get the showcase gallery SWF diagram rendering.
-This is needed to investigate and verify #163 (standalone task add) and
-#164 (hold-to-drag panning), both of which the user reports were working
-in the gallery previously.
+TDD the SWF stack layout properly. The user's model is clear:
+1. Write test cases for the nested-stacks column model
+2. The layout is recursive: each `do` block is a VStack, each `switch` fans into HStack of VStacks
+3. Container sizing flows bottom-up (children determine parent size)
+4. Position assignment flows top-down (parent determines child origin)
+5. Single-column segments center across the width of their child columns
+
+Do NOT use ELK. Do NOT post-process. Get the recursive stack model right.
 
 ## Cross-Module
 
-- pages `main`: graph-renderer fixes (handles, nodeTypes, z-index, coordinator eligibility)
-- pages `issue-433-structural-editing`: DiagramBaseMixin picker + chooser composedPath fix
-- pages-diagram-palette: mouse-leave timeout on PagesNodeChooser
+Pages changes (on `issue-464-orchestration-showcase`):
+- `node-gesture-coordinator.ts` — mousedown blocking
+- `node-move-coordinator.ts` — shadow DOM `elementsFromPoint`, flicker fix
+- `css-isolation.ts` — cursor override during move mode
 
 ## References
 
+- Stack layout: `packages/graph-stencil-swf/src/layout/swf-stack-layout.ts`
+- Stack layout tests: `packages/graph-stencil-swf/src/layout/swf-stack-layout.test.ts`
 - Spec: `specs/issue-158-lsp-schema-refinements/2026-09-17-domain-schema-assembly-design.md`
-- Decisions: `specs/issue-158-lsp-schema-refinements/decisions.md`
-- Playwright tests: `examples/tests/diagram-iife-bundle.spec.ts` (17 tests)
+- Constraint: `packages/blocks-ui-core/src/layout-constraints.ts`
