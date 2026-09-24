@@ -17,6 +17,15 @@ flyway-next-v: none
 - [x] casehubio/blocks-ui#160 — extend yamlSwitchVariant for multi-key patterns
 - [x] casehubio/blocks-ui#161 — domain schema assembly for IntelliJ LSP plugin
 - [ ] casehubio/blocks-ui#172 — SWF 1.0 complete task type stencils and picker filtering ← active
+  - [ ] Batch 1: Grammar foundation + leaf stencils
+    - [ ] Task 1: SDK upgrade + grammar constants + type registration
+    - [ ] Task 2: Update all existing grammars to shared constants
+    - [ ] Task 3: Four leaf stencils Emit Listen Run Wait
+  - [ ] Batch 2: Container stencils + diagram integration
+    - [ ] Task 4: Do and Fork container stencils
+    - [ ] Task 5: Wire containers into swf-diagram + layout tests
+  - [ ] Batch 3: Examples + adapter verification
+    - [ ] Task 6: Example YAML and adapter coverage
 - [ ] casehubio/blocks-ui#173 — SWF edge click picker and palette drag-to-canvas
 - [ ] casehubio/blocks-ui#170 — Stack-column escape edge optimisation and pages migration
 - [ ] casehubio/blocks-ui#171 — Case diagram deterministic layout for Plans and PlanItems
