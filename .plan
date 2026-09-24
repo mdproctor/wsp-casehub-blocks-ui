@@ -15,16 +15,8 @@ flyway-next-v: none
 - [x] casehubio/blocks-ui#158 — Issue #158
 - [x] casehubio/blocks-ui#159 — migrate addElement/addOrgUnit to yamlAppendWithUniqueName
 - [x] casehubio/blocks-ui#160 — extend yamlSwitchVariant for multi-key patterns
-- [ ] casehubio/blocks-ui#161 — domain schema assembly for IntelliJ LSP plugin ← active
-  - [x] Batch 1: Bundle foundation
-    - [x] Task 1: Shared DIAGRAM_TAGS constant
-    - [x] Task 2: Esbuild diagram bundle + HTML shell
-  - [x] Batch 2: IntelliJ split editor
-    - [x] Task 3: JCEF panel + theme + sync
-    - [x] Task 4: Split editor provider + Gradle wiring
-  - [x] Batch 3: CI pipeline
-    - [x] Task 5: GitHub Actions workflow
-- [ ] casehubio/blocks-ui#172 — SWF 1.0 complete task type stencils and picker filtering
+- [x] casehubio/blocks-ui#161 — domain schema assembly for IntelliJ LSP plugin
+- [ ] casehubio/blocks-ui#172 — SWF 1.0 complete task type stencils and picker filtering ← active
 - [ ] casehubio/blocks-ui#173 — SWF edge click picker and palette drag-to-canvas
 - [ ] casehubio/blocks-ui#170 — Stack-column escape edge optimisation and pages migration
 - [ ] casehubio/blocks-ui#171 — Case diagram deterministic layout for Plans and PlanItems
