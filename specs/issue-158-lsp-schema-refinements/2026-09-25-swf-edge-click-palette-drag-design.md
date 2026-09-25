@@ -46,14 +46,22 @@ in SwfDiagram's render (swf-diagram.ts:319-326):
 
 **Type filtering (D10):** Override `_chooserItems()` in SwfDiagram.
 When `_pendingEdgeId` is set, call `getInsertableTypes(edgeId)` on the
-edit policy instead of `_paletteItems()`. The edit policy method filters
-`getCreatableTypes()` through `canSpliceOntoEdge(type, edgeId)` to
-return only grammar-valid types for that edge position.
+edit policy and convert the returned type strings to `PaletteItem[]`
+using the stencil registry. When `_pendingEdgeId` is null, delegate to
+`super._chooserItems()` (existing grammar-filtered list for pane-click
+and connect-end-on-empty flows).
+
+The edit policy method filters `getCreatableTypes()` through
+`canSpliceOntoEdge(type, edgeId)` to return only grammar-valid types
+for that edge position. The component can further narrow this list for
+UX reasons.
 
 `getInsertableTypes` signature change: add optional `edgeId?: string`
-parameter (swf-edit-policy.ts:73-75). The current signature takes no
-args and returns `[]`. Adding an optional parameter is
-backward-compatible — no existing callers break.
+parameter on the SWF implementation only (swf-edit-policy.ts:73-75).
+The EditPolicy interface in pages stays unchanged — TypeScript allows
+implementations to accept additional optional parameters. The current
+implementation takes no args and returns `[]`. No existing callers
+break.
 
 **Select handler (D11):** Override `_onChooserSelect` in SwfDiagram.
 When `_pendingEdgeId` is set:
