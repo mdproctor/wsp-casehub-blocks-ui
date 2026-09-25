@@ -110,3 +110,27 @@
 **Sources:** swf-stack-layout.ts (column tree algorithm), OWS 1.0 spec fork.branches definition
 **Exploration:** quick
 **Status:** captured
+
+## D10: Edge-click type filtering — layered policy + component
+
+**Choice:** `getInsertableTypes(edgeId)` on the edit policy returns grammar-valid types for the clicked edge position by filtering `getCreatableTypes()` through `canSpliceOntoEdge(type, edgeId)`. The diagram component can further narrow the list for UX reasons beyond grammar validity. Policy owns grammar; component owns UX.
+**Alternatives:**
+- All 12 types unfiltered — shows invalid options, rejecting at mutation time is worse UX
+- Leaf types only (hardcoded exclude list) — fragile, doesn't respect grammar context
+**Rationale:** The edit policy already has `canSpliceOntoEdge` and `canConnect` infrastructure. Filtering at the source (picker) prevents invalid insertions rather than catching them at mutation time. Layering lets the component apply additional UX constraints without duplicating grammar logic.
+**Trade-offs:** `getInsertableTypes` gains an `edgeId` parameter (API change). Minor — method currently returns empty array, no existing callers to break.
+**Sources:** swf-edit-policy.ts:66-79 (canSpliceOntoEdge, getInsertableTypes, getCreatableTypes), GraphCanvas.ts:573-578 (graph:edge:click event)
+**Exploration:** quick
+**Status:** captured
+
+## D11: Picker positioning on edge click — reuse existing picker with edge context
+
+**Choice:** Reuse the existing `_showNodePicker` infrastructure with the clicked edgeId as context. The picker's select callback dispatches a `splitEdge` mutation targeting that edge instead of `addNode`. Picker positioning uses the click event coordinates. No new picker UI — same overlay, same UX.
+**Alternatives:**
+- New dedicated `_showPickerAtEdgeClick` method — more explicit but duplicates positioning logic already in the mixin's picker infrastructure
+**Rationale:** The node picker already handles type listing, positioning, and selection callbacks. Edge-click insertion differs only in mutation type (splitEdge vs addNode) and needs the edgeId as context. Passing context through the existing infrastructure is minimal new code and keeps picker UX consistent across all entry points (pane click, connect-end-on-empty, edge click).
+**Trade-offs:** Picker infrastructure gains a context parameter. Acceptable — it's an internal API within the mixin.
+**Depends on:** D10 (type filtering determines what the picker shows)
+**Sources:** diagram-base-mixin.ts:193-215 (_handlePaletteSelect, _handleMutation), swf-diagram.ts:319-326 (event handler switch)
+**Exploration:** quick
+**Status:** captured
