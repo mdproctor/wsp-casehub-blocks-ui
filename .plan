@@ -13,8 +13,8 @@ flyway-next-v: unknown
 
 ## Queue
 - [ ] casehubio/engine#1149 — Issue #1149 ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: Scaffold evolution-config package (types API events)
+  - [x] Batch 1: Foundation
+    - [x] Task 1: Scaffold evolution-config package (types API events)
   - [ ] Batch 2: deny-pattern-editor
     - [ ] Task 2: deny-pattern-editor component
   - [ ] Batch 3: watch-pattern-editor
