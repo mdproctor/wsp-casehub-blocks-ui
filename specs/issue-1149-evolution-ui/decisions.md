@@ -37,3 +37,29 @@
 **Depends on:** D1 (combined spec)
 **Exploration:** quick
 **Status:** captured
+
+## D4: Gate-policy-editor as grouped table with inline mode selectors
+
+**Choice:** Table with stage rows grouped by domain. Columns: stage name, ordinal, gate checkpoint indicator, mode dropdown (GATED/AUTO/NOTIFY). Gate checkpoint stages get three-way dropdown; non-checkpoint stages get AUTO/NOTIFY only. Optional compact pipeline summary above the table as a read-only at-a-glance visualisation.
+**Alternatives:**
+- Horizontal stage pipeline with inline mode controls — visually striking but unwieldy for multi-domain support, harder to scan, fights the data shape (a mapping is a table)
+- Card grid (one card per stage) — wastes space, poor information density
+**Rationale:** The policy is fundamentally a mapping (stage → mode). A table is the most information-dense and scannable representation, consistent with blocks-ui's preferences-editor and mute-list patterns. Multi-domain stage grouping is natural in a grouped table. A pipeline visualisation can complement as a summary header without replacing the editing surface.
+**Trade-offs:** Less visually distinctive than a pipeline view. The pipeline summary is optional read-only decoration.
+**Sources:** GatePolicy.java:21-40 (Map<String, GateMode>), StageDescriptor.java:18 (ordinal, gateCheckpoint, domainId), preferences-editor pattern, grouped-data-view pattern
+**Depends on:** D3 (independent editor elements)
+**Exploration:** quick
+**Status:** captured
+
+## D5: Workbench as summary bar + tabbed content
+
+**Choice:** Compact KPI summary bar (health score, active streams, circuit breaker, compliance) always visible at top. Below: tabbed content for Timeline (blocks-timeline), Streams (pages-table), Inbox (pages-table), Configuration (three editors). Domain extensibility via `TabDefinition[]` — consuming apps add domain-specific tabs.
+**Alternatives:**
+- Split-workbench (left overview, right detail) — follows trust-workbench precedent but awkward for a dashboard that has no natural master-detail relationship; left pane becomes a dashboard-within-a-dashboard
+- Card grid (blocks-plan-model-dashboard pattern) — all sections visible simultaneously; good density but no tab-based extensibility; configuration editors need their own space
+**Rationale:** The evolution workbench is a dashboard, not a master-detail view. A summary bar + tabs provides clean structure with natural tab-based extensibility. Existing `detail-pane` component already supports `TabDefinition[]` with badges, lazy element creation, ARIA tablist, and keyboard navigation. Domain apps (devtown, trading) add tabs for domain-specific views without modifying blocks-ui.
+**Trade-offs:** Only one tab visible at a time — users can't see timeline and streams simultaneously. Mitigated by the summary bar providing at-a-glance health.
+**Sources:** detail-pane (TabDefinition[], badge support), kpi-metric-row (summary bar), D9 engine decision (blocks-ui = composable primitives, apps compose)
+**Depends on:** D3 (package structure), D4 (gate-policy in table form fits a tab)
+**Exploration:** quick
+**Status:** captured
