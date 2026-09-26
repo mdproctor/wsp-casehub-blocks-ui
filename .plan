@@ -21,8 +21,8 @@ flyway-next-v: unknown
     - [x] Task 3: watch-pattern-editor component
   - [x] Batch 4: gate-policy-editor
     - [x] Task 4: gate-policy-editor component
-  - [ ] Batch 5: Workbench
-    - [ ] Task 5: detail-pane standalone mode
-    - [ ] Task 6: evolution-workbench component
+  - [x] Batch 5: Workbench
+    - [x] Task 5: detail-pane standalone mode
+    - [x] Task 6: evolution-workbench component
   - [ ] Batch 6: Finalize
     - [ ] Task 7: Sample page + schema registry + engine issues
