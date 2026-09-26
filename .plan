@@ -17,8 +17,8 @@ flyway-next-v: unknown
     - [x] Task 1: Scaffold evolution-config package (types API events)
   - [x] Batch 2: deny-pattern-editor
     - [x] Task 2: deny-pattern-editor component
-  - [ ] Batch 3: watch-pattern-editor
-    - [ ] Task 3: watch-pattern-editor component
+  - [x] Batch 3: watch-pattern-editor
+    - [x] Task 3: watch-pattern-editor component
   - [ ] Batch 4: gate-policy-editor
     - [ ] Task 4: gate-policy-editor component
   - [ ] Batch 5: Workbench
