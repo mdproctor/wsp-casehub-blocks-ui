@@ -2,56 +2,50 @@
 
 ## Context
 
-Phase 4 of the evolution conductor epic (casehubio/engine#1149). Engine-side work is complete — domain-agnostic SPIs, persistence, wiring, and generic extraction all landed in slot 197 (archived). This slot builds the UI layer in blocks-ui.
+Evolution conductor UI (casehubio/engine#1149, Phase 4). All initial components landed: three configuration editors (#175-#177), workbench shell (#178), sample page (#179). Follow-up epic #188 covers operational completeness.
 
-## Immediate Next Step
+## What Was Built
 
-`work start`. Begin with #175 (deny-pattern-editor) — the three editor components (#175-#177) are independent and can be built in any order. The workbench (#178) depends on all three.
+| Issue | Component | Status |
+|-------|-----------|--------|
+| #175 | `deny-pattern-editor` — static + dynamic deny pattern CRUD | Done |
+| #176 | `watch-pattern-editor` — escalation watch pattern CRUD | Done |
+| #177 | `gate-policy-editor` — per-stage GATED/AUTO/NOTIFY config | Done |
+| #178 | `evolution-workbench` — summary bar + tabbed dashboard | Done |
+| #179 | Sample page with trading risk panel domain extension demo | Done |
+| — | `detail-pane` standalone mode enhancement | Done |
 
-## Key Design Decisions
+Two new packages: `evolution-config/` (shared types/API + 3 editors) and `evolution-workbench/`. 85 tests passing.
 
-From slot 197 spec (`specs/issue-1148-generalise-evolution-conductor/decisions.md`):
+## Engine Issues Filed
 
-- D1: CapabilityArea IS the HealthSensor — no separate health SPI
-- D2: ImprovementCategoryProvider SPI — domains contribute categories with metadata
-- D3: ImprovementProposalSource SPI — domains register proposal generators
-- D8: Domain-contributed improvement stages — stage IDs are strings, not enums
-- D9: blocks-ui gets composable primitives, devtown composes them into the developer workbench
-- D10: Devtown is the first consumer — observes its own development pipeline
+| Issue | What | Why |
+|-------|------|-----|
+| engine#1186 | `getWatchPatterns` | watch-pattern-editor endpoint mode |
+| engine#1187 | `getStages`/`getCategories` | gate-policy-editor stage metadata |
+| engine#1188 | `getGatePolicy` | gate-policy-editor pre-population |
 
-## Existing Components to Reuse
+## What's Next
 
-| Conductor concept | Existing component | Reuse level |
-|---|---|---|
-| Gate decisions | `approval-gate` | Direct |
-| Pending inbox | `notification-inbox`, `work-item-inbox` | High |
-| Health scores | `kpi-metric-row` | Direct |
-| Compliance levels | `compliance-summary` | Direct |
-| Tick history | `event-trail`, `blocks-timeline` | High |
-| Improvement streams | `work-item-detail`, `work-item-row` | High |
-| Audit trail | `audit-trail-viewer` | Direct |
-| Confidence scores | `trust-score-panel` | Partial |
+**Follow-up epic: casehubio/blocks-ui#188 — Evolution conductor UI operational completeness**
 
-## New Components
+| Priority | Issue | Scale | Complexity | Blocked by | Notes |
+|----------|-------|-------|------------|------------|-------|
+| 1 | engine#1186 | XS | Low | — | Unblocks watch-pattern endpoint mode |
+| 1 | engine#1187 | XS | Low | — | Unblocks gate-policy endpoint mode |
+| 1 | engine#1188 | XS | Low | — | Unblocks gate-policy pre-population |
+| 2 | #186 | M | Med | — | Streams tab — pages-table with block/unblock |
+| 2 | #187 | M | Med | — | Inbox tab — pages-table with approve/reject |
+| 3 | #181 | S | Med | engine#1186 | Deny-pattern preview against active streams |
+| 3 | #182 | S | Med | #186 | Gate-policy impact preview |
+| 4 | #183 | S | Low | — | Audit trail tab (reuses audit-trail-viewer) |
+| 4 | #184 | S | Low | — | Health detail tab (reuses trust-score-panel) |
+| 5 | #185 | S | Low | — | Responsive layout |
 
-1. **deny-pattern-editor** (#175) — static + dynamic deny pattern management
-2. **watch-pattern-editor** (#176) — escalation watch pattern CRUD
-3. **gate-policy-editor** (#177) — configure GATED/AUTO/NOTIFY per stage
-
-## Workbench
-
-4. **evolution-workbench** (#178) — composes all of the above into a domain-extensible dashboard
-5. **Sample page** (#179) — reference view any app can adopt
+Engine issues are quick wins (thin adapter methods). Start there, then Streams + Inbox tabs to make the workbench operational.
 
 ## Repos in Slot
 
 - **blocks-ui** (primary) — new components and workbench
 - **blocks** — domain specialisation
-- **engine** — API surface (read-only reference, no changes expected)
-
-## References
-
-- Engine spec: slot 197 workspace `specs/issue-1148-generalise-evolution-conductor/`
-- Engine decisions: slot 197 workspace `specs/issue-1148-generalise-evolution-conductor/decisions.md`
-- Epic: casehubio/blocks-ui#174
-- Parent epic: casehubio/engine#1149
+- **engine** — API surface (3 issues filed for endpoint gaps)
