@@ -1,0 +1,136 @@
+## D1: No JSON manifests — discrimination lives in schema structure
+
+**Choice:** No separate JSON manifest files. The discrimination structure is expressed directly in the Zod schemas via `z.union()`. The schema IS the manifest — no separate artifact to drift.
+**Alternatives:**
+- JSON manifests as declarative documentation — human-readable but a second representation that rots independently of the schemas
+- JSON manifests consumed by generator — highest value but deferred scope (generator infrastructure changes)
+**Rationale:** Hand-written artifacts rot. The Zod union structure is machine-readable, type-checked, and is the actual runtime data — no bridging layer needed. Future generator work can introspect the union schemas if it needs discrimination metadata.
+**Trade-offs:** No cross-language manifest for Java engine consumption. Acceptable: the engine does its own validation via Java types today.
+**Sources:** FormatRegistration interface in pages-lsp/dist/types.d.ts, schema-navigation.js ZodUnion handling
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D2: ZodUnion with sibling narrowing — no variantDispatchers needed
+
+**Choice:** Restructure flat `.passthrough()` schemas into `z.union([variantA, variantB, ...])`. The existing `schemaToCompletions` in pages-lsp already narrows ZodUnion by matching sibling keys against each option's shape. No `variantDispatchers` wiring needed.
+**Alternatives:**
+- Wire variantDispatchers into FormatRegistration — adds dispatch infrastructure but `navigateSchema` doesn't actually consume it (getVariantSchema exists on the interface but isn't called from completion/navigation code)
+- Modify navigateSchema to consult variantDispatchers — requires pages-lsp changes, more moving parts
+**Rationale:** The completion engine already handles ZodUnion correctly: when a variant key is present as a sibling, it filters union options by shape match. When no variant is chosen, it merges all options (correct initial state). `.passthrough()` doesn't interfere because `getShape()` returns only explicitly declared keys. SWF already uses this pattern and it works.
+**Trade-offs:** variantDispatchers infrastructure stays unused. The registry interface already defines it — but wiring data into it adds maintenance for no immediate consumer. Can be revisited if hover/diagnostics needs explicit dispatch.
+**Depends on:** D1 (no manifests means no dispatch data source anyway)
+**Sources:** schema-navigation.js:273-298 (ZodUnion sibling narrowing), schema-navigation.js:167-179 (ZodUnion navigation), lsp-schemas/src/schemas/swf.ts (existing union pattern)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D3: Generator produces union-aware schemas — no hand-written schema files
+
+**Choice:** Enhance the existing `generate-domain-schemas.ts` with a discriminator config per format. The generator reads the config, splits flat TypeScript types into `z.union()` schemas at discrimination points. Generated schemas replace hand-written schemas for case, org, and htn. SWF keeps its hand-written schema (source types are flat `Record<string, unknown>[]` — CNCF task structure isn't in the TS types).
+**Alternatives:**
+- Hand-written schemas with staleness tests — works but rots as user noted; maintenance burden for ~200 lines of schema code that duplicates generated output
+- Programmatic schema transform (import generated flat schema, runtime-split into unions) — avoids hand-written schemas but introspects Zod `_def` internals, fragile across Zod versions
+**Rationale:** The generator already has `discriminatorManifest?: string` on `FormatConfig` (line 15) — designed for this but never implemented. A small TypeScript config file (~20 lines per format) maps type names to variant keys. The generator separates properties into common vs variant groups and produces `z.union([common.extend({variant}), ...])`. Generated code uses only stable public API (`z.object()`, `.extend()`, `z.union()`). The config is validated at generation time — if a variant key doesn't exist in the TypeScript type, ts-morph throws.
+**Trade-offs:** Generator becomes more complex (~50 lines of new logic). Acceptable: it's build-time code, not runtime, and eliminates hand-written schema maintenance entirely. SWF remains hand-written as the one exception.
+**Depends on:** D2 (union-based narrowing is what makes generated unions work for completion)
+**Sources:** generate-domain-schemas.ts (existing generator with discriminatorManifest hook), ts-to-zod @discriminator JSDoc pattern (prior art — we use config file instead since source types are auto-generated from engine), Zod v4 deprecation of z.discriminatedUnion (z.union() is the stable path)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D4: Native-first hybrid architecture, delivered progressively
+
+**Choice:** Target architecture is native IntelliJ for text editor (existing LSP), tree (custom PsiStructureViewFactory), and property panel (native typed form editors). Visual diagram is JCEF via TextEditorWithPreview. Structural editing reimplemented in Kotlin with shared validation rules. Delivered in three phases: (1) JCEF diagram split editor, (2) native tree + property panel, (3) structural editing with clipboard bridge.
+**Alternatives:**
+- JCEF-heavy — tree + diagram + properties all in JCEF. Maximum code reuse from web components but non-native feel, higher memory, split UX between native editor and web panels.
+- Diagram-only without progressive layering — ships faster but no path to structural editing or native tree.
+**Rationale:** Native IntelliJ components for tree and properties give the best UX and integrate with IntelliJ's undo, VCS, and search. JCEF is reserved for the visual diagram where no native equivalent exists. Progressive delivery lets each phase ship independently and learn from usage.
+**Trade-offs:** Structural editing logic exists in two implementations (Kotlin + TypeScript). Mitigated by shared validation rules expressed as data (JSON config per format) and shared clipboard format (serialized YAML fragments).
+**Sources:** pages-builder-shell (existing workbench pattern), TextEditorWithPreview (IntelliJ API), structural-editing-design.md (clipboard spec)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D5: Workbench SPI — Zod schema + visual component only
+
+**Choice:** Format registration for the extensible workbench is just two things: the Zod schema and the visual editor component tag name. Tree structure, property forms, and fragment rules are all derived from the Zod schema at runtime via Zod 4 introspection. No separate build-time generator for workbench metadata.
+**Alternatives:**
+- Extend generate-domain-schemas.ts to emit tree adapters, fragment rules, and property descriptors alongside Zod schemas — build-time derivation, validated by tests, but adds generator complexity and artifacts to track.
+- Separate WorkbenchRegistration alongside FormatRegistration — explicit hand-coded SPI per format, full control but high maintenance.
+**Rationale:** Zod 4 metadata makes runtime introspection clean: z.string() → text input, z.enum() → dropdown, z.number().min().max() → number with range, z.array() → collection tree node. The schema IS the workbench descriptor. No extra artifacts, no drift, no staleness tests needed for workbench metadata.
+**Scope:** This applies to the web workbench (pages-builder-shell) only. The IntelliJ tree (phase 2, D4) derives structure from the YAML PSI tree directly — no Zod access in Kotlin. Both derive from the same underlying YAML structure but via different mechanisms appropriate to their runtime.
+**Trade-offs:** Runtime introspection has a small startup cost. Complex property layouts (e.g. conditional fields, grouped sections) may need supplementary hints beyond what Zod encodes. Acceptable: hints can be added as Zod metadata annotations without changing the overall approach.
+**Depends on:** D4 (architecture determines what the SPI needs to provide)
+**Sources:** Zod 4 metadata API, pages-builder-shell property palette, generate-domain-schemas.ts (existing generator)
+**Exploration:** quick
+**Status:** captured
+
+## D7: Editor ↔ diagram sync — asymmetric protocol
+
+**Choice:** Asymmetric sync protocol. Editor → Diagram: full YAML string push via CefMessageRouter on every DocumentListener change (simple, read-only rendering). Diagram → Editor: CST-preserving edits produce minimal deltas (offset, length, newText) sent back to Kotlin, applied as document.replaceString() in a WriteAction. The diagram never re-serializes the whole document — only the changed characters are transmitted.
+**Alternatives:**
+- Full YAML push in both directions — simple but destroys comments, blank lines, and custom spacing on diagram-initiated edits.
+- Incremental change tracking in both directions — complex protocol, must maintain synchronized document state on both sides, fragile.
+**Rationale:** Comments, formatting, and blank lines are user intent that must survive structural edits. CST-preserving edits (already used by applySwfPropertyEdit in graph-stencil-swf and computeMinimalChanges in pages-builder) produce targeted patches without touching surrounding text. Full push for rendering is simple and stateless — the diagram components already handle full re-parse efficiently.
+**Trade-offs:** Diagram components must use CST manipulation (yaml library's CST API) rather than parse-modify-serialize for all structural edits. This is already the established pattern across the codebase.
+**Depends on:** D6 (CefMessageRouter is the transport), D4 (split editor architecture)
+**Sources:** applySwfPropertyEdit (graph-stencil-swf, CST-preserving), computeMinimalChanges (pages-builder/diff-patch.ts), yaml-core CST primitives, DocumentListener + WriteAction (IntelliJ API)
+**Exploration:** deep-analysis
+**Status:** captured
+
+## D6: JCEF diagram loading — bundled HTML + JS in plugin resources
+
+**Choice:** The esbuild bundler produces a `diagram-panel.bundle.js` alongside the existing `server-node.bundle.cjs`. A small HTML shell in plugin resources loads this bundle. Kotlin creates a `JBCefBrowser`, loads the HTML from plugin resources, and communicates via `CefMessageRouter` (JS ↔ Kotlin bridge). Self-contained, works offline, same bundling pattern as the LSP server.
+**Alternatives:**
+- Dev server with hot reload (Vite) — viable for development only, not distribution. Could complement bundled approach as dev convenience but not worth building in phase 1.
+**Rationale:** Bundled resources are self-contained, require no external dependencies at runtime, and follow the same pattern as the LSP server bundle. Plugin zip size increases but diagram components + Lit + graph renderer are modest.
+**Trade-offs:** No hot reload during development — must rebuild bundle to see changes. Acceptable for phase 1; dev server convenience can be added later if iteration speed becomes a bottleneck.
+**Depends on:** D4 (JCEF is the visual column in the split editor)
+**Sources:** build-bundle.js (existing esbuild pattern), JBCefBrowser API, CefMessageRouter (JS ↔ Kotlin bridge)
+**Exploration:** quick
+**Status:** captured
+
+## D8: Task type categorisation — containers vs leaves
+
+**Choice:** Two categories: container types (Do, Fork) follow the For/Try pattern (header render + children inside, entry in `containerTypes` set), leaf types (Emit, Listen, Run, Wait) follow the Call/Set/Raise pattern (simple card render). All 6 new types are normal-flow tasks (support `then`, not terminal) per OWS 1.0 spec.
+**Alternatives:**
+- Treat Do/Fork as leaf nodes (collapse children) — simpler but hides workflow structure; defeats purpose of visual diagram
+- Treat all 6 as containers (even leaf types) — unnecessary complexity for types that have no children
+**Rationale:** The OWS 1.0 spec clearly distinguishes container types (Do, Fork, For, Try have inline `do:` or `branches:` sub-task lists) from atomic types (Emit, Listen, Run, Wait are single-step operations). The SDK `buildFlatGraph` produces child nodes with `parentId` for containers, confirming the distinction.
+**Trade-offs:** Container stencils require layout integration (containerTypes set, edge visibility rules, container styling). Straightforward since the infrastructure exists.
+**Sources:** OWS 1.0 DSL reference (dsl-reference.md), SDK GraphNodeType enum, swf-diagram.ts:228 containerTypes set, swf-stack-layout.ts container handling
+**Exploration:** quick
+**Status:** captured
+
+## D9: Fork layout — side-by-side parallel columns
+
+**Choice:** Render fork branches as parallel side-by-side columns within the container, reusing the existing column tree layout from the stack-column algorithm. Each branch gets its own column. Show `compete` flag as a badge on the container header.
+**Alternatives:**
+- Stacked rows — simpler but doesn't visually convey parallelism; would look like a sequential `do` block
+- Defer fork layout — add stencil/grammar now but skip container rendering; tackle in #170 when layout infrastructure is improved
+**Rationale:** The stack-column layout already handles switch fan-out via parallel columns. Fork branches have the same visual semantics (concurrent independent paths). Reusing existing layout logic minimises new code. The `compete` badge distinguishes fork-as-race from fork-as-join.
+**Trade-offs:** Fork branches in the SDK are single tasks (not sequences like switch-case branches), so the columns may be narrower. The layout handles variable-width columns correctly (proven in switch tests).
+**Sources:** swf-stack-layout.ts (column tree algorithm), OWS 1.0 spec fork.branches definition
+**Exploration:** quick
+**Status:** captured
+
+## D10: Edge-click type filtering — layered policy + component
+
+**Choice:** `getInsertableTypes(edgeId)` on the edit policy returns grammar-valid types for the clicked edge position by filtering `getCreatableTypes()` through `canSpliceOntoEdge(type, edgeId)`. The diagram component can further narrow the list for UX reasons beyond grammar validity. Policy owns grammar; component owns UX.
+**Alternatives:**
+- All 12 types unfiltered — shows invalid options, rejecting at mutation time is worse UX
+- Leaf types only (hardcoded exclude list) — fragile, doesn't respect grammar context
+**Rationale:** The edit policy already has `canSpliceOntoEdge` and `canConnect` infrastructure. Filtering at the source (picker) prevents invalid insertions rather than catching them at mutation time. Layering lets the component apply additional UX constraints without duplicating grammar logic.
+**Trade-offs:** `getInsertableTypes` gains an `edgeId` parameter (API change). Minor — method currently returns empty array, no existing callers to break.
+**Sources:** swf-edit-policy.ts:66-79 (canSpliceOntoEdge, getInsertableTypes, getCreatableTypes), GraphCanvas.ts:573-578 (graph:edge:click event)
+**Exploration:** quick
+**Status:** captured
+
+## D11: Picker positioning on edge click — reuse existing picker with edge context
+
+**Choice:** Reuse the existing `_showNodePicker` infrastructure with the clicked edgeId as context. The picker's select callback dispatches a `splitEdge` mutation targeting that edge instead of `addNode`. Picker positioning uses the click event coordinates. No new picker UI — same overlay, same UX.
+**Alternatives:**
+- New dedicated `_showPickerAtEdgeClick` method — more explicit but duplicates positioning logic already in the mixin's picker infrastructure
+**Rationale:** The node picker already handles type listing, positioning, and selection callbacks. Edge-click insertion differs only in mutation type (splitEdge vs addNode) and needs the edgeId as context. Passing context through the existing infrastructure is minimal new code and keeps picker UX consistent across all entry points (pane click, connect-end-on-empty, edge click).
+**Trade-offs:** Picker infrastructure gains a context parameter. Acceptable — it's an internal API within the mixin.
+**Depends on:** D10 (type filtering determines what the picker shows)
+**Sources:** diagram-base-mixin.ts:193-215 (_handlePaletteSelect, _handleMutation), swf-diagram.ts:319-326 (event handler switch)
+**Exploration:** quick
+**Status:** captured
