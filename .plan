@@ -11,6 +11,7 @@ design-repo: project
 design-section-hashes: 4d2cc5ab:## §1 Introduction and Goals|4f6b26ef:## §2 Constraints|39b76cb9:## §3 Context and Scope|74aa736f:## §4 Solution Strategy|9ca8de62:## §5 Building Block View|f1938c56:## §6 Runtime View|65807a21:## §7 Deployment View|a03d508f:## §8 Crosscutting Concepts|b2e1b57c:## §9 Journeys and Chapters|598f3a04:## §10 Architectural Decisions|1f604475:## §11 Quality Requirements|af5f260f:## §12 Risks and Technical Debt|42d51385:## §13 Glossary
 flyway-next-v: none
 evidence-era: true
+active-issue: 203
 
 ## Queue
 - [x] casehubio/blocks-ui#158 — Issue #158
@@ -21,10 +22,18 @@ evidence-era: true
 - [x] casehubio/blocks-ui#173 — SWF edge click picker and palette drag-to-canvas
 - [x] casehubio/blocks-ui#170 — Stack-column escape edge optimisation and pages migration
 - [x] casehubio/blocks-ui#171 — Case diagram deterministic layout for Plans and PlanItems
-- [ ] casehubio/blocks-ui#195 — remove dead computeSwfStackLayout
-- [ ] casehubio/blocks-ui#190 — remove debug scaffolding from IIFE bundle
-- [ ] casehubio/blocks-ui#189 — DiagramSyncListener timer leak
-- [ ] casehubio/blocks-ui#192 — extract shared name-generation logic
-- [ ] casehubio/blocks-ui#191 — moveSwfTask only rewires one then reference
-- [ ] casehubio/blocks-ui#193 — pre-index children in computeStackColumnLayout
-- [ ] casehubio/blocks-ui#194 — findConvergence nearest-node edge case
+- [x] casehubio/blocks-ui#195 — remove dead computeSwfStackLayout
+- [x] casehubio/blocks-ui#190 — remove debug scaffolding from IIFE bundle
+- [x] casehubio/blocks-ui#189 — DiagramSyncListener timer leak
+- [x] casehubio/blocks-ui#192 — extract shared name-generation logic
+- [x] casehubio/blocks-ui#191 — moveSwfTask only rewires one then reference
+- [x] casehubio/blocks-ui#193 — pre-index children in computeStackColumnLayout
+- [x] casehubio/blocks-ui#194 — findConvergence nearest-node edge case
+- [x] casehubio/blocks-ui#196 — fix broken index.ts exports
+- [x] casehubio/blocks-ui#197 — remove stale ElkAlgorithm re-export
+- [x] casehubio/blocks-ui#198 — remove empty layout directory
+- [x] casehubio/blocks-ui#199 — Props interface gaps
+- [x] casehubio/blocks-ui#200 — _handleCanvasEvent visibility mismatch
+- [x] casehubio/blocks-ui#201 — _setupPush missing
+- [x] casehubio/blocks-ui#202 — tests for htn-diagram and radial-layout
+- [x] casehubio/blocks-ui#203 — migrate case-dependency-graph
