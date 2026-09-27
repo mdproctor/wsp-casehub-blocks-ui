@@ -2,7 +2,7 @@
 
 ## State
 branch: main
-state: closing:stamped
+state: active
 project-sha: 1ec41bf
 date: 2026-09-27
 issue-repo: casehubio/blocks-ui
@@ -41,3 +41,4 @@ active-issue: 203
 - [ ] casehubio/blocks-ui#164 — canvas pans during hold-to-drag node move
 - [ ] casehubio/blocks-ui#163 — palette adds tasks connected instead of standalone
 - [ ] casehubio/blocks-ui#162 — add PROPOSE and JUDGMENT to TypeScript MESSAGE_TYPES
+- [ ] casehubio/blocks-ui#205 — import radial-layout from pages graph-renderer
