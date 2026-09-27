@@ -2,7 +2,7 @@
 
 ## State
 branch: main
-state: active
+state: closing:stamped
 project-sha: 1ec41bf
 date: 2026-09-27
 issue-repo: casehubio/blocks-ui
@@ -37,3 +37,6 @@ active-issue: 203
 - [x] casehubio/blocks-ui#201 — _setupPush missing
 - [x] casehubio/blocks-ui#202 — tests for htn-diagram and radial-layout
 - [x] casehubio/blocks-ui#203 — migrate case-dependency-graph
+
+## Deferred
+- [ ] migrate radial-layout to pages graph-renderer (S / Low) [] — blocked on casehub-pages#473 landing first — then update import in graph-stencil-org and delete local copy
