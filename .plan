@@ -20,3 +20,10 @@ flyway-next-v: none
 - [x] casehubio/blocks-ui#173 — SWF edge click picker and palette drag-to-canvas
 - [x] casehubio/blocks-ui#170 — Stack-column escape edge optimisation and pages migration
 - [x] casehubio/blocks-ui#171 — Case diagram deterministic layout for Plans and PlanItems
+- [ ] casehubio/blocks-ui#195 — remove dead computeSwfStackLayout
+- [ ] casehubio/blocks-ui#190 — remove debug scaffolding from IIFE bundle
+- [ ] casehubio/blocks-ui#189 — DiagramSyncListener timer leak
+- [ ] casehubio/blocks-ui#192 — extract shared name-generation logic
+- [ ] casehubio/blocks-ui#191 — moveSwfTask only rewires one then reference
+- [ ] casehubio/blocks-ui#193 — pre-index children in computeStackColumnLayout
+- [ ] casehubio/blocks-ui#194 — findConvergence nearest-node edge case
