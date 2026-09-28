@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-1149-evolution-ui
-state: active
+state: closing:verified
 project-sha: slot-creation
 date: 2026-09-25
 issue-repo: casehubio/engine
@@ -11,18 +11,6 @@ design-repo: project
 design-section-hashes: 
 flyway-next-v: unknown
 
+evidence-era: true
 ## Queue
-- [ ] casehubio/engine#1149 — Issue #1149 ← active
-  - [x] Batch 1: Foundation
-    - [x] Task 1: Scaffold evolution-config package (types API events)
-  - [x] Batch 2: deny-pattern-editor
-    - [x] Task 2: deny-pattern-editor component
-  - [x] Batch 3: watch-pattern-editor
-    - [x] Task 3: watch-pattern-editor component
-  - [x] Batch 4: gate-policy-editor
-    - [x] Task 4: gate-policy-editor component
-  - [x] Batch 5: Workbench
-    - [x] Task 5: detail-pane standalone mode
-    - [x] Task 6: evolution-workbench component
-  - [x] Batch 6: Finalize
-    - [x] Task 7: Sample page + schema registry + engine issues
+- [x] casehubio/engine#1149 — Issue #1149
