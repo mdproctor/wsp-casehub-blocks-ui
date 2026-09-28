@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-1149-evolution-ui
-state: closing:merged
+state: closing:stamped
 project-sha: slot-creation
 date: 2026-09-25
 issue-repo: casehubio/engine
