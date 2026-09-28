@@ -1,7 +1,7 @@
 _branch=issue-1149-evolution-ui
 report_init=done
 code_review_attempt=1
-last_yielded=handoff_write
+last_yielded=journal_entry
 code_review=done
 code_review_produced=0
 branch_audit_conformance_attempt=1
@@ -109,3 +109,5 @@ arc42_scan_wrap_produced=0
 handoff_write_attempt=1
 handoff_write=done
 handoff_write_produced=0
+journal_entry_attempt=1
+journal_entry=done
