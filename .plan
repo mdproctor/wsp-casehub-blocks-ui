@@ -1,0 +1,15 @@
+# Work Plan — issue-210-agent-manifest-editor
+
+## State
+branch: issue-210-agent-manifest-editor
+state: scaffolded
+project-sha: 
+date: 
+issue-repo: casehubio/blocks-ui
+covers: 195,190,189,192,191,193,194
+design-repo: project
+design-section-hashes: 
+flyway-next-v: none
+
+## Queue
+- [ ] casehubio/blocks-ui#210 — Issue #210 ← active
