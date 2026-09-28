@@ -1,0 +1,15 @@
+# Work Plan — issue-188-evolution-conductor-operational
+
+## State
+branch: issue-188-evolution-conductor-operational
+state: scaffolded
+project-sha: 
+date: 
+issue-repo: casehubio/blocks-ui
+covers: 188
+design-repo: 
+design-section-hashes: 
+flyway-next-v: 
+
+## Queue
+- [ ] casehubio/blocks-ui#188 — Issue #188 ← active
