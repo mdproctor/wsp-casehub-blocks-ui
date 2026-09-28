@@ -2,7 +2,7 @@
 
 ## State
 branch: main
-state: active
+state: closing:review
 project-sha: 1ec41bf
 date: 2026-09-27
 issue-repo: casehubio/blocks-ui
