@@ -11,7 +11,7 @@ design-repo: project
 design-section-hashes: 4d2cc5ab:## §1 Introduction and Goals|4f6b26ef:## §2 Constraints|39b76cb9:## §3 Context and Scope|74aa736f:## §4 Solution Strategy|9ca8de62:## §5 Building Block View|f1938c56:## §6 Runtime View|65807a21:## §7 Deployment View|a03d508f:## §8 Crosscutting Concepts|b2e1b57c:## §9 Journeys and Chapters|598f3a04:## §10 Architectural Decisions|1f604475:## §11 Quality Requirements|af5f260f:## §12 Risks and Technical Debt|42d51385:## §13 Glossary
 flyway-next-v: none
 evidence-era: true
-active-issue: 165
+active-issue: 205
 
 ## Queue
 - [x] casehubio/blocks-ui#158 — Issue #158
@@ -37,8 +37,8 @@ active-issue: 165
 - [x] casehubio/blocks-ui#201 — _setupPush missing
 - [x] casehubio/blocks-ui#202 — tests for htn-diagram and radial-layout
 - [x] casehubio/blocks-ui#203 — migrate case-dependency-graph
-- [ ] casehubio/blocks-ui#165 — showcase gallery SWF diagram not rendering
-- [ ] casehubio/blocks-ui#164 — canvas pans during hold-to-drag node move
-- [ ] casehubio/blocks-ui#163 — palette adds tasks connected instead of standalone
-- [ ] casehubio/blocks-ui#162 — add PROPOSE and JUDGMENT to TypeScript MESSAGE_TYPES
-- [ ] casehubio/blocks-ui#205 — import radial-layout from pages graph-renderer
+- [x] casehubio/blocks-ui#165 — showcase gallery SWF diagram not rendering
+- [x] casehubio/blocks-ui#164 — canvas pans during hold-to-drag node move
+- [x] casehubio/blocks-ui#163 — palette adds tasks connected instead of standalone
+- [x] casehubio/blocks-ui#162 — add PROPOSE and JUDGMENT to TypeScript MESSAGE_TYPES
+- [x] casehubio/blocks-ui#205 — import radial-layout from pages graph-renderer
