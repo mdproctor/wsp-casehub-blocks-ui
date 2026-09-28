@@ -1,77 +1,51 @@
 # HANDOFF — casehub-blocks-ui
 
-## Last Session
+## Context
 
-Drained the full plan queue (23/23 issues). Two batches of work:
+Evolution conductor UI (casehubio/engine#1149, Phase 4). All initial components landed: three configuration editors (#175-#177), workbench shell (#178), sample page (#179). Follow-up epic #188 covers operational completeness.
 
-**Batch 1 — Cleanup queue from LSP schema work (7 issues):**
-Removed dead `computeSwfStackLayout` (730L), stripped debug scaffolding
-from IIFE bundle, fixed `DiagramSyncListener` timer leak (Timer → 
-ScheduledExecutorService + Disposer registration), extracted
-`prepareSwfTaskInsert` helper, and fixed `moveSwfTask` to rewire ALL
-`then:` references on move (was only rewiring one edge source). Two
-issues (#193, #194) closed as wrong-repo — fixes belong in casehub-pages.
+## What Was Built
 
-**Batch 2 — Codebase audit (8 issues):**
-Fixed 5 broken index.ts exports (wrong class names), removed stale
-`ElkAlgorithm` re-export from graph-stencil-org, filled Props interface
-gaps (GroupedDataViewProps, WorkItemDetailProps), fixed
-`_handleCanvasEvent` visibility mismatch in 3 diagram components,
-removed redundant `_setupPush` calls, added 10 tests (radial-layout +
-htn-diagram), and migrated `case-dependency-graph` from d3 to pages
-graph infrastructure (502L deleted, 8 d3 dependencies removed).
+| Issue | Component | Status |
+|-------|-----------|--------|
+| #175 | `deny-pattern-editor` — static + dynamic deny pattern CRUD | Done |
+| #176 | `watch-pattern-editor` — escalation watch pattern CRUD | Done |
+| #177 | `gate-policy-editor` — per-stage GATED/AUTO/NOTIFY config | Done |
+| #178 | `evolution-workbench` — summary bar + tabbed dashboard | Done |
+| #179 | Sample page with trading risk panel domain extension demo | Done |
+| — | `detail-pane` standalone mode enhancement | Done |
 
-**Graph migration audit result:** All four stencil packages (SWF, Case,
-HTN, Org) now contain only domain config — schemas, icons, callbacks,
-stencil definitions, edit policies. No generic infrastructure remains in
-blocks-ui. Every graph component uses the pages rendering and layout
-stack.
+Two new packages: `evolution-config/` (shared types/API + 3 editors) and `evolution-workbench/`. 85 tests passing.
 
-## Known Issues Needing Attention
+## Engine Issues Filed
 
-### Palette drag green bar indicators not tested
-
-The palette drag-to-canvas splice indicators (green bars on edges during
-drag-over) were not verified. GraphCanvas has the infrastructure
-(`getAddPlacement`, drop handler, splice indicator rendering) but the
-SWF diagram's custom render might not wire the drag events correctly.
-Lower-priority visual polish.
-
-### Pre-existing: degraded property editing
-
-"Property editing unavailable — No YAML path for task node" appears for
-the Claim Review example. `yamlPaths` from `buildYamlPaths` doesn't
-match `buildFlatGraph` node IDs. Pre-existing.
-
-### Pre-existing typecheck errors (8 component groups)
-
-`channel-activity`, `kpi-metric-row` (after _setupPush removal — needs
-pages PushMixin to expose `willUpdate` reconnect path), `grouped-data-view`,
-`blocks-dag-viewer`, `case-flow-viewer`, `blocks-decomposition-tree`,
-`blocks-plan-item-tree`, `blocks-plan-model-dashboard`, `org-diagram`.
-Most are `exactOptionalPropertyTypes` strictness issues or mixin type
-mismatches with pages.
+| Issue | What | Why |
+|-------|------|-----|
+| engine#1186 | `getWatchPatterns` | watch-pattern-editor endpoint mode |
+| engine#1187 | `getStages`/`getCategories` | gate-policy-editor stage metadata |
+| engine#1188 | `getGatePolicy` | gate-policy-editor pre-population |
 
 ## What's Next
 
-No active issues in the blocks-ui queue. Potential work:
+**Follow-up epic: casehubio/blocks-ui#188 — Evolution conductor UI operational completeness**
 
-- casehub-pages#473 — migrate `radial-layout.ts` from graph-stencil-org to
-  graph-renderer (115L, standalone algorithm, no org-specific types)
-- casehub-pages#467 — `_computeLayout` hook (eliminate `_fullRender` overrides)
-- casehub-pages#468 — standard render template with default event wiring
-- Address pre-existing typecheck errors (mostly pages-side mixin fixes)
+| Priority | Issue | Scale | Complexity | Blocked by | Notes |
+|----------|-------|-------|------------|------------|-------|
+| 1 | engine#1186 | XS | Low | — | Unblocks watch-pattern endpoint mode |
+| 1 | engine#1187 | XS | Low | — | Unblocks gate-policy endpoint mode |
+| 1 | engine#1188 | XS | Low | — | Unblocks gate-policy pre-population |
+| 2 | #186 | M | Med | — | Streams tab — pages-table with block/unblock |
+| 2 | #187 | M | Med | — | Inbox tab — pages-table with approve/reject |
+| 3 | #181 | S | Med | engine#1186 | Deny-pattern preview against active streams |
+| 3 | #182 | S | Med | #186 | Gate-policy impact preview |
+| 4 | #183 | S | Low | — | Audit trail tab (reuses audit-trail-viewer) |
+| 4 | #184 | S | Low | — | Health detail tab (reuses trust-score-panel) |
+| 5 | #185 | S | Low | — | Responsive layout |
 
-## Cross-Module
+Engine issues are quick wins (thin adapter methods). Start there, then Streams + Inbox tabs to make the workbench operational.
 
-Pages issues filed:
-- casehub-pages#467 — `_computeLayout` layout hook
-- casehub-pages#468 — standard render template
-- casehub-pages#473 — migrate radial-layout to graph-renderer
+## Repos in Slot
 
-## References
-
-- `moveSwfTask` fix: `packages/graph-stencil-swf/src/adapter/swf-yaml-editor.ts`
-- d3→pages migration: `components/case-dependency-graph/src/blocks-case-dependency-graph.ts`
-- Contributor guide updated: `docs/guides/contributor-guide.md:295`
-- Diary: `blog/2026-09-27-mdp01-the-last-d3-component.md`
+- **blocks-ui** (primary) — new components and workbench
+- **blocks** — domain specialisation
+- **engine** — API surface (3 issues filed for endpoint gaps)
