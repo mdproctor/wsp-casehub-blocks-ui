@@ -2,28 +2,40 @@
 
 ## Last Session
 
-Cleanup and audit session. Drained 23-item plan (LSP schema cleanup queue + codebase audit). Then tackled 5 more fix/migration issues. Key changes:
+Agent setup wizard — manifest editor UX redesign (#215) and avatar-step filter sync bugfix (#216 partial).
 
-- **moveSwfTask bug fix** — now rewires ALL `then:` references on move, not just the edge source
-- **case-dependency-graph** migrated from d3-force/d3-selection to pages `computeElkLayout(algorithm: 'force')` + `pages-graph-canvas`
-- **addSwfTask** now produces disconnected nodes — adds `then: exit` to previous last task before appending
-- **case diagram reverted to ELK layout** — stack-column unsuitable for bipartite case topology (workers lateral to bindings)
-- **Worker node selection size fix** — collapsed height 130→165 to match actual stencil render height
-- **radial-layout migrated** to pages graph-renderer (pages#473 landed, blocks-ui now imports)
-- **Layout suppression during drag** — `_runLayout` deferred while NodeMoveCoordinator is active (pages#474)
+### Completed
 
-## Known Issues
+- **#215 landed** (ee2d8ff) — manifest editor UX redesign:
+  - Pipeline step headers (1 Providers, 2 Aliases) with completion badges and dimming
+  - Alias resolution preview — live `→ Claude Opus 4.6` or `→ (no match)` per alias row
+  - Add-model on built-in provider cards (parity with Other card)
+  - Manifest YAML preview with alias resolution comments
+  - Data-loaded model merge fix (models not in presets now visible in cards)
 
-- **Canvas pans during hold-to-drag** — pages#474, partially addressed (layout suppression landed, pan suppression still open)
-- **Property editing unavailable** — "No YAML path for task node" in case diagram examples. Pre-existing `yamlPaths`/`buildFlatGraph` mismatch.
-- **Pre-existing typecheck errors** — channel-activity, org-diagram, and several other components have `exactOptionalPropertyTypes` strictness issues
+- **#214 closed** — auth pattern abstraction was already landed, issue was stale-open
+
+- **#216 partial fix landed** (ff85b4c) — SDI and Big Five now sync to filter pills on archetype selection. But two problems remain (see below).
+
+### In Progress
+
+- **#216 needs full fix** — two remaining problems:
+  1. **Incomplete framework sync**: Only SDI + Big Five sync to `_frameworks`/`_bigFive` in `_selectArchetype()`. MBTI, Enneagram, DISC, Belbin profile values need syncing too so their pills show solid/selected state.
+  2. **SDI pill visual ambiguity**: All SDI pills have colored borders by default (`sdi-blue`, `sdi-red`, `sdi-green`, `sdi-hub`). Avatar-match border highlighting is invisible against these. Non-matched pills look the same as matched ones. Needs dimming or a different visual signal.
+  
+  User wants TDD on the complete matrix — test all six frameworks × three visual states (selected, avatar-match, neutral).
 
 ## What's Next
 
-Open issues are all feature work — no remaining cleanup. Three tracks:
-- **Evolution conductor** — slot 206 has epic #174 done, epic #188 (operational completeness) is next
-- **Agent setup wizard** — #166, paused in stack
-- **Org diagram** — #157, rich agent properties
+1. **#216** — complete the filter pill sync + SDI visual fix (TDD, design iteration in browser)
+2. **#211** — agent-catalog (template browsing, filtering, from-scratch creation). All deps met (#167 avatar, #210 manifest editor done).
+3. **#212** — agent-profile (character sheet with inline editing)
+4. **#213** — agent-relationship-editor (table + arc diagram + ego subgraph)
+
+## Known Issues
+
+- **Pre-existing typecheck errors** — channel-activity, org-diagram, and several other components have `exactOptionalPropertyTypes` strictness issues
+- **Pre-existing dirty schema** — `component-schemas.generated.ts` has uncommitted changes from groupedDataView/workItemDetail, not from this session's work
 
 ## Cross-Module
 
