@@ -39,3 +39,4 @@ report_close_issues=done
 verify=done
 report_verify=done
 upstream_push=done
+checkout_main_mechanical_attempt=1
