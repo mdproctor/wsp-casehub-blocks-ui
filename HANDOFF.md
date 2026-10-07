@@ -49,3 +49,15 @@ Completed #233 (relationship editor diagram tab), then iterated on UX issues fou
 The table view works well for flat CRUD. The chain navigator adds the missing context — seeing where a relationship sits in the transitive chain. The user wants all editing to be inline and fast.
 
 Demo: `npx vite /path/to/blocks-ui --port 8792` then `http://localhost:8792/components/agent-relationship-editor/demo.html`
+
+## Cross-Repo Changes (2026-10-07)
+
+- **Branch:** `issue-530-document-diff-extraction` — DocumentDiff reduced to thin subclass extending PagesDocumentDiff from `@casehubio/pages-document-diff`
+- **Commit:** `1b8f92b` — 1084 lines removed, 30 added. Thread/timeline/selection domain logic retained.
+- **Depends on:** `casehubio/casehub-pages#530` — `pages-document-diff` package must be published before this branch can build.
+
+## Cross-Module
+
+- pages#473 — radial-layout migration (CLOSED)
+- pages#474 — hold-to-drag pan + layout suppression (layout fix landed, pan fix open)
+- pages#530 — Milkdown editor, includes `pages-document-diff` extraction (branch `issue-530-document-diff-extraction` here)
