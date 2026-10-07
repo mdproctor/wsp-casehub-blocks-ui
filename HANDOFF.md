@@ -25,7 +25,14 @@ Open issues are all feature work — no remaining cleanup. Three tracks:
 - **Agent setup wizard** — #166, paused in stack
 - **Org diagram** — #157, rich agent properties
 
+## Cross-Repo Changes (2026-10-07)
+
+- **Branch:** `issue-530-document-diff-extraction` — DocumentDiff reduced to thin subclass extending PagesDocumentDiff from `@casehubio/pages-document-diff`
+- **Commit:** `1b8f92b` — 1084 lines removed, 30 added. Thread/timeline/selection domain logic retained.
+- **Depends on:** `casehubio/casehub-pages#530` — `pages-document-diff` package must be published before this branch can build.
+
 ## Cross-Module
 
 - pages#473 — radial-layout migration (CLOSED)
 - pages#474 — hold-to-drag pan + layout suppression (layout fix landed, pan fix open)
+- pages#530 — Milkdown editor, includes `pages-document-diff` extraction (branch `issue-530-document-diff-extraction` here)
