@@ -2,42 +2,47 @@
 
 ## Last Session
 
-Agent setup wizard — #216 filter pill sync fix + #211 agent-catalog component.
+Org diagram avatar/profession integration (#157) + new issue #233 for relationship editor improvements.
 
 ### Completed
 
-- **#216 closed** (37c5418) — all six framework filter pills now sync on archetype selection. MBTI, Enneagram, DISC, Belbin added to `_selectArchetype()`. SDI non-matching pills dimmed when archetype selected. 8 tests.
+- **#157 closed** (98b33f4 on main) — org-diagram avatar, profession, REST endpoint integration:
+  - Extended `AgentDescriptor` with `avatar`, `profession`, `role` fields
+  - `enrichWithDescriptors` maps `role` → `descriptorRole` on `OrgAgentNodeData` (avoids collision with org membership role)
+  - `sizingClassifier` accounts for profession row height
+  - Org-agent stencil renders `<agent-avatar .code=${} size="xs">` in header (fallback: colored dot when no avatar)
+  - Profession row below header: `"Software / Architect"` (only when profession present)
+  - `graph-stencil-org` gains `@casehubio/agent-avatar-2d` dependency (not a cross-stencil import)
+  - `BlocksOrgDiagram` gains `agentsEndpoint` (REST fetch) and `collections` (avatar collection registration) properties
+  - `_effectiveAgents` getter: programmatic `agents` takes precedence over `_fetchedAgents`
+  - Gastown demo enriched with avatars (Sovereign/Ruler, Sage/Mentor, Sage/Detective, Sage/Translator, Creator/Artist, Hero/Warrior), professions, constraints
+  - "Gastown (Minimal)" fixture added for comparison
+  - 3 new enrichment tests, 4 new stencil render tests
+  - Verified in Playwright: avatars render correctly, profession rows display, colored dot fallback works
 
-- **#211 closed** (fb6afda landed on main) — agent-catalog component:
-  - Evolved `FullAgentDescriptor` in blocks-ui-core with personality, manifest, preferredAlias, profession, role fields
-  - Extracted `initProfile` from avatar-step into shared `profile-derivation.ts`
-  - Template data derived from PROFESSION_PRESETS (120+ templates, 5 featured)
-  - Grouped-by-role layout with profession pill filters, fuzzy search, featured picks
-  - Inline detail expansion with personality badges, alias tier, summary text
-  - `catalog:template:selected` event with FullAgentDescriptor
-  - 16 component tests + 5 data tests + 3 profile derivation tests
-  - Demo harness at `components/agent-catalog/demo.html`
+### Created
 
-- **#217 created** — agent-personality-workbench: tabbed catalog + wizard with shared profile panel. The catalog and avatar wizard are two views of the same personality state.
+- **#233 opened** — feat: org relationship editor — tabular editing with diagram viewer tab
+  - Add "Diagram" tab to `<agent-relationship-editor>` alongside Table and Arc
+  - Renders `<blocks-org-diagram readonly>` fed from roster + relationships data
+  - Data bridge: convert roster/relationships → org YAML for the diagram
+  - Richer table rows with avatar thumbnails and profession
+  - Demo page with gastown data
+  - Component: `components/agent-relationship-editor/src/agent-relationship-editor.ts`
+  - Demo: `components/agent-relationship-editor/demo.html`
+  - Run: `npx vite /path/to/blocks-ui --port 8792` then `http://localhost:8792/components/agent-relationship-editor/demo.html`
 
-### Design Decisions
+### Key Files Changed
 
-- Catalog templates reuse PROFESSION_PRESETS (no separate taxonomy)
-- Alias-driven manifest defaults per task type (reasoning-heavy vs fast-response)
-- "From scratch" removed from catalog — belongs at host level as mode toggle
-- Duplicate `PersonalityProfile` type in blocks-ui-core and avatar-step (cleanup tracked)
+| File | What changed |
+|------|-------------|
+| `packages/graph-stencil-org/src/types.ts` | `AgentDescriptor` + `OrgAgentNodeData` extended |
+| `packages/graph-stencil-org/src/adapter/enrichment.ts` | Maps avatar, profession, role→descriptorRole |
+| `packages/graph-stencil-org/src/stencils/org-agent.ts` | Avatar + profession rendering |
+| `packages/graph-stencil-org/src/layout/layout-rules.ts` | Profession row in sizing |
+| `components/org-diagram/src/blocks-org-diagram.ts` | agentsEndpoint, collections, fetch lifecycle |
+| `examples/src/pages/org-diagram-page.ts` | Rich gastown demo data |
 
-## What's Next
+### Context for Next Session
 
-1. **#217** — agent-personality-workbench (catalog + wizard tabs, shared profile)
-2. **#212** — agent-profile (character sheet with inline editing)
-3. **#213** — agent-relationship-editor (table + arc diagram + ego subgraph)
-
-## Known Issues
-
-- **Pre-existing typecheck errors** — channel-activity, org-diagram, trust-workbench, blocks-dag-viewer have strictness issues
-- **Duplicate PersonalityProfile type** — defined in both blocks-ui-core/types/agent.ts and avatar-step/avatar-step.ts (structurally identical, will drift)
-
-## Cross-Module
-
-- pages#474 — hold-to-drag pan fix (open)
+The user wants to focus on the **relationship editor** as the primary editing interface for org structures, with the org-diagram as a read-only viewer tab. The graphical editor's line routing is messy — the tabular approach is cleaner for CRUD. Issue #233 has full details including how to run the demo, the data types involved, and what to build.
