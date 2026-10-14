@@ -26,3 +26,4 @@
 >>>>>>> issue-190-speech-denoising
 | [2026-09-07-mdp01-zod-schemas-from-source.md](2026-09-07-mdp01-zod-schemas-from-source.md) | 2026-09-07 | Schema generation from source — ts-morph generator, BlocksComponentRegistry, 55 Zod schemas, typed configure() |
 | [2026-09-27-mdp01-the-last-d3-component.md](2026-09-27-mdp01-the-last-d3-component.md) | 2026-09-27 | Migrated the last d3 graph component to pages infrastructure — every graph component now uses the same rendering and layout stack |
+| [2026-10-14-mdp01-the-diagram-that-writes-itself.md](2026-10-14-mdp01-the-diagram-that-writes-itself.md) | 2026-10-14 | Data bridge pattern: pure adapter function connects web components with different data shapes without coupling |
