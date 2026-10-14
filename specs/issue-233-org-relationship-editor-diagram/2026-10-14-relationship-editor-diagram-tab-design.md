@@ -101,7 +101,9 @@ The diagram re-renders with the merged state.
 The org-diagram emits a pages-event via `selectionTopic` when a node is
 clicked. The relationship editor listens for
 `relationship-editor:diagram:agent-selected` and extracts the `agentId`
-from the node ID format `agent:<unitId>:<agentId>`.
+from the node ID format `agent:<unitId>:<agentId>` (including the
+synthetic "unassigned" unit case: `agent:unassigned:<agentId>`). Unit
+node clicks (`unit:*`) are ignored.
 
 Setting `focalAgentId` updates:
 - **Table view** — re-groups relationships around the new focal agent
