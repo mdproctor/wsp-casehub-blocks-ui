@@ -13,3 +13,11 @@ flyway-next-v:
 
 ## Queue
 - [ ] casehubio/blocks-ui#233 — Issue #233 ← active
+  - [x] Batch 1: Bridge Function
+    - [x] Task 1: toOrgYaml bridge function
+  - [x] Batch 2: Diagram Tab
+    - [x] Task 2: agents property + ARIA + diagram tab
+    - [x] Task 3: bidirectional click-to-focus
+  - [x] Batch 3: Richer Rows + Demo
+    - [x] Task 4: avatar and profession in table rows
+    - [x] Task 5: update demo with gastown data
