@@ -33,3 +33,14 @@
 **Sources:** RelationshipChangeset type in events.ts, _pendingAdditions/_pendingRemovals in agent-relationship-editor.ts
 **Exploration:** quick
 **Status:** captured
+
+## D4: BACKS_UP handling in chain tab
+
+**Choice:** Show as pairs — BACKS_UP renders as flat `A ↔ B` pairs (depth-1 trees). Every agent is a root. Keeps one view for all relationship kinds.
+**Alternatives:**
+- Exclude BACKS_UP from chain tab — only directional kinds shown. Adds conditional logic and user must know which tab to check.
+**Rationale:** Pairs are trivial to render in the tree. No exclusion logic. Consistent UX — all kinds in one place.
+**Trade-offs:** BACKS_UP doesn't really "chain" — minor conceptual mismatch, but harmless.
+**Sources:** Issue #234 relationship kinds table
+**Exploration:** quick
+**Status:** captured
