@@ -19,7 +19,7 @@ interface ChainNode {
   agentId: string;
   children: ChainNode[];
   isCycle: boolean;
-  relationshipIndex: number; // index into source relationships array, -1 for roots
+  relationshipIndex: number; // index into this.relationships (not _effectiveRelationships), -1 for roots
   isPending: boolean;        // true if this edge is a pending addition
 }
 
