@@ -13,3 +13,11 @@ flyway-next-v:
 
 ## Queue
 - [ ] casehubio/blocks-ui#234 — Issue #234 ← active
+  - [ ] Batch 1: Chain tree function
+    - [ ] Task 1: buildChainForest pure function with tests
+  - [ ] Batch 2: Chain tab rendering
+    - [ ] Task 2: Add chain tab with kind picker and tree rendering
+  - [ ] Batch 3: Inline editing
+    - [ ] Task 3: Inline delete insert and add operations
+  - [ ] Batch 4: Insert-between and demo
+    - [ ] Task 4: Insert-between and demo update
