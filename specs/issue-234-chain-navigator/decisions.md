@@ -22,3 +22,14 @@
 **Sources:** ego-subgraph.ts (single-hop precedent), AgentRelationship[] flat array
 **Exploration:** quick
 **Status:** captured
+
+## D3: Inline delete with reconnect
+
+**Choice:** Multi-step pending changeset — "remove and reconnect" produces one removal + N additions in the existing pending model. Tree re-renders from `_effectiveRelationships` showing structural result immediately.
+**Alternatives:**
+- Compound operation type — `CompoundEdit { type: 'reconnect', removal, additions }` in changeset. Better UX label but changes the public `RelationshipChangeset` API for marginal benefit.
+**Rationale:** Pending additions/removals already tell the full story. Tree view shows the structural result. No API change needed.
+**Trade-offs:** User must understand that green additions are the reconnection — no single "reconnect" label in the confirm bar.
+**Sources:** RelationshipChangeset type in events.ts, _pendingAdditions/_pendingRemovals in agent-relationship-editor.ts
+**Exploration:** quick
+**Status:** captured
