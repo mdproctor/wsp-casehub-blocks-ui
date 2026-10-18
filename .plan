@@ -5,6 +5,7 @@
 
 ## State
 branch: 
-state: active
+state: closing:review
 Current: none
 date: 
+evidence-era: true
