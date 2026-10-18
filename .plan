@@ -1,11 +1,22 @@
-# Work Plan — 
-
-## Queue
-- [ ] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
+# Work Plan — Work Plan —
 
 ## State
 branch: 
-state: closing:promoted
+state: active
 Current: none
 date: 
 evidence-era: true
+
+## Queue
+- [ ] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
+- [ ] casehubio/blocks-ui#241 — Agent Pipeline — Graph View
+- [ ] casehubio/blocks-ui#242 — Agent Project Drill-Down
+- [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level
+- [ ] casehubio/blocks-ui#244 — Choreography View — Reactive Case
+- [ ] casehubio/blocks-ui#245 — Work Item Card — Human-in-the-Loop
+- [ ] casehubio/blocks-ui#246 — Summarisation Pipeline — Event Stream
+- [ ] casehubio/blocks-ui#247 — Desired State Graph — dependsOn + forEach
+- [ ] casehubio/blocks-ui#248 — Application Topology — Deployment View
+- [ ] casehubio/blocks-ui#249 — Adaptive Topology — Situation-Triggered Mutations
+- [ ] casehubio/blocks-ui#250 — Project Dashboard — Aggregate View
+- [ ] casehubio/blocks-ui#251 — Focus Mode + Completeness Signals
