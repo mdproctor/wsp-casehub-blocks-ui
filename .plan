@@ -3,13 +3,13 @@
 ## State
 branch: 
 state: active
-Current: none
+Current: casehubio/blocks-ui#241 — Agent Pipeline — Graph View
 date: 
 evidence-era: true
 
 ## Queue
-- [ ] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
-- [ ] casehubio/blocks-ui#241 — Agent Pipeline — Graph View
+- [x] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
+- [ ] casehubio/blocks-ui#241 — Agent Pipeline — Graph View ← active
 - [ ] casehubio/blocks-ui#242 — Agent Project Drill-Down
 - [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level
 - [ ] casehubio/blocks-ui#244 — Choreography View — Reactive Case
