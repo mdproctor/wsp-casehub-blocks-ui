@@ -5,7 +5,7 @@
 
 ## State
 branch: 
-state: closing:verified
+state: closing:promoted
 Current: none
 date: 
 evidence-era: true
