@@ -68,7 +68,7 @@ type TierElement = GraphTier | GraphConnector;
 Walk `PhaseItem[]` sequentially:
 
 1. **`step` (no routing)** — single-node tier. If the next phase is `parallel`, emit a `fan-out` connector with lane names as labels.
-2. **`parallel`** — multi-node tier. Each lane's first step becomes a node. If a lane has multiple steps, they stack within the same node card (description list).
+2. **`parallel`** — multi-node tier. Each lane's first step becomes a node. If a lane has multiple steps, render only the first as the graph node with a "+N more" count badge — the graph view is a topology summary, not a full step listing (the lanes view shows all steps).
 3. **`signal`** — emit a `flow` connector with signal barrier metadata.
 4. **`quorum`** — emit a `fan-in` connector with quorum barrier metadata.
 5. **`step` with `routing` (match)** — single-node tier for the step, then an `outcomes` connector, then a multi-node tier with one node per match case. Color hints derived from match pattern names: `"approve"` → green, `"escalate"` → amber, `"reject"` → red. Unrecognised patterns use default styling.
