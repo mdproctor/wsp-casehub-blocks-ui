@@ -2,7 +2,7 @@
 
 ## State
 branch: 
-state: closing:pushed
+state: closing:merged
 Current: casehubio/blocks-ui#241 — Agent Pipeline — Graph View
 date: 
 evidence-era: true
