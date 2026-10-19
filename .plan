@@ -1,7 +1,7 @@
 # Work Plan — Work Plan —
 
 ## State
-branch: 
+branch: issue-241-agent-pipeline-graph-view
 state: active
 Current: casehubio/blocks-ui#241 — Agent Pipeline — Graph View
 date: 
@@ -10,6 +10,14 @@ evidence-era: true
 ## Queue
 - [x] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
 - [ ] casehubio/blocks-ui#241 — Agent Pipeline — Graph View ← active
+  - [ ] Batch 1: Tier Model
+    - [ ] Task 1: Create tier assignment model and functions
+  - [ ] Batch 2: Toggle
+    - [ ] Task 2: Add viewMode property and header toggle
+  - [ ] Batch 3: Rendering
+    - [ ] Task 3: Render graph tiers and connectors
+  - [ ] Batch 4: Gallery
+    - [ ] Task 4: Update gallery and schema registry
 - [ ] casehubio/blocks-ui#242 — Agent Project Drill-Down
 - [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level
 - [ ] casehubio/blocks-ui#244 — Choreography View — Reactive Case
