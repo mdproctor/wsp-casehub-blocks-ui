@@ -1,7 +1,7 @@
 # Work Plan — Work Plan —
 
 ## State
-branch: issue-242-agent-project-drill-down
+branch: 
 state: active
 Current: casehubio/blocks-ui#241 — Agent Pipeline — Graph View
 date: 
@@ -10,15 +10,8 @@ evidence-era: true
 ## Queue
 - [x] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
 - [x] casehubio/blocks-ui#241 — Agent Pipeline — Graph View
-- [ ] casehubio/blocks-ui#242 — Agent Project Drill-Down ← active
-  - [ ] Batch 1: Events
-    - [ ] Task 1: Emit drill-down event
-    - [ ] Task 2: Breadcrumb back-navigation
-  - [ ] Batch 2: Steps
-    - [ ] Task 3: Add Steps tab to agent-viewer
-  - [ ] Batch 3: Gallery
-    - [ ] Task 4: Gallery drill-down section
-- [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level
+- [x] casehubio/blocks-ui#242 — Agent Project Drill-Down
+- [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level ← active
 - [ ] casehubio/blocks-ui#244 — Choreography View — Reactive Case
 - [ ] casehubio/blocks-ui#245 — Work Item Card — Human-in-the-Loop
 - [ ] casehubio/blocks-ui#246 — Summarisation Pipeline — Event Stream
