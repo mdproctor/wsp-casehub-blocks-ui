@@ -2,15 +2,15 @@
 
 ## Last Session
 
-Completed #240 (coordination-pipeline-view) — first component from epic #239 gallery showcase. Built `coordination-pipeline-view` Lit component rendering coordination playbooks as vertical pipelines. Iterated on YAML ergonomics: flattened `SwimLane` to `Record<name, steps>` and removed `step:`/`barrier:` wrapper nesting from `PhaseItem` union after user feedback. Populated epic #239 queue (#241-#251) in `.plan`.
+Completed #241 (Agent Pipeline — Graph View). Added graph view mode to `coordination-pipeline-view` — pure CSS tiered layout with flex rows, connectors (fan-out labels, quorum barrier, fan-in chevrons), color-coded outcome nodes, and Lanes/Graph toggle. Key design decision: CSS-only rendering, no SVG — `PhaseItem[]` is always sequential so CSS flexbox handles it naturally. Landed as `c3d16c4`.
 
 ## Immediate Next Step
 
-Start #241 — Agent Pipeline Graph View. Same KYC data rendered as node-edge topology. Reuses `CoordinationPipeline` types from #240. Will need a layout approach (ELK or manual SVG positioning) different from the CSS grid used for swim lanes.
+Start #242 (Agent Project Drill-Down). Read the issue, check mockup section, brainstorm.
 
 ## References
 
-- `packages/agent-viewer/src/coordination-pipeline-view.ts` — the component
-- `packages/agent-viewer/src/coordination-types.ts` — shared types (#241 reuses these)
-- `packages/agent-viewer/gallery.html` — section 5 (rendered) + YAML tab
-- `casehub-pages/docs/mockups/step-review-viewer.html` — section 14 is #241's mockup
+- `wsp-casehub-blocks-ui/specs/issue-241-agent-pipeline-graph-view/` — spec + decisions
+- `wsp-casehub-blocks-ui/plans/2026-10-19-agent-pipeline-graph-view.md` — implementation plan
+- `packages/agent-viewer/src/coordination-graph-model.ts` — tier assignment model
+- `packages/agent-viewer/gallery.html` — section 5 shows graph view
