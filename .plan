@@ -1,22 +1,13 @@
-# Work Plan — Work Plan —
+# Work Plan — yaml-project-view-alignment
 
 ## State
-branch: 
+branch: main
 state: active
-Current: casehubio/blocks-ui#241 — Agent Pipeline — Graph View
-date: 
-evidence-era: true
+date: 2026-10-20
+issue-repo: casehubio/blocks-ui
+covers: 262,263,258
 
 ## Queue
-- [x] casehubio/blocks-ui#240 — Agent Coordination Pipeline View
-- [x] casehubio/blocks-ui#241 — Agent Pipeline — Graph View
-- [ ] casehubio/blocks-ui#242 — Agent Project Drill-Down ← active
-- [ ] casehubio/blocks-ui#243 — Agent Diff — Coordination Level
-- [ ] casehubio/blocks-ui#244 — Choreography View — Reactive Case
-- [ ] casehubio/blocks-ui#245 — Work Item Card — Human-in-the-Loop
-- [ ] casehubio/blocks-ui#246 — Summarisation Pipeline — Event Stream
-- [ ] casehubio/blocks-ui#247 — Desired State Graph — dependsOn + forEach
-- [ ] casehubio/blocks-ui#248 — Application Topology — Deployment View
-- [ ] casehubio/blocks-ui#249 — Adaptive Topology — Situation-Triggered Mutations
-- [ ] casehubio/blocks-ui#250 — Project Dashboard — Aggregate View
-- [ ] casehubio/blocks-ui#251 — Focus Mode + Completeness Signals
+- [ ] casehubio/blocks-ui#262 — PatternSpec: 12 of 17 fields have no YAML source ← active
+- [ ] casehubio/blocks-ui#263 — CoordinationPipeline: UI-only fields need sourcing or removal
+- [ ] casehubio/blocks-ui#258 — Gallery demo data should come from real YAML project definitions
