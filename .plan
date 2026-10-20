@@ -1,13 +1,15 @@
-# Work Plan — yaml-project-view-alignment
+# Work Plan — issue-262-patternspec-trim-unsourced
 
 ## State
-branch: main
-state: active
-date: 2026-10-20
+branch: issue-262-patternspec-trim-unsourced
+state: scaffolded
+project-sha: 
+date: 
 issue-repo: casehubio/blocks-ui
 covers: 262,263,258
+design-repo: 
+design-section-hashes: 
+flyway-next-v: 
 
 ## Queue
-- [ ] casehubio/blocks-ui#262 — PatternSpec: 12 of 17 fields have no YAML source ← active
-- [ ] casehubio/blocks-ui#263 — CoordinationPipeline: UI-only fields need sourcing or removal
-- [ ] casehubio/blocks-ui#258 — Gallery demo data should come from real YAML project definitions
+- [ ] casehubio/blocks-ui#262 — Issue #262 ← active
