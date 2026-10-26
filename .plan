@@ -1,15 +1,25 @@
 # Work Plan — main
 
 ## State
-branch: main
+branch: issue-277-agency-pattern-views
 state: scaffolded
 project-sha: 
 date: 
 issue-repo: casehubio/casehub-mosaic
-covers: 257
+covers: 277
 design-repo: project
 design-section-hashes: 
 flyway-next-v: none
 
 ## Queue
-- [ ] casehubio/casehub-mosaic#257 — Issue #257 ← active
+- [x] casehubio/casehub-mosaic#257 — Issue #257
+- [ ] casehubio/casehub-mosaic#277 — Epic: Agency Pattern Views ← active
+  - [ ] Batch 1: Foundation
+    - [ ] Task 1: PatternViewMixin and shared styles
+  - [ ] Batch 2: Migration
+    - [ ] Task 2: Migrate voting-view
+    - [ ] Task 3: Migrate debate-view
+  - [ ] Batch 3: Dispatch
+    - [ ] Task 4: Base pattern view
+    - [ ] Task 5: Playbook spec view
+    - [ ] Task 6: Exhaustive switch dispatch
