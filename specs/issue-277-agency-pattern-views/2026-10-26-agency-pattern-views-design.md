@@ -271,7 +271,7 @@ Confidence scoring and eviction visualization. Memory entries table with confide
 **Cognition View (`agency-social-cognition-view`)**
 Cognitive pattern visualization. Renders cognition agent assignments, cognitive processing scope, and failure policy. Agent card grid. Property-only data. The standalone cognitive workbench (#231) in `components/cognitive-workbench/` is a separate composition that builds on this view.
 
-**Provisional:** The capability catalog marks `cognition` as `hasYamlRoot: true`, indicating the Java side has a rich YAML schema. The current `SocialPatternCategory` interface has no cognition-specific fields — when those fields are derived from the Java schema, this view will need enrichment beyond the base-field layout.
+**Provisional (#287):** The capability catalog marks `cognition` as `hasYamlRoot: true`, indicating the Java side has a rich YAML schema. The current `SocialPatternCategory` interface has no cognition-specific fields — when those fields are derived from the Java schema, this view will need enrichment beyond the base-field layout. Tracked as casehubio/casehub-mosaic#287.
 
 **Reflection** → rendered by `agency-base-pattern-view` (see §Base Pattern View below).
 
