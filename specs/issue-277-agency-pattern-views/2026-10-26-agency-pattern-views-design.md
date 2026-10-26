@@ -4,7 +4,7 @@ Epic: casehubio/casehub-mosaic#277
 
 ## Vision
 
-Every agency capability — orchestration, deliberation, perception, communication, governance, optimisation, social — gets a dedicated visualization component that renders its PatternCategory YAML spec. The type system mirrors the 7-category hierarchy from casehubio/blocks#337 (agency repo restructure). Together with the existing playbook visualization (coordination-pipeline-view), this gives full UI coverage for building agentic applications from YAML definitions.
+Every agency capability — orchestration, deliberation, perception, communication, governance, optimisation, social — gets a dedicated visualization component that renders its PatternCategory YAML spec. The type system mirrors the 7-category hierarchy from casehubio/blocks#337 (agency repo restructure). Playbook pattern specs are handled by a thin spec-descriptor view; the existing coordination-pipeline-view renders rich runtime pipeline data separately. Together this gives full UI coverage for building agentic applications from YAML definitions.
 
 ## Architecture
 
@@ -20,6 +20,7 @@ switch (spec.category) {
       case 'choreography': return html`<agency-orchestration-choreography-view .spec=${spec}></...>`;
       case 'saga': return html`<agency-orchestration-saga-view .spec=${spec}></...>`;
       case 'decomposition': return html`<agency-orchestration-decomposition-view .spec=${spec}></...>`;
+      default: const _o: never = spec.type; return _o;
     }
   case 'deliberation':
     switch (spec.type) {
@@ -28,41 +29,50 @@ switch (spec.category) {
       case 'negotiation': return html`<agency-deliberation-negotiation-view .spec=${spec}></...>`;
       case 'coalition': return html`<agency-deliberation-coalition-view .spec=${spec}></...>`;
       case 'normative': return html`<agency-deliberation-normative-view .spec=${spec}></...>`;
+      default: const _d: never = spec.type; return _d;
     }
   case 'perception':
     switch (spec.type) {
       case 'summarisation': return html`<agency-perception-summarisation-view .spec=${spec}></...>`;
       case 'narrative': return html`<agency-perception-narrative-view .spec=${spec}></...>`;
       case 'observation': return html`<agency-perception-observation-view .spec=${spec}></...>`;
+      default: const _p: never = spec.type; return _p;
     }
   case 'communication':
     switch (spec.type) {
-      case 'channel-execution': return html`<agency-communication-channel-execution-view .spec=${spec}></...>`;
-      case 'channel-summary': return html`<agency-communication-channel-summary-view .spec=${spec}></...>`;
+      case 'channel-execution': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      case 'channel-summary': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      default: const _c: never = spec.type; return _c;
     }
   case 'governance':
     switch (spec.type) {
       case 'judgment': return html`<agency-governance-judgment-view .spec=${spec}></...>`;
-      case 'oversight': return html`<agency-governance-oversight-view .spec=${spec}></...>`;
-      case 'attestation': return html`<agency-governance-attestation-view .spec=${spec}></...>`;
-      case 'trust': return html`<agency-governance-trust-view .spec=${spec}></...>`;
+      case 'oversight': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      case 'attestation': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      case 'trust': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      default: const _g: never = spec.type; return _g;
     }
   case 'optimisation':
     switch (spec.type) {
       case 'prompt-optimisation': return html`<agency-optimisation-prompt-view .spec=${spec}></...>`;
+      default: const _x: never = spec.type; return _x;
     }
   case 'social':
     switch (spec.type) {
       case 'memory-hygiene': return html`<agency-social-memory-hygiene-view .spec=${spec}></...>`;
       case 'cognition': return html`<agency-social-cognition-view .spec=${spec}></...>`;
-      case 'reflection': return html`<agency-social-reflection-view .spec=${spec}></...>`;
+      case 'reflection': return html`<agency-base-pattern-view .spec=${spec}></...>`;
+      default: const _s: never = spec.type; return _s;
     }
   case 'playbook':
-    return html`<coordination-pipeline-view .spec=${spec}></coordination-pipeline-view>`;
+    return html`<agency-playbook-spec-view .spec=${spec}></agency-playbook-spec-view>`;
+  default: const _: never = spec; return _;
 }
 ```
 
-PatternCategory is a closed discriminated union of 8 interfaces (7 agency + playbook). The switch gives compile-time exhaustiveness — adding a new type to the union forces updating the dispatch. Playbook delegates to the existing coordination-pipeline-view. No runtime registry needed.
+PatternCategory is a closed discriminated union of 8 interfaces (7 agency + playbook). The `default: never` guards give true compile-time exhaustiveness — adding a new type to the union causes a type error at the unhandled default. No runtime registry needed.
+
+**Playbook dispatch note:** `PlaybookPatternCategory` is a thin spec descriptor (`{category, type, name?, description?}`). It is structurally incompatible with `CoordinationPipeline` (which has `phases: PhaseItem[]` and is the data type for `coordination-pipeline-view`). The playbook case dispatches to `agency-playbook-spec-view`, which renders the spec descriptor fields (playbook type label, name, description). The rich pipeline visualization (`coordination-pipeline-view`) is a separate concern — it renders runtime `CoordinationPipeline` data accessed through the Steps tab, not through the Pattern dispatch.
 
 ### Component Placement (D3)
 
@@ -72,15 +82,17 @@ New pattern views live as subdirectories within `packages/agent-viewer/`:
 packages/agent-viewer/src/
 ├── shared-styles.ts         # patternViewStyles + PatternViewMixin
 ├── views/
+│   ├── base-pattern-view.ts         # shared view for types with no category-specific fields
+│   ├── playbook-spec-view.ts        # thin PlaybookPatternCategory renderer
 │   ├── orchestration/
 │   │   ├── supervisor-view.ts
 │   │   ├── choreography-view.ts
 │   │   ├── saga-view.ts
 │   │   ├── decomposition-view.ts
-│   │   └── routing-detail.ts         # sub-component for routing data
+│   │   └── routing-detail.ts        # sub-component for routing data
 │   ├── deliberation/
-│   │   ├── voting-view.ts            # migrated from src/voting-view.ts
-│   │   ├── debate-view.ts            # migrated from src/debate-view.ts
+│   │   ├── voting-view.ts           # migrated from src/voting-view.ts
+│   │   ├── debate-view.ts           # migrated from src/debate-view.ts
 │   │   ├── negotiation-view.ts
 │   │   ├── coalition-view.ts
 │   │   └── normative-view.ts
@@ -88,23 +100,16 @@ packages/agent-viewer/src/
 │   │   ├── observation-view.ts
 │   │   ├── narrative-view.ts
 │   │   ├── summarisation-view.ts
-│   │   └── summarisation-funnel.ts   # sub-component of summarisation-view
-│   ├── communication/
-│   │   ├── channel-execution-view.ts
-│   │   └── channel-summary-view.ts
+│   │   └── summarisation-funnel.ts  # sub-component of summarisation-view
 │   ├── governance/
-│   │   ├── judgment-view.ts
-│   │   ├── oversight-view.ts
-│   │   ├── attestation-view.ts
-│   │   └── trust-view.ts
+│   │   └── judgment-view.ts
 │   ├── optimisation/
 │   │   └── prompt-optimisation-view.ts
 │   └── social/
 │       ├── memory-hygiene-view.ts
-│       ├── cognition-view.ts
-│       └── reflection-view.ts
-├── coordination-pipeline-view.ts  # existing — playbook dispatch target
-├── agent-viewer.ts          # dispatch container
+│       └── cognition-view.ts
+├── coordination-pipeline-view.ts    # existing — renders CoordinationPipeline runtime data
+├── agent-viewer.ts                  # dispatch container
 └── ...
 ```
 
@@ -126,14 +131,14 @@ Existing views are renamed to follow the convention as part of Batch 0:
 - `voting-view` → `agency-deliberation-voting-view`
 - `debate-view` → `agency-deliberation-debate-view`
 
-Standalone components (case-definition-diagram, cognitive-workbench) are NOT pattern views and do NOT follow this convention — they are exempt from D1 dispatch.
+Standalone components (cognitive-workbench, work-item-hitl) are NOT pattern views and do NOT follow this convention — they are exempt from D1 dispatch.
 
 ### Two Visualization Families (D7)
 
 | Family | Data type | Purpose | Existing examples |
 |--------|-----------|---------|-------------------|
 | Playbook (steps) | CoordinationPipeline | Step sequencing — phases, barriers, swim lanes | coordination-pipeline-view |
-| Agency (patterns) | PatternCategory variants | Multi-agent coordination — routing, deliberation, perception | voting-view, debate-view |
+| Agency (patterns) | PatternCategory variants | Multi-agent coordination — routing, deliberation, perception | agency-deliberation-voting-view, agency-deliberation-debate-view |
 
 These coexist in agent-viewer. Playbook views render how steps execute. Agency views render how agents coordinate. Different data, different purpose.
 
@@ -215,19 +220,12 @@ Agent selection decision visualization, composed within supervisor-view and othe
 
 ### Governance Category
 
-`GovernancePatternCategory` extends `BasePatternCategory` with `type: 'judgment' | 'oversight' | 'attestation' | 'trust'` and no additional fields. All governance views render the base fields: name, description, agents, failurePolicy. Note: the `JudgmentSpec` (triggers, callers, agreement) is a field on `DeliberationPatternCategory`, not on `GovernancePatternCategory` — the governance `judgment` type and the deliberation `judgment` field are distinct concepts.
+`GovernancePatternCategory` extends `BasePatternCategory` with `type: 'judgment' | 'oversight' | 'attestation' | 'trust'` and no additional fields. Note: the `JudgmentSpec` (triggers, callers, agreement) is a field on `DeliberationPatternCategory`, not on `GovernancePatternCategory` — the governance `judgment` type and the deliberation `judgment` field are distinct concepts.
 
 **#268 — Judgment View (`agency-governance-judgment-view`)**
 Governance judgment policy visualization. Shows the judgment type label, assigned agents with role badges, failure policy configuration. Agent card grid with role assignment. Property-only data.
 
-**Oversight View (`agency-governance-oversight-view`)**
-Governance oversight visualization. Renders oversight agent assignments, monitoring scope description, and failure policy. Agent card grid. Property-only data.
-
-**Attestation View (`agency-governance-attestation-view`)**
-Formal sign-off visualization. Renders attestation agent assignments, attestation scope description, and failure policy. Agent card grid. Property-only data.
-
-**Trust View (`agency-governance-trust-view`)**
-Trust computation governance visualization. Renders trust-computing agent assignments, trust scope description, and failure policy. Agent card grid. Property-only data.
+**Oversight, Attestation, Trust** → rendered by `agency-base-pattern-view` (see §Base Pattern View below).
 
 ### Deliberation Category
 
@@ -244,11 +242,7 @@ Rule arbitration strategies. Shows conflicting norms/rules, arbitration strategy
 
 `CommunicationPatternCategory` extends `BasePatternCategory` with `type: 'channel-execution' | 'channel-summary'` and no additional fields.
 
-**Channel Execution View (`agency-communication-channel-execution-view`)**
-Channel execution pattern visualization. Renders channel agent assignments, execution scope, and failure policy. Agent card grid. Property-only data.
-
-**Channel Summary View (`agency-communication-channel-summary-view`)**
-Channel summary pattern visualization. Renders summary agent assignments, summary scope description, and failure policy. Agent card grid. Property-only data.
+**Channel Execution, Channel Summary** → rendered by `agency-base-pattern-view` (see §Base Pattern View below).
 
 ### Perception Category
 
@@ -277,8 +271,24 @@ Confidence scoring and eviction visualization. Memory entries table with confide
 **Cognition View (`agency-social-cognition-view`)**
 Cognitive pattern visualization. Renders cognition agent assignments, cognitive processing scope, and failure policy. Agent card grid. Property-only data. The standalone cognitive workbench (#231) in `components/cognitive-workbench/` is a separate composition that builds on this view.
 
-**Reflection View (`agency-social-reflection-view`)**
-Self-reflection pattern visualization. Renders reflection agent assignments, reflection scope description, and failure policy. Agent card grid. Property-only data.
+**Provisional:** The capability catalog marks `cognition` as `hasYamlRoot: true`, indicating the Java side has a rich YAML schema. The current `SocialPatternCategory` interface has no cognition-specific fields — when those fields are derived from the Java schema, this view will need enrichment beyond the base-field layout.
+
+**Reflection** → rendered by `agency-base-pattern-view` (see §Base Pattern View below).
+
+### Base Pattern View (`agency-base-pattern-view`)
+
+Single parameterized component for capability types whose category interfaces have no fields beyond `BasePatternCategory`. Renders: type label badge, name, description, agent card grid, failure policy configuration. The type label is derived from `spec.type` — no per-type rendering logic.
+
+Dispatched for these 6 types:
+- governance: `oversight`, `attestation`, `trust`
+- communication: `channel-execution`, `channel-summary`
+- social: `reflection`
+
+One component, one test file, one CSS block, one gallery page. When a type later gains category-specific fields (e.g., when `GovernancePatternCategory` is enriched), that type graduates from the base view to its own component — a one-line dispatch change. Property-only data.
+
+### Playbook Spec View (`agency-playbook-spec-view`)
+
+Thin renderer for `PlaybookPatternCategory` — the pattern spec descriptor for playbook types (sequence, parallel, loop, conditional, match, try-catch). Renders the playbook type label, name, and description. This is NOT the rich pipeline visualization — `PlaybookPatternCategory` is a thin descriptor (`{category, type, name?, description?}`), structurally incompatible with `CoordinationPipeline` (which has `phases: PhaseItem[]`). The rich pipeline visualization (`coordination-pipeline-view`) renders runtime `CoordinationPipeline` data accessed through the Steps tab. Property-only data.
 
 ### Standalone Components (outside D1 dispatch)
 
@@ -323,10 +333,12 @@ Combines #247 and #248 — desired state graph with topology overlay. Shows targ
 | Migrate voting-view to `src/views/deliberation/voting-view.ts` | Adopt PatternViewMixin, rename `pattern` → `spec`, rename element to `agency-deliberation-voting-view` |
 | Migrate debate-view to `src/views/deliberation/debate-view.ts` | Adopt PatternViewMixin, rename `pattern` → `spec`, rename element to `agency-deliberation-debate-view` |
 | Update agent-viewer dispatch | Rename `.pattern=${p}` → `.spec=${p}`, update element names, add exhaustive switch over all 22 agency types + playbook |
+| Create `agency-base-pattern-view` in `src/views/base-pattern-view.ts` | Shared component for 6 types with no category-specific fields |
+| Create `agency-playbook-spec-view` in `src/views/playbook-spec-view.ts` | Thin PlaybookPatternCategory renderer (type label, name, description) |
 | Create `src/views/` directory structure | Category subdirectories |
 | Gallery scaffold (#258) | Real YAML demo data structure |
 
-### Wave 1 — Orchestration + Governance (8 views, 6 issues)
+### Wave 1 — Orchestration + Governance (6 views, 6 issues)
 
 | # | View | Complexity |
 |---|------|------------|
@@ -335,19 +347,19 @@ Combines #247 and #248 — desired state graph with topology overlay. Shows targ
 | #254 | Saga | S — two-column forward/compensation |
 | #255 | Decomposition (renamed from case-definition-diagram) | L — graph-canvas + ELK, trust decorations |
 | #268 | Judgment | S — agent card grid, base fields |
-| — | Oversight, Attestation, Trust | XS — base-field views (agents, failurePolicy) |
+| — | Oversight, Attestation, Trust → `agency-base-pattern-view` | — (shared component, built once in Batch 0) |
 
-### Wave 2 — Deliberation + Communication (6 views, 5 issues)
+### Wave 2 — Deliberation + Communication (4 views, 5 issues)
 
 | # | View | Complexity |
 |---|------|------------|
 | #269 | Negotiation | M — proposal lifecycle, rounds |
 | #270 | Coalition formation | M — capability matrix, coverage bars |
 | #271 | Normative conflict | S — tree-based conflict display |
-| — | Channel Execution, Channel Summary | XS — base-field views (agents, failurePolicy) |
+| — | Channel Execution, Channel Summary → `agency-base-pattern-view` | — (shared component, built once in Batch 0) |
 | #245 | Work item card HITL (standalone, `components/`) | S — task card with response form |
 
-### Wave 3 — Perception + Optimisation + Social (9 views, 7 issues)
+### Wave 3 — Perception + Optimisation + Social (7 views, 7 issues)
 
 | # | View | Complexity |
 |---|------|------------|
@@ -355,8 +367,8 @@ Combines #247 and #248 — desired state graph with topology overlay. Shows targ
 | #273 | Decision narrative | M — signal-to-narrative pipeline |
 | #246 | Summarisation pipeline (includes #253 funnel sub-component) | M — multi-stage pipeline, live metrics, funnel |
 | #274 | Prompt optimisation | M — variant table, scoring sparklines |
-| — | Cognition | XS — base-field view + cognitive workbench hook |
-| — | Reflection | XS — base-field view (agents, failurePolicy) |
+| — | Cognition (provisional — will enrich when SocialPatternCategory gains fields) | XS — base-field view + cognitive workbench hook |
+| — | Reflection → `agency-base-pattern-view` | — (shared component, built once in Batch 0) |
 | #275 | Memory hygiene | S — memory table with confidence scores |
 | #231 | Cognitive workbench (standalone, `components/`) | L — greenfield, graph layout |
 
@@ -401,7 +413,7 @@ Schema:
 - `packages/mosaic-core/src/types/patterns/` — PatternCategory type system
 - `packages/mosaic-core/src/types/orchestration.ts` — YAML spec types and runtime types
 - `packages/agent-viewer/src/agent-viewer.ts:262-278` — current dispatch logic
-- `packages/agent-viewer/src/voting-view.ts` — existing pattern view reference
+- `packages/agent-viewer/src/views/deliberation/voting-view.ts` — existing pattern view reference (post Batch 0 migration)
 - `packages/agent-viewer/src/coordination-pipeline-view.ts` — playbook visualization (CoordinationPipeline type)
 - `components/conversation-viewer/` — standalone deliberation workbench
 - `packages/mosaic-core/src/types/patterns/catalog-staleness.test.ts` — catalog/TS type parity enforcement
