@@ -18,18 +18,51 @@ switch (spec.category) {
     switch (spec.type) {
       case 'supervisor': return html`<agency-orchestration-supervisor-view .spec=${spec}></...>`;
       case 'choreography': return html`<agency-orchestration-choreography-view .spec=${spec}></...>`;
-      // ...
+      case 'saga': return html`<agency-orchestration-saga-view .spec=${spec}></...>`;
+      case 'decomposition': return html`<agency-orchestration-decomposition-view .spec=${spec}></...>`;
     }
   case 'deliberation':
     switch (spec.type) {
-      case 'voting': return html`<agency-voting-view .spec=${spec}></...>`;
-      // ...
+      case 'voting': return html`<agency-deliberation-voting-view .spec=${spec}></...>`;
+      case 'debate': return html`<agency-deliberation-debate-view .spec=${spec}></...>`;
+      case 'negotiation': return html`<agency-deliberation-negotiation-view .spec=${spec}></...>`;
+      case 'coalition': return html`<agency-deliberation-coalition-view .spec=${spec}></...>`;
+      case 'normative': return html`<agency-deliberation-normative-view .spec=${spec}></...>`;
     }
-  // exhaustive over all categories
+  case 'perception':
+    switch (spec.type) {
+      case 'summarisation': return html`<agency-perception-summarisation-view .spec=${spec}></...>`;
+      case 'narrative': return html`<agency-perception-narrative-view .spec=${spec}></...>`;
+      case 'observation': return html`<agency-perception-observation-view .spec=${spec}></...>`;
+    }
+  case 'communication':
+    switch (spec.type) {
+      case 'channel-execution': return html`<agency-communication-channel-execution-view .spec=${spec}></...>`;
+      case 'channel-summary': return html`<agency-communication-channel-summary-view .spec=${spec}></...>`;
+    }
+  case 'governance':
+    switch (spec.type) {
+      case 'judgment': return html`<agency-governance-judgment-view .spec=${spec}></...>`;
+      case 'oversight': return html`<agency-governance-oversight-view .spec=${spec}></...>`;
+      case 'attestation': return html`<agency-governance-attestation-view .spec=${spec}></...>`;
+      case 'trust': return html`<agency-governance-trust-view .spec=${spec}></...>`;
+    }
+  case 'optimisation':
+    switch (spec.type) {
+      case 'prompt-optimisation': return html`<agency-optimisation-prompt-view .spec=${spec}></...>`;
+    }
+  case 'social':
+    switch (spec.type) {
+      case 'memory-hygiene': return html`<agency-social-memory-hygiene-view .spec=${spec}></...>`;
+      case 'cognition': return html`<agency-social-cognition-view .spec=${spec}></...>`;
+      case 'reflection': return html`<agency-social-reflection-view .spec=${spec}></...>`;
+    }
+  case 'playbook':
+    return html`<coordination-pipeline-view .spec=${spec}></coordination-pipeline-view>`;
 }
 ```
 
-PatternCategory is a closed discriminated union. The switch gives compile-time exhaustiveness — adding a new type to the union forces updating the dispatch. No runtime registry needed.
+PatternCategory is a closed discriminated union of 8 interfaces (7 agency + playbook). The switch gives compile-time exhaustiveness — adding a new type to the union forces updating the dispatch. Playbook delegates to the existing coordination-pipeline-view. No runtime registry needed.
 
 ### Component Placement (D3)
 
@@ -37,39 +70,47 @@ New pattern views live as subdirectories within `packages/agent-viewer/`:
 
 ```
 packages/agent-viewer/src/
+├── shared-styles.ts         # patternViewStyles + PatternViewMixin
 ├── views/
 │   ├── orchestration/
 │   │   ├── supervisor-view.ts
 │   │   ├── choreography-view.ts
 │   │   ├── saga-view.ts
-│   │   └── routing-strategy-view.ts
+│   │   ├── decomposition-view.ts
+│   │   └── routing-detail.ts         # sub-component for routing data
 │   ├── deliberation/
+│   │   ├── voting-view.ts            # migrated from src/voting-view.ts
+│   │   ├── debate-view.ts            # migrated from src/debate-view.ts
 │   │   ├── negotiation-view.ts
 │   │   ├── coalition-view.ts
 │   │   └── normative-view.ts
 │   ├── perception/
 │   │   ├── observation-view.ts
 │   │   ├── narrative-view.ts
-│   │   └── summarisation-view.ts
+│   │   ├── summarisation-view.ts
+│   │   └── summarisation-funnel.ts   # sub-component of summarisation-view
 │   ├── communication/
-│   │   └── channel-execution-view.ts
+│   │   ├── channel-execution-view.ts
+│   │   └── channel-summary-view.ts
 │   ├── governance/
-│   │   └── judgment-view.ts
+│   │   ├── judgment-view.ts
+│   │   ├── oversight-view.ts
+│   │   ├── attestation-view.ts
+│   │   └── trust-view.ts
 │   ├── optimisation/
 │   │   └── prompt-optimisation-view.ts
 │   └── social/
 │       ├── memory-hygiene-view.ts
-│       └── cognition-view.ts
-├── voting-view.ts           # existing — stays in place
-├── debate-view.ts           # existing — stays in place
-├── coordination-pipeline-view.ts  # existing — playbook, not agency
+│       ├── cognition-view.ts
+│       └── reflection-view.ts
+├── coordination-pipeline-view.ts  # existing — playbook dispatch target
 ├── agent-viewer.ts          # dispatch container
 └── ...
 ```
 
 Standalone workbenches that compose multiple views stay in `components/`:
 - `components/conversation-viewer/` — already a standalone composition
-- `components/cognitive-workbench/` — promoted from `examples/`, composes cognition views
+- `components/cognitive-workbench/` — greenfield cognitive visualization (#231)
 
 ### Naming Convention (D6)
 
@@ -77,11 +118,15 @@ Custom element tags: `agency-<category>-<type>-view`
 
 Examples:
 - `agency-orchestration-supervisor-view`
-- `agency-deliberation-negotiation-view`
+- `agency-deliberation-voting-view`
 - `agency-governance-judgment-view`
 - `agency-perception-observation-view`
 
-Existing views (voting-view, debate-view) keep their current names to avoid breaking consumers — they predate the category-aware naming.
+Existing views are renamed to follow the convention as part of Batch 0:
+- `voting-view` → `agency-deliberation-voting-view`
+- `debate-view` → `agency-deliberation-debate-view`
+
+Standalone components (case-definition-diagram, cognitive-workbench) are NOT pattern views and do NOT follow this convention — they are exempt from D1 dispatch.
 
 ### Two Visualization Families (D7)
 
@@ -94,7 +139,7 @@ These coexist in agent-viewer. Playbook views render how steps execute. Agency v
 
 ### Shared Infrastructure (D5)
 
-**`patternViewStyles`** — shared CSS export from mosaic-core:
+**`patternViewStyles`** — shared CSS export from `packages/agent-viewer/src/shared-styles.ts`:
 
 ```typescript
 export const patternViewStyles = css`
@@ -110,7 +155,7 @@ export const patternViewStyles = css`
 `;
 ```
 
-**`PatternViewMixin`** — thin Lit mixin in agent-viewer:
+**`PatternViewMixin`** — thin Lit mixin in `packages/agent-viewer/src/shared-styles.ts`:
 
 ```typescript
 export const PatternViewMixin = <T extends Constructor<LitElement>>(Base: T) =>
@@ -138,6 +183,8 @@ Views use: `class SupervisorView extends PatternViewMixin(LitElement) { ... }`
 
 Views needing live data additionally compose with DataSourceMixin: `class SummarisationView extends PatternViewMixin(DataSourceMixin(LitElement)) { ... }`
 
+**Property migration:** The mixin standardises on `spec` as the property name for the PatternCategory data. Existing views (voting-view, debate-view) currently use `pattern`. Batch 0 renames `pattern` → `spec` in these views and updates the agent-viewer dispatch callsite (`.pattern=${p}` → `.spec=${p}`). This is a breaking change for any external callers — acceptable since this platform has no end users.
+
 ### Data Source Strategy (D8)
 
 | View type | Data delivery | Rationale |
@@ -154,22 +201,33 @@ Views needing live data additionally compose with DataSourceMixin: `class Summar
 **#267 — Supervisor View (`agency-orchestration-supervisor-view`)**
 Hub-and-spoke agent routing visualization. Central supervisor node connected to worker agents. Shows routing spec (first-match/round-robin/sequential/llm-selected/select-all), termination conditions, failure policy. Worker agent cards around the hub. Property-only data.
 
-**#276 — Routing Strategy View (`agency-orchestration-routing-view`)**
-Agent selection decision visualization. Shows the routing decision tree: guard conditions, match outcomes, selected agents with capability badges. Tabular view of routing history (if execution data available). Property-only for spec, optional endpoint for routing history.
-
 **#244 — Choreography View (`agency-orchestration-choreography-view`)**
 Reactive blackboard architecture. Shared state (blackboard) in the center, agents observing and writing. Event-driven activation visualization — which agents respond to which state changes. Activation spec badges. Property-only data.
 
 **#254 — Saga View (`agency-orchestration-saga-view`)**
 Forward path + compensation chain. Two-column layout: left shows the forward execution path (steps with agent assignments), right shows compensation steps in reverse order. Step status badges, compensation triggers. Property-only data.
 
-**#255 — Case Definition Diagram (`agency-case-definition-diagram`)**
-YAML case definition drill-down through all execution models. Reuses pages-graph-canvas + ELK layout (like agency-dag-viewer). Shows bindings, workers, milestones with trust score pills and adaptive decision badges. Dual data mode (endpoint for case definition YAML, property for inline).
+**#255 — Decomposition View (`agency-orchestration-decomposition-view`)**
+YAML case definition drill-down showing task decomposition strategy. Reuses pages-graph-canvas + ELK layout (like agency-dag-viewer). Shows decomposition strategy, agent bindings, workers, milestones with trust score pills and adaptive decision badges. Dual data mode (endpoint for case definition YAML, property for inline).
+
+**#276 — Routing Detail (sub-component, not dispatched)**
+Agent selection decision visualization, composed within supervisor-view and other orchestration views that have `routing` data. Shows the routing decision tree: guard conditions, match outcomes, selected agents with capability badges. This is NOT a pattern type — `routing` is a property on `OrchestrationPatternCategory`, not a value of `OrchestrationPatternType`. Rendered inline within parent views, not through D1 dispatch.
 
 ### Governance Category
 
+`GovernancePatternCategory` extends `BasePatternCategory` with `type: 'judgment' | 'oversight' | 'attestation' | 'trust'` and no additional fields. All governance views render the base fields: name, description, agents, failurePolicy. Note: the `JudgmentSpec` (triggers, callers, agreement) is a field on `DeliberationPatternCategory`, not on `GovernancePatternCategory` — the governance `judgment` type and the deliberation `judgment` field are distinct concepts.
+
 **#268 — Judgment View (`agency-governance-judgment-view`)**
-Triggers, callers, escalation chains, agreement visualization. Three-section layout: trigger config (alwaysYield/neverYield/iterationBased/confidenceThreshold), caller topology (single/fanOut/escalationChain with agent cards), agreement spec (unanimous/majority/threshold). Property-only data.
+Governance judgment policy visualization. Shows the judgment type label, assigned agents with role badges, failure policy configuration. Agent card grid with role assignment. Property-only data.
+
+**Oversight View (`agency-governance-oversight-view`)**
+Governance oversight visualization. Renders oversight agent assignments, monitoring scope description, and failure policy. Agent card grid. Property-only data.
+
+**Attestation View (`agency-governance-attestation-view`)**
+Formal sign-off visualization. Renders attestation agent assignments, attestation scope description, and failure policy. Agent card grid. Property-only data.
+
+**Trust View (`agency-governance-trust-view`)**
+Trust computation governance visualization. Renders trust-computing agent assignments, trust scope description, and failure policy. Agent card grid. Property-only data.
 
 ### Deliberation Category
 
@@ -184,8 +242,13 @@ Rule arbitration strategies. Shows conflicting norms/rules, arbitration strategy
 
 ### Communication Category
 
-**#245 — Work Item Card HITL (`agency-communication-hitl-view`)**
-Human-in-the-loop work item card. Shows the task description, agent context, required human action, response form. Integrates with the existing work-item-detail patterns. Property-only data.
+`CommunicationPatternCategory` extends `BasePatternCategory` with `type: 'channel-execution' | 'channel-summary'` and no additional fields.
+
+**Channel Execution View (`agency-communication-channel-execution-view`)**
+Channel execution pattern visualization. Renders channel agent assignments, execution scope, and failure policy. Agent card grid. Property-only data.
+
+**Channel Summary View (`agency-communication-channel-summary-view`)**
+Channel summary pattern visualization. Renders summary agent assignments, summary scope description, and failure policy. Agent card grid. Property-only data.
 
 ### Perception Category
 
@@ -198,8 +261,8 @@ Signals to narratives pipeline. Shows how raw signal events are transformed thro
 **#246 — Summarisation Pipeline View (`agency-perception-summarisation-view`)**
 Event stream processing pipeline. Multi-stage pipeline: event stream → chunking → LLM summarisation → structured output. Stage metrics (throughput, latency). Dual data mode (spec + EventStreamController for live pipeline metrics).
 
-**#253 — Summarisation Funnel View (`agency-perception-summarisation-funnel-view`)**
-Funnel visualization of summarisation compression. Shows input event count → intermediate summaries → final output. Compression ratio badges. Property-only data.
+**#253 — Summarisation Funnel (sub-component of #246, not dispatched)**
+Funnel visualization of summarisation compression, composed within the summarisation pipeline view. Shows input event count → intermediate summaries → final output. Compression ratio badges. Not dispatched via D1 — a single `spec.type === 'summarisation'` case renders the pipeline view, which conditionally includes the funnel sub-component.
 
 ### Optimisation Category
 
@@ -208,11 +271,22 @@ Variant selection and scoring. Shows prompt variants with A/B comparison, scorin
 
 ### Social Category
 
-**#231 — Cognitive Workbench (promoted from examples)**
-Brain graph visualization. Promote from `examples/cognitive-workbench/` to `components/cognitive-workbench/`. Uses pages-graph-canvas with brain layout (ELK). Extraction pipeline view. Dual data mode.
-
 **#275 — Memory Hygiene View (`agency-social-memory-hygiene-view`)**
 Confidence scoring and eviction visualization. Memory entries table with confidence scores, staleness indicators, eviction policy thresholds. Sorted by confidence (low first for eviction candidates). Dual data mode (spec + endpoint for memory state).
+
+**Cognition View (`agency-social-cognition-view`)**
+Cognitive pattern visualization. Renders cognition agent assignments, cognitive processing scope, and failure policy. Agent card grid. Property-only data. The standalone cognitive workbench (#231) in `components/cognitive-workbench/` is a separate composition that builds on this view.
+
+**Reflection View (`agency-social-reflection-view`)**
+Self-reflection pattern visualization. Renders reflection agent assignments, reflection scope description, and failure policy. Agent card grid. Property-only data.
+
+### Standalone Components (outside D1 dispatch)
+
+**#245 — Work Item Card HITL**
+Human-in-the-loop work item card. Shows the task description, agent context, required human action, response form. Integrates with the existing work-item-detail patterns. This is NOT a communication pattern type — `CommunicationPatternCategory.type` is `'channel-execution' | 'channel-summary'`, with no `hitl` value. Lives in `components/` as a standalone work-item extension. Property-only data.
+
+**#231 — Cognitive Workbench**
+Brain graph visualization. Greenfield development in `components/cognitive-workbench/`. Uses pages-graph-canvas with brain layout (ELK). Extraction pipeline view. Composes agency-social-cognition-view. Dual data mode.
 
 ### Infrastructure (Wave 4)
 
@@ -238,47 +312,53 @@ Combines #247 and #248 — desired state graph with topology overlay. Shows targ
 
 ## Wave Execution Plan (D2, D4)
 
+**Dependency:** #257 (Align pattern views to real blocks PatternSpec YAML) is OPEN. Its type alignment scope was largely resolved by #283 (CLOSED) and #284 (CLOSED), which established the current type system derived from the Java schema. Batch 0 depends on the type system being stable, which it now is. The remaining scope of #257 (aligning voting-view/debate-view to real YAML shapes) is subsumed by the migration tasks below.
+
 ### Batch 0 — Foundation
 
 | Task | Description |
 |------|-------------|
-| Add `patternViewStyles` to mosaic-core | Shared CSS export |
-| Create `PatternViewMixin` in agent-viewer | Spec property + ARIA + empty state |
+| Create `patternViewStyles` in `packages/agent-viewer/src/shared-styles.ts` | Shared CSS export (agent-viewer scoped, not mosaic-core) |
+| Create `PatternViewMixin` in `packages/agent-viewer/src/shared-styles.ts` | Spec property + ARIA + empty state |
+| Migrate voting-view to `src/views/deliberation/voting-view.ts` | Adopt PatternViewMixin, rename `pattern` → `spec`, rename element to `agency-deliberation-voting-view` |
+| Migrate debate-view to `src/views/deliberation/debate-view.ts` | Adopt PatternViewMixin, rename `pattern` → `spec`, rename element to `agency-deliberation-debate-view` |
+| Update agent-viewer dispatch | Rename `.pattern=${p}` → `.spec=${p}`, update element names, add exhaustive switch over all 22 agency types + playbook |
 | Create `src/views/` directory structure | Category subdirectories |
-| Expand agent-viewer switch dispatch | Exhaustive over all PatternCategory types with placeholders |
 | Gallery scaffold (#258) | Real YAML demo data structure |
 
-### Wave 1 — Orchestration + Governance (6 issues)
+### Wave 1 — Orchestration + Governance (8 views, 6 issues)
 
 | # | View | Complexity |
 |---|------|------------|
-| #267 | Supervisor | M — hub-and-spoke layout, agent cards |
-| #276 | Routing strategy | M — decision tree + optional history table |
+| #267 | Supervisor (includes #276 routing detail sub-component) | M — hub-and-spoke layout, agent cards, routing detail |
 | #244 | Choreography | M — blackboard + reactive agents |
 | #254 | Saga | S — two-column forward/compensation |
-| #255 | Case definition diagram | L — graph-canvas + ELK, trust decorations |
-| #268 | Judgment | S — three-section layout |
+| #255 | Decomposition (renamed from case-definition-diagram) | L — graph-canvas + ELK, trust decorations |
+| #268 | Judgment | S — agent card grid, base fields |
+| — | Oversight, Attestation, Trust | XS — base-field views (agents, failurePolicy) |
 
-### Wave 2 — Deliberation + Communication (4 issues)
+### Wave 2 — Deliberation + Communication (6 views, 5 issues)
 
 | # | View | Complexity |
 |---|------|------------|
 | #269 | Negotiation | M — proposal lifecycle, rounds |
 | #270 | Coalition formation | M — capability matrix, coverage bars |
 | #271 | Normative conflict | S — tree-based conflict display |
-| #245 | Work item card HITL | S — task card with response form |
+| — | Channel Execution, Channel Summary | XS — base-field views (agents, failurePolicy) |
+| #245 | Work item card HITL (standalone, `components/`) | S — task card with response form |
 
-### Wave 3 — Perception + Optimisation + Social (7 issues)
+### Wave 3 — Perception + Optimisation + Social (9 views, 7 issues)
 
 | # | View | Complexity |
 |---|------|------------|
 | #272 | Observation pipeline | M — pipeline with tiered output |
 | #273 | Decision narrative | M — signal-to-narrative pipeline |
-| #246 | Summarisation pipeline | M — multi-stage pipeline, live metrics |
-| #253 | Summarisation funnel | S — funnel visualization |
+| #246 | Summarisation pipeline (includes #253 funnel sub-component) | M — multi-stage pipeline, live metrics, funnel |
 | #274 | Prompt optimisation | M — variant table, scoring sparklines |
-| #231 | Cognitive workbench | L — promote from examples, graph layout |
+| — | Cognition | XS — base-field view + cognitive workbench hook |
+| — | Reflection | XS — base-field view (agents, failurePolicy) |
 | #275 | Memory hygiene | S — memory table with confidence scores |
+| #231 | Cognitive workbench (standalone, `components/`) | L — greenfield, graph layout |
 
 ### Wave 4 — Infrastructure (6 issues)
 
@@ -304,9 +384,9 @@ Agent-viewer dispatch test:
 - Integration test creating agent-viewer with each category+type
 
 Schema:
-- Each new `agency-*` component exports a Props interface
-- AgencyComponentRegistry entry added (per PP-20260907)
-- `yarn workspace @casehubio/mosaic-schema run generate` after each wave
+- Standalone `agency-*` components (`components/`) export a Props interface and get AgencyComponentRegistry entries (per PP-20260907)
+- Pattern views (`packages/agent-viewer/src/views/`) are internal sub-components of agent-viewer and exempt from individual registry entries — they are not independently consumed by host applications
+- `yarn workspace @casehubio/mosaic-schema run generate` after each wave for standalone components
 
 ## Protocols Checklist
 
@@ -314,7 +394,7 @@ Schema:
 |----------|-----------|--------|
 | PP-20260713 (customisation pattern) | Views with render callbacks | Typed config + callbacks, inline styles in callback output |
 | PP-20260930 (event namespace) | Views emitting bubbling events | `<component-prefix>:<action>` naming |
-| PP-20260907 (registry props) | All new agency-* elements | Export Props interface, add to AgencyComponentRegistry |
+| PP-20260907 (registry props) | Standalone agency-* elements in `components/` | Export Props interface, add to AgencyComponentRegistry. Pattern views in `packages/agent-viewer/src/views/` are internal sub-components and exempt — they are consumed only through agent-viewer's dispatch, not independently by host applications |
 
 ## References
 
@@ -324,9 +404,8 @@ Schema:
 - `packages/agent-viewer/src/voting-view.ts` — existing pattern view reference
 - `packages/agent-viewer/src/coordination-pipeline-view.ts` — playbook visualization (CoordinationPipeline type)
 - `components/conversation-viewer/` — standalone deliberation workbench
-- `examples/cognitive-workbench/` — barebones cognitive visualization (#231)
+- `packages/mosaic-core/src/types/patterns/catalog-staleness.test.ts` — catalog/TS type parity enforcement
 - casehubio/blocks#337 — Java agency repo restructure (7-category hierarchy)
 - `docs/protocols/mosaic/component-customisation-pattern.md` — PP-20260713
 - `docs/protocols/mosaic/custom-event-namespace-prefix.md` — PP-20260930
 - `docs/protocols/mosaic/component-registry-props.md` — PP-20260907
-- `docs/guides/contributor-guide.md` — architecture and conventions
