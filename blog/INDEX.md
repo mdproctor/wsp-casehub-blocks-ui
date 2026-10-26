@@ -28,3 +28,4 @@
 | [2026-09-27-mdp01-the-last-d3-component.md](2026-09-27-mdp01-the-last-d3-component.md) | 2026-09-27 | Migrated the last d3 graph component to pages infrastructure — every graph component now uses the same rendering and layout stack |
 | [2026-10-14-mdp01-the-diagram-that-writes-itself.md](2026-10-14-mdp01-the-diagram-that-writes-itself.md) | 2026-10-14 | Data bridge pattern: pure adapter function connects web components with different data shapes without coupling |
 | [2026-10-26-mp01-closed-dispatch.md](2026-10-26-mp01-closed-dispatch.md) | 2026-10-26 | Design review revised three architecture decisions for pattern view dispatch — closed type systems deserve compile-time exhaustiveness, not runtime registries |
+| [2026-10-26-mp02-grounding-pattern-views.md](2026-10-26-mp02-grounding-pattern-views.md) | 2026-10-26 | Fourteen pattern views across six agency categories — why grounding UI in real Java types matters more than plausible fabrication |
