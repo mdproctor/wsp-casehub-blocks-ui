@@ -1,6 +1,47 @@
 # HANDOFF — casehub-mosaic
 
-## Last Session (2026-10-26)
+## Last Session (2026-10-26, continued)
+
+Wave 3 pattern views — grounded against real Java types per issue #288 audit. 6 new views, 1 rework, 3 new type files.
+
+### What happened
+
+1. **Type definitions (Batch 4)** — 3 new type files in mosaic-core/types/patterns/:
+   - `perception.ts`: PipelineSpec (source/levels), WorldSpec (actions/sections/renderer with RendererSpec)
+   - `optimisation.ts`: PromptOptimisationPipeline (signature/optimiser/config/safety/confidenceScorer/examples)
+   - `social.ts`: CognitionConfig (13 sections), RetentionConfig (threshold + 4 weights)
+   - Moved PerceptionPatternCategory, OptimisationPatternCategory, SocialPatternCategory out of base.ts
+2. **Perception views (Batch 5)** — 3 new views:
+   - `summarisation-view`: vertical pipeline with source → level cards (grouping badge, summariser, emit)
+   - `observation-view`: action tags, section cards with type badges, tier threshold bar (verbatim/grouped/summarised)
+   - `narrative-view`: L0/L1/L2 pipeline stages with colour-coded badges, narrative output node
+3. **Optimisation + Social views (Batch 6)** — 3 new views:
+   - `prompt-optimisation-view`: pipeline cards with signature, optimiser/diversity badges, config grid, safety guardrails, scorer badge, examples count
+   - `cognition-view`: 13-module grid with ON/OFF status, config key tags, summary count
+   - `memory-hygiene-view`: retention threshold display, weighted scoring bars (confidence/recency/scope/trust)
+4. **Negotiation rework (Batch 7)** — added NegotiationParty + AcceptancePolicy types to deliberation.ts. View now renders named party cards with roles, acceptance policy badge with threshold, falls back to agent-card when parties absent.
+5. **Gallery** — new section 5 (5a–5f) for standalone showcases, viewer compositions (2m–2p). Renumbered sections 5→6, 6→7.
+6. **Exports** — all 6 new view classes and new types exported from agent-viewer index.
+
+### Branch state
+
+- **Branch:** `issue-277-agency-pattern-views` — 21 commits, clean
+- **Typecheck:** passes
+- **Tests:** 300 pass (283 agent-viewer + 17 mosaic-core), 5 pre-existing failures (voting/debate threshold rendering)
+- **ARIA:** passes (2 pre-existing failures in unrelated components)
+
+### Category colour scheme
+
+| Category | Colour | Hex |
+|----------|--------|-----|
+| Orchestration | Peach | #fab387 |
+| Deliberation | Purple | #cba6f7 |
+| Governance | Red | #f38ba8 |
+| Perception | Teal | #94e2d5 |
+| Optimisation | Amber | #f9e2af |
+| Social | Pink | #f5c2e7 |
+
+## Previous Session (2026-10-26)
 
 Pattern view implementation session for epic #277. Built 8 new dedicated pattern views replacing all Wave 1 and Wave 2 placeholders in the agent-viewer dispatch.
 
