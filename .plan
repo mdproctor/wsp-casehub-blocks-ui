@@ -14,12 +14,12 @@ flyway-next-v: none
 ## Queue
 - [x] casehubio/casehub-mosaic#257 — Issue #257
 - [ ] casehubio/casehub-mosaic#277 — Epic: Agency Pattern Views ← active
-  - [ ] Batch 1: Foundation
-    - [ ] Task 1: PatternViewMixin and shared styles
-  - [ ] Batch 2: Migration
-    - [ ] Task 2: Migrate voting-view
-    - [ ] Task 3: Migrate debate-view
-  - [ ] Batch 3: Dispatch
-    - [ ] Task 4: Base pattern view
-    - [ ] Task 5: Playbook spec view
-    - [ ] Task 6: Exhaustive switch dispatch
+  - [x] Batch 1: Foundation
+    - [x] Task 1: PatternViewMixin and shared styles
+  - [x] Batch 2: Migration
+    - [x] Task 2: Migrate voting-view
+    - [x] Task 3: Migrate debate-view
+  - [x] Batch 3: Dispatch
+    - [x] Task 4: Base pattern view
+    - [x] Task 5: Playbook spec view
+    - [x] Task 6: Exhaustive switch dispatch
