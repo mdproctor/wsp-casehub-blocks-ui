@@ -26,3 +26,4 @@
 >>>>>>> issue-190-speech-denoising
 | [2026-09-07-mdp01-zod-schemas-from-source.md](2026-09-07-mdp01-zod-schemas-from-source.md) | 2026-09-07 | Schema generation from source — ts-morph generator, BlocksComponentRegistry, 55 Zod schemas, typed configure() |
 | [2026-10-27-mdp01-the-type-that-was-already-right.md](2026-10-27-mdp01-the-type-that-was-already-right.md) | 2026-10-27 | Execution/Reports tab architecture for pattern views, CognitionConfig type rework where the design review caught a CognitionConfig.java vs CognitionDefinition conflation |
+| [2026-10-27-mdp02-coordination-step-field-sourcing.md](2026-10-27-mdp02-coordination-step-field-sourcing.md) | 2026-10-27 | Traced CoordinationStep fields to engine Java records — kept 3 sourced fields, removed 3 UI-only fields with render-time derivation |
