@@ -19,7 +19,7 @@ flyway-next-v: none
   - [x] Batch 2: View migrations
     - [x] Task 3: Migrate perception views
     - [x] Task 4: Migrate optimisation and memory-hygiene views
-  - [ ] Batch 3: cognition-view rework
-    - [ ] Task 5: Rework cognition-view with typed config
-  - [ ] Batch 4: Gallery and cross-repo
-    - [ ] Task 6: Update gallery and file issues
+  - [x] Batch 3: cognition-view rework
+    - [x] Task 5: Rework cognition-view with typed config
+  - [x] Batch 4: Gallery and cross-repo
+    - [x] Task 6: Update gallery and file issues
