@@ -23,17 +23,18 @@
 **Exploration:** quick
 **Status:** captured
 
-## D3: CognitionConfig — Type the 13+ modules from Java source
+## D3: CognitionConfig — Type the 13 sections from CognitionDefinition
 
-**Choice:** Type the modules now based on Java CognitionConfig audit
+**Choice:** Type the 13 sections now based on CognitionDefinition (agency/agentic-yaml)
 **Alternatives:**
 - Leave opaque for #287 — keeps scope smaller but cognition-view stays fabricated
-**Rationale:** Java audit revealed CognitionConfig is fundamentally wrong — not 13 opaque Record<string, unknown> modules but 23 boolean toggles + separate per-subsystem config beans (MoodConfig, DriveConfig, etc.). Fixing this now grounds the view properly.
-**Trade-offs:** Broader scope. Some subsystems are toggle-only with no config record — those get boolean-only interfaces. File agency issues if Java source is missing typed configs.
-**Sources:** neocortex/cognition-api CognitionConfig.java, CognitionDefaultBeans.java
-**Exploration:** quick
+- Replace with CognitionConfig.java boolean toggles — REJECTED by design review: wrong Java type (CDI runtime, not YAML schema)
+**Rationale:** Design review (R1-02/R1-03) revealed the mosaic-core CognitionConfig structure (13 sections) is correct — it mirrors CognitionDefinition from agency/agentic-yaml. The fix is typing each section's fields using the *ConfigSpec Java records, not replacing with boolean toggles from a CDI-internal type. CognitionConfig.java (neocortex) is a runtime toggle set that does NOT flow to the frontend.
+**Trade-offs:** Broader scope (13 typed interfaces). RelationshipStageConfigSpec typed as Record<string, unknown> initially.
+**Sources:** agency/agentic-yaml CognitionDefinition.java, *ConfigSpec.java records
+**Exploration:** quick → revised after design review
 **Depends on:** D1 (scope includes typing work)
-**Status:** captured
+**Status:** revised
 
 ## D4: Migration strategy — In-place rework
 
