@@ -116,8 +116,12 @@ interface BeliefRevisionConfig {
 // SchererAppraisalConfig
 ```
 
-SocialPatternCategory updated: `cognition` field becomes `CognitionConfig` (toggles)
-with optional per-subsystem config properties alongside it.
+SocialPatternCategory updated: `cognition` field type changes from the fabricated
+opaque-module shape to `CognitionConfig` (boolean toggles). Per-subsystem typed
+configs (MoodConfig, DriveConfig, etc.) become optional properties on
+SocialPatternCategory — e.g. `moodConfig?: MoodConfig`, `driveConfig?: DriveConfig`.
+This mirrors the Java structure where CognitionConfig holds the toggles and the
+per-subsystem beans are separate injected records.
 
 ### Per-View Rework
 
