@@ -16,9 +16,9 @@ flyway-next-v: none
   - [x] Batch 1: Foundation
     - [x] Task 1: Type CognitionConfig sections
     - [x] Task 2: Add tab infrastructure to PatternViewMixin
-  - [ ] Batch 2: View migrations
-    - [ ] Task 3: Migrate perception views
-    - [ ] Task 4: Migrate optimisation and memory-hygiene views
+  - [x] Batch 2: View migrations
+    - [x] Task 3: Migrate perception views
+    - [x] Task 4: Migrate optimisation and memory-hygiene views
   - [ ] Batch 3: cognition-view rework
     - [ ] Task 5: Rework cognition-view with typed config
   - [ ] Batch 4: Gallery and cross-repo
