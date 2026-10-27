@@ -2,7 +2,7 @@
 
 ## State
 branch: issue-288-grounded-pattern-views
-state: active
+state: closing:review
 project-sha: 
 date: 2026-10-27
 issue-repo: casehubio/casehub-mosaic
@@ -11,6 +11,7 @@ design-repo: project
 design-section-hashes: 
 flyway-next-v: none
 
+evidence-era: true
 ## Queue
 - [ ] casehubio/casehub-mosaic#288 — Grounded pattern views ← active
   - [x] Batch 1: Foundation
