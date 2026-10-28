@@ -1,0 +1,14 @@
+{
+  "branch": "issue-291-personality-vocab-manifest",
+  "issue": 291,
+  "repos": {
+    "blocks-ui": {
+      "sha": "cf635b8",
+      "pushed": true
+    },
+    "eidos": {
+      "sha": "unknown",
+      "pushed": true
+    }
+  }
+}
