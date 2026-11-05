@@ -26,28 +26,34 @@ Pure data functions operating on raw `AgentRelationship[]`:
 function findChainRoots(
   relationships: AgentRelationship[],
   agentId: string,
-  kind: RelationshipKind
+  kind: RelationshipKind,
+  extendedKind?: string
 ): string[]
 ```
 
 Walks upward from `agentId` following reverse edges (where `targetAgentId`
 matches) to find root agents — agents with no incoming edges of the given kind.
-If the focal agent is itself a root, returns `[agentId]`. If the focal agent
-appears in multiple disconnected chains, returns multiple roots. If the upward
-walk revisits a node (fully cyclic chain with no natural root), returns
-`[agentId]` — the focal agent becomes the entry point.
+When `extendedKind` is provided (for `kind: 'EXTENDED'`), only edges matching
+both `kind` and `extendedKind` are followed. If the focal agent is itself a
+root, returns `[agentId]`. If the focal agent appears in multiple disconnected
+chains, returns multiple roots. If the upward walk revisits a node (fully cyclic
+chain with no natural root), returns `[agentId]` — the focal agent becomes the
+entry point.
 
 ```ts
 function buildChainTree(
   relationships: AgentRelationship[],
   rootAgentId: string,
-  kind: RelationshipKind
+  kind: RelationshipKind,
+  extendedKind?: string
 ): ChainNode
 ```
 
 Walks downward from `rootAgentId` following outgoing edges of the given kind.
-Builds a tree with cycle detection via **ancestor-path tracking** (not a flat
-visited-set). The traversal maintains the current path from root to the node
+When `extendedKind` is provided, only edges matching both `kind` and
+`extendedKind` are followed — this ensures "Mentors (Extended)" builds a tree
+from mentors edges only, not all EXTENDED edges. Builds a tree with cycle
+detection via **ancestor-path tracking** (not a flat visited-set). The traversal maintains the current path from root to the node
 being expanded. A node is marked `isCycle: true` only if it appears in its own
 ancestor path — i.e., there is a path from the node back to itself. This
 correctly distinguishes DAG convergence from cycles:
@@ -85,7 +91,7 @@ chain-view is bidirectional: properties in, structured events out.
 
 **Events out (via `pages-event`):**
 - `chain:operation` — payload: `ChainOperation` — emitted on each inline edit
-- `chain:kind-changed` — payload: `{ kind: RelationshipKind }` — informational
+- `chain:kind-changed` — payload: `{ kind: RelationshipKind, extendedKind?: string }` — informational
 
 These events use `bubbles: true` but **not** `composed: true` — they are
 internal communication between chain-view and the editor parent within the
@@ -137,6 +143,13 @@ and `_pendingAdditions: AgentRelationship[]`.
 
 This correctly handles: duplicate removals (idempotent), add-then-remove
 (cancels), remove-then-re-add (cancels).
+
+**Confirmed-relationship suppression:** as a final step, additions whose
+identity matches a confirmed relationship (one present in the original
+`this.relationships` array and not being removed in the same changeset) are
+suppressed. This is a safety net for cases where the operation builder produces
+additions that duplicate existing edges (e.g., reconnect when the parent already
+has a direct edge to a child — see R2-02).
 
 The editor listens for `chain:operation` events, appends to
 `_pendingOperations`, derives flattened pending additions/removals, and passes
@@ -316,7 +329,9 @@ Clicking `[×]` on a non-leaf node shows inline options:
 ```
 
 - **Remove and reconnect:** parent inherits the removed node's children. Creates
-  a compound `ChainOperation` with N+1 removals and N additions.
+  a compound `ChainOperation` with N+1 removals and N additions. The operation
+  builder skips additions where the parent already has a confirmed edge to
+  the child (prevents redundant additions — see R2-02).
 - **Remove and disconnect:** removes all edges involving the node in this chain.
   Creates a compound `ChainOperation` with removals only — the chain splits.
 
@@ -412,6 +427,9 @@ Pure unit tests in `chain-tree.test.ts`:
   A is cyclic under D
 - Root discovery: mid-chain agent finds correct root
 - Root discovery: agent in multiple chains returns multiple roots
+- **EXTENDED sub-grouping**: mixed `extendedKind` values ('mentors', 'reviews')
+  — `buildChainTree` with `extendedKind: 'mentors'` follows only mentors edges,
+  ignores reviews edges
 - Empty relationships for kind: returns empty
 - Single node (root with no children)
 
@@ -426,7 +444,9 @@ Pure unit tests in `chain-tree.test.ts`:
 - Pending state: removals struck through, additions green
 - Cycle marker renders for cyclic nodes
 - Keyboard navigation: arrow keys, enter
-- Agent picker filters out agents already in chain
+- Agent picker for add-leaf excludes ancestors of insertion point; non-ancestor
+  tree agents remain available (DAG convergence is valid)
+- Agent picker for insert-between excludes ancestors, self, and target
 
 ### Editor integration
 
@@ -441,6 +461,7 @@ Pure unit tests in `chain-tree.test.ts`:
 - Identity-based removal matching (order-independent)
 - Individual operation dismissal removes single operation and reverses effects
 - Metadata propagation: insert-between inherits scope, not attestation
+- Reconnect suppresses additions that duplicate confirmed relationships
 - Multiple root rendering: stacked trees, focal agent highlighted in all
 
 ## File Changes
