@@ -32,15 +32,20 @@ Issue #282 — Thin CLAUDE.md, bring consumer and contributor guides to full cov
 
 ## What's Next
 
-Open issues by priority:
+**Next session: #234 — interactive chain navigator with inline editing.**
 
-1. **#315** — Cognitive state dashboard — live emotion/drive visualization (L/Med)
-2. **#307** — Avatar streaming — token-by-token via pages PushSource (M/Med)
-3. **#305** — Avatar theme — replace hardcoded dark with pages tokens (XS/Low)
-4. **#306** — Avatar text-only mode — optional 3D avatar (S/Low)
-5. **#235** — org-diagram renders degraded summary mode in standalone demo contexts
+Start fresh from main (stale `issue-234-chain-navigator` branch has only #233 fixes, all already on main — no #234 work was started). Needs brainstorming for traversal algorithm, inline editing UX, and cycle detection. See issue body for full spec.
 
-Paused: **#234** — interactive chain navigator (paused since 2026-10-27)
+The chain navigator is a third tab (Table / Chain / Diagram) or replaces the table for chain-forming relationship kinds (SUPERVISES, ESCALATES_TO, DELEGATES_TO, REPORTS_TO). Key files:
+- `components/agent-relationship-editor/` — the host component
+- `packages/graph-stencil-org/src/adapter/ego-subgraph.ts` — single-hop extraction (needs transitive version)
+
+Other open issues:
+- **#315** — Cognitive state dashboard (L/Med)
+- **#307** — Avatar streaming (M/Med)
+- **#305** — Avatar theme tokens (XS/Low)
+- **#306** — Avatar text-only mode (S/Low)
+- **#235** — org-diagram degraded mode
 
 ## Cross-Repo Changes (2026-10-07)
 
