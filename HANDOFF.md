@@ -1,30 +1,26 @@
 # HANDOFF — casehub-mosaic
 
-## Last Session (2026-10-27)
+## Last Session (2026-11-05)
 
-Issue #288 — Execution/Reports tab architecture for pattern views, CognitionConfig type rework grounded against CognitionDefinition from agency/agentic-yaml.
+Issue #282 — Thin CLAUDE.md, bring consumer and contributor guides to full coverage.
 
 ### What happened
 
-1. **CognitionConfig type rework** — replaced 12 `Record<string, unknown>` sections with 13 typed `*ConfigSpec` interfaces matching `CognitionDefinition` from `agency/agentic-yaml`. Design review caught a critical mistake: initial audit targeted `CognitionConfig.java` (CDI runtime toggles, never flows to frontend) instead of `CognitionDefinition` (YAML schema type). The existing 13-section structure was correct — only the depth was wrong.
-2. **Execution/Reports tab architecture** — PatternViewMixin gained `renderTabBar()`/`renderTabPanel()` with override points (`renderExecution()`/`renderReports()`). Full ARIA: roving tabindex, `aria-controls`, `aria-labelledby`, Home/End keys. Shared header CSS extracted to `patternViewStyles` with `--pattern-badge-color`.
-3. **View migrations** — all 6 Wave 3 views (summarisation, observation, narrative, prompt-optimisation, cognition, memory-hygiene) wrapped with Execution/Reports tabs. Migration was mechanical for 5 views (move render body into renderExecution).
-4. **cognition-view rework** — replaced generic module card grid with typed config rendering: config fields with Duration highlighting, axis weight bar charts for drive config, nested sub-sections for mood baseline and narrative synthesis gate.
-5. **Cross-repo issues filed** — agency#368 (CognitionDefinition REST endpoint), neocortex#713 (toggle-to-section mapping documentation)
-6. **Issues closed** — #288, #287 (cognition-view enrichment fulfilled by this work)
-7. **Blog entry** — "The Type That Was Already Right" covering the CognitionConfig vs CognitionDefinition conflation
+1. **Thinned CLAUDE.md** — replaced the 70-line dense Key Directories table with a 25-line grouped summary pointing to guides for detail
+2. **Updated consumer guide** — packages 4→10, components 37→66, organized by domain. Fixed stale references: diagram-core migration to pages, status domain count (11→14), case-flow-viewer name mismatch.
+3. **Updated contributor guide** — added 5 packages (graph-stencil-org, agent-avatar-2d, agent-viewer, avatar, lsp-schemas) and 29 components to Full Module Details. Fixed diagram-core section to reflect migration to `@casehubio/pages-diagram-core`.
+4. **Issues closed** — #282
 
 ### Branch state
 
-- Landed on main as `bb521cd` + `2436528` (2 squashed commits)
-- Branch `issue-288-grounded-pattern-views` stamped closed
+- Landed on main as `b2ef478c` (1 squashed commit)
+- Branch `issue-282-thin-claude-md` stamped closed
 
 ### Key decisions
 
-- Execution/Reports tabs are in PatternViewMixin (override methods, not TabDefinition composition) — fixed 2-tab structure doesn't justify the flexibility
-- CognitionConfig mirrors CognitionDefinition (YAML schema), NOT CognitionConfig.java (CDI runtime) — the frontend receives YAML-derived data
-- `RelationshipStageConfigSpec` left as `Record<string, unknown>` — full tier structure deferred
-- Reports tabs are stubs — report TS types don't exist yet
+- Detailed component descriptions live in the guides (consumer + contributor), not CLAUDE.md — no separate catalog file needed
+- CLAUDE.md retains a grouped navigation index (package groups + component domains) sufficient for routing to the right guide
+- Legacy packages (blocks-ui-core, blocks-ui-schema) excluded from guides — empty/dist-only remnants from the blocks→agency rename
 
 ## Known Issues
 
@@ -36,15 +32,15 @@ Issue #288 — Execution/Reports tab architecture for pattern views, CognitionCo
 
 ## What's Next
 
-Priority order:
+Open issues by priority:
 
-1. **#289** — Fix agent-viewer TypeScript errors blocking mosaic parent bootstrap (S/Low — build blocker)
-2. **#257** — Align pattern views to real PatternSpec YAML (M/Med — partially addressed by slot 219, needs triage)
-3. **#256** — Align eidos-view to real AgentDescriptor model (M/Med — same grounding pattern as #288)
-4. **#258** — Gallery demo data from real YAML (L/High — cross-repo, needs engine projections)
-5. **#282** — Thin CLAUDE.md (S/Low — housekeeping)
+1. **#315** — Cognitive state dashboard — live emotion/drive visualization (L/Med)
+2. **#307** — Avatar streaming — token-by-token via pages PushSource (M/Med)
+3. **#305** — Avatar theme — replace hardcoded dark with pages tokens (XS/Low)
+4. **#306** — Avatar text-only mode — optional 3D avatar (S/Low)
+5. **#235** — org-diagram renders degraded summary mode in standalone demo contexts
 
-Epic #277 sub-issues mostly closed. Remaining open: #255 (YAML case definition diagram — XL/High), #257, #258.
+Paused: **#234** — interactive chain navigator (paused since 2026-10-27)
 
 ## Cross-Repo Changes (2026-10-07)
 
