@@ -298,17 +298,21 @@ trees. The `[+ new chain]` button creates a new root, adding another tree.
 Each node is a row with indentation per depth level:
 
 ```
-▸ [avatar] Agent Name [role]          [+ insert] [×]
-    ▸ [avatar] Child Agent [role]     [+ insert] [×]
-        [avatar] Leaf Agent [role]    [+ add]    [×]
+▸ [avatar] Root Agent [role]                    [+ add] [×]
+    ▸ [avatar] Child Agent [role]   [+ insert] [+ add] [×]
+        [avatar] Leaf Agent [role]  [+ insert] [+ add] [×]
 ```
 
 - `▸`/`▾` collapse/expand toggle for nodes with children
 - Agent rendering: avatar + name + optional role badge (reuses the
   `_renderAgentCell` pattern from the editor)
-- `[+ insert]` button on each non-leaf node's row — inserts a new agent between
-  that node and its children. Opens an inline agent picker on click.
-- `[+ add]` button on leaf nodes — opens inline agent picker to add a new child
+- `[+ insert]` button on each **non-root** node's row — inserts a new agent
+  between that node's parent and that node. Opens an inline agent picker on
+  click. This is a per-edge operation: clicking `[+ insert]` on child B (whose
+  parent is A) inserts between A and B specifically, producing `removals: [A→B],
+  additions: [A→C, C→B]`. Root nodes have no parent, so no insert button.
+- `[+ add]` button on every node — opens inline agent picker to add a new child
+  below this node
 - `[×]` on any node — opens removal options inline
 
 A `[+ new chain]` button below the tree starts a new chain with inline source
@@ -322,7 +326,7 @@ background highlight so the user sees their position in the chain context.
 
 ### Removal options
 
-Clicking `[×]` on a non-leaf node shows inline options:
+Clicking `[×]` on a non-leaf, non-root node shows inline options:
 
 ```
 [Remove and reconnect] [Remove and disconnect] [Cancel]
@@ -335,6 +339,15 @@ Clicking `[×]` on a non-leaf node shows inline options:
 - **Remove and disconnect:** removes all edges involving the node in this chain.
   Creates a compound `ChainOperation` with removals only — the chain splits.
 
+Clicking `[×]` on a **root node with children** shows only:
+
+```
+[Remove and disconnect] [Cancel]
+```
+
+Reconnect is hidden because a root has no parent to inherit children. Reconnect
+on a root would produce removals without additions — identical to disconnect.
+
 On a leaf node, clicking `[×]` directly creates a `delete` operation (single
 removal, no reconnection choice needed).
 
@@ -344,12 +357,13 @@ Clicking `[+ insert]` or `[+ add]` shows an inline dropdown of available agents
 from the roster. The filter excludes only agents that would create a cycle at
 the specific insertion point, not all agents present in the chain:
 
-- **Add leaf** (adding child to node X): exclude ancestors of X (including X
+- **Add child** (adding child to node X): exclude ancestors of X (including X
   itself). Agents elsewhere in the tree are valid — DAG convergence is
   legitimate.
-- **Insert between** (inserting between A and B): exclude ancestors of A
-  (including A) and B itself. Inserting B between A and B would create a
-  self-loop; inserting an ancestor of A would create a cycle.
+- **Insert above** (clicking `[+ insert]` on node B whose parent is A — inserts
+  between A and B): exclude ancestors of A (including A) and B itself. Inserting
+  B between A and B would create a self-loop; inserting an ancestor of A would
+  create a cycle.
 
 This correctly handles DAG structures where an agent appears under multiple
 parents. Selecting an agent creates the appropriate `ChainOperation`.
@@ -438,9 +452,12 @@ Pure unit tests in `chain-tree.test.ts`:
 - Renders tree structure with correct indentation and ARIA attributes
 - Kind selector shows populated kinds, excludes BACKS_UP
 - Focal agent highlighted
-- Click insert: shows picker, emits `chain:operation` with correct type
+- Click `[+ insert]` on non-root node: shows picker, emits `chain:operation`
+  with insert-between type for parent→this edge
+- Click `[+ add]` on any node: shows picker, emits add-leaf operation
 - Click remove on leaf: emits delete operation
-- Click remove on non-leaf: shows reconnect/disconnect options
+- Click remove on non-leaf non-root: shows reconnect/disconnect options
+- Click remove on root with children: shows disconnect only (no reconnect)
 - Pending state: removals struck through, additions green
 - Cycle marker renders for cyclic nodes
 - Keyboard navigation: arrow keys, enter
