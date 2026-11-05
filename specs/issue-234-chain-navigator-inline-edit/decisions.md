@@ -89,7 +89,7 @@
 **Alternatives:**
 - Build traversal inside chain-view — duplicates domain logic from `computeDerivedData`, mixes data operations with UI rendering
 - Reuse `computeDerivedData` via GraphModel adapter — adds a conversion step (toOrgGraph → computeDerivedData → extract), and `computeDerivedData` doesn't support all kinds transitively
-**Rationale:** Chain traversal is a data operation, not a UI concern. A new `buildChainTree(relationships: AgentRelationship[], rootAgentId: string, kind: RelationshipKind): ChainNode[]` function in `graph-stencil-org` works directly on the relationship array, includes cycle detection, and is testable independently of the UI.
+**Rationale:** Chain traversal is a data operation, not a UI concern. A new `buildChainTree(relationships: AgentRelationship[], rootAgentId: string, kind: RelationshipKind): ChainNode` function in `graph-stencil-org` works directly on the relationship array, includes cycle detection, and is testable independently of the UI.
 **Trade-offs:** Adds a new public API to graph-stencil-org. But the function is small, well-bounded, and the package already owns relationship data structures.
 **Depends on:** D4 (component architecture — chain-view consumes the utility)
 **Sources:** Review R1-07, `extractEgoSubgraph` (single-hop precedent), `computeDerivedData` (partial transitive traversal)

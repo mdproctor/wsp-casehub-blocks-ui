@@ -33,7 +33,9 @@ function findChainRoots(
 Walks upward from `agentId` following reverse edges (where `targetAgentId`
 matches) to find root agents — agents with no incoming edges of the given kind.
 If the focal agent is itself a root, returns `[agentId]`. If the focal agent
-appears in multiple disconnected chains, returns multiple roots.
+appears in multiple disconnected chains, returns multiple roots. If the upward
+walk revisits a node (fully cyclic chain with no natural root), returns
+`[agentId]` — the focal agent becomes the entry point.
 
 ```ts
 function buildChainTree(
@@ -150,7 +152,8 @@ confirm remains `RelationshipChangeset` (flattened additions/removals).
 
 Segmented control at the top of the Chain tab. Shows only kinds that have
 relationships in the current dataset. BACKS_UP is excluded (pairs, not chains).
-Defaults to the first populated kind. Changing kind rebuilds the tree.
+EXTENDED is navigable if present. Defaults to the first populated kind. Changing
+kind rebuilds the tree.
 
 ### Tree rendering
 
@@ -165,9 +168,9 @@ Each node is a row with indentation per depth level:
 - `▸`/`▾` collapse/expand toggle for nodes with children
 - Agent rendering: avatar + name + optional role badge (reuses the
   `_renderAgentCell` pattern from the editor)
-- `[+ insert]` appears on hover between parent and child — opens inline agent
-  picker to insert between the two
-- `[+ add]` on leaf nodes — opens inline agent picker to add a new child
+- `[+ insert]` button on each non-leaf node's row — inserts a new agent between
+  that node and its children. Opens an inline agent picker on click.
+- `[+ add]` button on leaf nodes — opens inline agent picker to add a new child
 - `[×]` on any node — opens removal options inline
 
 A `[+ new chain]` button below the tree starts a new chain with inline source
