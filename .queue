@@ -1,0 +1,28 @@
+# Work Plan — issue-234-chain-navigator-inline-edit
+
+## State
+branch: issue-234-chain-navigator-inline-edit
+status: active
+project-sha: 
+date: 
+issue-repo: casehubio/casehub-mosaic
+covers: 234
+design-repo: 
+design-section-hashes: 
+flyway-next-v: 
+
+## Queue
+- [ ] casehubio/casehub-mosaic#234 — Issue #234 ← active
+  - [x] Batch 1: Traversal
+    - [x] Task 1: ChainNode and buildChainTree
+  - [x] Batch 2: Types
+    - [x] Task 2: RelationshipIdentity and flattenOperations
+  - [x] Batch 3: Migration
+    - [x] Task 3: Editor changeset migration
+  - [x] Batch 4: ChainView
+    - [x] Task 4: Tree rendering and ARIA
+    - [x] Task 5: Inline editing operations
+  - [x] Batch 5: Integration
+    - [x] Task 6: Wire chain-view as third tab
+  - [x] Batch 6: Polish
+    - [x] Task 7: Playwright verification
