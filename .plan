@@ -1,0 +1,15 @@
+# Work Plan — issue-224-connection-identity-ui
+
+## State
+branch: issue-224-connection-identity-ui
+state: scaffolded
+project-sha: 
+date: 
+issue-repo: casehubio/casehub-mosaic
+covers: 224
+design-repo: 
+design-section-hashes: 
+flyway-next-v: none
+
+## Queue
+- [ ] casehubio/casehub-mosaic#224 — Issue #224 ← active
