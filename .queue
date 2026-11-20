@@ -5,7 +5,7 @@
 - [x] casehubio/casehub-mosaic#302 — Tool call visibility in transcript
 - [x] casehubio/casehub-mosaic#306 — Avatar text-only mode
 - [x] casehubio/casehub-mosaic#304 — Confirmation flow in conversation
-- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram ← done on issue-295-execution-model-badge
+- [x] casehubio/casehub-mosaic#295 — Execution model badge on case diagram
   - [x] Batch 1: Detection
     - [x] Task 1: Add detectDiagramTypeFromSrc and extend detectDiagramType
     - [x] Task 2: Update DIAGRAM_TAGS
