@@ -19,3 +19,5 @@ flyway-next-v: none
 - [ ] casehubio/casehub-mosaic#302 — Tool call visibility in transcript
 - [ ] casehubio/casehub-mosaic#306 — Avatar text-only mode
 - [ ] casehubio/casehub-mosaic#304 — Confirmation flow in conversation
+- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram
+- [ ] casehubio/casehub-mosaic#298 — Worker chain tracing animated edges
