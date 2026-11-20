@@ -36,6 +36,8 @@ The text-only mode came from a real consumer need. Clinical triage and life dash
 
 A `showAvatar` boolean on the panel conditionally renders the heavyweight parts. TalkingHead is already lazy-loaded via dynamic `import()`, so when the avatar element isn't in the DOM, the WebGL dependency never loads. The text-only panel is transcript and input bar — nothing else.
 
+The panel itself is a vertical stack — avatar above transcript — but nothing forces that layout. Each piece is an independent custom element: `<casehub-avatar>`, `<casehub-transcript>`, `<casehub-speech>`, `<casehub-avatar-controls>`. A host that wants the avatar on the left and the conversation on the right just composes them in a side-by-side grid. The panel is a convenience; the primitives are the real API.
+
 ## What's left unbuilt
 
 The confirmation flow leaves one thing open: auto-expiry. The `expiresAt` field exists on `ConversationTurn` but nothing reads it yet. A stale confirmation just sits there with its buttons enabled. The timer logic belongs in the session layer, not the transcript renderer — getting the event plumbing right matters more than the timeout.
