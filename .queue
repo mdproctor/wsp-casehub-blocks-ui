@@ -1,10 +1,10 @@
 # Work Plan —
 
 ## State
-branch: issue-224-connection-identity-ui
+branch: 
 issue-repo: casehubio/casehub-mosaic
-status: drained
-covers: 224
+status: active
+covers: casehubio/casehub-mosaic#295
 project-sha: 
 date: 
 design-repo: 
@@ -13,11 +13,13 @@ flyway-next-v: none
 
 ## Queue
 - [x] casehubio/casehub-mosaic#224 — Issue #224
-- [ ] casehubio/casehub-mosaic#327 — Rename AvatarConfig to AvatarComponentConfig
-- [ ] casehubio/casehub-mosaic#326 — Deprecate AvatarWsController
-- [ ] casehubio/casehub-mosaic#305 — Avatar theme tokens
-- [ ] casehubio/casehub-mosaic#302 — Tool call visibility in transcript
-- [ ] casehubio/casehub-mosaic#306 — Avatar text-only mode
-- [ ] casehubio/casehub-mosaic#304 — Confirmation flow in conversation
-- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram
+- [ ] casehubio/casehub-mosaic#327 — Rename AvatarConfig to AvatarComponentConfig ← done on issue-327-rename-avatar-config
+- [ ] casehubio/casehub-mosaic#326 — Deprecate AvatarWsController ← done on issue-326-deprecate-avatar-ws-controller
+- [ ] casehubio/casehub-mosaic#305 — Avatar theme tokens ← done on issue-305-avatar-theme-tokens
+- [ ] casehubio/casehub-mosaic#302 — Tool call visibility in transcript ← done on issue-302-tool-call-transcript
+- [ ] casehubio/casehub-mosaic#306 — Avatar text-only mode ← done on issue-306-avatar-text-only-mode
+- [ ] casehubio/casehub-mosaic#304 — Confirmation flow in conversation ← done on issue-304-confirmation-flow
+- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram ← active
 - [ ] casehubio/casehub-mosaic#298 — Worker chain tracing animated edges
+- [ ] casehubio/casehub-mosaic#332 — Confirmation-auto-expiry-timer
+- [ ] casehubio/casehub-mosaic#333 — ConversationTurn-discriminated-union
