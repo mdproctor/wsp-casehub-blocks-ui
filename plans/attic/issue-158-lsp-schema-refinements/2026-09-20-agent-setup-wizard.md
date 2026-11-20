@@ -500,7 +500,7 @@ git commit -m "feat(blocks-ui-core): add agent setup event topics and relationsh
 
 **Interfaces:**
 - Consumes: `AgentDisposition`, `DispositionAxis`, `primaryTerm` from blocks-ui-core
-- Produces: `CanonicalTermRegistry`, `resolveFeatures()`, `AvatarFeatures`, `AvatarConfig`
+- Produces: `CanonicalTermRegistry`, `resolveFeatures()`, `AvatarFeatures`, `AvatarComponentConfig`
 
 - [ ] **Step 1: Create package.json**
 
@@ -734,7 +734,7 @@ git commit -m "feat(agent-avatar-2d): scaffold package with canonical term regis
 - Test: `packages/agent-avatar-2d/src/agent-avatar.test.ts`
 
 **Interfaces:**
-- Consumes: `resolveFeatures`, `AvatarFeatures`, `AvatarConfig` from Task 4
+- Consumes: `resolveFeatures`, `AvatarFeatures`, `AvatarComponentConfig` from Task 4
 - Produces: `generateAvatar()`, `generateCandidates()`, `customiseAvatar()`, `<agent-avatar>` element
 
 - [ ] **Step 1: Write generator tests**
