@@ -1,4 +1,22 @@
-# Work Plan —
+- [x] casehubio/casehub-mosaic#224 — Issue #224
+- [x] casehubio/casehub-mosaic#327 — Rename AvatarConfig to AvatarComponentConfig
+- [x] casehubio/casehub-mosaic#326 — Deprecate AvatarWsController
+- [x] casehubio/casehub-mosaic#305 — Avatar theme tokens
+- [x] casehubio/casehub-mosaic#302 — Tool call visibility in transcript
+- [x] casehubio/casehub-mosaic#306 — Avatar text-only mode
+- [x] casehubio/casehub-mosaic#304 — Confirmation flow in conversation
+- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram ← done on issue-295-execution-model-badge
+  - [x] Batch 1: Detection
+    - [x] Task 1: Add detectDiagramTypeFromSrc and extend detectDiagramType
+    - [x] Task 2: Update DIAGRAM_TAGS
+  - [x] Batch 2: Badge
+    - [x] Task 3: Add diagramType badge to toolbar
+    - [x] Task 4: Wire type resolution and update consumers
+- [ ] casehubio/casehub-mosaic#298 — Worker chain tracing animated edges        ← active
+- [ ] casehubio/casehub-mosaic#332 — Confirmation-auto-expiry-timer
+- [ ] casehubio/casehub-mosaic#333 — ConversationTurn-discriminated-union
+- [ ] casehubio/casehub-mosaic#334 — Badge colours should use pages CSS tokens
+- [ ] casehubio/casehub-mosaic#335 — diagram-workbench resolve root type dynamically
 
 ## State
 branch: 
@@ -10,24 +28,3 @@ date:
 design-repo: 
 design-section-hashes: 
 flyway-next-v: none
-
-## Queue
-- [x] casehubio/casehub-mosaic#224 — Issue #224
-- [ ] casehubio/casehub-mosaic#327 — Rename AvatarConfig to AvatarComponentConfig ← done on issue-327-rename-avatar-config
-- [ ] casehubio/casehub-mosaic#326 — Deprecate AvatarWsController ← done on issue-326-deprecate-avatar-ws-controller
-- [ ] casehubio/casehub-mosaic#305 — Avatar theme tokens ← done on issue-305-avatar-theme-tokens
-- [ ] casehubio/casehub-mosaic#302 — Tool call visibility in transcript ← done on issue-302-tool-call-transcript
-- [ ] casehubio/casehub-mosaic#306 — Avatar text-only mode ← done on issue-306-avatar-text-only-mode
-- [ ] casehubio/casehub-mosaic#304 — Confirmation flow in conversation ← done on issue-304-confirmation-flow
-- [ ] casehubio/casehub-mosaic#295 — Execution model badge on case diagram ← done on issue-295-execution-model-badge
-  - [x] Batch 1: Detection
-    - [x] Task 1: Add detectDiagramTypeFromSrc and extend detectDiagramType
-    - [x] Task 2: Update DIAGRAM_TAGS
-  - [x] Batch 2: Badge
-    - [x] Task 3: Add diagramType badge to toolbar
-    - [x] Task 4: Wire type resolution and update consumers
-- [ ] casehubio/casehub-mosaic#298 — Worker chain tracing animated edges ← active
-- [ ] casehubio/casehub-mosaic#332 — Confirmation-auto-expiry-timer
-- [ ] casehubio/casehub-mosaic#333 — ConversationTurn-discriminated-union
-- [ ] casehubio/casehub-mosaic#334 — Badge colours should use pages CSS tokens
-- [ ] casehubio/casehub-mosaic#335 — diagram-workbench resolve root type dynamically
