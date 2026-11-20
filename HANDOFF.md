@@ -2,20 +2,27 @@
 
 ## Last Session
 
-Implemented Epic #224 — Connection & Identity UI components. Built 2 new packages: `@casehubio/mosaic-connection-manager` (6 primitives, 2 controllers, 1 pre-configured page) and `@casehubio/mosaic-login-page`. 12 commits, 69 tests, typecheck clean, squash reviewed. Code review surfaced 3 must-fix items (applied) and 3 issues filed (#329, #330, #331). Close ceremony blocked by workspace alignment — workspace `.queue` belongs to `issue-234` branch from a prior session.
+Completed 6 avatar package issues stacked on branches from issue-327 through issue-304: config rename (#327), dead controller removal (#326), theme token migration (#305), tool-call transcript rendering (#302), text-only panel mode (#306), and confirmation flow (#304). Code review applied — fixed dynamic ARIA label bug and merged duplicate handlers. 2 issues filed (#332 auto-expiry timer, #333 discriminated union refactor) and scheduled in queue. Blog entry written.
+
+## Active Item
+
+#295 — Execution model badge on case diagram. Not started. This is a topic change from avatar to diagram components.
+
+## Queue State
+
+6 done items awaiting landing: #327, #326, #305, #302, #306, #304
+Active: #295
+Queued: #306 text-only mode (done), #304 confirmation (done), #295 execution badge (active), #298 animated edges, #332 auto-expiry, #333 discriminated union
 
 ## Immediate Next Step
 
-Fix workspace alignment: the workspace `.queue` on the committed main branch references `issue-234-chain-navigator-inline-edit`. Our `issue-224` queue was written via `plan_manager.py append` but over the stale committed state. Resolve the workspace queue conflict, then run `work end` to land the branch.
+Run `work end` to land the 6 done items, then start #295 (case diagram work — different domain, fresh session recommended).
 
 ## Cross-Module
 
-- platform#898 — REST endpoints for ServiceConnection and WebAuthn (filed this session, not yet implemented)
+- platform#898 — REST endpoints for ServiceConnection and WebAuthn (filed in prior session, not yet implemented)
 
 ## References
 
-- Spec: `specs/issue-224-connection-identity-ui/2026-11-19-connection-identity-ui-design.md`
-- Plan: `plans/2026-11-19-connection-identity-ui.md`
-- Decisions: `specs/issue-224-connection-identity-ui/decisions.md`
-- Blog: `blog/2026-11-19-mdp01-the-login-button-is-not-a-component.md`
-- Filed issues: #329 (dark mode overlay), #330 (state prop), #331 (missing tests)
+- Blog: `blog/2026-11-20-mdp01-the-avatar-gets-discipline.md`
+- Filed issues: #332 (confirmation auto-expiry timer), #333 (ConversationTurn discriminated union)
