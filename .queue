@@ -8,7 +8,7 @@
 - [x] casehubio/casehub-mosaic#295 — Execution model badge on case diagram
 - [x] casehubio/casehub-mosaic#298 — Worker chain tracing animated edges
 - [x] casehubio/casehub-mosaic#332 — Confirmation-auto-expiry-timer
-- [ ] casehubio/casehub-mosaic#333 — ConversationTurn-discriminated-union ← done on issue-332-confirmation-auto-expiry-timer
+- [x] casehubio/casehub-mosaic#333 — ConversationTurn-discriminated-union
 - [ ] casehubio/casehub-mosaic#334 — Badge colours should use pages CSS tokens        ← active
 - [ ] casehubio/casehub-mosaic#335 — diagram-workbench resolve root type dynamically
 - [ ] casehubio/casehub-mosaic#339 — fix confirmation card ARIA label should reflect current status
