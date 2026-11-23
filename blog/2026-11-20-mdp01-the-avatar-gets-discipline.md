@@ -38,8 +38,12 @@ A `showAvatar` boolean on the panel conditionally renders the heavyweight parts.
 
 The panel itself is a vertical stack — avatar above transcript — but nothing forces that layout. Each piece is an independent custom element: `<casehub-avatar>`, `<casehub-transcript>`, `<casehub-speech>`, `<casehub-avatar-controls>`. A host that wants the avatar on the left and the conversation on the right just composes them in a side-by-side grid. The panel is a convenience; the primitives are the real API.
 
-## What's left unbuilt
+## The timer that proved the architecture right
 
-The confirmation flow leaves one thing open: auto-expiry. The `expiresAt` field exists on `ConversationTurn` but nothing reads it yet. A stale confirmation just sits there with its buttons enabled. The timer logic belongs in the session layer, not the transcript renderer — getting the event plumbing right matters more than the timeout.
+The last piece of the confirmation flow was auto-expiry. `expiresAt` sat on `ConversationTurn` unread — a stale confirmation waited with its buttons enabled until someone clicked or the page refreshed.
 
-The transcript went from a flat text renderer to something that can show the agent's work — tools, confirmations, errors — inline where the user is already reading. That's the foundation for the cognitive agent pipeline to surface its reasoning without forcing a context switch.
+The original thinking put the timer in the session layer. That turned out to be wrong. The transcript already owns the confirmation rendering — it checks `confirmationStatus` to decide what to show, it dispatches `avatar:confirmation-response` when buttons are clicked. Making the transcript check `expiresAt` on a 1-second interval and transition stale confirmations to `'expired'` keeps the state machine in one place. The session doesn't need to know about expiry timing; it only needs to know the result. An `avatar:confirmation-expired` event carries that upward through the DOM, same as the response event does for user actions.
+
+The confirmation card already disables its buttons for any non-pending status. So the timer does one thing — transitions `pending` to `'expired'` when the clock runs out — and everything else follows from the existing rendering logic. No new CSS, no new template branches, no changes to the session layer.
+
+The transcript went from a flat text renderer to something that can show the agent's work — tools, confirmations, errors, timeouts — inline where the user is already reading. That's the foundation for the cognitive agent pipeline to surface its reasoning without forcing a context switch.
