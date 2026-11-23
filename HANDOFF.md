@@ -2,20 +2,22 @@
 
 ## Last Session
 
-Completed 7 issues across two domains. Avatar package: config rename (#327), dead controller removal (#326), theme token migration (#305), tool-call transcript rendering (#302), text-only panel mode (#306), and confirmation flow (#304). Case diagram: execution model badge (#295) — filename-based type detection, content fallback, colour-coded toolbar badge. Code review applied. 3 issues filed (#334 badge tokens, #335 workbench dynamic type, #336 org-wide naming). Blog entry written.
+Completed #332 (confirmation auto-expiry timer). Added a 1-second interval check in `casehub-transcript` that transitions pending confirmations to `'expired'` when their `expiresAt` deadline passes. Dispatches `avatar:confirmation-expired` event. Timer cleans up on disconnect. 7 tests covering expiry, non-expiry, event dispatch, idempotency, no-deadline, cleanup, and multi-expiry. Code review found one pre-existing issue — ARIA label doesn't reflect confirmation status changes — filed as #339.
+
+Revised blog `2026-11-20-mdp01-the-avatar-gets-discipline.md` to replace the "What's left unbuilt" section with the auto-expiry design story — timer lives in the transcript not the session layer.
 
 ## Active Item
 
-#298 — Worker chain tracing animated edges. Not started. Different domain from badge work.
+#334 — Badge colours should use pages CSS tokens. Not started.
 
 ## Queue State
 
-Active: #298 (not started)
-Queued: #332 auto-expiry, #333 discriminated union, #334 badge tokens, #335 workbench type
+Active: #334 (not started)
+Queued: #335 workbench dynamic type, #339 confirmation ARIA label
 
 ## Immediate Next Step
 
-Start #298. Read `components/casehub-diagram/` and graph-renderer for edge animation patterns.
+Start #334. Check `components/casehub-diagram/` for hardcoded badge colour values and migrate to `--pages-*` CSS custom properties.
 
 ## Cross-Module
 
@@ -23,5 +25,5 @@ Start #298. Read `components/casehub-diagram/` and graph-renderer for edge anima
 
 ## References
 
-- Blog: `blog/2026-11-20-mdp01-the-avatar-gets-discipline.md`, `blog/2026-11-20-mdp02-the-type-is-in-the-name.md`
-- Filed issues: #332 (confirmation auto-expiry timer), #333 (ConversationTurn discriminated union), #334 (badge tokens), #335 (workbench dynamic type), #336 (org-wide naming)
+- Blog: `blog/2026-11-20-mdp01-the-avatar-gets-discipline.md` (revised this session)
+- Filed issues: #339 (confirmation ARIA label)
