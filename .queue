@@ -12,7 +12,7 @@
 - [x] casehubio/casehub-mosaic#334 — Badge colours should use pages CSS tokens
 - [x] casehubio/casehub-mosaic#335 — diagram-workbench resolve root type dynamically
 - [x] casehubio/casehub-mosaic#339 — fix confirmation card ARIA label should reflect current status
-- [ ] casehubio/casehub-mosaic#340 — Migrate-remaining-hardcoded-badge-colours ← done on issue-339-confirmation-aria-status
+- [x] casehubio/casehub-mosaic#340 — Migrate-remaining-hardcoded-badge-colours
 - [ ] casehubio/casehub-mosaic#341 — Workbench-collapsed-strip-type-badge        ← active
 
 ## State
