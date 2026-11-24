@@ -31,3 +31,4 @@
 | [2026-11-07-mdp01-chains-not-rows.md](2026-11-07-mdp01-chains-not-rows.md) | 2026-11-07 | Chain navigator with inline editing — why table views hide org structure and how compound operations with identity-based changesets solve it |
 | [2026-11-20-mdp01-the-avatar-gets-discipline.md](2026-11-20-mdp01-the-avatar-gets-discipline.md) | 2026-11-20 | Avatar package cleanup: config rename, dead code removal, theme tokens, tool-call and confirmation transcript rendering, text-only mode |
 | [2026-11-20-mdp02-the-type-is-in-the-name.md](2026-11-20-mdp02-the-type-is-in-the-name.md) | 2026-11-20 | Document type detection from filename convention, extending detectDiagramType, colour-coded badge in toolbar |
+| [2026-11-24-mdp01-three-lies-your-ui-tells.md](2026-11-24-mdp01-three-lies-your-ui-tells.md) | 2026-11-24 | Three UI honesty fixes: badge colours to CSS tokens, dynamic diagram root type, confirmation ARIA labels reflecting state |
