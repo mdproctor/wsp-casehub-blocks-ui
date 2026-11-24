@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 520 320" font-family="system-ui, sans-serif">
+  <defs>
+    <style>
+      .bg { fill: #1a1a1a; }
+      .strip { fill: #2a2a2a; stroke: #333; stroke-width: 1; }
+      .strip-hover { fill: #3a3a3a; stroke: #333; stroke-width: 1; }
+      .panel { fill: #1e1e1e; stroke: #333; stroke-width: 1; }
+      .label { fill: #999; font-size: 11px; font-weight: 600; }
+      .dot-info { fill: #3b82f6; }
+      .dot-accent { fill: #8b5cf6; }
+      .dot-warning { fill: #f59e0b; }
+      .title { fill: #ccc; font-size: 13px; font-weight: 600; }
+      .subtitle { fill: #888; font-size: 10px; }
+      .anno { fill: #666; font-size: 10px; font-style: italic; }
+      .arrow { stroke: #666; stroke-width: 1; fill: none; marker-end: url(#arrowhead); }
+      .brace { stroke: #555; stroke-width: 1; fill: none; }
+    </style>
+    <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="8" refY="3" orient="auto">
+      <path d="M0,0 L8,3 L0,6" fill="#666"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="520" height="320" class="bg" rx="6"/>
+
+  <!-- Title -->
+  <text x="260" y="28" text-anchor="middle" class="title">Collapsed Strip — Before and After</text>
+
+  <!-- BEFORE -->
+  <text x="130" y="56" text-anchor="middle" class="subtitle">Before</text>
+
+  <!-- Before: two collapsed strips + active panel -->
+  <rect x="20" y="66" width="36" height="230" class="strip" rx="0"/>
+  <text x="38" y="190" class="label" transform="rotate(-90, 38, 190)" text-anchor="middle">Case Definition</text>
+
+  <rect x="57" y="66" width="36" height="230" class="strip" rx="0"/>
+  <text x="75" y="190" class="label" transform="rotate(-90, 75, 190)" text-anchor="middle">Sub Process</text>
+
+  <rect x="94" y="66" width="168" height="230" class="panel" rx="0"/>
+  <text x="178" y="186" text-anchor="middle" class="anno">active diagram</text>
+
+  <!-- AFTER -->
+  <text x="400" y="56" text-anchor="middle" class="subtitle">After</text>
+
+  <!-- After: two collapsed strips with dots + active panel -->
+  <rect x="288" y="66" width="36" height="230" class="strip" rx="0"/>
+  <circle cx="306" cy="82" r="4" class="dot-info"/>
+  <text x="306" y="190" class="label" transform="rotate(-90, 306, 190)" text-anchor="middle">Case Definition</text>
+
+  <rect x="325" y="66" width="36" height="230" class="strip-hover" rx="0"/>
+  <circle cx="343" cy="82" r="4" class="dot-accent"/>
+  <text x="343" y="190" class="label" transform="rotate(-90, 343, 190)" text-anchor="middle">Sub Process</text>
+
+  <!-- Annotation arrows to dots -->
+  <path d="M 370,80 L 352,80" class="arrow"/>
+  <text x="374" y="78" class="anno">type dot</text>
+  <text x="374" y="90" class="anno">(variant colour)</text>
+
+  <rect x="362" y="66" width="140" height="230" class="panel" rx="0"/>
+  <text x="432" y="186" text-anchor="middle" class="anno">active diagram</text>
+</svg>

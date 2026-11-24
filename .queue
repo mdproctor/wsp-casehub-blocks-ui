@@ -1,3 +1,17 @@
+# Work Plan —
+
+## State
+branch: issue-341-workbench-strip-type-badge
+issue-repo: casehubio/casehub-mosaic
+status: done
+covers: casehubio/casehub-mosaic#341
+project-sha: 
+date: 
+design-repo: 
+design-section-hashes: 
+flyway-next-v: none
+
+## Queue
 - [x] casehubio/casehub-mosaic#224 — Issue #224
 - [x] casehubio/casehub-mosaic#327 — Rename AvatarConfig to AvatarComponentConfig
 - [x] casehubio/casehub-mosaic#326 — Deprecate AvatarWsController
@@ -13,15 +27,4 @@
 - [x] casehubio/casehub-mosaic#335 — diagram-workbench resolve root type dynamically
 - [x] casehubio/casehub-mosaic#339 — fix confirmation card ARIA label should reflect current status
 - [x] casehubio/casehub-mosaic#340 — Migrate-remaining-hardcoded-badge-colours
-- [ ] casehubio/casehub-mosaic#341 — Workbench-collapsed-strip-type-badge        ← active
-
-## State
-branch: 
-issue-repo: casehubio/casehub-mosaic
-status: active
-covers: casehubio/casehub-mosaic#341
-project-sha: 
-date: 
-design-repo: 
-design-section-hashes: 
-flyway-next-v: none
+- [x] casehubio/casehub-mosaic#341 — Workbench-collapsed-strip-type-badge
