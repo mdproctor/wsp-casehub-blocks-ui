@@ -2,28 +2,33 @@
 
 ## Last Session
 
-Completed #332 (confirmation auto-expiry timer). Added a 1-second interval check in `casehub-transcript` that transitions pending confirmations to `'expired'` when their `expiresAt` deadline passes. Dispatches `avatar:confirmation-expired` event. Timer cleans up on disconnect. 7 tests covering expiry, non-expiry, event dispatch, idempotency, no-deadline, cleanup, and multi-expiry. Code review found one pre-existing issue — ARIA label doesn't reflect confirmation status changes — filed as #339.
+Completed three XS issues in one session:
 
-Revised blog `2026-11-20-mdp01-the-avatar-gets-discipline.md` to replace the "What's left unbuilt" section with the auto-expiry design story — timer lives in the transcript not the session layer.
+- **#334** — Migrated diagram toolbar badge colours from hardcoded hex to `--pages-*` CSS tokens. Replaced `DIAGRAM_TYPE_COLORS` hex map with `DIAGRAM_TYPE_VARIANT` semantic category map (info, accent, warning, success, danger, neutral). Badge colours now adapt to light/dark themes via the pages token system. 3 new tests for variant classes, neutral fallback, and absence of inline styles.
+
+- **#335** — Replaced hardcoded `diagramType: 'choreography'` in `diagram-workbench.ts` with `detectDiagramTypeFromSrc(this.src) ?? detectDiagramType(this.yaml)`. Note: `rootLevel.diagramType` is not currently consumed by any rendering path (the root renders through `<casehub-diagram>` which does its own detection). Fix is for data correctness, not visible behaviour today.
+
+- **#339** — Confirmation card ARIA label now reflects current status: "Confirmation approved/declined/expired" instead of always "Confirmation required". Visual status text uses terse form ("Confirmed"), ARIA uses natural speech ("Confirmation approved").
+
+Filed two new issues from code review:
+- **#340** — Remaining hardcoded badge colours in agent-card.ts, shared-styles.ts, decorator-badge.ts, org-legend.ts
+- **#341** — Workbench collapsed strip should show diagram type badge
+
+Blog: `2026-11-24-mdp01-three-lies-your-ui-tells.md` — theme of UI honesty gaps at abstraction boundaries.
 
 ## Active Item
 
-#334 — Badge colours should use pages CSS tokens. Not started.
+None — #339 is done and awaiting landing. Queue has items waiting.
 
 ## Queue State
 
-Active: #334 (not started)
-Queued: #335 workbench dynamic type, #339 confirmation ARIA label
+Done (awaiting landing): #334, #335, #339
+Queued: #340 remaining badge colour migrations, #341 workbench collapsed strip type badge
 
 ## Immediate Next Step
 
-Start #334. Check `components/casehub-diagram/` for hardcoded badge colour values and migrate to `--pages-*` CSS custom properties.
+Run work end to land the three done items, then work start on #340 (remaining badge colour migrations — M/Low, same domain as #334).
 
 ## Cross-Module
 
 - platform#898 — REST endpoints for ServiceConnection and WebAuthn (filed in prior session, not yet implemented)
-
-## References
-
-- Blog: `blog/2026-11-20-mdp01-the-avatar-gets-discipline.md` (revised this session)
-- Filed issues: #339 (confirmation ARIA label)
